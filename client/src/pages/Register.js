@@ -1,11 +1,14 @@
-import {useState} from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function RegisterPage() {
   const navigate = useNavigate()
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
+  const [gender, setGender] = useState('')
+  const [birthDate, setBirthDate] = useState('')
+  const [district, setDistrict] = useState('')
   const [password, setPassword] = useState('')
 
   async function registerUser(event) {
@@ -19,13 +22,16 @@ function RegisterPage() {
       body: JSON.stringify({
         name,
         email,
+        gender,
+        birthDate,
+        district,
         password,
       }),
     })
 
     const data = await response.json()
 
-    if(data.status === 'ok'){
+    if (data.status === 'ok') {
       navigate('/login')
     }
   }
@@ -49,13 +55,34 @@ function RegisterPage() {
         />
         <br />
         <input
+          value={gender}
+          onChange={(e) => setGender(e.target.value)}
+          type="text"
+          placeholder='Gender'
+        />
+        <br />
+        <input
+        value={birthDate}
+        onChange={(e) => setBirthDate(e.target.value)}
+        type="date"
+        placeholder='Birth Date'
+      />
+      <br />
+        <input
+        value={district}
+        onChange={(e) => setDistrict(e.target.value)}
+        type="text"
+        placeholder='District'
+      />
+      <br />
+        <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
           placeholder='Password'
         />
         <br />
-        <input type="submit" value="Register"/>
+        <input type="submit" value="Register" />
       </form>
     </div>
   );
