@@ -1,4 +1,3 @@
-// add a note
 import {useState} from 'react'
 
 function LoginPage() {
