@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
+import LogoutBtn from '../components/LogoutBtn';
 
 const Home = () => {
     const navigate = useNavigate()
@@ -18,18 +19,10 @@ const Home = () => {
         }
     }, [])
 
-    const logOut = (event) => {
-        event.preventDefault()
-        localStorage.clear('')
-        navigate('/login')
-    }
-
     return (
         <div>
             {name && <h1>Hello {name}!</h1>}
-            <form onSubmit={logOut}>
-                <input type="submit" value="Log out" onClick={logOut} />
-            </form>
+            <LogoutBtn/>
         </div>
     )
 }
