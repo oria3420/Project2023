@@ -1,4 +1,5 @@
 import {useState} from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function LoginPage() {
   const [email, setEmail] = useState('')
@@ -22,8 +23,8 @@ function LoginPage() {
 
     if(data.user){
       localStorage.setItem('token', data.user)
-      alert('Login successful')
-      window.location.href = '/dashboard'
+      alert('Login successful ')
+      window.location.href = '/home'
     }
     else{
       alert('Please check your username and password')
