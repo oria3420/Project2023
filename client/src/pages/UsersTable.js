@@ -11,30 +11,32 @@ const UsersTable = () => {
         .catch(error => console.error(error))
     }, [])
     
+    var fieldNames = []
+    if(users[0]){
+        fieldNames = Object.keys(users[0])
+    }
+    fieldNames.shift()
+    
     return (
         <table>
-          <thead>
+            <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Gender</th>
-              <th>Birth Date</th>
-              <th>District</th>
-            </tr>
-          </thead>
-          <tbody>
-          {users.map(user => (
-            <tr key={user._id}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.gender}</td>
-              <td>{user.birthDate}</td>
-              <td>{user.district}</td>
-            </tr>
-          ))}
-        </tbody>
+            {fieldNames.map(fieldName => (
+                <th key={fieldName}>{fieldName}</th>
+            ))}
+                </tr>
+            </thead>
+            <tbody>
+                {users.map(user => (
+                    <tr key={user._id}>
+                    {fieldNames.map(fieldName => (
+                        <td key={fieldName}>{user[fieldName]}</td>
+                    ))}
+                    </tr>
+                ))}
+            </tbody>
         </table>
-      )
+    )
     
 }
 
