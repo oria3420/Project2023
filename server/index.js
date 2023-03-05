@@ -3,6 +3,7 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
+const Recipes = require('./models/recipe.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
@@ -33,8 +34,8 @@ app.get('/api/users-table', async (req, res) => {
 
 app.get('/api/recipes-table', async (req, res) => {
     try {
-        const users = await User.find({});
-        res.status(200).json(users);
+        const recipes = await Recipes.find({});
+        res.status(200).json(recipes);
     } catch (error) {
         console.error(error);
         res.status(500).send('Server error');
