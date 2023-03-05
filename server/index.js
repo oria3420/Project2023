@@ -22,25 +22,18 @@ catch (error) {
     console.log('connection failed')
 }
 
-app.get('/api/table-users', async (req, res) => {
+const getCollection = (collection) => async (req, res) => {
     try {
-        const users = await User.find({});
-        res.status(200).json(users);
+      const data = await collection.find({});
+      res.status(200).json(data);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
+      console.error(error);
+      res.status(500).send('Server error');
     }
-})
+  };
 
-app.get('/api/table-recipes', async (req, res) => {
-    try {
-        const recipes = await Recipes.find({});
-        res.status(200).json(recipes);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
-    }
-})
+app.get('/api/table-users', getCollection(User))
+app.get('/api/table-recipes', getCollection(Recipes))
 
 app.post('/api/register', async (req, res) => {
     console.log(req.body)
