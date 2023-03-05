@@ -21,7 +21,25 @@ catch (error) {
     console.log('connection failed')
 }
 
+app.get('/api/users-table', async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+})
 
+app.get('/api/recipes-table', async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.status(200).json(users);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+})
 
 app.post('/api/register', async (req, res) => {
     console.log(req.body)
@@ -59,7 +77,6 @@ app.post('/api/login', async (req, res) => {
                 name: user.name,
                 email: user.email,
             }, 'secret123')
-
         return res.json({ status: 'ok', user: token })
     }
     else {

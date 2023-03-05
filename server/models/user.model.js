@@ -8,7 +8,6 @@ const User = new mongoose.Schema(
         birthDate: {type: String, required: true},
         district: {type: String, required: true},
         password: {type: String, required: true},
-        quote: {type: String},
     },
     {collection: 'Users'}
 )
