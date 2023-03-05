@@ -22,7 +22,7 @@ catch (error) {
     console.log('connection failed')
 }
 
-app.get('/api/users-table', async (req, res) => {
+app.get('/api/table-users', async (req, res) => {
     try {
         const users = await User.find({});
         res.status(200).json(users);
@@ -32,7 +32,7 @@ app.get('/api/users-table', async (req, res) => {
     }
 })
 
-app.get('/api/recipes-table', async (req, res) => {
+app.get('/api/table-recipes', async (req, res) => {
     try {
         const recipes = await Recipes.find({});
         res.status(200).json(recipes);
