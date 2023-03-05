@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 function RegisterPage() {
   const navigate = useNavigate()
@@ -82,6 +83,7 @@ function RegisterPage() {
           placeholder='Password'
         />
         <br />
+        <p>Already have an account? <Link to="/login">Log in</Link></p>
         <input type="submit" value="Register" />
       </form>
     </div>
