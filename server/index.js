@@ -35,6 +35,18 @@ const getCollection = (collection) => async (req, res) => {
 app.get('/api/table-users', getCollection(User))
 app.get('/api/table-recipes', getCollection(Recipes))
 
+app.get('/api/admin', (req, res) => {
+    mongoose.connection.db.listCollections().toArray((err, collections) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Server error');
+      } else {
+        const collectionNames = collections.map(collection => collection.name);
+        res.status(200).json(collectionNames);
+      }
+    });
+  });
+
 app.post('/api/register', async (req, res) => {
     console.log(req.body)
     try {
