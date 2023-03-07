@@ -1,3 +1,5 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LoginPage from './pages/Login'
@@ -5,9 +7,7 @@ import Home from './pages/Home';
 import RegisterPage from './pages/Register'
 import Admin from './pages/Admin'
 import Recipe from './pages/Recipe'
-import UsersTable from './pages/UsersTable';
-import RecipesTable from './pages/RecipesTable';
-
+import TablesRouter from './tables/TablesRouter';
 
 const App = () => {
     return (
@@ -18,8 +18,7 @@ const App = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/recipe" element={<Recipe />} />
-                <Route path="/table-users" element={<UsersTable />} />
-                <Route path="/table-recipes" element={<RecipesTable />} />
+                <Route path="/table/:type" element={<TablesRouter />} />
             </Routes>
         </BrowserRouter>
     );

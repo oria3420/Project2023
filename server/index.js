@@ -4,6 +4,7 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
 const Recipes = require('./models/recipe.model')
+const Times = require('./models/time.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
@@ -32,8 +33,9 @@ const getCollection = (collection) => async (req, res) => {
     }
   };
 
-app.get('/api/table-users', getCollection(User))
-app.get('/api/table-recipes', getCollection(Recipes))
+app.get('/api/table/users', getCollection(User))
+app.get('/api/table/recipes', getCollection(Recipes))
+app.get('/api/table/times', getCollection(Times))
 
 app.get('/api/admin', (req, res) => {
     mongoose.connection.db.listCollections().toArray((err, collections) => {
