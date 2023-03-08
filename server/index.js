@@ -1,4 +1,4 @@
-const globals = require('../common/tablesNames');
+const globals = require('../client/src/common/tablesNames');
 const TABLE_NAMES = globals.TABLE_NAMES;
 const express = require('express')
 const app = express()
@@ -38,15 +38,16 @@ const getCollection = (collectionName) => async (req, res) => {
     }
 };
 
+const tableRoutes = Object.values(TABLE_NAMES).map(tableName => {
+    return {
+        path: `/api/table/${tableName}`,
+        handler: getCollection(tableName)
+    };
+});
 
-app.get(`/api/table/${TABLE_NAMES.USERS}`, getCollection(TABLE_NAMES.USERS));
-app.get(`/api/table/${TABLE_NAMES.RECIPES}`, getCollection(TABLE_NAMES.RECIPES));
-app.get(`/api/table/${TABLE_NAMES.TIMES_CATEGORIES}`, getCollection(TABLE_NAMES.TIMES_CATEGORIES));
-app.get(`/api/table/${TABLE_NAMES.SEASONS_CATEGORIES}`, getCollection(TABLE_NAMES.SEASONS_CATEGORIES));
-app.get(`/api/table/${TABLE_NAMES.KOSHER_CATEGORIES}`, getCollection(TABLE_NAMES.KOSHER_CATEGORIES));
-app.get(`/api/table/${TABLE_NAMES.HEALTH_CATEGORIES}`, getCollection(TABLE_NAMES.HEALTH_CATEGORIES));
-app.get(`/api/table/${TABLE_NAMES.COOKING_TYPE_CATEGORIES}`, getCollection(TABLE_NAMES.COOKING_TYPE_CATEGORIES));
-app.get(`/api/table/${TABLE_NAMES.ALLERGIES_CATEGORIES}`, getCollection(TABLE_NAMES.ALLERGIES_CATEGORIES));
+tableRoutes.forEach(route => {
+    app.get(route.path, route.handler);
+});
 
 app.get('/api/admin', (req, res) => {
     mongoose.connection.db.listCollections().toArray((err, collections) => {
