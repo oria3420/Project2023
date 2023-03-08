@@ -3,8 +3,7 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const User = require('./models/user.model')
-const Recipes = require('./models/recipe.model')
-const Times = require('./models/time.model')
+const Collection = require('./models/collection.model');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
@@ -23,31 +22,39 @@ catch (error) {
     console.log('connection failed')
 }
 
-const getCollection = (collection) => async (req, res) => {
-    try {
-      const data = await collection.find({});
-      res.status(200).json(data);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('Server error');
-    }
-  };
 
-app.get('/api/table/users', getCollection(User))
-app.get('/api/table/recipes', getCollection(Recipes))
-app.get('/api/table/times', getCollection(Times))
+
+const getCollection = (collectionName) => async (req, res) => {
+    try {
+        const Model = Collection.getModel(collectionName);
+        const data = await Model.find({});
+        res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+};
+
+app.get('/api/table/users', getCollection('Users'));
+app.get('/api/table/recipes', getCollection('Recipes'));
+app.get('/api/table/times_categories', getCollection('Times_Categories'));
+app.get('/api/table/seasons_categories', getCollection('Seasons_Categories'));
+app.get('/api/table/kosher_categories', getCollection('Kosher_Categories'));
+app.get('/api/table/health_categories', getCollection('Health_Categories'));
+app.get('/api/table/cooking_type_categories', getCollection('Cookingtypes_Categories'));
+app.get('/api/table/allergies_categories', getCollection('Allergies_Categories'));
 
 app.get('/api/admin', (req, res) => {
     mongoose.connection.db.listCollections().toArray((err, collections) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Server error');
-      } else {
-        const collectionNames = collections.map(collection => collection.name);
-        res.status(200).json(collectionNames);
-      }
+        if (err) {
+            console.error(err);
+            res.status(500).send('Server error');
+        } else {
+            const collectionNames = collections.map(collection => collection.name);
+            res.status(200).json(collectionNames);
+        }
     });
-  });
+});
 
 app.post('/api/register', async (req, res) => {
     console.log(req.body)

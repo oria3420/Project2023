@@ -10,7 +10,10 @@ function TablesRouter() {
   const { type } = useParams();
   const [tableRows, setTableRows] = useState([]);
 
-  const tableArr = useMemo(() => ["users", "recipes", "times"], []);
+  const tableArr = useMemo(() =>
+  ["users", "recipes", "times_categories", "seasons_categories", "kosher_categories", "health_categories", "cooking_type_categories", "allergies_categories"],
+    []);
+
 
   useEffect(() => {
     if (!tableArr.includes(type)) {

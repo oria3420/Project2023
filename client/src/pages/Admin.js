@@ -37,7 +37,7 @@ const Admin = () => {
             <ul>
                 {collections.map((collection, index) => (
                     <li key={index}>
-                        <a href={`/table-${collection}`}>{collection}</a>
+                        <a href={`/table/${collection.toLowerCase()}`}>{collection}</a>
                     </li>
                 ))}
             </ul>
