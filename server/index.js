@@ -1,3 +1,5 @@
+const globals = require('../common/tablesNames');
+const TABLE_NAMES = globals.TABLE_NAMES;
 const express = require('express')
 const app = express()
 const cors = require('cors')
@@ -6,6 +8,7 @@ const User = require('./models/user.model')
 const Collection = require('./models/collection.model');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+
 
 
 app.use(cors())
@@ -35,14 +38,15 @@ const getCollection = (collectionName) => async (req, res) => {
     }
 };
 
-app.get('/api/table/users', getCollection('Users'));
-app.get('/api/table/recipes', getCollection('Recipes'));
-app.get('/api/table/times_categories', getCollection('Times_Categories'));
-app.get('/api/table/seasons_categories', getCollection('Seasons_Categories'));
-app.get('/api/table/kosher_categories', getCollection('Kosher_Categories'));
-app.get('/api/table/health_categories', getCollection('Health_Categories'));
-app.get('/api/table/cooking_type_categories', getCollection('Cookingtypes_Categories'));
-app.get('/api/table/allergies_categories', getCollection('Allergies_Categories'));
+
+app.get(`/api/table/${TABLE_NAMES.USERS}`, getCollection(TABLE_NAMES.USERS));
+app.get(`/api/table/${TABLE_NAMES.RECIPES}`, getCollection(TABLE_NAMES.RECIPES));
+app.get(`/api/table/${TABLE_NAMES.TIMES_CATEGORIES}`, getCollection(TABLE_NAMES.TIMES_CATEGORIES));
+app.get(`/api/table/${TABLE_NAMES.SEASONS_CATEGORIES}`, getCollection(TABLE_NAMES.SEASONS_CATEGORIES));
+app.get(`/api/table/${TABLE_NAMES.KOSHER_CATEGORIES}`, getCollection(TABLE_NAMES.KOSHER_CATEGORIES));
+app.get(`/api/table/${TABLE_NAMES.HEALTH_CATEGORIES}`, getCollection(TABLE_NAMES.HEALTH_CATEGORIES));
+app.get(`/api/table/${TABLE_NAMES.COOKING_TYPE_CATEGORIES}`, getCollection(TABLE_NAMES.COOKING_TYPE_CATEGORIES));
+app.get(`/api/table/${TABLE_NAMES.ALLERGIES_CATEGORIES}`, getCollection(TABLE_NAMES.ALLERGIES_CATEGORIES));
 
 app.get('/api/admin', (req, res) => {
     mongoose.connection.db.listCollections().toArray((err, collections) => {

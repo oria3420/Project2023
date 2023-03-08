@@ -9,7 +9,7 @@ const User = new mongoose.Schema(
         district: {type: String},
         password: {type: String, required: true},
     },
-    {collection: 'Users'}
+    {collection: 'users'}
 )
 
 const model = mongoose.model('UserData', User)

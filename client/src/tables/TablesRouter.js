@@ -11,7 +11,7 @@ function TablesRouter() {
   const [tableRows, setTableRows] = useState([]);
 
   const tableArr = useMemo(() =>
-  ["users", "recipes", "times_categories", "seasons_categories", "kosher_categories", "health_categories", "cooking_type_categories", "allergies_categories"],
+  ["users", "recipes", "times_categories", "seasons_categories", "kosher_categories", "health_categories", "cooking_types_categories", "allergies_categories"],
     []);
 
 
