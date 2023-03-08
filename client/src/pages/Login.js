@@ -28,7 +28,7 @@ function LoginPage() {
       localStorage.setItem('token', data.user)
       alert('Login successful ')
       const user = jwt_decode(data.user)
-      if(user.email == ADMIN_EMAIL){
+      if(user.email === ADMIN_EMAIL){
         window.location.href = '/admin'
       }
       else{

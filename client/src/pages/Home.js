@@ -17,7 +17,7 @@ const Home = () => {
                 navigate.replace('/login')
             }
         }
-    }, [])
+    }, [navigate])
 
     return (
         <div>

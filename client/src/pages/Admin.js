@@ -6,7 +6,6 @@ import LogoutBtn from '../components/LogoutBtn';
 const Admin = () => {
     const navigate = useNavigate()
     const [name, setName] = useState(null)
-    const [isAdmin, setIsAdmin] = useState(null)
     const [collections, setCollections] = useState([]);
 
     useEffect(() => {
@@ -22,7 +21,6 @@ const Admin = () => {
             const user = jwt_decode(token)
             if (user.email === "admin@gmail.com") {
                 console.log("admin")
-                setIsAdmin(true)
             }
             setName(user.name)
             if (!user) {
@@ -30,7 +28,7 @@ const Admin = () => {
                 navigate.replace('/login')
             }
         }
-    }, [])
+    }, [navigate])
 
     return (
         <div>

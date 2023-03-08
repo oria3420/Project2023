@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+// import React, { useEffect, useState } from 'react';
 
 
-const Recipe = () => {
+// const Recipe = () => {
 
-    return (
-        <div>
-            <h1>Recipe</h1>
-        </div>
-    )
-}
+//     return (
+//         <div>
+//             <h1>Recipe</h1>
+//         </div>
+//     )
+// }
 
-export default Recipe
+// export default Recipe
