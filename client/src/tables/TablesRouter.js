@@ -1,21 +1,33 @@
 import { useParams } from "react-router-dom";
-import UsersTable from './UsersTable';
-import RecipesTable from './RecipesTable';
-import TimesCat from './TimesCat';
+import React, { useState, useEffect, useMemo } from 'react'
+import Table from './Table';
+
+function InvalidTableType() {
+  return <div>Invalid table type</div>;
+}
 
 function TablesRouter() {
   const { type } = useParams();
+  const [tableRows, setTableRows] = useState([]);
 
-  if (type === "users") {
-    return <UsersTable />;
-  } else if (type === "recipes") {
-    return <RecipesTable />;
-  } else if (type === "times") {
-    return <TimesCat />;
+  const tableArr = useMemo(() => ["users", "recipes", "times"], []);
+
+  useEffect(() => {
+    if (!tableArr.includes(type)) {
+      return;
+    }
+    fetch(`http://localhost:1337/api/table/${type}`)
+      .then(res => res.json())
+      .then(data => setTableRows(data))
+      .catch(error => console.error(error))
+  }, [type, tableArr]);
+
+  if (!tableArr.includes(type)) {
+    return <InvalidTableType />;
   }
-  else {
-    return <div>Invalid table type</div>;
-  }
+
+  return <Table rows={tableRows} />;
 }
+
 
 export default TablesRouter

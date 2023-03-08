@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 
 const Table = (props) => {
     const rows = props.rows
@@ -10,7 +10,7 @@ const Table = (props) => {
     fieldNames.shift()
 
     return (
-        <table class="table table-bordered table-hover">
+        <table className="table table-bordered table-hover">
             <thead>
                 <tr>
                     {fieldNames.map(fieldName => (
