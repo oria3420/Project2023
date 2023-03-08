@@ -7,7 +7,7 @@ import Home from './pages/Home';
 import RegisterPage from './pages/Register';
 import Admin from './pages/Admin';
 import TablesRouter from './tables/TablesRouter';
-// import Recipe from './pages/Recipe';
+import RecipePage from './pages/Recipe';
 
 const App = () => {
     return (
@@ -18,6 +18,7 @@ const App = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/table/:type" element={<TablesRouter />} />
+                <Route path="/recipes/:id" element={<RecipePage />} />
             </Routes>
         </BrowserRouter>
     );

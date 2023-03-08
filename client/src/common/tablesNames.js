@@ -7,4 +7,8 @@ module.exports.TABLE_NAMES = {
     HEALTH_CATEGORIES: 'health_categories',
     COOKING_TYPE_CATEGORIES: 'cooking_types_categories',
     ALLERGIES_CATEGORIES: 'allergies_categories',
+    KITCHENS_CATEGORIES: 'kitchens_categories',
+    FLAVOR_CATEGORIES: 'flavor_categories',
+    MEAL_TYPES_CATEGORIES: 'meal_types_categories',
+    DIFFICULTY_CATEGORIES: 'difficulty_categories',
   };

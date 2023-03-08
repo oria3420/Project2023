@@ -1,13 +1,14 @@
-// import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useParams } from "react-router-dom";
 
+const RecipePage = () => {
+    const { type } = useParams();
+    
+    return (
+        <div>
+            <h1>Recipe</h1>
+        </div>
+    )
+}
 
-// const Recipe = () => {
-
-//     return (
-//         <div>
-//             <h1>Recipe</h1>
-//         </div>
-//     )
-// }
-
-// export default Recipe
+export default RecipePage
