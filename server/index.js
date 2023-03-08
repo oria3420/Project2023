@@ -122,3 +122,19 @@ const tableRoutes = Object.values(TABLE_NAMES).map(tableName => {
 tableRoutes.forEach(route => {
     app.get(route.path, route.handler);
 });
+
+
+// recipe
+app.get('/api/recipes/:id', (req, res) => {
+    const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
+    Recipe.findOne({ RecipeId: req.params.id }, (err, recipe) => {
+      if (err) {
+        console.error(err);
+        res.sendStatus(500);
+      } else if (!recipe) {
+        res.sendStatus(404);
+      } else {
+        res.send(recipe);
+      }
+    });
+  });
