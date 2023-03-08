@@ -26,29 +26,6 @@ catch (error) {
 }
 
 
-
-const getCollection = (collectionName) => async (req, res) => {
-    try {
-        const Model = Collection.getModel(collectionName);
-        const data = await Model.find({});
-        res.status(200).json(data);
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Server error');
-    }
-};
-
-const tableRoutes = Object.values(TABLE_NAMES).map(tableName => {
-    return {
-        path: `/api/table/${tableName}`,
-        handler: getCollection(tableName)
-    };
-});
-
-tableRoutes.forEach(route => {
-    app.get(route.path, route.handler);
-});
-
 app.get('/api/admin', (req, res) => {
     mongoose.connection.db.listCollections().toArray((err, collections) => {
         if (err) {
@@ -122,3 +99,26 @@ app.post('/api/login', async (req, res) => {
 app.listen(1337, () => {
     console.log('Server saterted on 1337')
 })
+
+// tables
+const getCollection = (collectionName) => async (req, res) => {
+    try {
+        const Model = Collection.getModel(collectionName);
+        const data = await Model.find({});
+        res.status(200).json(data);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Server error');
+    }
+};
+
+const tableRoutes = Object.values(TABLE_NAMES).map(tableName => {
+    return {
+        path: `/api/table/${tableName}`,
+        handler: getCollection(tableName)
+    };
+});
+
+tableRoutes.forEach(route => {
+    app.get(route.path, route.handler);
+});
