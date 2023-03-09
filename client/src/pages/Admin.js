@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 import LogoutBtn from '../components/LogoutBtn';
+import Navbar from '../components/Navbar';
+
 
 const Admin = () => {
     const navigate = useNavigate()
@@ -32,7 +34,7 @@ const Admin = () => {
 
     return (
         <div>
-            {name && <h1>Hello {name} (Admin)!</h1>}
+            {name && <Navbar name={name}/>}
             <h2>Collections:</h2>
             <ul>
                 {collections.map((collection, index) => (

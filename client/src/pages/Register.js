@@ -49,7 +49,7 @@ function RegisterPage() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             type="text"
-            placeholder='Name'
+            placeholder='Full Name'
           />
           <br />
           <input
@@ -60,7 +60,7 @@ function RegisterPage() {
             placeholder='Email'
           />
           <br />
-          <select id="input-select" className="form-select input-register" value={gender} onChange={(e) => setGender(e.target.value)}>
+          <select className="form-select input-register input-select" value={gender} onChange={(e) => setGender(e.target.value)}>
             <option value="">Select Gender</option>
             <option value="female">Female</option>
             <option value="male">Male</option>
@@ -74,7 +74,7 @@ function RegisterPage() {
             placeholder='Birth Date'
           />
           <br />
-          <select id="input-select" className="form-select input-register" value={district} onChange={(e) => setDistrict(e.target.value)}>
+          <select className="form-select input-register input-select" value={district} onChange={(e) => setDistrict(e.target.value)}>
             <option value="">Select district</option>
             <option value="northern">Northern District (HaTzafon)</option>
             <option value="haifa">Haifa District (Hefa)</option>
@@ -93,7 +93,7 @@ function RegisterPage() {
           />
           <br />
           <p>Already have an account? <Link to="/login">Log in</Link></p>
-          <input id="btn-register" class="btn btn-primary" type="submit" value="Register" />
+          <input id="btn-register" className="btn btn-primary" type="submit" value="Register" />
         </form>
       </div>
     </div>

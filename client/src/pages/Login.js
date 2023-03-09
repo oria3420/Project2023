@@ -70,8 +70,8 @@ function LoginPage() {
             placeholder='Password'
           />
 
-          <input id="btn-login" class="btn btn-primary" type="submit" value="Login" />
-          <input id="btn-register" class="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
+          <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
+          <input id="btn-register" className="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
         </form>
       </div>
     </div>
