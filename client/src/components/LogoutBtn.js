@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom'
+import './Components.css';
+import Navbar from '../components/Navbar';
 
 const LogoutBtn = () => {
     const navigate = useNavigate()
@@ -11,7 +13,7 @@ const LogoutBtn = () => {
 
     return (
         <form onSubmit={logOut}>
-            <input type="submit" value="Log out" />
+            <input className='logout-btn' type="submit" value="Log out" />
         </form>
     )
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
-import LogoutBtn from '../components/LogoutBtn';
+import Navbar from '../components/Navbar';
 
 const Home = () => {
     const navigate = useNavigate()
@@ -21,8 +21,7 @@ const Home = () => {
 
     return (
         <div>
-            {name && <h1>Hello {name}!</h1>}
-            <LogoutBtn/>
+            {name && <Navbar name={name}/>}
         </div>
     )
 }

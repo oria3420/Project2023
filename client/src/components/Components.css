@@ -10,6 +10,31 @@
 }
 
 
+.logo-navbar{
+    width: 60px;
+    height: 60px;;
+}
 
 
+.name-container {
+    display: flex; /* Set the container to use flexbox */
+    align-items: center; /* Center the items vertically */
+  }
+  
+  .name-container .bi {
+    margin-right: 8px; /* Add some space between the icon and the text */
+  }
 
+.logout-btn {
+    background-color: transparent;
+    border: 0px;
+    padding: 0px;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.dropdown-menu-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
