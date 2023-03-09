@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import jwt_decode from "jwt-decode";
-import { Link } from 'react-router-dom';
-import './Login.css';
+import './Connect.css';
 
 function LoginPage() {
   const [email, setEmail] = useState('')
@@ -51,8 +50,9 @@ function LoginPage() {
   return (
     <div class="body">
       <div class="form-login">
-        <h1>Login</h1>
+
         <form onSubmit={loginUser}>
+          <img src="/images/logo.png" alt="Logo" class="logo" />
           <input
             className="form-control input"
             value={email}
@@ -67,7 +67,7 @@ function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder='Password'
-          />        
+          />
           <input id="btn-login" class="btn btn-primary" type="submit" value="Login" />
           <input id="btn-register" class="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
         </form>

@@ -1,0 +1,45 @@
+.input{
+    background-color: #ede9e9;
+    border-color: #ede9e9;
+    border-radius: 15px;
+}
+
+.body{
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Set the height of the container to full viewport height */
+    background-image: url('../../../client/public/images/backgrund.png');
+    background-size: cover; /* to resize the image to cover the entire element */
+    background-position: center; /* to center the image horizontally and vertically */    
+}
+
+.form-login{
+    width: 300px; /* Set the width of the form */
+    padding: 20px;
+    text-align: center;
+}
+
+#btn-login{
+    background-color: orange;
+    border-color: orange;
+    border-radius: 15px;
+    width: 35%;
+    display: block; /* Make button block-level */
+    margin: 20px auto 0; /* Center button horizontally and add some top margin */
+}
+
+#btn-register{
+    background-color: green;
+    border-color: green;
+    border-radius: 15px;
+    width: 45%;
+    display: block; /* Make button block-level */
+    margin: 20px auto 0; /* Center button horizontally and add some top margin */
+}
+
+.logo{
+    width: 40%;
+    height: 40%;
+    margin-bottom: 20px;
+}
