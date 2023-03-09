@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import './Components.css';
-import Navbar from '../components/Navbar';
 
 const LogoutBtn = () => {
     const navigate = useNavigate()
