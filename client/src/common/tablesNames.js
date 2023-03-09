@@ -12,4 +12,5 @@ module.exports.TABLE_NAMES = {
     MEAL_TYPES_CATEGORIES: 'meal_types_categories',
     DIFFICULTY_CATEGORIES: 'difficulty_categories',
     INGREDIENTS: 'ingredients',
+    RECIPE_INGREDIENTS: 'recipe_ingredients',
   };
