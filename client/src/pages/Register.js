@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
+import './Connect.css';
 
 function RegisterPage() {
   const navigate = useNavigate()
@@ -38,10 +39,13 @@ function RegisterPage() {
   }
 
   return (
-    <div>
-      <h1>Register</h1>
+    <div className="body">
+    <div className="form-connect">
       <form onSubmit={registerUser}>
+        <img src="/images/logo.png" alt="Logo" className="logo-register" />
+        <label className="form-title">Create a new account</label>
         <input
+          className="form-control input-register"
           value={name}
           onChange={(e) => setName(e.target.value)}
           type="text"
@@ -49,6 +53,7 @@ function RegisterPage() {
         />
         <br />
         <input
+         className="form-control input-register"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           type="email"
@@ -56,6 +61,7 @@ function RegisterPage() {
         />
         <br />
         <input
+        className="form-control input-register"
           value={gender}
           onChange={(e) => setGender(e.target.value)}
           type="text"
@@ -63,6 +69,7 @@ function RegisterPage() {
         />
         <br />
         <input
+        className="form-control input-register"
         value={birthDate}
         onChange={(e) => setBirthDate(e.target.value)}
         type="date"
@@ -70,6 +77,7 @@ function RegisterPage() {
       />
       <br />
         <input
+        className="form-control input-register"
         value={district}
         onChange={(e) => setDistrict(e.target.value)}
         type="text"
@@ -77,6 +85,7 @@ function RegisterPage() {
       />
       <br />
         <input
+        className="form-control input-register"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           type="password"
@@ -84,8 +93,9 @@ function RegisterPage() {
         />
         <br />
         <p>Already have an account? <Link to="/login">Log in</Link></p>
-        <input type="submit" value="Register" />
+        <input id="btn-register" class="btn btn-primary" type="submit" value="Register" />
       </form>
+    </div>
     </div>
   );
 }

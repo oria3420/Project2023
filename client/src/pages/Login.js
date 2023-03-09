@@ -48,13 +48,14 @@ function LoginPage() {
 
 
   return (
-    <div class="body">
-      <div class="form-login">
+    <div className="body">
+      <div className="form-connect">
 
         <form onSubmit={loginUser}>
-          <img src="/images/logo.png" alt="Logo" class="logo" />
+          <img src="/images/logo.png" alt="Logo" className="logo-login" />
+          <label className="form-title">Login</label>
           <input
-            className="form-control input"
+            className="form-control input-login"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
@@ -62,7 +63,7 @@ function LoginPage() {
           />
           <br />
           <input
-            className="form-control input"
+            className="form-control input-login"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"

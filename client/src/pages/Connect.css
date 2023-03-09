@@ -1,7 +1,14 @@
-.input{
+.input-login{
     background-color: #ede9e9;
     border-color: #ede9e9;
     border-radius: 15px;
+}
+
+.input-register{
+    background-color: #ede9e9;
+    border-color: #ede9e9;
+    border-radius: 15px;
+    height: 30px;
 }
 
 .body{
@@ -14,7 +21,7 @@
     background-position: center; /* to center the image horizontally and vertically */    
 }
 
-.form-login{
+.form-connect{
     width: 300px; /* Set the width of the form */
     padding: 20px;
     text-align: center;
@@ -38,8 +45,21 @@
     margin: 20px auto 0; /* Center button horizontally and add some top margin */
 }
 
-.logo{
+.logo-login{
     width: 40%;
     height: 40%;
     margin-bottom: 20px;
 }
+
+.logo-register{
+    width: 20%;
+    height: 20%;
+    margin-bottom: 20px;
+}
+
+.form-title {
+    display: block;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
