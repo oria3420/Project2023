@@ -14,7 +14,6 @@ function TablesRouter() {
 
   useEffect(() => {
     if (!Object.values(TABLE_NAMES).includes(type)) {
-      console.log(TABLE_NAMES.users)
       return;
     }
     fetch(`http://localhost:1337/api/table/${type}`)
