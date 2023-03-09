@@ -54,7 +54,7 @@
 .logo-register{
     width: 20%;
     height: 20%;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .form-title {
@@ -62,4 +62,9 @@
     font-weight: bold;
     font-size: 1.2em;
     margin-bottom: 20px;
+  }
+
+  #input-select{
+    height: max-content;
+    font-size: 15px;
   }
