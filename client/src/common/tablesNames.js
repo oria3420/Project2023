@@ -13,4 +13,12 @@ module.exports.TABLE_NAMES = {
     DIFFICULTY_CATEGORIES: 'difficulty_categories',
     INGREDIENTS: 'ingredients',
     RECIPE_INGREDIENTS: 'recipe_ingredients',
+    RECIPE_ALLERGIES_CATEGORIES: 'recipe_allergies_categories',
+    RECIPE_COOKIMG_TYPE_CATEGORIES: 'recipe_cooking_types_categories',
+    RECIPE_DIFFICULTY_CATEGORIES: 'recipe_difficulty_categories',
+    RECIPE_FLAVOR_CATEGORIES: 'recipe_flavor_categories',
+    RECIPE_HEALTH_CATEGORIES: 'recipe_health_categories',
+    RECIPE_MEAL_TYPES_CATEGORIES: 'recipe_meal_types_categories',
+    RECIPE_SEASONS_CATEGORIES: 'recipe_seasons_categories',
+    RECIPE_TIMES_CATEGORIES: 'recipe_times_categories',
   };
