@@ -1,12 +1,12 @@
 .input-login{
-    background-color: #ede9e9;
-    border-color: #ede9e9;
+    background-color: #D1D1D1;
+    border-color: #D1D1D1;
     border-radius: 15px;
 }
 
 .input-register{
-    background-color: #ede9e9;
-    border-color: #ede9e9;
+    background-color: #D1D1D1;
+    border-color: #D1D1D1;
     border-radius: 15px;
     height: 30px;
 }
@@ -68,3 +68,4 @@
     height: max-content;
     font-size: 15px;
   }
+

@@ -1,7 +1,12 @@
 .our-navbar{
-    background-color: green;
+    background-color: #27A617;
     color: white !important;
     font-weight: bold;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
 }
 
 .our-navbar span {

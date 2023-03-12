@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
+import './Admin.css';
 
 
 const Admin = () => {
@@ -32,18 +33,21 @@ const Admin = () => {
     }, [navigate])
 
     return (
-        <div>
-            {name && <Navbar name={name + " (Admin)"} />}
+        <div className='admin-container'>
+          {name && <Navbar name={name + " (Admin)"} />}
+          <div class='collections-container'>
             <h2>Collections:</h2>
             <ul>
-                {collections.sort().map((collection, index) => (
-                    <li key={index}>
-                        <a href={`/table/${collection}`}>{collection}</a>
-                    </li>
-                ))}
+              {collections.sort().map((collection, index) => (
+                <li key={index}>
+                  <a href={`/table/${collection}`}>{collection}</a>
+                </li>
+              ))}
             </ul>
+          </div>
         </div>
-    )
+      );
+      
 }
 
 export default Admin
