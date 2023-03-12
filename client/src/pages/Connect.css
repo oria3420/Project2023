@@ -16,7 +16,7 @@
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     height: 100vh; /* Set the height of the container to full viewport height */
-    background-image: url('../../../client/public/images/backgrund.png');
+    background-image: url('../../../client/public/images/backgrund1.png');
     background-size: cover; /* to resize the image to cover the entire element */
     background-position: center; /* to center the image horizontally and vertically */    
 }
@@ -28,8 +28,8 @@
 }
 
 #btn-login{
-    background-color: orange;
-    border-color: orange;
+    background-color: #DC8F41;
+    border-color: #DC8F41;
     border-radius: 15px;
     width: 35%;
     display: block; /* Make button block-level */
@@ -37,8 +37,8 @@
 }
 
 #btn-register{
-    background-color: green;
-    border-color: green;
+    background-color: #27A617;
+    border-color: #27A617;
     border-radius: 15px;
     width: 45%;
     display: block; /* Make button block-level */

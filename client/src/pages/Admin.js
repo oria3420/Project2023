@@ -33,10 +33,10 @@ const Admin = () => {
 
     return (
         <div>
-            {name && <Navbar name={name + " (Admin)"}/>}
+            {name && <Navbar name={name + " (Admin)"} />}
             <h2>Collections:</h2>
             <ul>
-                {collections.map((collection, index) => (
+                {collections.sort().map((collection, index) => (
                     <li key={index}>
                         <a href={`/table/${collection}`}>{collection}</a>
                     </li>
