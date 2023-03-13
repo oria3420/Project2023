@@ -11,12 +11,12 @@
     height: 30px;
 }
 
-.body{
+.connect-body{
     display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center; /* Center vertically */
     height: 100vh; /* Set the height of the container to full viewport height */
-    background-image: url('../../../client/public/images/backgrund1.png');
+    background-image: url('../../../client/public/images/bg.png');
     background-size: cover; /* to resize the image to cover the entire element */
     background-position: center; /* to center the image horizontally and vertically */    
 }
@@ -54,7 +54,7 @@
 .logo-register{
     width: 20%;
     height: 20%;
-    margin-bottom: 15px;
+    margin-bottom: 7px;
 }
 
 .form-title {

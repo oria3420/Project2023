@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar';
-import './Admin.css';
+import './App.css';
 
 
 const Admin = () => {

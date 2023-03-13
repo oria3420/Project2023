@@ -39,7 +39,7 @@ function RegisterPage() {
   }
 
   return (
-    <div className="body">
+    <div className="connect-body">
       <div className="form-connect">
         <form onSubmit={registerUser}>
           <img src="/images/logo.png" alt="Logo" className="logo-register" />

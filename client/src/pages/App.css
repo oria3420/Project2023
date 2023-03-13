@@ -1,0 +1,30 @@
+.collections-container{
+    padding-top: 80px;
+}
+
+.app-body{
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Set the height of the container to full viewport height */
+    background-image: url('../../public/images/home-bg.jpg');
+    background-size: cover; /* to resize the image to cover the entire element */
+    background-position: center; /* to center the image horizontally and vertically */   
+}
+
+#btn-home-menu{
+    background-color: #27A617;
+    border-color: #27A617;
+    border-radius: 15px;
+    width: 200%;
+    display: block; /* Make button block-level */
+    margin: 20px auto 0; /* Center button horizontally and add some top margin */
+}
+
+.home-menu {
+  display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center; /* center vertically */
+  flex-direction: column; /* stack the inputs vertically */
+  height: 100%; /* set the height of the container to fill the parent */
+}

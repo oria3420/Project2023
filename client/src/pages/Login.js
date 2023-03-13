@@ -48,7 +48,7 @@ function LoginPage() {
 
 
   return (
-    <div className="body">
+    <div className="connect-body">
       <div className="form-connect">
 
         <form onSubmit={loginUser}>
