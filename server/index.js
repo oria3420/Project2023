@@ -138,3 +138,21 @@ app.get('/api/recipes/:id', (req, res) => {
       }
     });
   });
+
+  // filters
+  app.get('/api/home/search_recipe', async (req, res) => {
+    try {
+        const collections = await mongoose.connection.db.listCollections().toArray();
+        const filteredCollections = collections.filter(collection => /categories$/.test(collection.name));
+      const result = {};
+      for (const collection of filteredCollections) {
+        const documents = await mongoose.connection.db.collection(collection.name).find().toArray();
+        result[collection.name] = documents;
+      }
+      res.json(result);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+  
