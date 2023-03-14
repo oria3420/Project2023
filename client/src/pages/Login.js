@@ -30,7 +30,6 @@ function LoginPage() {
 
     if (data.user) {
       localStorage.setItem('token', data.user)
- //     alert('Login successful ')
       const user = jwt_decode(data.user)
       if (user.email === ADMIN_EMAIL) {
         window.location.href = '/admin'
@@ -42,9 +41,7 @@ function LoginPage() {
 
     }
     else {
-   //   alert('Please check your username and password')
    setErrorMessage('Please check your username and password');
-
     }
   }
 
