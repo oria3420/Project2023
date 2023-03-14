@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import jwt_decode from "jwt-decode";
 import './Connect.css';
-// hey oriya
+
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -53,12 +53,11 @@ function LoginPage() {
   return (
     <div className="connect-body">
       <div className="form-connect">
-
         <form onSubmit={loginUser}>
           <img src="/images/logo.png" alt="Logo" className="logo-login" />
           <label className="form-title">Login</label>
           <input
-            className="form-control input-login"
+            className={`form-control input-login ${errorMessage ? 'error' : ''}`}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
@@ -66,21 +65,20 @@ function LoginPage() {
           />
           <br />
           <input
-            className="form-control input-login"
+            className={`form-control input-login ${errorMessage ? 'error' : ''}`}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
             placeholder='Password'
           />
           <div>
-          {errorMessage && <p>{errorMessage}</p>}
-        </div>
+            {errorMessage && <p>{errorMessage}</p>}
+          </div>
           <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
           <input id="btn-register" className="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
         </form>
       </div>
     </div>
-    
   );
 }
 
