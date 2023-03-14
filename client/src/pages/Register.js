@@ -20,7 +20,6 @@ function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [nameError, setNameError] = useState('');
   const [emailError, setEmailError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
 
@@ -38,6 +37,7 @@ function RegisterPage() {
         birthDate,
         district,
         password,
+        confirmPassword
       }),
     })
 
@@ -71,7 +71,7 @@ function RegisterPage() {
   }
 
   return (
-    <div className="connect-body needs-validation" novalidate>
+    <div className="connect-body">
       <div className="form-connect">
         <form onSubmit={registerUser}>
           <img src="/images/logo.png" alt="Logo" className="logo-register" />

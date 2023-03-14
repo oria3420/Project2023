@@ -38,24 +38,32 @@ app.get('/api/admin', (req, res) => {
     });
 });
 
+
 app.post('/api/register', async (req, res) => {
-    console.log(req.body)
     try {
-        const newPassword = await bcrypt.hash(req.body.password, 10)
-        await User.create({
-            name: req.body.name,
-            email: req.body.email,
-            gender: req.body.gender,
-            birthDate: req.body.birthDate,
-            district: req.body.district,
-            password: newPassword,
-        })
-        res.json({ status: 'ok' })
+      const existingUser = await User.findOne({ email: req.body.email });
+      if (existingUser) {
+        return res.status(409).json({ error: 'Duplicate email' });
+      }
+      if(req.body.confirmPassword !==req.body.password){
+        return res.status(409).json({ error: 'Passwords dont match' });
+      }
+      const newPassword = await bcrypt.hash(req.body.password, 10);
+      await User.create({
+        name: req.body.name,
+        email: req.body.email,
+        gender: req.body.gender,
+        birthDate: req.body.birthDate,
+        district: req.body.district,
+        password: newPassword,
+      });
+  
+      res.json({ status: 'ok' });
     } catch (err) {
-        console.log(err)
-        res.json({ status: 'error', error: 'Duplicate email' })
-    }
-})
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+      }
+});
 
 app.post('/api/login', async (req, res) => {
     const user = await User.findOne({
