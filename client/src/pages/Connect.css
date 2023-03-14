@@ -69,3 +69,6 @@
     font-size: 15px;
   }
 
+  .error {
+    border-color: red;
+  }
