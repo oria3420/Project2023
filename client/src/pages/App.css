@@ -12,6 +12,18 @@
     background-position: center; /* to center the image horizontally and vertically */    
 }
 
+.app-body {
+    background-image: url('../../public/images/home-bg.jpg');
+    display: flex;
+    flex-direction: column; /* Stack child elements vertically */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Set the height of the container to full viewport height */
+    background-size: cover; /* Resize the image to cover the entire element */
+    background-position: center; /* Center the image horizontally and vertically */    
+  }
+
+  
 #btn-home-menu{
     background-color: #27A617;
     border-color: #27A617;
@@ -31,3 +43,5 @@
     text-align: center;
     margin-top: 30px;
 }
+
+

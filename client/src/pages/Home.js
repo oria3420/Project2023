@@ -20,12 +20,22 @@ const Home = () => {
         }
     }, [navigate])
 
+    function searchRecipe() {
+        navigate('/home/search_recipe', { state: { name: name } });
+      }
+
     return (
         <div className="app-body">
 
             {name && <Navbar name={name} />}
             <div className="home-menu">
-                <input id="btn-home-menu" className="btn btn-primary" type="button" value="Search a Recipe" />
+                <input
+                    id="btn-home-menu"
+                    className="btn btn-primary"
+                    type="button"
+                    value="Search a Recipe"
+                    onClick={searchRecipe}
+                />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Popular Recipes" />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Ingredients List" />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Shopping List" />

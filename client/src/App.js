@@ -8,6 +8,7 @@ import RegisterPage from './pages/Register';
 import Admin from './pages/Admin';
 import TablesRouter from './tables/TablesRouter';
 import RecipePage from './pages/Recipe';
+import SearchRecipe from './pages/SearchRecipe';
 
 const App = () => {
     return (
@@ -19,6 +20,7 @@ const App = () => {
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/table/:type" element={<TablesRouter />} />
                 <Route path="/recipes/:id" element={<RecipePage />} />
+                <Route path="/home/search_recipe" element={<SearchRecipe />} />
             </Routes>
         </BrowserRouter>
     );
