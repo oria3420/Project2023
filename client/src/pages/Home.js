@@ -22,16 +22,13 @@ const Home = () => {
 
     return (
         <div className="app-body">
-            <div>
-                 {name && <Navbar name={name} />}
-                <input  id="btn-home-menu" className="btn btn-primary" type="button" value="Search a Recipe" />
-                <br/>
+
+            {name && <Navbar name={name} />}
+            <div className="home-menu">
+                <input id="btn-home-menu" className="btn btn-primary" type="button" value="Search a Recipe" />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Popular Recipes" />
-                <br/>
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Ingredients List" />
-                <br/>
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Shopping List" />
-                <br/>
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Shopping List" />
             </div>
         </div>
