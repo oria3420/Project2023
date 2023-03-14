@@ -69,6 +69,16 @@
     font-size: 15px;
   }
 
-  .error {
+  .input-login.error {
     border-color: red;
+    background-color: #f5c6c6;
+  }
+.error-message {
+    display: none;
+  }
+  
+  .visible {
+    display: block;
+    color: red;
+    font-weight: bold;
   }

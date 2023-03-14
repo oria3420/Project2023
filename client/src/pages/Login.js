@@ -57,7 +57,7 @@ function LoginPage() {
           <img src="/images/logo.png" alt="Logo" className="logo-login" />
           <label className="form-title">Login</label>
           <input
-            className={`form-control input-login ${errorMessage ? 'error' : ''}`}
+            className={`form-control input-login ${errorMessage ? 'error' : ''}` }
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
@@ -71,7 +71,7 @@ function LoginPage() {
             type="password"
             placeholder='Password'
           />
-          <div>
+          <div className={`error-message ${errorMessage ? 'visible' : ''}`}>
             {errorMessage && <p>{errorMessage}</p>}
           </div>
           <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
