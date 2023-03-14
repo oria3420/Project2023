@@ -5,12 +5,13 @@ import './Connect.css';
 function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMessage, setErrorMessage] = useState('');
   const ADMIN_EMAIL = "admin@gmail.com";
 
   function redirectToRegister() {
     window.location.href = "/register";
   }
-//hey!!!!
+
   async function loginUser(event) {
     event.preventDefault()
 
@@ -29,7 +30,7 @@ function LoginPage() {
 
     if (data.user) {
       localStorage.setItem('token', data.user)
-      alert('Login successful ')
+ //     alert('Login successful ')
       const user = jwt_decode(data.user)
       if (user.email === ADMIN_EMAIL) {
         window.location.href = '/admin'
@@ -41,7 +42,9 @@ function LoginPage() {
 
     }
     else {
-      alert('Please check your username and password')
+   //   alert('Please check your username and password')
+   setErrorMessage('Please check your username and password');
+
     }
   }
 
@@ -69,12 +72,15 @@ function LoginPage() {
             type="password"
             placeholder='Password'
           />
-
+          <div>
+          {errorMessage && <p>{errorMessage}</p>}
+        </div>
           <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
           <input id="btn-register" className="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
         </form>
       </div>
     </div>
+    
   );
 }
 
