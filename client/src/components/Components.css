@@ -43,3 +43,8 @@
     align-items: center;
     justify-content: center;
   }
+
+  .recipe-card{
+    width: 18em;
+    height: 9em;
+  }

@@ -5,9 +5,12 @@ const RecipeCard = (props) => {
     const recipe = props.recipe
     return (
         <div>
-        <ul>
-            <li key={recipe.Name}>{recipe.Name}</li>
-            </ul>
+            <div className="card recipe-card">
+                <div className="card-body">
+                    <h6 className="card-title">{recipe.Name}</h6>
+                    <label>Total time: {recipe.TotalTime}</label>
+                </div>
+            </div>
         </div>
     )
 }
