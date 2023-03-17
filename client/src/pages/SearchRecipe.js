@@ -1,8 +1,8 @@
 import Navbar from '../components/Navbar';
+import RecipeCard from '../components/RecipeCard';
 import { useLocation } from 'react-router-dom';
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import Table from '../tables/Table';
 
 const SearchRecipe = () => {
     const location = useLocation();
@@ -18,7 +18,6 @@ const SearchRecipe = () => {
         .then(data => setRecipes(data))
         .catch(error => console.error(error))
     }, []);
-    console.log(recipes)
 
     useEffect(() => {
         fetch('http://localhost:1337/api/home/search_recipe')
@@ -64,7 +63,9 @@ const SearchRecipe = () => {
                         ))}
                 </div>
                 <div className='recipes-container'>
-                    <Table rows={recipes} />
+                {recipes.map((recipe) => (
+                    <RecipeCard key={recipe.Name} recipe={recipe} />
+                  ))}
                 </div>
             </div>
         </div>
