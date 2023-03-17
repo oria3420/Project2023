@@ -1,35 +1,48 @@
-.collections-container{
+.collections-container {
     padding-top: 80px;
-}
-
-.app-body{
-    background-image: url('../../public/images/home-bg.jpg');
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    height: 100vh; /* Set the height of the container to full viewport height */
-    background-size: cover; /* to resize the image to cover the entire element */
-    background-position: center; /* to center the image horizontally and vertically */    
 }
 
 .app-body {
     background-image: url('../../public/images/home-bg.jpg');
     display: flex;
-    flex-direction: column; /* Stack child elements vertically */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    height: 100vh; /* Set the height of the container to full viewport height */
-    background-size: cover; /* Resize the image to cover the entire element */
-    background-position: center; /* Center the image horizontally and vertically */    
-  }
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    height: 100vh;
+    /* Set the height of the container to full viewport height */
+    background-size: cover;
+    /* to resize the image to cover the entire element */
+    background-position: center;
+    /* to center the image horizontally and vertically */
+}
 
-  
-#btn-home-menu{
+.app-body {
+    background-image: url('../../public/images/home-bg.jpg');
+    display: flex;
+    flex-direction: column;
+    /* Stack child elements vertically */
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+    height: 100vh;
+    /* Set the height of the container to full viewport height */
+    background-size: cover;
+    /* Resize the image to cover the entire element */
+    background-position: center;
+    /* Center the image horizontally and vertically */
+}
+
+
+#btn-home-menu {
     background-color: #27A617;
     border-color: #27A617;
     border-radius: 25px;
-    display: block; /* Make button block-level */
-    margin: 20px auto 0 auto; /* Center button horizontally and add some top margin */
+    display: block;
+    /* Make button block-level */
+    margin: 20px auto 0 auto;
+    /* Center button horizontally and add some top margin */
     width: inherit;
     font-size: 1.2em;
     margin-top: 30px;
@@ -38,18 +51,28 @@
 
 
 .home-menu {
-    width: 400px; /* Set the width of the form */
+    width: 400px;
+    /* Set the width of the form */
     padding: 20px;
     text-align: center;
     margin-top: 30px;
 }
 
-
-.filter-menu {
-    margin-top: 80px;
-    width: 20%;
+.category-header:hover {
+    /* add your hover styles here */
+    cursor: pointer;
 }
 
-.category-title{
-    border-bottom: 1px solid black;
+.search-recipe-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 80px;
+}
+
+.filter-menu {
+    width: 40%;
+}
+
+.recipes-container {
+    width: 60%;
 }
