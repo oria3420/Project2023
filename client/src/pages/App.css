@@ -45,3 +45,11 @@
 }
 
 
+.filter-menu {
+    margin-top: 80px;
+    width: 20%;
+}
+
+.category-title{
+    border-bottom: 1px solid black;
+}

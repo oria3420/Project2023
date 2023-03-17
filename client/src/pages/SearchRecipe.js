@@ -20,9 +20,19 @@ const SearchRecipe = () => {
         <div>
             {name && <Navbar name={name} />}
             <div className='filter-menu'>
-                <h1>hello</h1>
+                {Object.keys(categories).map((category) => (
+                    <div className='category' key={category}>
+                        <span className='category-title'>{category}</span>
+                        <br />
+                        {categories[category].map((value) => (
+                            <div className="form-check">
+                                <input className="form-check-input" type="checkbox" id="inlineCheckbox1" />
+                                <label className="form-check-label" for="inlineCheckbox1">{value}</label>
+                            </div>
+                        ))}
+                    </div>
+                ))}
             </div>
-
         </div>
     )
 }
