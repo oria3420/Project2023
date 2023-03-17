@@ -151,12 +151,14 @@ app.get('/api/recipes/:id', (req, res) => {
   app.get('/api/home/search_recipe', async (req, res) => {
     try {
         const collections = await mongoose.connection.db.listCollections().toArray();
-        const filteredCollections = collections.filter(collection => /categories$/.test(collection.name));
+        const filteredCollections = collections.filter(collection => /^(?!recipe).*categories$/.test(collection.name));
       const result = {};
       for (const collection of filteredCollections) {
         const documents = await mongoose.connection.db.collection(collection.name).find().toArray();
-        result[collection.name] = documents;
+        const values = documents.map(doc => Object.values(doc)[2]);
+        result[collection.name] = values;
       }
+      console.log(result)
       res.json(result);
     } catch (err) {
       console.error(err);
