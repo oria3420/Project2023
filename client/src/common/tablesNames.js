@@ -23,6 +23,7 @@ module.exports.TABLE_NAMES = {
     RECIPE_SEASONS_CATEGORIES: 'recipe_seasons_categories',
     RECIPE_TIMES_CATEGORIES: 'recipe_times_categories',
     RECIPE_FOOD_CATEGORIES: 'recipe_food_categories',
+    RECIPES_IMAGES: 'recipes_images',
     COMMENTS: 'comments',
     FAVORITES: 'favorites',
   };

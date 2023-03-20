@@ -87,3 +87,8 @@
     border-color: red;
     background-color: #f5c6c6;
   }
+
+  .recipe_image{
+    width: 50px;
+    height: 30px;
+  }

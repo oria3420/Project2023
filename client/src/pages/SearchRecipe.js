@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar';
 import RecipeCard from '../components/RecipeCard';
 import { useLocation } from 'react-router-dom';
+import { useNavigate  } from 'react-router-dom';
 import './App.css';
 import React, { useState, useEffect } from 'react';
 
@@ -10,6 +11,7 @@ const SearchRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
+    const navigate = useNavigate();
 
 
     useEffect(() => {
@@ -39,6 +41,9 @@ const SearchRecipe = () => {
             [category]: !expandedCategories[category]
         });
     };
+    const handleClick = (recipeId) => {
+        navigate(`/recipes/${recipeId}`);
+      };
 
     return (
         <div>
@@ -64,9 +69,11 @@ const SearchRecipe = () => {
                 </div>
                 <div className='recipes-container'>
                 {recipes.map((recipe) => (
-                    <RecipeCard key={recipe.Name} recipe={recipe} />
-                  ))}
-                </div>
+                  <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
+                    <RecipeCard recipe={recipe} />
+                  </div>
+                ))}
+              </div>
             </div>
         </div>
     )

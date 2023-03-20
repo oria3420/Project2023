@@ -104,9 +104,6 @@ app.post('/api/login', async (req, res) => {
 //     }
 // })
 
-app.listen(1337, () => {
-    console.log('Server saterted on 1337')
-})
 
 // tables
 const getCollection = (collectionName) => async (req, res) => {
@@ -166,3 +163,24 @@ app.get('/api/recipes/:id', (req, res) => {
     }
   });
   
+
+  app.get('/api/recipes/:id/image', (req, res) => {
+    const recipeId = req.params.id;
+    const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
+    const document = Image.findOne();
+    console.log(document)
+    Image.findOne({ recipe_ID: recipeId }, (err, image_link) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error fetching image');
+      } else if (!image_link) {
+        res.status(404).send('Image not found');
+      } else {
+        res.send(image_link.url);
+      }
+    });
+  });
+
+  app.listen(1337, () => {
+    console.log('Server saterted on 1337')
+})
