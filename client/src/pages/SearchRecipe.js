@@ -44,7 +44,7 @@ const SearchRecipe = () => {
     const handleClick = (recipeId) => {
         navigate(`/recipes/${recipeId}`);
       };
-
+    
     return (
         <div>
             {name && <Navbar name={name} />}

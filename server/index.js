@@ -131,18 +131,19 @@ tableRoutes.forEach(route => {
 
 // recipe
 app.get('/api/recipes/:id', (req, res) => {
-    const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
-    Recipe.findOne({ RecipeId: req.params.id }, (err, recipe) => {
-      if (err) {
-        console.error(err);
-        res.sendStatus(500);
-      } else if (!recipe) {
-        res.sendStatus(404);
-      } else {
-        res.send(recipe);
-      }
-    });
+  const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
+  const id = parseInt(req.params.id);
+  Recipe.findOne({ RecipeId: id }, (err, recipe) => {
+    if (err) {
+      console.error(err);
+      res.sendStatus(500);
+    } else if (!recipe) {
+      res.sendStatus(404);
+    } else {
+      res.send(recipe);
+    }
   });
+});
 
   // filters
   app.get('/api/home/search_recipe', async (req, res) => {
@@ -155,28 +156,24 @@ app.get('/api/recipes/:id', (req, res) => {
         const values = documents.map(doc => Object.values(doc)[2]);
         result[collection.name] = values;
       }
-      console.log(result)
       res.json(result);
     } catch (err) {
       console.error(err);
       res.status(500).send('Internal Server Error');
     }
   });
-  
 
-  app.get('/api/recipes/:id/image', (req, res) => {
-    const recipeId = req.params.id;
+  app.get('/api/recipes/images/:recipeId', async (req, res) => {
     const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
-    const document = Image.findOne();
-    console.log(document)
-    Image.findOne({ recipe_ID: recipeId }, (err, image_link) => {
+    const id = parseInt(req.params.recipeId);
+    Image.findOne({ recipe_ID: id }, (err, recipe) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error fetching image');
-      } else if (!image_link) {
+      } else if (!recipe) {
         res.status(404).send('Image not found');
       } else {
-        res.send(image_link.url);
+        res.send(recipe.image_link);
       }
     });
   });
