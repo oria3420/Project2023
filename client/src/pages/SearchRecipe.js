@@ -12,6 +12,7 @@ const SearchRecipe = () => {
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
     const navigate = useNavigate();
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
 
     useEffect(() => {
@@ -44,7 +45,21 @@ const SearchRecipe = () => {
     const handleClick = (recipeId) => {
         navigate(`/recipes/${recipeId}`);
       };
-    
+
+      function handleCheckboxChange(event) {
+        const value = event.target.value;
+        if (event.target.checked) {
+          setSelectedCategories([...selectedCategories, value]);
+        } else {
+          setSelectedCategories(selectedCategories.filter((category) => category !== value));
+        }
+    }
+    const filteredRecipes = selectedCategories.length === 0
+    ? recipes
+    : recipes.filter((recipe) =>
+        recipe.Categories.some((category) => selectedCategories.includes(category))
+      );
+      
     return (
         <div>
             {name && <Navbar name={name} />}

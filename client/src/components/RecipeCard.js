@@ -12,7 +12,13 @@ const RecipeCard = (props) => {
     async function getImageUrl() {
       const response = await fetch(`http://localhost:1337/api/recipes/images/${recipe.RecipeId}`);
       const data = await response.text();
-      setImageUrl(data || defaultImageUrl);
+      if (data !=='Image not found'){
+        setImageUrl(data)
+      }
+      else{
+        setImageUrl(defaultImageUrl)
+      }
+      
     }
     getImageUrl();
   }, [recipe.RecipeId]);
@@ -24,6 +30,7 @@ const RecipeCard = (props) => {
         <div className="card-body">
           <h6 className="card-title">{recipe.Name}</h6>
           <label>Total time: {recipe.TotalTime}.</label>
+          <p className="card-text">{recipe.Description}</p>
         </div>
       </div>
     </div>

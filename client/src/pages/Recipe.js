@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
+import '../components/Components.css';
+
+const defaultImageUrl = '/images/logo.png'
 
 const RecipePage = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
   useEffect(() => {
     async function fetchRecipe() {
@@ -13,11 +17,26 @@ const RecipePage = () => {
     }
     fetchRecipe();
   }, [id]);
-
+  useEffect(() => {
+    async function getImageUrl() {
+      const response = await fetch(`http://localhost:1337/api/recipes/images/${id}`);
+      const data = await response.text();
+      if (data !=='Image not found'){
+        setImageUrl(data)
+      }
+      else{
+        setImageUrl(defaultImageUrl)
+      }
+      
+    }
+    getImageUrl();
+  }, [id]);
+console.log(id)
   return (
     <div>
       {recipe ? (
         <div>
+        {imageUrl && <img class="card-img-top" src={imageUrl} alt="Card image cap"></img>}
           <h2>{recipe.Name}</h2>
           <p>Author: {recipe.AuthorName}</p>
           <p>Cook Time: {recipe.CookTime}</p>

@@ -45,6 +45,27 @@
   }
 
   .recipe-card{
-    width: 18em;
-    height: 9em;
+    width: 20em;
+    height: 15em;
+    text-align: center;
+
+    align-items: center;
+  }
+
+  .card-img-top{
+    width: 10em;
+    height: 5em;
+  }
+  .card-text {
+    max-height: 15em; /* Change the height value to your desired height */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Change the line clamp value to the number of lines you want to show */
+    -webkit-box-orient: vertical;
+    transition: max-height 0.5s ease-out; /* Add a smooth transition effect */
+  }
+
+  .card-text:hover {
+    max-height: none; /* Remove the max-height limit on hover */
   }
