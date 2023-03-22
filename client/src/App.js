@@ -9,12 +9,13 @@ import Admin from './pages/Admin';
 import TablesRouter from './tables/TablesRouter';
 import RecipePage from './pages/Recipe';
 import SearchRecipe from './pages/SearchRecipe';
+import WelcomePage from './pages/Welcome'
 
 const App = () => {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<LoginPage />} />
+                <Route path="/" element={<WelcomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/home" element={<Home />} />
