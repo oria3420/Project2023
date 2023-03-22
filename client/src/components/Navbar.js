@@ -5,7 +5,9 @@ const Navbar = ({ name }) => {
     return (
         <nav className="navbar bg-body-tertiary our-navbar">
             <div className="container-fluid d-flex justify-content-between align-items-center">
+            <a href='/home'>
                 <img className='logo-navbar' src="/images/logo_white.png" alt="Logo" />
+                </a>
                 <div className='name-container'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
                     <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
