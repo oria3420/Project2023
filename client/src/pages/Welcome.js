@@ -17,10 +17,11 @@ function WelcomePage() {
 
   return (
     <div className="connect-body">
-      <div className="form-connect">
-          <img src="/images/logo.png" alt="Logo" className="logo-login" />
-          <h1 className="form-title">WELCOME TO MA MEATBASHEL</h1>
+      <div className="welcome-connect">
+          <img src="/images/logo.png" alt="Logo" className="logo-welcome" />
+          <h1 className="welcome-titel">WELCOME TO MA MEATBASHEL</h1>
           <br />
+          <h3>!האתר הכי מוש בעולם</h3>
           <input id="btn-login" className="btn btn-primary" type="submit" value="Login" onClick={redirectToLogin} />
           <input id="btn-register" className="btn btn-primary" type="button" value="SignUp" onClick={redirectToRegister} />
       </div>

@@ -92,3 +92,19 @@
     width: 50px;
     height: 30px;
   }
+
+  .welcome-titel{
+    font-weight: bold;
+    font-size: 3em;
+  }
+
+  .welcome-connect{
+    padding: 20px;
+    text-align: center;
+}
+
+.logo-welcome{
+  width: 20%;
+
+  margin-bottom: 20px;
+}
