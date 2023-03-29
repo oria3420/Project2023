@@ -23,7 +23,9 @@ const Home = () => {
     function searchRecipe() {
         navigate('/home/search_recipe', { state: { name: name } });
       }
-
+      function popularRecipes() {
+        navigate('/home/popular_recipes', { state: { name: name } });
+      }
     return (
         <div className="app-body">
 
@@ -36,7 +38,7 @@ const Home = () => {
                     value="Search a Recipe"
                     onClick={searchRecipe}
                 />
-                <input id="btn-home-menu" className="btn btn-primary" type="button" value="Popular Recipes" />
+                <input id="btn-home-menu" className="btn btn-primary" type="button" value="Popular Recipes" onClick={popularRecipes} />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Ingredients List" />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Shopping List" />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="About Us" />
