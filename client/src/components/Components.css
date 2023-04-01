@@ -44,28 +44,56 @@
     justify-content: center;
   }
 
-  .recipe-card{
+  .recipe-card {
+    display: flex;
+    flex-direction: column;
     width: 20em;
-    height: 15em;
+    height: 25em; /* Increase the height to fit the larger image */
     text-align: center;
-
     align-items: center;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    margin-right: 7px;
   }
 
-  .card-img-top{
-    width: 10em;
-    height: 5em;
+  .recipe-card img {
+    height: 25em; /* Set a fixed height for the images */
+    object-fit: cover; /* Maintain aspect ratio while filling the available space */
   }
+  
+  .card-img-top {
+    flex: 1; /* Allows the image to take up the full available space */
+    object-fit: cover; /* Ensures the image fills the available space */
+    border-top-left-radius: 15px; /* Adds rounded corners to the top of the image */
+    border-top-right-radius: 15px;
+  }
+  
+  .card-body {
+    flex: 2; /* Allows the card body to take up the remaining space */
+    text-align: left; /* Aligns the card content to the left */
+  }
+  
   .card-text {
-    max-height: 15em; /* Change the height value to your desired height */
+    text-transform: capitalize;
+    max-height: 8em; /* Change the height value to your desired height */
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* Change the line clamp value to the number of lines you want to show */
     -webkit-box-orient: vertical;
     transition: max-height 0.5s ease-out; /* Add a smooth transition effect */
+    font-size: 14px; 
   }
 
   .card-text:hover {
     max-height: none; /* Remove the max-height limit on hover */
+  }
+  
+  .card-title{
+    text-transform: capitalize;
+    color: #4D4D4C;
+  }
+
+  .bi-heart {
+    color: #27A617;
   }

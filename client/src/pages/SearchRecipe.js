@@ -43,7 +43,8 @@ const SearchRecipe = () => {
         });
     };
     const handleClick = (recipeId) => {
-        navigate(`/recipes/${recipeId}`);
+        console.log("check")
+        /*navigate(`/recipes/${recipeId}`);*/
       };
 
       function handleCheckboxChange(event) {

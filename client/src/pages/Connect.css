@@ -108,3 +108,21 @@
 
   margin-bottom: 20px;
 }
+
+#btn-login-welcome{
+  background-color: #DC8F41;
+  border-color: #DC8F41;
+  border-radius: 15px;
+  width: 30%;
+  display: block; /* Make button block-level */
+  margin: 20px auto 0; /* Center button horizontally and add some top margin */
+}
+
+#btn-register-welcome{
+  background-color: #27A617;
+  border-color: #27A617;
+  border-radius: 15px;
+  width: 30%;
+  display: block; /* Make button block-level */
+  margin: 20px auto 0; /* Center button horizontally and add some top margin */
+}
