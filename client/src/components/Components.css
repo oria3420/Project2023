@@ -55,24 +55,21 @@
     margin-bottom: 10px;
     margin-right: 7px;
   }
-
-  .recipe-card img {
-    height: 25em; /* Set a fixed height for the images */
-    object-fit: cover; /* Maintain aspect ratio while filling the available space */
-  }
   
   .card-img-top {
     flex: 1; /* Allows the image to take up the full available space */
     object-fit: cover; /* Ensures the image fills the available space */
     border-top-left-radius: 15px; /* Adds rounded corners to the top of the image */
     border-top-right-radius: 15px;
+    height: 230px;
+    object-fit: cover; 
   }
-  
+
   .card-body {
     flex: 2; /* Allows the card body to take up the remaining space */
     text-align: left; /* Aligns the card content to the left */
   }
-  
+
   .card-text {
     text-transform: capitalize;
     max-height: 8em; /* Change the height value to your desired height */
