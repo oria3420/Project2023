@@ -12,8 +12,7 @@ const SearchRecipe = () => {
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
     const navigate = useNavigate();
-    const [selectedCategories, setSelectedCategories] = useState([]);
-
+    const [checkedItems, setCheckedItems] = useState({});
 
     useEffect(() => {
       fetch(`http://localhost:1337/api/table/recipes`)
@@ -24,42 +23,38 @@ const SearchRecipe = () => {
 
     useEffect(() => {
         fetch('http://localhost:1337/api/home/search_recipe')
-            .then(response => response.json())
-            .then(data => {
-                const expandedCategories = {};
-                Object.keys(data).forEach(category => {
-                    expandedCategories[category] = false;
-                });
-                setCategories(data);
-                setExpandedCategories(expandedCategories);
-            })
-            .catch(error => console.error(error));
-    }, []);
-
-    const toggleCategory = (category) => {
+          .then(response => response.json())
+          .then(data => {
+            const expandedCategories = {};
+            const checkedItems = {};
+            Object.keys(data).forEach(category => {
+              expandedCategories[category] = false;
+              checkedItems[category] = {};
+            });
+            setCategories(data);
+            setExpandedCategories(expandedCategories);
+            setCheckedItems(checkedItems);
+          })
+          .catch(error => console.error(error));
+      }, []);
+    
+      const toggleCategory = (category) => {
         setExpandedCategories({
-            ...expandedCategories,
-            [category]: !expandedCategories[category]
+          ...expandedCategories,
+          [category]: !expandedCategories[category]
         });
-    };
-    const handleClick = (recipeId) => {
-        console.log("check")
-        /*navigate(`/recipes/${recipeId}`);*/
+      };
+    
+      const handleCheckboxChange = (category, value) => {
+        const checkedItemsCopy = { ...checkedItems };
+        checkedItemsCopy[category][value] = !checkedItemsCopy[category][value];
+        setCheckedItems(checkedItemsCopy);
       };
 
-      function handleCheckboxChange(event) {
-        const value = event.target.value;
-        if (event.target.checked) {
-          setSelectedCategories([...selectedCategories, value]);
-        } else {
-          setSelectedCategories(selectedCategories.filter((category) => category !== value));
-        }
-    }
-    const filteredRecipes = selectedCategories.length === 0
-    ? recipes
-    : recipes.filter((recipe) =>
-        recipe.Categories.some((category) => selectedCategories.includes(category))
-      );
+    const handleClick = (recipeId) => {
+        navigate(`/recipes/${recipeId}`);
+      };
+
       
     return (
         <div>
@@ -76,7 +71,7 @@ const SearchRecipe = () => {
                                 </div>
                                 {expandedCategories[category] && categories[category].map((value) => (
                                     <div className="form-check" key={value}>
-                                        <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} />
+                                    <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} checked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
                                         <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value}</label>
                                     </div>
                                 ))}

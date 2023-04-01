@@ -27,7 +27,7 @@ const RecipeCard = (props) => {
   return (
     <div>
       <div className="card recipe-card">
-        {imageUrl && <img class="card-img-top" src={imageUrl} alt="Card image cap"></img>}
+        {imageUrl && <img class="card-img-top" src={imageUrl} alt="Card cap"></img>}
         <div className="card-body">
           <h6 className="card-title">{recipe.Name}</h6>
           <p className="card-text">{recipe.Description}</p>
