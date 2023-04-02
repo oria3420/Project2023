@@ -163,6 +163,26 @@ app.get('/api/recipes/:id', (req, res) => {
     }
   });
 
+  app.get('/api/recipes_categories', async (req, res) => {
+    try {
+      const collections = await mongoose.connection.db.listCollections().toArray();
+      const recipeCollections = collections.filter(collection => collection.name.startsWith("recipe_") && collection.name.endsWith("_categories"));
+      
+      const result = {};
+      
+      for (const collection of recipeCollections) {
+        const docs = await mongoose.connection.db.collection(collection.name).find().toArray();
+        result[collection.name] = docs;
+      }
+      console.log(result)
+      res.json(result);
+      
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
   app.get('/api/home/popular_recipes', async (req, res) => {
     try {
         const collections = await mongoose.connection.db.listCollections().toArray();
