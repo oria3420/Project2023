@@ -3,7 +3,7 @@ import RecipeCard from '../components/RecipeCard';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 
 const SearchRecipe = () => {
     const location = useLocation();
@@ -16,10 +16,7 @@ const SearchRecipe = () => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [recipesCategories, setRecipesCategories] = useState([]);
 
-    
-    console.log(recipesCategories)
-    console.log(categories)
-
+      
     useEffect(() => {
         fetch(`http://localhost:1337/api/table/recipes`)
             .then(res => res.json())
@@ -53,11 +50,7 @@ const SearchRecipe = () => {
             })
             .catch(error => console.error(error));
     }, []);
-    
-    useEffect(() => {
-        filterRecipes();
-    }, [checkedItems]);
-
+   
     const toggleCategory = (category) => {
         setExpandedCategories({
             ...expandedCategories,
@@ -72,38 +65,52 @@ const SearchRecipe = () => {
         filterRecipes(); // apply filters when checkbox changes
     };
 
-    const filterRecipes = () => {
-        const filteredIds = {};
+    const filterRecipes = useCallback(() => {
+        let filteredIds = {};
         let anyChecked = false;
-        Object.keys(checkedItems).forEach(category => {
-            Object.keys(checkedItems[category]).forEach(value => {
-                if (checkedItems[category][value]) {
-                    anyChecked = true;
-                    const recipeCategory = "recipe_" + category;
-                    let category_ID;
-                    for(let i=0; i<categories[category].length; i++){
-                        if(categories[category][i][1] === value.substring(2)){
-                            category_ID = categories[category][i][0];
-                        }
-                    }
-                    const filteredRecipes_check = [];
-                    for (let i = 0; i < recipesCategories[recipeCategory].length; i++) {
-                        const recipe = recipesCategories[recipeCategory][i];
-                        if (recipe.category_ID === category_ID) {
-                            filteredRecipes_check.push(recipe);
-                            filteredIds[recipe.recipe_ID] = true
-                        }
-                    }
+        Object.keys(checkedItems).forEach((category) => {
+          Object.keys(checkedItems[category]).forEach((value) => {
+            if (checkedItems[category][value]) {
+              anyChecked = true;
+              const recipeCategory = "recipe_" + category;
+              let category_ID;
+              for (let i = 0; i < categories[category].length; i++) {
+                if (categories[category][i][1] === value.substring(2)) {
+                  category_ID = categories[category][i][0];
                 }
-            });
+              }
+              const tempFilteredIds = {};
+              for (let i = 0; i < recipesCategories[recipeCategory].length; i++) {
+                const recipe = recipesCategories[recipeCategory][i];
+                if (recipe.category_ID === category_ID) {
+                  tempFilteredIds[recipe.recipe_ID] = true;
+                }
+              }
+              if (Object.keys(filteredIds).length === 0) {
+                filteredIds = tempFilteredIds;
+              } else {
+                filteredIds = Object.keys(filteredIds)
+                  .filter((id) => tempFilteredIds[id])
+                  .reduce((obj, id) => {
+                    obj[id] = true;
+                    return obj;
+                  }, {});
+              }
+            }
+          });
         });
         if (!anyChecked) {
-            setFilteredRecipes(recipes);
+          setFilteredRecipes(recipes);
         } else {
-            const filteredRecipes = recipes.filter(recipe => filteredIds[recipe.RecipeId]);
-            setFilteredRecipes(filteredRecipes);
+          const filteredRecipes = recipes.filter((recipe) => filteredIds[recipe.RecipeId]);
+          setFilteredRecipes(filteredRecipes);
         }
-    };
+      }, [checkedItems, categories, recipes, recipesCategories]);
+      
+      useEffect(() => {
+        filterRecipes();
+      }, [checkedItems, filterRecipes]);
+
     const handleClick = (recipeId) => {
         navigate(`/recipes/${recipeId}`);
     };

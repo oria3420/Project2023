@@ -9,25 +9,24 @@ const RecipeCard = (props) => {
   const [imageUrl, setImageUrl] = useState(null);
   const recipe = props.recipe;
 
-  // useEffect(() => {
-  //   async function getImageUrl() {
-  //     const response = await fetch(`http://localhost:1337/api/recipes/images/${recipe.RecipeId}`);
-  //     const data = await response.text();
-  //     if (data !== 'Image not found') {
-  //       setImageUrl(data)
-  //     }
-  //     else {
-  //       setImageUrl(defaultImageUrl)
-  //     }
-
-  //   }
-  //   getImageUrl();
-  // }, [recipe.RecipeId]);
+  useEffect(() => {
+    async function getImageUrl() {
+      const response = await fetch(`http://localhost:1337/api/recipes/images/${recipe.RecipeId}`);
+      const data = await response.text();
+      if (data !== 'Image not found') {
+        setImageUrl(data)
+      }
+      else {
+        setImageUrl(defaultImageUrl)
+      }
+    }
+    getImageUrl();
+  }, [recipe.RecipeId]);
 
   return (
     <div>
       <div className="card recipe-card">
-
+      {imageUrl && <img className="card-img-top" src={imageUrl} alt="Card cap"></img>}
         <div className="card-body">
           <h6 className="card-title">{recipe.Name}</h6>
           <p className="card-text">{recipe.Description}</p>
@@ -43,4 +42,3 @@ const RecipeCard = (props) => {
 
 export default RecipeCard
 
-// {imageUrl && <img className="card-img-top" src={imageUrl} alt="Card cap"></img>}
