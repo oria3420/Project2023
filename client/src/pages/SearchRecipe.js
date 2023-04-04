@@ -51,6 +51,10 @@ const SearchRecipe = () => {
             })
             .catch(error => console.error(error));
     }, []);
+    
+    // useEffect(() => {
+    //     filterRecipes();
+    // }, [checkedItems]);
 
     const toggleCategory = (category) => {
         setExpandedCategories({
@@ -67,6 +71,7 @@ const SearchRecipe = () => {
     };
 
     const filterRecipes = () => {
+        console.log(checkedItems)
         const filteredIds = {};
         Object.keys(checkedItems).forEach(category => {
             Object.keys(checkedItems[category]).forEach(value => {
@@ -78,9 +83,7 @@ const SearchRecipe = () => {
                             category_ID = categories[category][i][0];
                         }
                     }
-                    
-                    console.log("category_ID = "+category_ID); 
-
+                
                     console.log(checkedItems[category][value])
 
                     const filteredRecipes_check = [];
