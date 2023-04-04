@@ -12,18 +12,11 @@ const SearchRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
+    const [checkedItems, setCheckedItems] = useState({});
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [recipesCategories, setRecipesCategories] = useState([]);
-    const [checkedItems, setCheckedItems] = useState(() => {
-        const defaultCheckedItems = {};
-        Object.keys(categories).forEach(category => {
-            defaultCheckedItems[category] = {};
-            categories[category].forEach(value => {
-                defaultCheckedItems[category][value] = false;
-            });
-        });
-        return defaultCheckedItems;
-    });
+
+    
     console.log(recipesCategories)
     console.log(categories)
 
@@ -61,9 +54,9 @@ const SearchRecipe = () => {
             .catch(error => console.error(error));
     }, []);
     
-    // useEffect(() => {
-    //     filterRecipes();
-    // }, [checkedItems]);
+    useEffect(() => {
+        filterRecipes();
+    }, [checkedItems]);
 
     const toggleCategory = (category) => {
         setExpandedCategories({
@@ -80,11 +73,12 @@ const SearchRecipe = () => {
     };
 
     const filterRecipes = () => {
-        console.log(checkedItems)
         const filteredIds = {};
+        let anyChecked = false;
         Object.keys(checkedItems).forEach(category => {
             Object.keys(checkedItems[category]).forEach(value => {
                 if (checkedItems[category][value]) {
+                    anyChecked = true;
                     const recipeCategory = "recipe_" + category;
                     let category_ID;
                     for(let i=0; i<categories[category].length; i++){
@@ -92,9 +86,6 @@ const SearchRecipe = () => {
                             category_ID = categories[category][i][0];
                         }
                     }
-                
-                    console.log(checkedItems[category][value])
-
                     const filteredRecipes_check = [];
                     for (let i = 0; i < recipesCategories[recipeCategory].length; i++) {
                         const recipe = recipesCategories[recipeCategory][i];
@@ -103,14 +94,16 @@ const SearchRecipe = () => {
                             filteredIds[recipe.recipe_ID] = true
                         }
                     }
-                    console.log(filteredRecipes_check)
                 }
             });
         });
-        const filteredRecipes = recipes.filter(recipe => filteredIds[recipe.RecipeId]);
-        setFilteredRecipes(filteredRecipes);
+        if (!anyChecked) {
+            setFilteredRecipes(recipes);
+        } else {
+            const filteredRecipes = recipes.filter(recipe => filteredIds[recipe.RecipeId]);
+            setFilteredRecipes(filteredRecipes);
+        }
     };
-
     const handleClick = (recipeId) => {
         navigate(`/recipes/${recipeId}`);
     };
