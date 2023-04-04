@@ -12,9 +12,18 @@ const SearchRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
-    const [checkedItems, setCheckedItems] = useState({});
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [recipesCategories, setRecipesCategories] = useState([]);
+    const [checkedItems, setCheckedItems] = useState(() => {
+        const defaultCheckedItems = {};
+        Object.keys(categories).forEach(category => {
+            defaultCheckedItems[category] = {};
+            categories[category].forEach(value => {
+                defaultCheckedItems[category][value] = false;
+            });
+        });
+        return defaultCheckedItems;
+    });
     console.log(recipesCategories)
     console.log(categories)
 
