@@ -153,7 +153,7 @@ app.get('/api/recipes/:id', (req, res) => {
       const result = {};
       for (const collection of filteredCollections) {
         const documents = await mongoose.connection.db.collection(collection.name).find().toArray();
-        const values = documents.map(doc => Object.values(doc)[2]);
+        const values = documents.map(doc => [Object.values(doc)[1], Object.values(doc)[2]]);
         result[collection.name] = values;
       }
       res.json(result);

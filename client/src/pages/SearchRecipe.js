@@ -10,7 +10,6 @@ const SearchRecipe = () => {
     const navigate = useNavigate();
     const name = location.state.name;
     const [categories, setCategories] = useState([]);
-    const [categories_ids, setCategories_ids] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
@@ -18,7 +17,7 @@ const SearchRecipe = () => {
     const [recipesCategories, setRecipesCategories] = useState([]);
     console.log(recipesCategories)
     console.log(categories)
-    
+
     useEffect(() => {
         fetch(`http://localhost:1337/api/table/recipes`)
             .then(res => res.json())
@@ -64,33 +63,31 @@ const SearchRecipe = () => {
         const checkedItemsCopy = { ...checkedItems };
         checkedItemsCopy[category][value] = !checkedItemsCopy[category][value];
         setCheckedItems(checkedItemsCopy);
-        console.log("handleCheckboxChange")
         filterRecipes(); // apply filters when checkbox changes
     };
 
     const filterRecipes = () => {
-        console.log("filterRecipes func")
         const filteredIds = {};
         Object.keys(checkedItems).forEach(category => {
-            console.log(checkedItems[category])
             Object.keys(checkedItems[category]).forEach(value => {
-                console.log(category)
-                console.log(value)
                 if (checkedItems[category][value]) {
                     const recipeCategory = "recipe_" + category;
-                    const category_ID = categories[category].indexOf(value)+1;
+                    const categoryArray = Object.entries(categories[category]);
+                    const [, [category_ID, ]] = categoryArray.find(([key, [categoryId, categoryName]]) => categoryName === "winter");
+
+                    console.log("category_ID = "+category_ID); 
+
                     console.log(checkedItems[category][value])
-                    console.log(recipesCategories[recipeCategory])
-                    console.log(category_ID)
+
                     const filteredRecipes_check = [];
                     for (let i = 0; i < recipesCategories[recipeCategory].length; i++) {
                         const recipe = recipesCategories[recipeCategory][i];
                         if (recipe.category_ID === category_ID) {
-                          filteredRecipes_check.push(recipe);
-                          filteredIds[recipe.recipe_ID] = true
+                            filteredRecipes_check.push(recipe);
+                            filteredIds[recipe.recipe_ID] = true
                         }
-                      }
-                      console.log(filteredRecipes_check)
+                    }
+                    console.log(filteredRecipes_check)
                 }
             });
         });
@@ -115,10 +112,10 @@ const SearchRecipe = () => {
                                     <span className='category-title'>{category}</span>
                                     <button className="btn btn-light category-toggle-btn">{expandedCategories[category] ? "-" : "+"}</button>
                                 </div>
-                                {expandedCategories[category] && categories[category].sort().map((value) => (
+                                {expandedCategories[category] && categories[category].sort((a, b) => a[1].localeCompare(b[1])).map((value) => (
                                     <div className="form-check" key={value}>
                                         <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} checked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
-                                        <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value}</label>
+                                        <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
                                     </div>
                                 ))}
                             </div>
