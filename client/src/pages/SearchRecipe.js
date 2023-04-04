@@ -4,24 +4,28 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './App.css';
 import React, { useState, useEffect } from 'react';
-import categoryMap from './categoryMap';
 
 const SearchRecipe = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const name = location.state.name;
     const [categories, setCategories] = useState([]);
+    const [categories_ids, setCategories_ids] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [recipesCategories, setRecipesCategories] = useState([]);
+    console.log(recipesCategories)
+    console.log(categories)
     
-
     useEffect(() => {
         fetch(`http://localhost:1337/api/table/recipes`)
             .then(res => res.json())
-            .then(data => setRecipes(data))
+            .then(data => {
+                setRecipes(data);
+                setFilteredRecipes(data); // initialize filteredRecipes with all recipes
+            })
             .catch(error => console.error(error))
     }, []);
 
@@ -31,8 +35,6 @@ const SearchRecipe = () => {
             .then(data => setRecipesCategories(data))
             .catch(error => console.error(error))
     }, []);
-
-    console.log(recipesCategories)
 
     useEffect(() => {
         fetch('http://localhost:1337/api/home/search_recipe')
@@ -51,40 +53,6 @@ const SearchRecipe = () => {
             .catch(error => console.error(error));
     }, []);
 
-    useEffect(() => {
-        const selectedCategories = Object.keys(checkedItems).filter((category) =>
-          Object.values(checkedItems[category]).some((value) => value)
-        );
-        if (selectedCategories.length === 0) {
-          // If no categories are selected, display all recipes
-          setFilteredRecipes(recipes);
-          return;
-        }
-        const filteredRecipes = recipes.filter((recipe) => {
-          return selectedCategories.every((category) => {
-            const recipeCategoryId = recipe[categoryMap[category]];
-            const matchingValues = checkedItems[category][recipeCategoryId];
-            return matchingValues;
-          });
-        });
-        console.log(filteredRecipes)
-        setFilteredRecipes(filteredRecipes);
-      }, [checkedItems, recipes]);
-
-    // useEffect(() => {
-    //     const selectedCategories = Object.keys(checkedItems).filter(category => {
-    //       return Object.keys(checkedItems[category]).some(value => checkedItems[category][value]);
-    //     });
-    //     const filteredRecipes = recipes.filter(recipe => {
-    //       return selectedCategories.every(category => {
-    //         const recipeCategoryName = categoryMap[category];
-    //         return checkedItems[category][recipe[recipeCategoryName]];
-    //       });
-    //     });
-    //     console.log(filteredRecipes)
-    //     setFilteredRecipes(filteredRecipes);
-    //   }, [checkedItems, recipes]);
-
     const toggleCategory = (category) => {
         setExpandedCategories({
             ...expandedCategories,
@@ -96,12 +64,43 @@ const SearchRecipe = () => {
         const checkedItemsCopy = { ...checkedItems };
         checkedItemsCopy[category][value] = !checkedItemsCopy[category][value];
         setCheckedItems(checkedItemsCopy);
+        console.log("handleCheckboxChange")
+        filterRecipes(); // apply filters when checkbox changes
+    };
+
+    const filterRecipes = () => {
+        console.log("filterRecipes func")
+        const filteredIds = {};
+        Object.keys(checkedItems).forEach(category => {
+            console.log(checkedItems[category])
+            Object.keys(checkedItems[category]).forEach(value => {
+                console.log(category)
+                console.log(value)
+                if (checkedItems[category][value]) {
+                    const recipeCategory = "recipe_" + category;
+                    const category_ID = categories[category].indexOf(value)+1;
+                    console.log(checkedItems[category][value])
+                    console.log(recipesCategories[recipeCategory])
+                    console.log(category_ID)
+                    const filteredRecipes_check = [];
+                    for (let i = 0; i < recipesCategories[recipeCategory].length; i++) {
+                        const recipe = recipesCategories[recipeCategory][i];
+                        if (recipe.category_ID === category_ID) {
+                          filteredRecipes_check.push(recipe);
+                          filteredIds[recipe.recipe_ID] = true
+                        }
+                      }
+                      console.log(filteredRecipes_check)
+                }
+            });
+        });
+        const filteredRecipes = recipes.filter(recipe => filteredIds[recipe.RecipeId]);
+        setFilteredRecipes(filteredRecipes);
     };
 
     const handleClick = (recipeId) => {
         navigate(`/recipes/${recipeId}`);
     };
-
 
     return (
         <div>
