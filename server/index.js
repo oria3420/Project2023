@@ -174,7 +174,6 @@ app.get('/api/recipes/:id', (req, res) => {
         const docs = await mongoose.connection.db.collection(collection.name).find().toArray();
         result[collection.name] = docs;
       }
-      console.log(result)
       res.json(result);
       
     } catch (err) {

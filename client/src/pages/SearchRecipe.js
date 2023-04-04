@@ -72,9 +72,13 @@ const SearchRecipe = () => {
             Object.keys(checkedItems[category]).forEach(value => {
                 if (checkedItems[category][value]) {
                     const recipeCategory = "recipe_" + category;
-                    const categoryArray = Object.entries(categories[category]);
-                    const [, [category_ID, ]] = categoryArray.find(([key, [categoryId, categoryName]]) => categoryName === "winter");
-
+                    let category_ID;
+                    for(let i=0; i<categories[category].length; i++){
+                        if(categories[category][i][1] === value.substring(2)){
+                            category_ID = categories[category][i][0];
+                        }
+                    }
+                    
                     console.log("category_ID = "+category_ID); 
 
                     console.log(checkedItems[category][value])
