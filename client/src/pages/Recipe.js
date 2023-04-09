@@ -10,6 +10,7 @@ const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [recipesCategories, setRecipesCategories] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
     async function fetchRecipe() {
@@ -20,6 +21,17 @@ const RecipePage = () => {
     fetchRecipe();
   }, [id]);
 
+  fetch('http://localhost:1337/api/recipes/ingredients')
+  .then(response => response.json())
+  .then(data => {
+    setIngredients(data);
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+  console.log(ingredients)
+  
   useEffect(() => {
     async function getImageUrl() {
       const response = await fetch(`http://localhost:1337/api/recipes/images/${id}`);
@@ -63,32 +75,33 @@ const RecipePage = () => {
           </div>
 
           <div className='recipe-body'>
-          <div className='instructions'>
-          <h3>Instructions</h3>
-          {recipe.RecipeInstructions.split('.').map((instruction, index) => {
-            const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
-            return instruction.trim() !== "" && (
-              <div className='step-container' key={index}>
-                <span className='step-index'>{index < 9 ? "0" : ""}{index + 1}. </span>
-                <span className='step-text'>{formattedInstruction}</span>
-                <br />
-              </div>
-            );
-          })}
-          </div>
+
           <div className='ingredients'>
           <h3>Ingredients</h3>
           {recipe.RecipeInstructions.split('.').map((instruction, index) => {
-            const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
             return instruction.trim() !== "" && (
               <div className='step-container' key={index}>
-                <span className='step-index'>{index < 9 ? "0" : ""}{index + 1}. </span>
-                <span className='step-text'>{formattedInstruction}</span>
+                <span className='ingredient-text'>ingredient</span>
                 <br />
               </div>
             );
           })}
           </div>
+
+            <div className='instructions'>
+              <h3>Instructions</h3>
+              {recipe.RecipeInstructions.split('.').map((instruction, index) => {
+                const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
+                return instruction.trim() !== "" && (
+                  <div className='step-container' key={index}>
+                    <span className='step-index'>{index < 9 ? "0" : ""}{index + 1}. </span>
+                    <span className='step-text'>{formattedInstruction}</span>
+                    <br />
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
 
 

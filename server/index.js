@@ -145,6 +145,15 @@ app.get('/api/recipes/:id', (req, res) => {
   });
 });
 
+app.get('/api/recipes/ingredients', async (req, res) => {
+  try {
+    const Ingredients = await Collection.getModel(TABLE_NAMES.INGREDIENTS);
+    res.send(Ingredients);
+  } catch (error) {
+    res.status(404).send({ error: "Could not retrieve ingredients." });
+  }
+});
+
   // filters
   app.get('/api/home/search_recipe', async (req, res) => {
     try {

@@ -5,7 +5,7 @@
 }
 
 .recipe-container{
-    margin: 0 15%;
+    margin: 0 6%;
 }
 
 .step-container{
@@ -27,21 +27,13 @@
     display: inline-block;
     vertical-align: middle;
 }
-
-.recipe-body {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-  }
-
-  .recipe-body {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-  }
   
-  .instructions, .ingredients {
-    flex-basis: 50%;
+  .ingredient-text::before {
+    content: "•"; /* Use the bullet character as the list item icon */
+    color: green;
+    margin-right: 5px; /* Add some space between the icon and the text */
+    font-size: 1.5em; /* adjust as needed */
+    margin-right: 0.5em; /* optional spacing */
   }
 
   .recipe-image {
@@ -49,3 +41,6 @@
     margin-top: 30px;
   }
   
+  .instructions, .ingredients{
+    margin-top: 40px;
+  }
