@@ -1,0 +1,26 @@
+.times-yield{
+    border-left: 4px solid green;
+    padding-left: 10px;
+    margin: 40px 0;
+}
+
+.recipe-container{
+    margin-left: 15%;
+}
+
+.step-index{
+    font-size: 20px;
+    color: rgb(56, 55, 55);
+    font-weight: 500;
+}
+
+.step-container{
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.step-text{
+    color: rgb(155, 151, 151);
+    margin-left: 10px;
+}
