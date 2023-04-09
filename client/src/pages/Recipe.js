@@ -52,8 +52,9 @@ const RecipePage = () => {
     <div>
       {recipe ? (
         <div className='recipe-container'>
-          {/*{imageUrl && <img src={imageUrl} alt="Card cap"></img>}*/}
+          <span>{recipe.DatePublished}</span>
           <h2>{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
+          {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
           <div className='times-yield'>
             <p>Prep Time: {recipe.PrepTime}</p>
             <p>Cook Time: {recipe.CookTime}</p>
@@ -61,6 +62,9 @@ const RecipePage = () => {
             <p>Servings: {recipe.RecipeYield}</p>
           </div>
 
+          <div className='recipe-body'>
+          <div className='instructions'>
+          <h3>Instructions</h3>
           {recipe.RecipeInstructions.split('.').map((instruction, index) => {
             const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
             return instruction.trim() !== "" && (
@@ -71,6 +75,21 @@ const RecipePage = () => {
               </div>
             );
           })}
+          </div>
+          <div className='ingredients'>
+          <h3>Ingredients</h3>
+          {recipe.RecipeInstructions.split('.').map((instruction, index) => {
+            const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
+            return instruction.trim() !== "" && (
+              <div className='step-container' key={index}>
+                <span className='step-index'>{index < 9 ? "0" : ""}{index + 1}. </span>
+                <span className='step-text'>{formattedInstruction}</span>
+                <br />
+              </div>
+            );
+          })}
+          </div>
+          </div>
 
 
         </div>
@@ -84,7 +103,6 @@ const RecipePage = () => {
 export default RecipePage;
 
 // <p>Author: {recipe.AuthorName}</p>
-// <p>Date Published: {recipe.DatePublished}</p>
 // <p>Description: {recipe.Description}</p>
 // <p>Recipe Category: {recipe.RecipeCategory}</p>
 // <p>Calories: {recipe.Calories}</p>
