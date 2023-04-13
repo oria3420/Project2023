@@ -1,13 +1,11 @@
 import Navbar from '../components/Navbar';
 import RecipeCard from '../components/RecipeCard';
 import { useLocation } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
 import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
 
 const SearchRecipe = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const name = location.state.name;
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
@@ -111,10 +109,6 @@ const SearchRecipe = () => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
 
-    const handleClick = (recipeId) => {
-        navigate(`/recipes/${recipeId}`);
-    };
-
     return (
         <div>
             {name && <Navbar name={name} />}
@@ -139,7 +133,7 @@ const SearchRecipe = () => {
                 </div>
                 <div className='recipes-container'>
                     {filteredRecipes.map((recipe) => (
-                        <RecipeCard recipe={recipe} />
+                        <RecipeCard recipe={recipe} name={name} />
                     ))}
                 </div>
             </div>

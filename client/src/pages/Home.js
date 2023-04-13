@@ -23,6 +23,7 @@ const Home = () => {
     function searchRecipe() {
         navigate('/home/search_recipe', { state: { name: name } });
       }
+      
       function popularRecipes() {
         navigate('/home/popular_recipes', { state: { name: name } });
       }

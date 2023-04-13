@@ -89,6 +89,7 @@
   .card-title{
     text-transform: capitalize;
     color: #4D4D4C;
+    cursor: pointer;
   }
 
   .bi-heart {

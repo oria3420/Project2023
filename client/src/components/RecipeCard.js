@@ -9,6 +9,7 @@ const defaultImageUrl = '/images/pizza.jpg'
 const RecipeCard = (props) => {
   const [imageUrl, setImageUrl] = useState(null);
   const recipe = props.recipe;
+  const name = props.name;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,16 +27,16 @@ const RecipeCard = (props) => {
   }, [recipe.RecipeId]);
 
   const handleClick = (recipeId) => {
-    navigate(`/recipes/${recipeId}`);
-};
+    navigate(`/recipes/${recipeId}`, { state: { name: name } });
+  };
 
   return (
     <div>
       <div className="card recipe-card">
-      {imageUrl && <img className="card-img-top" src={imageUrl} alt="Card cap"></img>}
+        {imageUrl && <img className="card-img-top" src={imageUrl} alt="Card cap"></img>}
         <div className="card-body">
-        <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
-          <h6 className="card-title">{recipe.Name}</h6>
+          <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
+            <h6 className="card-title">{recipe.Name}</h6>
           </div>
           <p className="card-text">{recipe.Description}</p>
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-heart" viewBox="0 0 16 16">

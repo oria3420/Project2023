@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
+import Navbar from '../components/Navbar';
+import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 
 // const defaultImageUrl = '/images/logo.png'
 const defaultImageUrl = '/images/pizza.jpg'
 
 const RecipePage = () => {
+  const location = useLocation();
+  const name = location.state.name;
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
@@ -54,55 +58,59 @@ const RecipePage = () => {
   return (
     <div>
       {recipe ? (
-        <div className='recipe-container'>
-          <span>{recipe.DatePublished}</span>
-          <h2>{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
-          <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
-          {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
-
-          <div className='times-yield'>
-            <p>Prep Time: {recipe.PrepTime}</p>
-            <p>Cook Time: {recipe.CookTime}</p>
-            <p>Total Time: {recipe.TotalTime}</p>
-            <p>Servings: {recipe.RecipeYield}</p>
-          </div>
-
-          <div className='recipe-body'>
-
-            <div className='ingredients'>
-              <h3>Ingredients</h3>
-              {ingredients.map((ingredient, index) => [
-                <div className='step-container' key={index}>
-                  <span className='ingredient-text' key={ingredient.name}>{ingredient.name}</span>
-                  <br key={`br-${index}`} />
-                </div>
-              ])}            
+        <>
+          {name && <Navbar name={name} />}
+          <div className='recipe-container'>
+            <span>{recipe.DatePublished}</span>
+            <h2>{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
+            <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
+            {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
+  
+            <div className='times-yield'>
+              <p>Prep Time: {recipe.PrepTime}</p>
+              <p>Cook Time: {recipe.CookTime}</p>
+              <p>Total Time: {recipe.TotalTime}</p>
+              <p>Servings: {recipe.RecipeYield}</p>
             </div>
-
-            <div className='instructions'>
-              <h3>Instructions</h3>
-              {recipe.RecipeInstructions.split('.').map((instruction, index) => {
-                const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
-                return instruction.trim() !== "" && (
+  
+            <div className='recipe-body'>
+  
+              <div className='ingredients'>
+                <h3>Ingredients</h3>
+                {ingredients.map((ingredient, index) => (
                   <div className='step-container' key={index}>
-                    <span className='step-index'>{index < 9 ? "0" : ""}{index + 1}. </span>
-                    <span className='step-text'>{formattedInstruction}</span>
-                    <br />
+                    <span className='ingredient-text' key={ingredient.name}>{ingredient.name}</span>
+                    <br key={`br-${index}`} />
                   </div>
-                );
-              })}
-              <br />
+                ))}            
+              </div>
+  
+              <div className='instructions'>
+                <h3>Instructions</h3>
+                {recipe.RecipeInstructions.split('.').map((instruction, index) => {
+                  const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
+                  return instruction.trim() !== "" && (
+                    <div className='step-container' key={index}>
+                      <span className='step-index'>{index < 9 ? "0" : ""}{index + 1}. </span>
+                      <span className='step-text'>{formattedInstruction}</span>
+                      <br />
+                    </div>
+                  );
+                })}
+                <br />
+              </div>
+  
             </div>
-
+  
+  
           </div>
-
-
-        </div>
+        </>
       ) : (
         <p>Loading recipe...</p>
       )}
     </div>
   );
+  
 }
 
 export default RecipePage;
