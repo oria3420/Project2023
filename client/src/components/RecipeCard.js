@@ -9,7 +9,8 @@ const defaultImageUrl = '/images/pizza.jpg'
 const RecipeCard = (props) => {
   const [imageUrl, setImageUrl] = useState(null);
   const recipe = props.recipe;
-  const name = props.name;
+  const user = props.user;
+  const name = user.name
   const navigate = useNavigate();
   const [isHeartFilled, setIsHeartFilled] = useState(false);
 

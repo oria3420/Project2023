@@ -7,14 +7,15 @@ import './App.css';
 const Home = () => {
     const navigate = useNavigate()
     const [name, setName] = useState(null)
+    const [user, setUser] = useState(null)
 
     useEffect(() => {
         const token = localStorage.getItem('token')
         if (token) {
-            const user = jwt_decode(token)
-            console.log(user)
-            setName(user.name)
-            if (!user) {
+            const _user = jwt_decode(token)
+            setName(_user.name)
+            setUser(_user)
+            if (!_user) {
                 localStorage.removeItem('token')
                 navigate.replace('/login')
             }
@@ -22,11 +23,11 @@ const Home = () => {
     }, [navigate])
 
     function searchRecipe() {
-        navigate('/home/search_recipe', { state: { name: name } });
+        navigate('/home/search_recipe', { state: { user: user } });
       }
       
       function popularRecipes() {
-        navigate('/home/popular_recipes', { state: { name: name } });
+        navigate('/home/popular_recipes', { state: { user: user } });
       }
     return (
         <div className="app-body">

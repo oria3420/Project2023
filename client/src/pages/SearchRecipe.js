@@ -6,7 +6,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 const SearchRecipe = () => {
     const location = useLocation();
-    const name = location.state.name;
+    const user = location.state.user
+    const name = user.name;
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
@@ -132,7 +133,7 @@ const SearchRecipe = () => {
                 </div>
                 <div className='recipes-container'>
                     {filteredRecipes.map((recipe) => (
-                        <RecipeCard recipe={recipe} name={name} />
+                        <RecipeCard recipe={recipe} user={user} />
                     ))}
                 </div>
             </div>
