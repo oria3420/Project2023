@@ -233,6 +233,42 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
     });
   });
 
+  app.post('/api/favorites/:recipeId/:userId', (req, res) => {
+    const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
+    const user_id = req.params.userId;
+    const recipe_id = parseInt(req.params.recipeId);
+    console.log("use " + user_id)
+    console.log("rec " + recipe_id)
+    Favorites.create({
+      user_id: user_id,
+      recipe_id: recipe_id,
+    })
+    // Favorites.insertOne({ user_id:user_id, recipe_id:recipe_id }, (err, result) => {
+    //   if (err) {
+    //     console.log(err);
+    //     res.sendStatus(500);
+    //   } else {
+    //     res.sendStatus(200);
+    //   }
+    // });
+  });
+
+  app.delete('/api/favorites/:recipeId/:userId', (req, res) => {
+    const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES)
+    const user_id = req.params.userId;
+    const recipe_id = parseInt(req.params.recipeId);
+    console.log("use " + user_id)
+    console.log("rec " + recipe_id)
+    Favorites.deleteOne({ user_id, recipe_id }, (err, result) => {
+      if (err) {
+        console.log(err);
+        res.sendStatus(500);
+      } else {
+        res.sendStatus(200);
+      }
+    });
+  });
+
   app.listen(1337, () => {
     console.log('Server saterted on 1337')
 })

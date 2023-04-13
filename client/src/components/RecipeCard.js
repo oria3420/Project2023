@@ -2,6 +2,7 @@ import './Components.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+
 // const defaultImageUrl = '/images/logo.png'
 const defaultImageUrl = '/images/pizza.jpg'
 
@@ -36,6 +37,9 @@ const RecipeCard = (props) => {
 
   const handleHeartClick = () => {
     setIsHeartFilled(!isHeartFilled);
+    const url = `http://localhost:1337/api/favorites/${recipe.RecipeId}/${user.email}`
+    const method = isHeartFilled ? 'DELETE' : 'POST';
+    fetch(url, { method });
   };
 
   return (
@@ -58,7 +62,7 @@ const RecipeCard = (props) => {
               onClick={() => handleHeartClick()}
             >
               <path
-                fill-rule="evenodd"
+                fillRule="evenodd"
                 d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
               />
             </svg>
