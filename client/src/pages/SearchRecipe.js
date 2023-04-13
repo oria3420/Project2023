@@ -14,7 +14,6 @@ const SearchRecipe = () => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [recipesCategories, setRecipesCategories] = useState([]);
 
-
     useEffect(() => {
         fetch(`http://localhost:1337/api/table/recipes`)
             .then(res => res.json())

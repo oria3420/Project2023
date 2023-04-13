@@ -12,6 +12,7 @@ const Home = () => {
         const token = localStorage.getItem('token')
         if (token) {
             const user = jwt_decode(token)
+            console.log(user)
             setName(user.name)
             if (!user) {
                 localStorage.removeItem('token')
