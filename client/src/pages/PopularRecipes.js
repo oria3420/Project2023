@@ -5,7 +5,7 @@ import { useNavigate  } from 'react-router-dom';
 import './App.css';
 import React, { useState, useEffect } from 'react';
 
-const PopularRecipe = () => {
+const PopularRecipes = () => {
     const location = useLocation();
     const name = location.state.name;
     const [categories, setCategories] = useState([]);
@@ -94,4 +94,4 @@ const PopularRecipe = () => {
     )
 }
 
-export default PopularRecipe
+export default PopularRecipes

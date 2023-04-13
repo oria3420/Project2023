@@ -10,6 +10,7 @@ import TablesRouter from './tables/TablesRouter';
 import RecipePage from './pages/Recipe';
 import SearchRecipe from './pages/SearchRecipe';
 import WelcomePage from './pages/Welcome'
+import PopularRecipes from './pages/PopularRecipes'
 
 const App = () => {
     return (
@@ -23,6 +24,7 @@ const App = () => {
                 <Route path="/table/:type" element={<TablesRouter />} />
                 <Route path="/recipes/:id" element={<RecipePage />} />
                 <Route path="/home/search_recipe" element={<SearchRecipe />} />
+                <Route path="/home/popular_recipes" element={<PopularRecipes />} />
             </Routes>
         </BrowserRouter>
     );
