@@ -233,6 +233,19 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
     });
   });
 
+  app.get('/api/favorites/:recipeId/:userId', (req, res) => {
+    const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
+    const user_id = req.params.userId;
+    const recipe_id = parseInt(req.params.recipeId);
+    const existingUser = Favorites.findOne({ user_id: user_id, recipe_id: recipe_id });
+      if (existingUser) {
+        return res.json({ status: 'true' });
+      }
+      else{
+        return res.json({ status: 'false' });
+      }
+  });
+
   app.post('/api/favorites/:recipeId/:userId', (req, res) => {
     const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
     const user_id = req.params.userId;
