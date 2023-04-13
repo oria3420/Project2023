@@ -9,7 +9,6 @@ const RecipePage = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
-  const [recipesCategories, setRecipesCategories] = useState([]);
   const [ingredients, setIngredients] = useState([]);
 
   useEffect(() => {
@@ -21,17 +20,22 @@ const RecipePage = () => {
     fetchRecipe();
   }, [id]);
 
-  fetch('http://localhost:1337/api/recipes/ingredients')
-  .then(response => response.json())
-  .then(data => {
-    setIngredients(data);
-  })
-  .catch(error => {
-    console.error(error);
-  });
+  useEffect(() => {
+    async function fetchIngredients() {
+      try {
+        const response = await fetch(`http://localhost:1337/api/recipes/${id}/ingredients`);
+        const data = await response.json();
+        setIngredients(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchIngredients();
+  }, [id]);
 
   console.log(ingredients)
-  
+
   useEffect(() => {
     async function getImageUrl() {
       const response = await fetch(`http://localhost:1337/api/recipes/images/${id}`);
@@ -47,26 +51,15 @@ const RecipePage = () => {
     getImageUrl();
   }, [id]);
 
-  useEffect(() => {
-    fetch(`http://localhost:1337/api/recipes_categories`)
-      .then(res => res.json())
-      .then(data => setRecipesCategories(data))
-      .catch(error => console.error(error))
-  }, []);
-
-  console.log(recipesCategories)
-
-  const recipeDifficulty = recipesCategories.recipe_difficulty_categories
-
-  console.log(recipeDifficulty)
-
   return (
     <div>
       {recipe ? (
         <div className='recipe-container'>
           <span>{recipe.DatePublished}</span>
           <h2>{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
+          <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
           {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
+          
           <div className='times-yield'>
             <p>Prep Time: {recipe.PrepTime}</p>
             <p>Cook Time: {recipe.CookTime}</p>
@@ -100,6 +93,7 @@ const RecipePage = () => {
                   </div>
                 );
               })}
+              <br/>
             </div>
 
           </div>
@@ -116,7 +110,7 @@ const RecipePage = () => {
 export default RecipePage;
 
 // <p>Author: {recipe.AuthorName}</p>
-// <p>Description: {recipe.Description}</p>
+
 // <p>Recipe Category: {recipe.RecipeCategory}</p>
 // <p>Calories: {recipe.Calories}</p>
 // <p>Fat Content: {recipe.FatContent}</p>

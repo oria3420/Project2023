@@ -145,14 +145,31 @@ app.get('/api/recipes/:id', (req, res) => {
   });
 });
 
-app.get('/api/recipes/ingredients', async (req, res) => {
+const getIngredientsForRecipe = async (recipeId) => {
+  const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS);
+  const Ingredients = Collection.getModel(TABLE_NAMES.INGREDIENTS);
+
+  const ingredientIds = await RecipeIngredients.find({ recipe_ID: recipeId }).distinct('ingredient_ID');
+
+  const ingredients = await Ingredients.find({ id: { $in: ingredientIds } });
+  console.log(ingredients)
+  return ingredients.map(({ ingredient }) => ({ name: ingredient }));
+};
+
+const getRecipeIngredients = async (req, res) => {
   try {
-    const Ingredients = await Collection.getModel(TABLE_NAMES.INGREDIENTS);
-    res.send(Ingredients);
+    const recipeId = parseInt(req.params.id);
+    const ingredients = await getIngredientsForRecipe(recipeId);
+    console.log(ingredients)
+    res.status(200).json(ingredients);
   } catch (error) {
-    res.status(404).send({ error: "Could not retrieve ingredients." });
+    console.error(error);
+    res.status(500).send('Server error');
   }
-});
+};
+
+app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
+
 
   // filters
   app.get('/api/home/search_recipe', async (req, res) => {
