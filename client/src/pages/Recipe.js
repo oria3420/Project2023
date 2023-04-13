@@ -34,7 +34,7 @@ const RecipePage = () => {
     fetchIngredients();
   }, [id]);
 
-  console.log(ingredients)
+
 
   useEffect(() => {
     async function getImageUrl() {
@@ -59,7 +59,7 @@ const RecipePage = () => {
           <h2>{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
           <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
           {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
-          
+
           <div className='times-yield'>
             <p>Prep Time: {recipe.PrepTime}</p>
             <p>Cook Time: {recipe.CookTime}</p>
@@ -69,17 +69,15 @@ const RecipePage = () => {
 
           <div className='recipe-body'>
 
-          <div className='ingredients'>
-          <h3>Ingredients</h3>
-          {recipe.RecipeInstructions.split('.').map((instruction, index) => {
-            return instruction.trim() !== "" && (
-              <div className='step-container' key={index}>
-                <span className='ingredient-text'>ingredient</span>
-                <br />
-              </div>
-            );
-          })}
-          </div>
+            <div className='ingredients'>
+              <h3>Ingredients</h3>
+              {ingredients.map((ingredient, index) => [
+                <div className='step-container' key={index}>
+                  <span className='ingredient-text' key={ingredient.name}>{ingredient.name}</span>
+                  <br key={`br-${index}`} />
+                </div>
+              ])}            
+            </div>
 
             <div className='instructions'>
               <h3>Instructions</h3>
@@ -93,7 +91,7 @@ const RecipePage = () => {
                   </div>
                 );
               })}
-              <br/>
+              <br />
             </div>
 
           </div>
