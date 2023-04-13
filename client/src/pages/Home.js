@@ -44,7 +44,7 @@ const Home = () => {
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Popular Recipes" onClick={popularRecipes} />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Ingredients List" />
                 <input id="btn-home-menu" className="btn btn-primary" type="button" value="Shopping List" />
-                <input id="btn-home-menu" className="btn btn-primary" type="button" value="About Us" />
+                <input id="btn-home-menu" className="btn btn-primary" type="button" value="Favorites" />
             </div>
         </div>
     )
