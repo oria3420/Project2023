@@ -139,9 +139,7 @@ const SearchRecipe = () => {
                 </div>
                 <div className='recipes-container'>
                     {filteredRecipes.map((recipe) => (
-                        <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
-                            <RecipeCard recipe={recipe} />
-                        </div>
+                        <RecipeCard recipe={recipe} />
                     ))}
                 </div>
             </div>
