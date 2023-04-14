@@ -109,6 +109,8 @@ const SearchRecipe = () => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
 
+
+
     return (
         <div>
             {name && <Navbar name={name} />}
