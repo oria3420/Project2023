@@ -69,31 +69,33 @@
     margin-top: 80px;
 }
 
+
 .filter-menu {
     width: 20%;
     position: sticky;
     top: 80px;
     height: calc(100vh - 80px);
     overflow-y: scroll;
-  }
-  
+    margin-right: 10px;
+}
+
 
 .recipes-container {
-    width: 80%;
+    width: calc(80% - 10px); /* subtract the margin from the width */
     display: flex;
-     flex-wrap: wrap;
+    flex-wrap: wrap;
+
 }
 
 .filter-menu::-webkit-scrollbar {
     width: 7px;
-  }
-  
-  .filter-menu::-webkit-scrollbar-thumb {
+}
+
+.filter-menu::-webkit-scrollbar-thumb {
     background-color: #ccc;
     border-radius: 10px;
-  }
-  
-  .filter-menu::-webkit-scrollbar-track {
+}
+
+.filter-menu::-webkit-scrollbar-track {
     background-color: #ffffff;
-  }
-  
+}
