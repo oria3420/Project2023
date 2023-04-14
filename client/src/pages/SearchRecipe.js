@@ -134,10 +134,12 @@ const SearchRecipe = () => {
                         ))}
                 </div>
                 <div className='recipes-container'>
-                    {filteredRecipes.map((recipe) => (
-                        <RecipeCard recipe={recipe} user={user} />
-                    ))}
-                </div>
+                {filteredRecipes.map((recipe) => (
+                  <div className='recipe-card-wrapper'>
+                    <RecipeCard recipe={recipe} user={user} />
+                  </div>
+                ))}
+              </div>
             </div>
         </div>
     )
