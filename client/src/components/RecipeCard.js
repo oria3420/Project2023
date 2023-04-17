@@ -15,25 +15,25 @@ const RecipeCard = (props) => {
   const navigate = useNavigate();
   const [isHeartFilled, setIsHeartFilled] = useState(false);
 
-  // async function registerUser(event) {
-  //   event.preventDefault()
-  //   const response = await fetch(`http://localhost:1337/api/favorites/${recipe.RecipeId}/${user.email}`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //   })
+  async function getLikes() {
+   
+    const response = await fetch(`http://localhost:1337/api/favorites/${recipe.RecipeId}/${user.email}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
 
-  //   const data = await response.json()
+    const data = await response.json()
 
-  //   if (data.status === 'false') {
-  //     setIsHeartFilled(false);
-  //   }else{
-  //     setIsHeartFilled(true);
-  //   }
+    if (data.status === 'false') {
+      setIsHeartFilled(false);
+    }else if (data.status === 'true'){
+      setIsHeartFilled(true);
+    }
 
-  // }
-  
+  }
+  getLikes();
 
 
   useEffect(() => {

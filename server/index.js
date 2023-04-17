@@ -237,13 +237,16 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
     const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
     const user_id = req.params.userId;
     const recipe_id = parseInt(req.params.recipeId);
-    const existingUser = Favorites.findOne({ user_id: user_id, recipe_id: recipe_id });
-      if (existingUser) {
-        return res.json({ status: 'true' });
-      }
-      else{
+    Favorites.findOne({ user_id: user_id, recipe_id: recipe_id }, (err, like) => {
+      if (err) {
+        return res.json({ status: 'false' });
+      } 
+      else if (!like){
         return res.json({ status: 'false' });
       }
+      else{
+        return res.json({ status: 'true' });
+      }})
   });
 
   app.post('/api/favorites/:recipeId/:userId', (req, res) => {
