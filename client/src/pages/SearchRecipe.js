@@ -135,10 +135,13 @@ const SearchRecipe = () => {
                         .sort((a, b) => a.localeCompare(b))
                         .map((category) => {
                             const categoryName = category.slice(0, -11).replace(/_/g, ' ');
+                            const words = categoryName.toLowerCase().split(" ");
+                            const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+                            const capitalizedCategoryName = capitalizedWords.join(" ");
                             return (
                                 <div className='category' key={category}>
                                     <div className="category-header" onClick={() => toggleCategory(category)}>
-                                        <span className='category-title'>{categoryName}</span>
+                                        <span className='category-title'>{capitalizedCategoryName}</span>
                                         <button className="btn btn-light category-toggle-btn">{expandedCategories[category] ? "-" : "+"}</button>
                                     </div>
                                     {expandedCategories[category] && categories[category].sort((a, b) => a[1].localeCompare(b[1])).map((value) => (
