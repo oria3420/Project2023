@@ -251,7 +251,7 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
     const recipe_id = parseInt(req.params.recipeId);
     console.log("use " + user_id)
     console.log("rec " + recipe_id)
-    Favorites.deleteOne({ user_id, recipe_id }, (err, result) => {
+    Favorites.deleteMany({ user_id, recipe_id }, (err, result) => {
       if (err) {
         console.log(err);
         res.sendStatus(500);
