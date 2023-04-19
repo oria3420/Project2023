@@ -243,14 +243,6 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
       user_id: user_id,
       recipe_id: recipe_id,
     })
-    // Favorites.insertOne({ user_id:user_id, recipe_id:recipe_id }, (err, result) => {
-    //   if (err) {
-    //     console.log(err);
-    //     res.sendStatus(500);
-    //   } else {
-    //     res.sendStatus(200);
-    //   }
-    // });
   });
 
   app.delete('/api/favorites/:recipeId/:userId', (req, res) => {
