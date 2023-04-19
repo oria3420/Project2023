@@ -1,19 +1,34 @@
 import Navbar from '../components/Navbar';
 import RecipeCard from '../components/RecipeCard';
-import { useLocation } from 'react-router-dom';
 import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
+import jwt_decode from "jwt-decode";
+import { useNavigate } from 'react-router-dom'
 
 const SearchRecipe = () => {
-    const location = useLocation();
-    const user = location.state.user
-    const name = user.name;
+    const navigate = useNavigate()
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [recipesCategories, setRecipesCategories] = useState([]);
+    const [name, setName] = useState(null)
+    const [user, setUser] = useState(null)
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        if (token) {
+            const _user = jwt_decode(token)
+            setName(_user.name)
+            setUser(_user)
+            if (!_user) {
+                localStorage.removeItem('token')
+                navigate.replace('/login')
+            }
+        }
+    }, [navigate])
+
 
     useEffect(() => {
         fetch(`http://localhost:1337/api/table/recipes`)
@@ -33,7 +48,7 @@ const SearchRecipe = () => {
     }, []);
 
     useEffect(() => {
-        fetch('http://localhost:1337/api/home/search_recipe')
+        fetch('http://localhost:1337/api/search_recipe')
             .then(response => response.json())
             .then(data => {
                 const expandedCategories = {};
@@ -118,28 +133,31 @@ const SearchRecipe = () => {
                 <div className='filter-menu'>
                     {Object.keys(categories)
                         .sort((a, b) => a.localeCompare(b))
-                        .map((category) => (
-                            <div className='category' key={category}>
-                                <div className="category-header" onClick={() => toggleCategory(category)}>
-                                    <span className='category-title'>{category}</span>
-                                    <button className="btn btn-light category-toggle-btn">{expandedCategories[category] ? "-" : "+"}</button>
-                                </div>
-                                {expandedCategories[category] && categories[category].sort((a, b) => a[1].localeCompare(b[1])).map((value) => (
-                                    <div className="form-check" key={value}>
-                                        <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
-                                        <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
+                        .map((category) => {
+                            const categoryName = category.slice(0, -11).replace(/_/g, ' ');
+                            return (
+                                <div className='category' key={category}>
+                                    <div className="category-header" onClick={() => toggleCategory(category)}>
+                                        <span className='category-title'>{categoryName}</span>
+                                        <button className="btn btn-light category-toggle-btn">{expandedCategories[category] ? "-" : "+"}</button>
                                     </div>
-                                ))}
-                            </div>
-                        ))}
+                                    {expandedCategories[category] && categories[category].sort((a, b) => a[1].localeCompare(b[1])).map((value) => (
+                                        <div className="form-check" key={value}>
+                                            <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
+                                            <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
+                                        </div>
+                                    ))}
+                                </div>
+                            );
+                        })}
                 </div>
                 <div className='recipes-container'>
-                {filteredRecipes.map((recipe) => (
-                  <div className='recipe-card-wrapper'>
-                    <RecipeCard recipe={recipe} user={user} />
-                  </div>
-                ))}
-              </div>
+                    {filteredRecipes.map((recipe) => (
+                        <div className='recipe-card-wrapper'>
+                            <RecipeCard recipe={recipe} user={user} />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     )

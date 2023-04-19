@@ -3,7 +3,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LoginPage from './pages/Login';
-import Home from './pages/Home';
 import RegisterPage from './pages/Register';
 import Admin from './pages/Admin';
 import TablesRouter from './tables/TablesRouter';
@@ -19,12 +18,11 @@ const App = () => {
                 <Route path="/" element={<WelcomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
-                <Route path="/home" element={<Home />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/table/:type" element={<TablesRouter />} />
                 <Route path="/recipes/:id" element={<RecipePage />} />
-                <Route path="/home/search_recipe" element={<SearchRecipe />} />
-                <Route path="/home/popular_recipes" element={<PopularRecipes />} />
+                <Route path="/search_recipe" element={<SearchRecipe />} />
+                <Route path="/popular_recipes" element={<PopularRecipes />} />
             </Routes>
         </BrowserRouter>
     );

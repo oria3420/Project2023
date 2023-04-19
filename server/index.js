@@ -89,22 +89,6 @@ app.post('/api/login', async (req, res) => {
     }
 })
 
-// app.get('/api/home', async (req, res) => {
-//     const token = req.headers['x-access-token']
-
-//     try {
-//         const decoded = jwt.verify(token, 'secret123')
-//         const email = decoded.email
-//         const user = await User.findOne({ email: email })
-//         console.log(user)
-//         return res.json({ status: 'ok', name: user.name })
-//     } catch (error) {
-//         console.log(error)
-//         res.json({ status: 'error', error: 'invalid user' })
-//     }
-// })
-
-
 // tables
 const getCollection = (collectionName) => async (req, res) => {
     try {
@@ -165,7 +149,7 @@ const getRecipeIngredients = async (req, res) => {
 app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
 
   // filters
-  app.get('/api/home/search_recipe', async (req, res) => {
+  app.get('/api/search_recipe', async (req, res) => {
     try {
         const collections = await mongoose.connection.db.listCollections().toArray();
         const filteredCollections = collections.filter(collection => /^(?!recipe).*categories$/.test(collection.name));

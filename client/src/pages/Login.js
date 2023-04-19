@@ -35,7 +35,7 @@ function LoginPage() {
         window.location.href = '/admin'
       }
       else {
-        window.location.href = '/home'
+        window.location.href = '/search_recipe'
 
       }
 
