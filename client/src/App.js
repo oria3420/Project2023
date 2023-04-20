@@ -9,6 +9,7 @@ import TablesRouter from './tables/TablesRouter';
 import RecipePage from './pages/Recipe';
 import SearchRecipe from './pages/SearchRecipe';
 import WelcomePage from './pages/Welcome'
+import Home from './pages/Home'
 
 const App = () => {
     return (
@@ -21,6 +22,7 @@ const App = () => {
                 <Route path="/table/:type" element={<TablesRouter />} />
                 <Route path="/recipes/:id" element={<RecipePage />} />
                 <Route path="/search_recipe" element={<SearchRecipe />} />
+                <Route path="/home" element={<Home />} />
             </Routes>
         </BrowserRouter>
     );
