@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 
-// const defaultImageUrl = '/images/logo.png'
+// const defaultImageUrl = '/images/logo_black_english.png'
 const defaultImageUrl = '/images/pizza.jpg'
 
 const RecipePage = () => {

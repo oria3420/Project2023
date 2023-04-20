@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-// const defaultImageUrl = '/images/logo.png'
+// const defaultImageUrl = '/images/logo_black_english.png'
 const defaultImageUrl = '/images/pizza.jpg'
 
 

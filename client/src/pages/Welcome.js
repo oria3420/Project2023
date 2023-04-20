@@ -16,7 +16,7 @@ function WelcomePage() {
   return (
     <div className="connect-body">
       <div className="welcome-connect">
-          <img src="/images/logo.png" alt="Logo" className="logo-welcome" />
+          <img src="/images/logo_black_english.png" alt="Logo" className="logo-welcome" />
           <h1 className="welcome-titel">WELCOME TO MA MITBASHEL</h1>
           <br />
           <h3>!האתר הכי מוש בעולם</h3>

@@ -51,7 +51,7 @@ function LoginPage() {
     <div className="connect-body">
       <div className="form-connect">
         <form onSubmit={loginUser}>
-          <img src="/images/logo.png" alt="Logo" className="logo-login" />
+          <img src="/images/logo_black_english.png" alt="Logo" className="logo-login" />
           <label className="form-title">Login</label>
           <input
             className={`form-control input-login ${errorMessage ? 'error' : ''}` }

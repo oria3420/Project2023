@@ -74,7 +74,7 @@ function RegisterPage() {
     <div className="connect-body">
       <div className="form-connect">
         <form onSubmit={registerUser}>
-          <img src="/images/logo.png" alt="Logo" className="logo-register" />
+          <img src="/images/logo_black_english.png" alt="Logo" className="logo-register" />
           <label for="validationCustom01" className="form-title">Create a new account</label>
           <input
             className={`form-control input-register ${nameError ? 'error' : ''}` }
