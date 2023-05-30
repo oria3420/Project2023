@@ -6,7 +6,6 @@ const SettingBtn = () => {
 
     const setting = (event) => {
         event.preventDefault()
-        localStorage.clear('')
         navigate('/setting')
     }
 

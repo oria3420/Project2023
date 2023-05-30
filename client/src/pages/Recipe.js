@@ -61,8 +61,10 @@ const RecipePage = () => {
         <>
           {name && <Navbar name={name} />}
           <div className='recipe-container'>
-            <span>{recipe.DatePublished}</span>
             <h2>{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
+            <span>{"Publish Date: "+recipe.DatePublished}</span>
+            <br></br>
+            <span>{"Author: "+recipe.AuthorName}</span>
             <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
             {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
   
