@@ -185,7 +185,7 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
     }
   });
 
-  app.get('/api/home/popular_recipes', async (req, res) => {
+  app.get('/api/popular_recipes', async (req, res) => {
     try {
         const collections = await mongoose.connection.db.listCollections().toArray();
         const filteredCollections = collections.filter(collection => /^(?!recipe).*categories$/.test(collection.name));
