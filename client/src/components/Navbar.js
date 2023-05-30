@@ -1,11 +1,12 @@
 import './Components.css';
 import LogoutBtn from './LogoutBtn';
+import SettingBtn from './SettingBtn';
 
 const Navbar = ({ name }) => {
     return (
         <nav className="navbar bg-body-tertiary our-navbar">
             <div className="container-fluid d-flex justify-content-between align-items-center">
-                <a href='/home'>
+                <a href='/search_recipe'>
                     <img className='logo-navbar' src="/images/logo_white_english.png" alt="Logo" />
                 </a>
 
@@ -22,6 +23,7 @@ const Navbar = ({ name }) => {
                         </span>
 
                         <ul className="dropdown-menu text-center">
+                            <SettingBtn/>
                             <LogoutBtn />
                         </ul>
 
