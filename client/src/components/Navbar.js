@@ -2,6 +2,7 @@ import './Components.css';
 import LogoutBtn from './LogoutBtn';
 import SettingBtn from './SettingBtn';
 import FavoriesBtn from './FavoritesBtn';
+import ShoppingBtn from './ShoppingBtn'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = ({ name }) => {
@@ -24,7 +25,7 @@ const Navbar = ({ name }) => {
                 Trending
                 </div>
                 <div className='navbar-text nevigate' onClick={recipes}>
-                Ingredients List
+                Groceries at Home
                 </div>
                 <div className='name-container'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
@@ -40,6 +41,7 @@ const Navbar = ({ name }) => {
 
                         <ul className="dropdown-menu text-center">
                             <FavoriesBtn/>
+                            <ShoppingBtn/>
                             <SettingBtn/>
                             <LogoutBtn />
                         </ul>

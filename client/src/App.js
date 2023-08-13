@@ -12,6 +12,7 @@ import WelcomePage from './pages/Welcome'
 import Home from './pages/Home'
 import Setting from './pages/Setting';
 import FavoriteRecipes from './pages/FavoriteRecipes'
+import Shopping from './pages/Setting'
 
 const App = () => {
     return (
@@ -27,6 +28,7 @@ const App = () => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/setting" element={<Setting />} />
                 <Route path="/favorites" element={<FavoriteRecipes />} />
+                <Route path="/shoping" element={<Shopping />} />
             </Routes>
         </BrowserRouter>
     );
