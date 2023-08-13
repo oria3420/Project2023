@@ -78,6 +78,7 @@ const RecipeCard = (props) => {
             <h6 className="card-title">{recipe.Name}</h6>
           </div>
           <p className="card-text">{recipe.Description}</p>
+          <div className="heart">
           {isHeartFilled ? (
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -108,6 +109,7 @@ const RecipeCard = (props) => {
               />
             </svg>
           )}
+          </div>
         </div>
       </div>
     </div>

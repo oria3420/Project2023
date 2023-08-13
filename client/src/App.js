@@ -11,7 +11,7 @@ import SearchRecipe from './pages/SearchRecipe';
 import WelcomePage from './pages/Welcome'
 import Home from './pages/Home'
 import Setting from './pages/Setting';
-import Favorites from './pages/FavoritesRecipes'
+import FavoriteRecipes from './pages/FavoriteRecipes'
 
 const App = () => {
     return (
@@ -26,7 +26,7 @@ const App = () => {
                 <Route path="/search_recipe" element={<SearchRecipe />} />
                 <Route path="/home" element={<Home />} />
                 <Route path="/setting" element={<Setting />} />
-                <Route path="/favorites" element={<Favorites />} />
+                <Route path="/favorites" element={<FavoriteRecipes />} />
             </Routes>
         </BrowserRouter>
     );

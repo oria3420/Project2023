@@ -261,6 +261,46 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
     });
   });
 
+  // app.get('/api/favorites/:userId', async (req, res) => {
+  //   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
+  //   try {
+  //     const user_id = req.params.userId;
+  
+  //     const favorites = await Favorites.find({ user_id: user_id });
+  //     res.json(favorites);
+  //   } catch (error) {
+  //     console.error(error);
+  //     res.status(500).send('Error fetching favorites');
+  //   }
+  // });
+
+  app.get('/api/favorites/:userId', async (req, res) => {
+    const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
+    const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
+    try {
+      const user_id = req.params.userId;
+  
+      // Find the favorites for the given user
+      const favorites = await Favorites.find({ user_id: user_id });
+      
+      if (favorites.length === 0) {
+        res.json([]); // No favorites found, return an empty array
+        return;
+      }
+      
+      console.log('Favorites:', favorites);
+      const recipeIds = favorites.map(favorite => favorite.recipe_id);
+      console.log('Recipe IDs:', recipeIds);
+      // Find the actual recipe documents using the recipe IDs
+      const favoriteRecipes = await Recipe.find({ RecipeId : { $in: recipeIds } });
+      console.log(favoriteRecipes)
+      res.json(favoriteRecipes);
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error fetching favorites');
+    }
+  });
+  
   app.listen(1337, () => {
     console.log('Server saterted on 1337')
 })
