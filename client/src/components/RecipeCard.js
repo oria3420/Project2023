@@ -3,8 +3,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
-// const defaultImageUrl = '/images/logo_black_english.png'
-const defaultImageUrl = '/images/pizza.jpg'
+const defaultImageUrl = '/images/logo_black_english.png'
+//const defaultImageUrl = '/images/pizza.jpg'
 
 
 const RecipeCard = (props) => {
@@ -41,8 +41,14 @@ const RecipeCard = (props) => {
     async function getImageUrl() {
       const response = await fetch(`http://localhost:1337/api/recipes/images/${recipe.RecipeId}`);
       const data = await response.text();
-      if (data !== 'Image not found') {
-        setImageUrl(data)
+      if (data !== 'Image not found' || data!== 'Error fetching image') {
+        //setImageUrl(data)
+        const resp = await fetch(data);
+        if (resp.ok) {
+          setImageUrl(data) // URL is working, send the URL as a response
+        } else {
+          setImageUrl(defaultImageUrl)
+        }
       }
       else {
         setImageUrl(defaultImageUrl)

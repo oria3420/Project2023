@@ -10,6 +10,8 @@ import RecipePage from './pages/Recipe';
 import SearchRecipe from './pages/SearchRecipe';
 import WelcomePage from './pages/Welcome'
 import Home from './pages/Home'
+import Setting from './pages/Setting';
+import Favorites from './pages/FavoritesRecipes'
 
 const App = () => {
     return (
@@ -23,6 +25,8 @@ const App = () => {
                 <Route path="/recipes/:id" element={<RecipePage />} />
                 <Route path="/search_recipe" element={<SearchRecipe />} />
                 <Route path="/home" element={<Home />} />
+                <Route path="/setting" element={<Setting />} />
+                <Route path="/favorites" element={<Favorites />} />
             </Routes>
         </BrowserRouter>
     );

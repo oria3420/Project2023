@@ -98,6 +98,6 @@
   .bi-heart-fill{
     color: #27A617;
   }
-  .nevigate{
-    
+  .nevigate:hover{
+    cursor: pointer;
   }

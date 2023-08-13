@@ -1,6 +1,7 @@
 import './Components.css';
 import LogoutBtn from './LogoutBtn';
 import SettingBtn from './SettingBtn';
+import FavoriesBtn from './FavoritesBtn';
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = ({ name }) => {
@@ -38,6 +39,7 @@ const Navbar = ({ name }) => {
                         </span>
 
                         <ul className="dropdown-menu text-center">
+                            <FavoriesBtn/>
                             <SettingBtn/>
                             <LogoutBtn />
                         </ul>
