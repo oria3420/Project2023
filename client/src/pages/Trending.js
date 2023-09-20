@@ -1,14 +1,13 @@
 import Navbar from '../components/Navbar';
 import RecipeCard from '../components/RecipeCard';
 import './App.css';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 
 const SearchRecipe = () => {
     const navigate = useNavigate()
     const [recipes, setRecipes] = useState([]);
-    const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
 
@@ -31,7 +30,6 @@ const SearchRecipe = () => {
             .then(res => res.json())
             .then(data => {
                 setRecipes(data);
-                setFilteredRecipes(data); // initialize filteredRecipes with all recipes
             })
             .catch(error => console.error(error))
     }, []);
@@ -47,7 +45,7 @@ const SearchRecipe = () => {
             <div className='search-recipe-container'>
 
                 <div className='recipes-container'>
-                    {filteredRecipes.map((recipe, index) => (
+                    {recipes.map((recipe, index) => (
                         <div className='recipe-card-wrapper' key={index}>
                             <RecipeCard recipe={recipe} user={user} />
                         </div>
