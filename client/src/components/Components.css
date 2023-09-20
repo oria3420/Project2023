@@ -104,3 +104,11 @@
   .heart:hover{
     cursor: pointer;
   }
+
+ul{
+    margin-left: 50%;
+  }
+
+.icon{
+  margin-left: 25%;
+}

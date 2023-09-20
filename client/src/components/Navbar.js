@@ -39,11 +39,11 @@ const Navbar = ({ name }) => {
                             {name}
                         </span>
 
-                        <ul className="dropdown-menu text-center">
-                            <FavoriesBtn/>
-                            <ShoppingBtn/>
-                            <SettingBtn/>
-                            <LogoutBtn />
+                        <ul className="dropdown-menu">
+                           <il> <FavoriesBtn/></il>
+                           <il> <ShoppingBtn/></il>
+                           <il> <SettingBtn/></il>
+                           <il> <LogoutBtn/></il>
                         </ul>
 
                     </div>
