@@ -12,6 +12,14 @@ const Navbar = ({ name }) => {
         event.preventDefault()
         navigate('/search_recipe')
     }
+    const trending = (event) => {
+        event.preventDefault()
+        navigate('/trending')
+    }
+    const groceries = (event) => {
+        event.preventDefault()
+        navigate('/groceries')
+    }
     return (
         <nav className="navbar bg-body-tertiary our-navbar">
             <div className="container-fluid d-flex justify-content-between align-items-center">
@@ -21,10 +29,10 @@ const Navbar = ({ name }) => {
                 <div className='navbar-text nevigate' onClick={recipes}>
                 Recipes
                 </div>
-                <div className='navbar-text nevigate' onClick={recipes}>
+                <div className='navbar-text nevigate' onClick={trending}>
                 Trending
                 </div>
-                <div className='navbar-text nevigate' onClick={recipes}>
+                <div className='navbar-text nevigate' onClick={groceries}>
                 Groceries at Home
                 </div>
                 <div className='name-container'>
