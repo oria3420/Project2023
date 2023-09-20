@@ -27,7 +27,7 @@ const SearchRecipe = () => {
 
 
     useEffect(() => {
-        fetch(`http://localhost:1337/api/table/recipes`)
+        fetch(`http://localhost:1337/api/trending`)
             .then(res => res.json())
             .then(data => {
                 setRecipes(data);

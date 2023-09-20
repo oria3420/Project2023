@@ -261,18 +261,6 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
     });
   });
 
-  // app.get('/api/favorites/:userId', async (req, res) => {
-  //   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
-  //   try {
-  //     const user_id = req.params.userId;
-  
-  //     const favorites = await Favorites.find({ user_id: user_id });
-  //     res.json(favorites);
-  //   } catch (error) {
-  //     console.error(error);
-  //     res.status(500).send('Error fetching favorites');
-  //   }
-  // });
 
   app.get('/api/favorites/:userId', async (req, res) => {
     const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
@@ -298,6 +286,22 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
     } catch (error) {
       console.error(error);
       res.status(500).send('Error fetching favorites');
+    }
+  });
+
+  app.get('/api/trending', async (req, res) => {
+    //AggregatedRating
+    const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
+    try {
+      // Fetch the top 10 rated recipes in descending order of rating
+      const topRecipes = await Recipe.find({})
+        .sort({ AggregatedRating: -1 })
+        .limit(10);
+  
+      res.json(topRecipes);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'An error occurred' });
     }
   });
   
