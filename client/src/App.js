@@ -12,8 +12,10 @@ import WelcomePage from './pages/Welcome'
 import Home from './pages/Home'
 import Setting from './pages/Setting';
 import FavoriteRecipes from './pages/FavoriteRecipes'
-import Shopping from './pages/Setting'
-import Trending from './pages/Trending'
+import Shopping from './pages/Setting';
+import Trending from './pages/Trending';
+import Groceries from './pages/Groceries';
+
 
 const App = () => {
     return (
@@ -31,7 +33,7 @@ const App = () => {
                 <Route path="/favorites" element={<FavoriteRecipes />} />
                 <Route path="/shoping" element={<Shopping />} />
                 <Route path="/trending" element={<Trending />} />
-                <Route path="/groceries" element={<Shopping />} />
+                <Route path="/groceries" element={<Groceries />} />
             </Routes>
         </BrowserRouter>
     );

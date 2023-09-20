@@ -36,14 +36,10 @@ const SearchRecipe = () => {
 
 
 
-
-
-
     return (
         <div>
             {name && <Navbar name={name} />}
             <div className='search-recipe-container'>
-
                 <div className='recipes-container'>
                     {recipes.map((recipe, index) => (
                         <div className='recipe-card-wrapper' key={index}>
