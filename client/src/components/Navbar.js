@@ -47,7 +47,7 @@ const Navbar = ({ name }) => {
                             {name}
                         </span>
 
-                        <ul className="dropdown-menu">
+                        <ul className="dropdown-menu dropdown-position">
                            <il> <FavoriesBtn/></il>
                            <il> <ShoppingBtn/></il>
                            <il> <SettingBtn/></il>

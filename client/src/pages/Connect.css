@@ -1,128 +1,134 @@
-.input-login{
-    background-color: #D1D1D1;
-    border-color: #D1D1D1;
-    border-radius: 15px;
+.input-login {
+  background-color: #D1D1D1;
+  border-color: #D1D1D1;
+  border-radius: 15px;
 }
 
-.input-register{
-    background-color: #D1D1D1;
-    border-color: #D1D1D1;
-    border-radius: 15px;
-    height: 30px;
+.input-register {
+  background-color: #D1D1D1;
+  border-color: #D1D1D1;
+  border-radius: 15px;
+  height: 30px;
 }
 
-.connect-body{
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    height: 100vh; /* Set the height of the container to full viewport height */
-    background-image: url('../../../client/public/images/bg.png');
-    background-size: cover; /* to resize the image to cover the entire element */
-    background-position: center; /* to center the image horizontally and vertically */    
+.connect-body {
+  display: flex;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  height: 100vh;
+  /* Set the height of the container to full viewport height */
+  background-image: url('../../../client/public/images/bg.png');
+  background-size: cover;
+  /* to resize the image to cover the entire element */
+  background-position: center;
+  /* to center the image horizontally and vertically */
 }
 
-.form-connect{
-    width: 300px; /* Set the width of the form */
-    padding: 20px;
-    text-align: center;
+.form-connect {
+  width: 300px;
+  /* Set the width of the form */
+  padding: 20px;
+  text-align: center;
 }
 
-#btn-login{
-    background-color: #DC8F41;
-    border-color: #DC8F41;
-    border-radius: 15px;
-    width: 35%;
-    display: block; /* Make button block-level */
-    margin: 20px auto 0; /* Center button horizontally and add some top margin */
+#btn-login {
+  background-color: #DC8F41;
+  border-color: #DC8F41;
+  border-radius: 15px;
+  width: 35%;
+  display: block;
+  /* Make button block-level */
+  margin: 20px auto 0;
+  /* Center button horizontally and add some top margin */
 }
 
-#btn-register{
-    background-color: #27A617;
-    border-color: #27A617;
-    border-radius: 15px;
-    width: 45%;
-    display: block; /* Make button block-level */
-    margin: 20px auto 0; /* Center button horizontally and add some top margin */
+#btn-register {
+  background-color: #27A617;
+  border-color: #27A617;
+  border-radius: 15px;
+  width: 45%;
+  display: block;
+  /* Make button block-level */
+  margin: 20px auto 0;
+  /* Center button horizontally and add some top margin */
 }
 
-.logo-login{
-    width: 60%;
-    height: 60%;
-    margin-bottom: 20px;
-}
-
-.logo-register{
-    width: 20%;
-    height: 20%;
-    margin-bottom: 7px;
-}
-
-.form-title {
-    display: block;
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-bottom: 20px;
-  }
-
-  .input-select{
-    height: max-content;
-    font-size: 15px;
-  }
-
-  .input-login.error {
-    border-color: red;
-    background-color: #f5c6c6;
-  }
-.error-message {
-    display: none;
-  }
-  
-  .visible {
-    display: block;
-    color: red;
-    font-weight: bold;
-  }
-
-  .input-register.error {
-    border-color: red;
-    background-color: #f5c6c6;
-  }
-
-  .recipe_image{
-    width: 50px;
-    height: 30px;
-  }
-
-  .welcome-titel{
-    font-weight: bold;
-    font-size: 3em;
-  }
-
-  .welcome-connect{
-    padding: 20px;
-    text-align: center;
-}
-
-.logo-welcome{
-  width: 20%;
-
+.logo-login {
+  width: 60%;
+  height: 60%;
   margin-bottom: 20px;
 }
 
-#btn-login-welcome{
+.logo-register {
+  width: 20%;
+  height: 20%;
+  margin-bottom: 7px;
+}
+
+.form-title {
+  display: block;
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: 20px;
+}
+
+.input-select {
+  height: max-content;
+  font-size: 15px;
+}
+
+.input-login.error {
+  border-color: red;
+  background-color: #f5c6c6;
+}
+
+.error-message {
+  display: none;
+}
+
+.visible {
+  display: block;
+  color: red;
+  font-weight: bold;
+}
+
+.input-register.error {
+  border-color: red;
+  background-color: #f5c6c6;
+}
+
+.recipe_image {
+  width: 50px;
+  height: 30px;
+}
+
+.welcome-titel {
+  font-weight: bold;
+  font-size: 3em;
+}
+
+.welcome-connect {
+  padding: 20px;
+  text-align: center;
+}
+
+.logo-welcome {
+  width: 20%;
+  margin-bottom: 20px;
+}
+
+#btn-login-welcome,
+#btn-register-welcome {
   background-color: #DC8F41;
   border-color: #DC8F41;
   border-radius: 15px;
   width: 30%;
-  display: block; /* Make button block-level */
-  margin: 20px auto 0; /* Center button horizontally and add some top margin */
+  margin: 20px 5px 0; /* Adjusted margin to create space between buttons */
 }
 
-#btn-register-welcome{
+#btn-register-welcome {
   background-color: #27A617;
   border-color: #27A617;
-  border-radius: 15px;
-  width: 30%;
-  display: block; /* Make button block-level */
-  margin: 20px auto 0; /* Center button horizontally and add some top margin */
 }

@@ -1,5 +1,5 @@
 .our-navbar{
-    background-color: #27A617;
+    background-color:rgb(26, 26, 26);
     height: 76px;
     color: white !important;
     font-weight: bold;
@@ -8,6 +8,7 @@
     left: 0;
     right: 0;
     z-index: 999;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Add a shadow */
 }
 
 .our-navbar span {
@@ -43,7 +44,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    
   }
+
+  .dropdown-menu[data-bs-popper] {
+    left: auto; /* Set left to "auto" to remove the left positioning */
+  }
+
+  .dropdown-menu.dropdown-position {
+    position: absolute;
+    top: 100%; /* Position it just below the navbar */
+    right: 0; /* Adjust this if needed to align with the right edge of the navbar */
+    z-index: 1000; /* Adjust the z-index as needed to ensure it appears above other elements */
+  }
+
 
   .recipe-card {
     display: flex;
@@ -111,3 +125,9 @@ ul{
 .icon{
   margin-left: 25%;
 }
+
+.navbar-text{
+  color: white;
+}
+
+
