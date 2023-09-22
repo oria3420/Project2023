@@ -11,7 +11,7 @@ function StarRating({ rating }) {
     for (let i = 0; i < filledStars; i++) {
         stars.push(
             <span key={i} className='star  filled-star'>
-            ★
+                ★
             </span>
         );
     }
@@ -19,12 +19,17 @@ function StarRating({ rating }) {
     for (let i = 0; i < unfilledStars; i++) {
         stars.push(
             <span key={i + filledStars} className='star unfilled-star'>
-            ★
+                ★
             </span>
         );
     }
 
-    return <div className="rating-stars">{stars}</div>;
+    return (
+        <div className="rating-stars">
+            {stars}
+            <span className="star-rating-text">({filledStars})</span>
+        </div>
+    );
 }
 
 export default StarRating;

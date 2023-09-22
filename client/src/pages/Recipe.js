@@ -61,22 +61,44 @@ const RecipePage = () => {
     return new Date(inputDate).toLocaleDateString('en-US', options);
   }
 
-    return (
+  return (
     <div>
       {recipe ? (
         <>
           {name && <Navbar name={name} />}
           <div className='recipe-container'>
             <div className='recipe-header'>
-              <h2 id="recipe-name">{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
+              <div className='recipe-details'>
+                <h2 id="recipe-name">{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
                 <span>{"Recipe by " + recipe.AuthorName}</span>
                 <span className="separator"></span>
                 <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
                 <br></br>
-                <StarRating rating={recipe.AggregatedRating} />             
+                <StarRating rating={recipe.AggregatedRating} />
+              </div>
+              <div className='recipe-image-container'>
+              {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
+              </div>
             </div>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            v            <br></br>
+
             <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
-            {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
+
 
             <div className='times-yield'>
               <p>Prep Time: {recipe.PrepTime}</p>

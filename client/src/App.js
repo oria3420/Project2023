@@ -14,7 +14,7 @@ import Setting from './pages/Setting';
 import FavoriteRecipes from './pages/FavoriteRecipes'
 import Shopping from './pages/Setting';
 import Trending from './pages/Trending';
-import Groceries from './pages/Groceries';
+// import Groceries from './pages/Groceries';
 
 
 const App = () => {
