@@ -3,7 +3,7 @@ import './StarRating.css';
 
 function StarRating({ rating }) {
     const maxRating = 5;
-    const filledStars = Math.floor(rating);
+    const filledStars = Math.floor(rating ?? 0);
     const unfilledStars = maxRating - filledStars;
 
     const stars = [];
