@@ -71,13 +71,29 @@ const RecipePage = () => {
               <div className='recipe-details'>
                 <h2 id="recipe-name">{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
                 <span>{"Recipe by " + recipe.AuthorName}</span>
-                <span className="separator"></span>
+                <span className="author-separator"></span>
                 <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
                 <br></br>
                 <StarRating rating={recipe.AggregatedRating} />
+                <div className='times-container'>
+                  <div className='time'>
+                    <span>{recipe.PrepTime}</span>
+                    <span>Prep <br /> Time</span>
+                  </div>
+
+                  <div className='time'>
+                    <span>{recipe.CookTime}</span>
+                    <span>Cook <br /> Time</span>
+                  </div>
+
+                  <div className='time'>
+                    <span>{recipe.TotalTime}</span>
+                    <span>Total <br /> Time</span>
+                  </div>
+                </div>
               </div>
               <div className='recipe-image-container'>
-              {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
+                {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
               </div>
             </div>
             <br></br>

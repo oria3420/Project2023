@@ -49,7 +49,7 @@
   }
 
   
-  .separator {
+  .author-separator {
     border-left: 1px solid rgb(201, 198, 198); /* Vertical line in light gray */
     height: 20px; /* Adjust the height of the line as needed */
     margin: 0 10px; /* Adjust the margin for spacing */
@@ -69,3 +69,17 @@
  .recipe-image{
   border-radius: 10px;
  }
+
+ .times-container {
+  display: flex;
+  align-items: baseline; /* Align items along the baseline */
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px; /* Adjust the margin as needed */
+  height: 20px; /* Set the height to match the separator */
+}
+
