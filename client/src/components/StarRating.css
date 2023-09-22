@@ -1,0 +1,20 @@
+.rating-stars .star {
+    margin-right: 5px; /* Adjust the margin value as needed */
+  }
+
+  .filled-star{
+    color: orange
+  }
+
+  .unfilled-star{
+    color: rgb(219, 219, 219);
+  }
+
+  .star {
+    font-size: 23px; /* Adjust the font size to increase the star size */
+    line-height: 1; /* Ensure the line height doesn't affect vertical alignment */
+  }
+  
+  .rating-stars{
+    margin-top: 10px;
+  }
