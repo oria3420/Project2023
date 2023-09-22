@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Navbar from '../components/Navbar';
+import StarRating from '../components/StarRating';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 
@@ -59,8 +60,8 @@ const RecipePage = () => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(inputDate).toLocaleDateString('en-US', options);
   }
-  
-  return (
+
+    return (
     <div>
       {recipe ? (
         <>
@@ -71,6 +72,8 @@ const RecipePage = () => {
                 <span>{"Recipe by " + recipe.AuthorName}</span>
                 <span className="separator"></span>
                 <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
+                <br></br>
+                <StarRating rating={recipe.AggregatedRating} />             
             </div>
             <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
             {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
