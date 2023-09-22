@@ -33,7 +33,7 @@ const App = () => {
                 <Route path="/favorites" element={<FavoriteRecipes />} />
                 <Route path="/shoping" element={<Shopping />} />
                 <Route path="/trending" element={<Trending />} />
-                <Route path="/groceries" element={<Groceries />} />
+                 {/* <Route path="/groceries" element={<Groceries />} /> */}
             </Routes>
         </BrowserRouter>
     );

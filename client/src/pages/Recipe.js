@@ -55,28 +55,35 @@ const RecipePage = () => {
     getImageUrl();
   }, [id]);
 
+  function formatDate(inputDate) {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(inputDate).toLocaleDateString('en-US', options);
+  }
+  
   return (
     <div>
       {recipe ? (
         <>
           {name && <Navbar name={name} />}
           <div className='recipe-container'>
-            <h2>{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
-            <span>{"Publish Date: "+recipe.DatePublished}</span>
-            <br></br>
-            <span>{"Author: "+recipe.AuthorName}</span>
+            <div className='recipe-header'>
+              <h2 id="recipe-name">{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
+                <span>{"Recipe by " + recipe.AuthorName}</span>
+                <span className="separator"></span>
+                <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
+            </div>
             <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
             {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
-  
+
             <div className='times-yield'>
               <p>Prep Time: {recipe.PrepTime}</p>
               <p>Cook Time: {recipe.CookTime}</p>
               <p>Total Time: {recipe.TotalTime}</p>
               <p>Servings: {recipe.RecipeYield}</p>
             </div>
-  
+
             <div className='recipe-body'>
-  
+
               <div className='ingredients'>
                 <h3>Ingredients</h3>
                 {ingredients.map((ingredient, index) => (
@@ -84,9 +91,9 @@ const RecipePage = () => {
                     <span className='ingredient-text' key={ingredient.name}>{ingredient.name}</span>
                     <br key={`br-${index}`} />
                   </div>
-                ))}            
+                ))}
               </div>
-  
+
               <div className='instructions'>
                 <h3>Instructions</h3>
                 {recipe.RecipeInstructions.split('.').map((instruction, index) => {
@@ -101,10 +108,10 @@ const RecipePage = () => {
                 })}
                 <br />
               </div>
-  
+
             </div>
-  
-  
+
+
           </div>
         </>
       ) : (
@@ -112,7 +119,7 @@ const RecipePage = () => {
       )}
     </div>
   );
-  
+
 }
 
 export default RecipePage;

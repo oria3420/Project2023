@@ -48,10 +48,10 @@ const Navbar = ({ name }) => {
                         </span>
 
                         <ul className="dropdown-menu dropdown-position">
-                           <il> <FavoriesBtn/></il>
-                           <il> <ShoppingBtn/></il>
-                           <il> <SettingBtn/></il>
-                           <il> <LogoutBtn/></il>
+                           <li> <FavoriesBtn/></li>
+                           <li> <ShoppingBtn/></li>
+                           <li> <SettingBtn/></li>
+                           <li> <LogoutBtn/></li>
                         </ul>
 
                     </div>

@@ -46,3 +46,18 @@
   .instructions, .ingredients{
     margin-top: 40px;
   }
+
+  #recipe-name{
+    margin-top: 10%;
+    font-weight: bold;
+    font-family: Palatino, "Palatino Linotype", serif;
+  }
+
+  
+  .separator {
+    border-left: 1px solid rgb(201, 198, 198); /* Vertical line in light gray */
+    height: 20px; /* Adjust the height of the line as needed */
+    margin: 0 10px; /* Adjust the margin for spacing */
+  }
+  
+  
