@@ -23,8 +23,7 @@
   background-size: cover;
   /* to resize the image to cover the entire element */
   background-position: center;
-  /* to center the image horizontally and vertically */
-}
+  }
 
 .form-connect {
   width: 300px;
@@ -102,33 +101,4 @@
 .recipe_image {
   width: 50px;
   height: 30px;
-}
-
-.welcome-titel {
-  font-weight: bold;
-  font-size: 3em;
-}
-
-.welcome-connect {
-  padding: 20px;
-  text-align: center;
-}
-
-.logo-welcome {
-  width: 20%;
-  margin-bottom: 20px;
-}
-
-#btn-login-welcome,
-#btn-register-welcome {
-  background-color: #DC8F41;
-  border-color: #DC8F41;
-  border-radius: 15px;
-  width: 30%;
-  margin: 20px 5px 0; /* Adjusted margin to create space between buttons */
-}
-
-#btn-register-welcome {
-  background-color: #27A617;
-  border-color: #27A617;
 }

@@ -1,0 +1,58 @@
+.welcome-titel {
+    font-weight: bold;
+    font-size: 3em;
+    color: white;
+  }
+  
+ .logo-welcome {
+    width: 20%;
+    margin-bottom: 20px;
+  }
+  
+  #btn-login-welcome,
+  #btn-register-welcome {
+    background-color: #DC8F41;
+    border-color: #DC8F41;
+    border-radius: 15px;
+    width: 30%;
+    margin: 20px 5px 0; /* Adjusted margin to create space between buttons */
+  }
+  
+  #btn-register-welcome {
+    background-color: #27A617;
+    border-color: #27A617;
+  }
+
+  .welcome-body {
+    display: flex;
+    justify-content: space-between; /* Creates space between the two parts */
+    align-items: center; /* Vertically center the content */
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-color: black;
+  }
+  
+  .welcome-video {
+    flex: 1; /* Allows the video part to grow and take available space */
+    /* Add any specific styles for the video part here */
+  }
+  
+  .welcome-connect {
+    flex: 1; /* Allows the welcome content part to grow and take available space */
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Set the height to fill the viewport */
+  }
+  
+  .video-container video {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  
