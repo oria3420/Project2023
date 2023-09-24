@@ -1,85 +1,124 @@
-.times-yield{
-    border-left: 4px solid green;
-    padding-left: 10px;
-    margin: 40px 0;
+.times-yield {
+  border-left: 4px solid green;
+  padding-left: 10px;
+  margin: 40px 0;
 }
 
-.recipe-container{
-    margin: 0 6%;
-    margin-top: 80px;
+.recipe-container {
+  margin: 0 6%;
+  margin-top: 80px;
 }
 
-.step-container{
-    margin-top: 20px;
-    display: flex;
-    align-items: flex-start;
-}
-
-.step-index{
-    font-size: 20px;
-    color: rgb(56, 55, 55);
-    font-weight: 500;
-    line-height: 1;
-}
-
-.step-text{
-    color: rgb(155, 151, 151);
-    margin-left: 10px;
-    display: inline-block;
-    vertical-align: middle;
-}
-  
-  .ingredient-text::before {
-    content: "•"; /* Use the bullet character as the list item icon */
-    color: green;
-    margin-right: 5px; /* Add some space between the icon and the text */
-    font-size: 1.5em; /* adjust as needed */
-    margin-right: 0.5em; /* optional spacing */
-  }
-
-  
-  .instructions, .ingredients{
-    margin-top: 40px;
-  }
-
-  #recipe-name{
-    margin-right: 15px;
-    font-weight: bold;
-    font-family: Palatino, "Palatino Linotype", serif;
-  }
-
-  
-  .author-separator {
-    border-left: 1px solid rgb(201, 198, 198); /* Vertical line in light gray */
-    height: 20px; /* Adjust the height of the line as needed */
-    margin: 0 10px; /* Adjust the margin for spacing */
-  }
-  
-
-  .recipe-header {
-    margin-top: 11%;
-    display: flex;
-    align-items: flex-start; /* Align items to the top of the container */
-  }
-
-  .recipe-details {
-    flex: 1; /* Allow the details to grow and take available space */
-  }
-
- .recipe-image{
-  border-radius: 10px;
- }
-
- .times-container {
+.step-container {
+  margin-top: 20px;
   display: flex;
-  align-items: baseline; /* Align items along the baseline */
+  align-items: flex-start;
+}
+
+.step-index {
+  font-size: 20px;
+  color: rgb(56, 55, 55);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.step-text {
+  color: rgb(155, 151, 151);
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.ingredient-text::before {
+  content: "•";
+  /* Use the bullet character as the list item icon */
+  color: green;
+  margin-right: 5px;
+  /* Add some space between the icon and the text */
+  font-size: 1.5em;
+  /* adjust as needed */
+  margin-right: 0.5em;
+  /* optional spacing */
+}
+
+
+.instructions,
+.ingredients {
+  margin-top: 40px;
+}
+
+#recipe-name {
+  margin-right: 15px;
+  font-weight: bold;
+  font-family: Palatino, "Palatino Linotype", serif;
+}
+
+
+.author-separator {
+  border-left: 1px solid rgb(201, 198, 198);
+  /* Vertical line in light gray */
+  height: 20px;
+  /* Adjust the height of the line as needed */
+  margin: 0 10px;
+  /* Adjust the margin for spacing */
+}
+
+
+.recipe-header {
+  margin-top: 11%;
+  display: flex;
+  align-items: flex-start;
+  /* Align items to the top of the container */
+}
+
+.recipe-details {
+  flex: 1;
+  /* Allow the details to grow and take available space */
+}
+
+.recipe-image {
+  border-radius: 10px;
+}
+
+.times-container {
+  margin-top: 20px;
+  display: flex;
+}
+
+:root {
+  --time-height: 20px;
+  /* Set the default height of .time */
 }
 
 .time {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 10px; /* Adjust the margin as needed */
-  height: 20px; /* Set the height to match the separator */
+  margin: 0 10px;
+  /* Adjust the margin as needed */
+  height: var(--time-height);
+  /* Use the custom property */
 }
 
+.time-separator {
+  border-left: 1.5px solid orange;
+  /* Vertical line in light gray */
+  height: calc(3 * var(--time-height) + 10px);
+  /* 3 times the height of .time */
+  margin: 0 10px;
+  /* Adjust the margin for spacing */
+}
+
+#btn-like {
+  background-color: white;
+  border-color: orange;
+  border-width: 2px; /* Increase the border thickness as needed */
+  color: orange;
+  border-radius: 10px;
+  width: 30%;
+  display: block;
+  margin-top: 30px;
+  font-weight: 600; /* Use 600 for semi-bold */
+  text-align: left; /* Align the text to the left */
+  padding-left: 10px; /* Add some left padding */
+}

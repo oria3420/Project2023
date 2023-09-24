@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Navbar from '../components/Navbar';
 import StarRating from '../components/StarRating';
+import Loading from '../components/Loading';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 
@@ -75,22 +76,21 @@ const RecipePage = () => {
                 <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
                 <br></br>
                 <StarRating rating={recipe.AggregatedRating} />
+
                 <div className='times-container'>
-                  <div className='time'>
-                    <span>{recipe.PrepTime}</span>
-                    <span>Prep <br /> Time</span>
-                  </div>
+                {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (
+                  <React.Fragment key={timeKey}>
+                    <div className='time'>
+                      <span>{recipe[timeKey]}</span>
+                      <span>{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
+                    </div>
+                    {index < 2 && <div className='time-separator'></div>}
+                  </React.Fragment>
+                ))}
+              </div>
+              
+              <input id="btn-like" className="btn btn-primary" type="submit" value="LIKE" />
 
-                  <div className='time'>
-                    <span>{recipe.CookTime}</span>
-                    <span>Cook <br /> Time</span>
-                  </div>
-
-                  <div className='time'>
-                    <span>{recipe.TotalTime}</span>
-                    <span>Total <br /> Time</span>
-                  </div>
-                </div>
               </div>
               <div className='recipe-image-container'>
                 {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
@@ -111,7 +111,7 @@ const RecipePage = () => {
             <br></br>
             <br></br>
             <br></br>
-            v            <br></br>
+            <br></br>
 
             <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
 
@@ -156,7 +156,7 @@ const RecipePage = () => {
           </div>
         </>
       ) : (
-        <p>Loading recipe...</p>
+        <Loading name={name} />
       )}
     </div>
   );
