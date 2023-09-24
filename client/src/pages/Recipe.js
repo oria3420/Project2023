@@ -75,7 +75,7 @@ const RecipePage = () => {
                 <span className="author-separator"></span>
                 <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
                 <br></br>
-                <StarRating rating={recipe.AggregatedRating} />
+                <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.reviewCount} />
 
                 <div className='times-container'>
                 {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (

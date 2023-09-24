@@ -1,10 +1,12 @@
 import React from 'react';
 import './StarRating.css';
 
-function StarRating({ rating }) {
+function StarRating({ rating, reviewCount }) {
     const maxRating = 5;
     const filledStars = Math.floor(rating ?? 0);
     const unfilledStars = maxRating - filledStars;
+
+    const reviews = reviewCount || 0;
 
     const stars = [];
 
@@ -27,7 +29,7 @@ function StarRating({ rating }) {
     return (
         <div className="rating-stars">
             {stars}
-            <span className="star-rating-text">({filledStars})</span>
+            <span className="star-rating-text">({reviews})</span>
         </div>
     );
 }
