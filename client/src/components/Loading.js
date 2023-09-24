@@ -14,7 +14,7 @@ const Loading = ({ name }) => {
     <div>
       <Navbar name={name} /> {/* Include the Navbar component */}
       <div className={styles.ring}>
-        Loading
+        Something's cooking in here
         <span></span>
       </div>
     </div>

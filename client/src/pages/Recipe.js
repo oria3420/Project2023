@@ -64,7 +64,7 @@ const RecipePage = () => {
 
   return (
     <div>
-      {recipe ? (
+      {0 ? (
         <>
           {name && <Navbar name={name} />}
           <div className='recipe-container'>
@@ -111,7 +111,7 @@ const RecipePage = () => {
             <br></br>
             <br></br>
             <br></br>
-            <br></br>
+        <br></br>
 
             <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
 
@@ -156,7 +156,7 @@ const RecipePage = () => {
           </div>
         </>
       ) : (
-        <Loading name={name} />
+        <Loading /> 
       )}
     </div>
   );
