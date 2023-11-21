@@ -64,7 +64,7 @@ const RecipePage = () => {
 
   return (
     <div>
-      {0 ? (
+      {name && recipe ? (
         <>
           {name && <Navbar name={name} />}
           <div className='recipe-container'>
