@@ -135,15 +135,31 @@ ul{
   display: flex;
   align-items: center;
   margin-top: 20px;
+  color:#797979;
 }
 
 .nutrition-field {
   padding: 5px 10px;
   text-align: center; /* Center the text within each field */
+  width: 10%;
 }
 
 .nutrition-divider {
   border-left: 2px solid orange;
   height: 50px; /* Adjust the height as needed */
   margin: 0 10px; /* Adjust the margin for spacing */
+}
+
+.field-value{
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.field-label{
+  font-size: 18px;
+}
+
+.nutrition-title {
+  font-weight: bold;
+  font-size: 35px;
 }

@@ -164,7 +164,11 @@ const RecipePage = () => {
 
             <NutritionTable recipe={recipe} />
 
-
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
 
 
 
