@@ -135,15 +135,14 @@ const SearchRecipe = () => {
 
 
 
-      const filterRecipesByQuery = (searchQuery) => {
-          // Check if the searchQuery is empty
+    const filterRecipesByQuery = useCallback((searchQuery) => {
+        // Check if the searchQuery is empty
         if (!searchQuery) {
-            setSearchRecipes(recipes)
-            console.log("none search")
+            setFilteredRecipes(recipes);  // Show all recipes when the search query is empty
             return;
         }
-        console.log("search")
-          // Convert the search query to lowercase for case-insensitive matching
+console.log("search")
+        // Convert the search query to lowercase for case-insensitive matching
         const lowercaseSearchQuery = searchQuery.toLowerCase();
 
         // Filter recipes based on the search query
@@ -153,12 +152,12 @@ const SearchRecipe = () => {
 
         // Update the state with the filtered recipes
         setFilteredRecipes(searchRecipes);
-      };
-      
-      useEffect(() => {
+    }, [recipes]); // Add recipes as a dependency
+
+    useEffect(() => {
         // Call a function to fetch and filter recipes based on the query
         filterRecipesByQuery(query);
-      }, [query]);
+    }, [query, filterRecipesByQuery]);
 
     return (
         <div>
