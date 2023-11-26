@@ -105,11 +105,11 @@
   }
 
   .bi-heart {
-    color: #27A617;
+    color: #000000;
   }
 
   .bi-heart-fill{
-    color: #27A617;
+    color: #e73737;
   }
   .nevigate:hover{
     cursor: pointer;
@@ -122,9 +122,6 @@ ul{
     margin-left: 50%;
   }
 
-.icon{
-  margin-left: 25%;
-}
 
 .navbar-text{
   color: white;

@@ -48,12 +48,13 @@ const Navbar = ({ name }) => {
                         </span>
 
                         <ul className="dropdown-menu dropdown-position">
-                           <li> <FavoriesBtn/></li>
-                           <li> <ShoppingBtn/></li>
-                           <li> <SettingBtn/></li>
-                           <li> <LogoutBtn/></li>
-                        </ul>
-
+                        <li><button type="button" className="dropdown-item"><FavoriesBtn /></button></li>
+                        <li><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
+                        <li><button type="button" className="dropdown-item"><SettingBtn /></button></li>
+                        <li><hr className="dropdown-divider" /></li>
+                        <li><button type="button" className="dropdown-item"><LogoutBtn /></button></li>
+                      </ul>
+                      
                     </div>
                 </div>
             </div>
