@@ -81,32 +81,24 @@
 }
 
 .times-container {
-  margin-top: 20px;
+  margin-top: 25px;
+  margin-bottom: 40px;
   display: flex;
+  color: #797979;
 }
 
-:root {
-  --time-height: 20px;
-  /* Set the default height of .time */
-}
+
 
 .time {
   display: flex;
   flex-direction: column;
   align-items: center;
   margin: 0 10px;
-  /* Adjust the margin as needed */
-  height: var(--time-height);
-  /* Use the custom property */
 }
 
 .time-separator {
-  border-left: 1.5px solid orange;
-  /* Vertical line in light gray */
-  height: calc(3 * var(--time-height) + 10px);
-  /* 3 times the height of .time */
+  border-left: 2px solid orange;
   margin: 0 10px;
-  /* Adjust the margin for spacing */
 }
 
 #btn-like {
@@ -115,10 +107,21 @@
   border-width: 2px; /* Increase the border thickness as needed */
   color: orange;
   border-radius: 10px;
-  width: 30%;
+  width: 235px; /* Set width to 100% */
   display: block;
   margin-top: 30px;
+  margin-left: 7px;
   font-weight: 600; /* Use 600 for semi-bold */
   text-align: left; /* Align the text to the left */
   padding-left: 10px; /* Add some left padding */
+}
+
+#time-number{
+  font-size: 25px; 
+  font-weight: bold;
+}
+
+#author-date{
+  margin-top: 15px;
+  margin-bottom: 15px;
 }

@@ -68,28 +68,33 @@ const RecipePage = () => {
         <>
           {name && <Navbar name={name} />}
           <div className='recipe-container'>
+
             <div className='recipe-header'>
+
               <div className='recipe-details'>
+              
                 <h2 id="recipe-name">{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
-                <span>{"Recipe by " + recipe.AuthorName}</span>
-                <span className="author-separator"></span>
-                <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
-                <br></br>
+                <div id="author-date">
+                  <span>{"Recipe by " + recipe.AuthorName}</span>
+                  <span className="author-separator"></span>
+                  <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
+                </div>
+
                 <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.reviewCount} />
 
                 <div className='times-container'>
-                {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (
-                  <React.Fragment key={timeKey}>
-                    <div className='time'>
-                      <span>{recipe[timeKey]}</span>
-                      <span>{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
-                    </div>
-                    {index < 2 && <div className='time-separator'></div>}
-                  </React.Fragment>
-                ))}
-              </div>
-              
-              <input id="btn-like" className="btn btn-primary" type="submit" value="LIKE" />
+                  {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (
+                    <React.Fragment key={timeKey}>
+                      <div className='time'>
+                        <span id="time-number">{recipe[timeKey]}</span>
+                        <span>{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
+                      </div>
+                      {index < 2 && <div className='time-separator'></div>}
+                    </React.Fragment>
+                  ))}
+                </div>
+
+                <input id="btn-like" className="btn btn-primary" type="submit" value="LIKE" />
 
               </div>
               <div className='recipe-image-container'>
@@ -111,7 +116,7 @@ const RecipePage = () => {
             <br></br>
             <br></br>
             <br></br>
-        <br></br>
+            <br></br>
 
             <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
 
@@ -156,7 +161,7 @@ const RecipePage = () => {
           </div>
         </>
       ) : (
-        <Loading /> 
+        <Loading />
       )}
     </div>
   );
