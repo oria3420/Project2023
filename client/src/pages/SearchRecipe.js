@@ -47,11 +47,6 @@ const SearchRecipe = () => {
     }, []);
 
     useEffect(() => {
-        // Call a function to fetch and filter recipes based on the query
-        filterRecipesByQuery(query);
-      }, [query]);
-
-    useEffect(() => {
         fetch(`http://localhost:1337/api/recipes_categories`)
             .then(res => res.json())
             .then(data => setRecipesCategories(data))
@@ -142,24 +137,28 @@ const SearchRecipe = () => {
 
       const filterRecipesByQuery = (searchQuery) => {
           // Check if the searchQuery is empty
-        if (searchQuery) {
-            console.log("search")
-            // Convert the search query to lowercase for case-insensitive matching
-          const lowercaseSearchQuery = searchQuery.toLowerCase();
-  
-          // Filter recipes based on the search query
-          const searchRecipes = recipes.filter((recipe) =>
-              recipe.title.toLowerCase().includes(lowercaseSearchQuery)
-          );
-  
-          // Update the state with the filtered recipes
-          setFilteredRecipes(searchRecipes);
+        if (!searchQuery) {
+            setSearchRecipes(recipes)
+            console.log("none search")
+            return;
         }
-        setSearchRecipes(recipes)
-        console.log("none search")
-        return;
-      };
+        console.log("search")
+          // Convert the search query to lowercase for case-insensitive matching
+        const lowercaseSearchQuery = searchQuery.toLowerCase();
 
+        // Filter recipes based on the search query
+        const searchRecipes = recipes.filter((recipe) =>
+            recipe.title.toLowerCase().includes(lowercaseSearchQuery)
+        );
+
+        // Update the state with the filtered recipes
+        setFilteredRecipes(searchRecipes);
+      };
+      
+      useEffect(() => {
+        // Call a function to fetch and filter recipes based on the query
+        filterRecipesByQuery(query);
+      }, [query]);
 
     return (
         <div>
