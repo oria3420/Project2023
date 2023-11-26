@@ -68,6 +68,10 @@
     align-items: center;
     border-radius: 15px;    
   }
+
+  .card.recipe-card {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Adjust values as needed */
+  }
   
   .card-img-top {
     flex: 1; /* Allows the image to take up the full available space */

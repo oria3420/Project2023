@@ -62,6 +62,10 @@ const RecipePage = () => {
     return new Date(inputDate).toLocaleDateString('en-US', options);
   }
 
+  function capitalizeFirstLetter(text) {
+    return text && text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
   return (
     <div>
       {name && recipe ? (
@@ -72,22 +76,22 @@ const RecipePage = () => {
             <div className='recipe-header'>
 
               <div className='recipe-details'>
-              
-                <h2 id="recipe-name">{recipe.Name.charAt(0).toUpperCase() + recipe.Name.slice(1)}</h2>
+
+                <h2 id="recipe-name">{capitalizeFirstLetter(recipe.Name)}</h2>
                 <div id="author-date">
                   <span>{"Recipe by " + recipe.AuthorName}</span>
                   <span className="author-separator"></span>
                   <span>{"Published on " + formatDate(recipe.DatePublished)}</span>
                 </div>
 
-                <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.reviewCount} />
+                <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 
                 <div className='times-container'>
                   {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (
                     <React.Fragment key={timeKey}>
                       <div className='time'>
                         <span id="time-number">{recipe[timeKey]}</span>
-                        <span>{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
+                        <span id="time-text">{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
                       </div>
                       {index < 2 && <div className='time-separator'></div>}
                     </React.Fragment>
@@ -97,36 +101,46 @@ const RecipePage = () => {
                 <input id="btn-like" className="btn btn-primary" type="submit" value="LIKE" />
 
               </div>
+
               <div className='recipe-image-container'>
                 {imageUrl && <img className='recipe-image' src={imageUrl} alt="Card cap"></img>}
               </div>
+
             </div>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
 
-            <p>{recipe.Description.charAt(0).toUpperCase() + recipe.Description.slice(1)}</p>
+            <div className='description'>
+              <div className='description-text'>
+              <p>{capitalizeFirstLetter(recipe.Description)}</p>
 
-
-            <div className='times-yield'>
-              <p>Prep Time: {recipe.PrepTime}</p>
-              <p>Cook Time: {recipe.CookTime}</p>
-              <p>Total Time: {recipe.TotalTime}</p>
-              <p>Servings: {recipe.RecipeYield}</p>
+              </div>
+              <div className='Description-details'>
+                <p>Servings: {capitalizeFirstLetter(recipe.RecipeCategory)}</p>
+                <p>Kosher: {capitalizeFirstLetter(recipe.RecipeCategory)}</p>
+                <p>Category: {capitalizeFirstLetter(recipe.RecipeCategory)}</p>
+              </div>
             </div>
+
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+
+
+
+
+
 
             <div className='recipe-body'>
 
