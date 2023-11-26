@@ -128,7 +128,7 @@
   margin-right: 0.5em;
 }
 
-.ingredients-steps-title {
+.title {
   font-weight: bold;
   font-size: 35px;
 }
@@ -156,3 +156,20 @@
   vertical-align: middle;
 }
 
+/* Add this to your CSS */
+.tags-container {
+  margin-top: 60px;
+}
+
+.tags-container ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.tags-container li {
+  display: inline-block;
+  margin-right: 10px;
+  background-color: #f2f2f2;
+  padding: 5px 10px;
+  border-radius: 5px;
+}

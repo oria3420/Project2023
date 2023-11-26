@@ -7,7 +7,6 @@ import NutritionTable from '../components/NutritionTable';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 
-// const defaultImageUrl = '/images/logo_black_english.png'
 const defaultImageUrl = '/images/pizza.jpg'
 
 const RecipePage = () => {
@@ -17,6 +16,20 @@ const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [ingredients, setIngredients] = useState([]);
+  const [recipeTags, setRecipeTags] = useState([]);
+
+  useEffect(() => {
+    async function fetchIngredients() {
+      try {
+        console.log("client")
+        const response = await fetch(`http://localhost:1337/api/recipes/${id}/tags`);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchIngredients();
+  }, [id]);
 
   useEffect(() => {
     async function fetchRecipe() {
@@ -134,7 +147,7 @@ const RecipePage = () => {
 
               <div className='ingredients-container'>
                 <div className='ingredients'>
-                  <span className="ingredients-steps-title">Ingredients</span>
+                  <span className="title">Ingredients</span>
                   {ingredients.map((ingredient, index) => (
                     <div className='step-container' key={index}>
                       <span className='ingredient-text' key={ingredient.name}>{ingredient.name}</span>
@@ -146,7 +159,7 @@ const RecipePage = () => {
               </div>
 
               <div className='instructions'>
-                <span className='ingredients-steps-title'>Instructions</span>
+                <span className='title'>Instructions</span>
                 {recipe.RecipeInstructions.split('.').map((instruction, index) => {
                   const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
                   return instruction.trim() !== "" && (
@@ -163,6 +176,13 @@ const RecipePage = () => {
             </div>
 
             <NutritionTable recipe={recipe} />
+
+            <div className='tags-container'>
+            <span className='title'>Recipe Tags</span>
+            <ul>
+
+            </ul>
+          </div>
 
             <br></br>
             <br></br>
@@ -184,16 +204,3 @@ const RecipePage = () => {
 }
 
 export default RecipePage;
-
-// <p>Author: {recipe.AuthorName}</p>
-
-// <p>Recipe Category: {recipe.RecipeCategory}</p>
-// <p>Calories: {recipe.Calories}</p>
-// <p>Fat Content: {recipe.FatContent}</p>
-// <p>Saturated Fat Content: {recipe.SaturatedFatContent}</p>
-// <p>Cholesterol Content: {recipe.CholesterolContent}</p>
-// <p>Sodium Content: {recipe.SodiumContent}</p>
-// <p>Carbohydrate Content: {recipe.CarbohydrateContent}</p>
-// <p>Fiber Content: {recipe.FiberContent}</p>
-// <p>Sugar Content: {recipe.SugarContent}</p>
-// <p>Protein Content: {recipe.ProteinContent}</p>
