@@ -110,13 +110,22 @@ const RecipePage = () => {
 
             <div className='description'>
               <div className='description-text'>
-              <p>{capitalizeFirstLetter(recipe.Description)}</p>
+                <p>{capitalizeFirstLetter(recipe.Description)}</p>
 
               </div>
               <div className='Description-details'>
-                <p>Servings: {capitalizeFirstLetter(recipe.RecipeCategory)}</p>
-                <p>Kosher: {capitalizeFirstLetter(recipe.RecipeCategory)}</p>
-                <p>Category: {capitalizeFirstLetter(recipe.RecipeCategory)}</p>
+                <p>
+                  <spanp class="bold-text">Servings: </spanp>
+                  <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
+                </p>
+                <p>
+                  <spanp class="bold-text">Kosher: </spanp>
+                  <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
+                </p>
+                <p>
+                  <spanp class="bold-text">Category: </spanp>
+                  <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
+                </p>
               </div>
             </div>
 
