@@ -4,6 +4,8 @@ import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
+
 
 const SearchRecipe = () => {
     const navigate = useNavigate()
@@ -15,6 +17,10 @@ const SearchRecipe = () => {
     const [recipesCategories, setRecipesCategories] = useState([]);
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
+    const { query } = useParams();
+    const [searchRecipes, setSearchRecipes] = useState([]);
+
+
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -39,6 +45,11 @@ const SearchRecipe = () => {
             })
             .catch(error => console.error(error))
     }, []);
+
+    useEffect(() => {
+        // Call a function to fetch and filter recipes based on the query
+        filterRecipesByQuery(query);
+      }, [query]);
 
     useEffect(() => {
         fetch(`http://localhost:1337/api/recipes_categories`)
@@ -127,6 +138,27 @@ const SearchRecipe = () => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
 
+
+
+      const filterRecipesByQuery = (searchQuery) => {
+          // Check if the searchQuery is empty
+        if (searchQuery) {
+            console.log("search")
+            // Convert the search query to lowercase for case-insensitive matching
+          const lowercaseSearchQuery = searchQuery.toLowerCase();
+  
+          // Filter recipes based on the search query
+          const searchRecipes = recipes.filter((recipe) =>
+              recipe.title.toLowerCase().includes(lowercaseSearchQuery)
+          );
+  
+          // Update the state with the filtered recipes
+          setFilteredRecipes(searchRecipes);
+        }
+        setSearchRecipes(recipes)
+        console.log("none search")
+        return;
+      };
 
 
     return (
