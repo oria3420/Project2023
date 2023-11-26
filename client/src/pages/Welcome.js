@@ -1,8 +1,7 @@
 import './Welcome.css';
-import myVideo from './bgVideo1.mp4';
+import bgVideo from './bgVideo1.mp4';
 
 function WelcomePage() {
-
 
   function redirectToRegister() {
     window.location.href = "/register";
@@ -13,12 +12,11 @@ function WelcomePage() {
   }
 
 
-
   return (
     <div className="welcome-body">
       <div className="video-container">
         <video autoPlay loop muted onLoadedMetadata={(e) => e.target.play()}>
-          <source src={myVideo} type="video/mp4" />
+          <source src={bgVideo} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
@@ -31,7 +29,6 @@ function WelcomePage() {
         <input id="btn-register-welcome" className="btn btn-primary" type="button" value="SignUp" onClick={redirectToRegister} />
       </div>
     </div>
-
   );
 }
 

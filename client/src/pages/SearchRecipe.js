@@ -129,6 +129,7 @@ const SearchRecipe = () => {
     return (
         <div>
             {name && <Navbar name={name} />}
+            div
             <div className='search-recipe-container'>
                 <div className='filter-menu'>
                     {Object.keys(categories)
