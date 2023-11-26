@@ -68,6 +68,10 @@
     align-items: center;
     border-radius: 15px;    
   }
+
+  .card.recipe-card {
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Adjust values as needed */
+  }
   
   .card-img-top {
     flex: 1; /* Allows the image to take up the full available space */
@@ -127,9 +131,43 @@ ul{
   color: white;
 }
 
+<<<<<<< HEAD
 .search-bar{
   width: 20%;
   position: sticky
 }
 
+=======
+.nutrition-table {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  color:#797979;
+}
+>>>>>>> 1c1a43a93b5ea691a7face4f45e7e019b0964327
 
+.nutrition-field {
+  padding: 5px 10px;
+  text-align: center; /* Center the text within each field */
+  width: 10%;
+}
+
+.nutrition-divider {
+  border-left: 2px solid orange;
+  height: 50px; /* Adjust the height as needed */
+  margin: 0 10px; /* Adjust the margin for spacing */
+}
+
+.field-value{
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.field-label{
+  font-size: 18px;
+}
+
+.nutrition-title {
+  font-weight: bold;
+  font-size: 35px;
+}
