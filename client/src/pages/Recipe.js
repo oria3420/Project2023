@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import Navbar from '../components/Navbar';
 import StarRating from '../components/StarRating';
 import Loading from '../components/Loading';
+import NutritionTable from '../components/NutritionTable';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 
@@ -115,15 +116,15 @@ const RecipePage = () => {
               </div>
               <div className='description-details'>
                 <p>
-                  <spanp class="bold-text">Servings: </spanp>
+                  <span className="bold-text">Servings: </span>
                   <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
                 </p>
                 <p>
-                  <spanp class="bold-text">Kosher: </spanp>
+                  <span className="bold-text">Kosher: </span>
                   <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
                 </p>
                 <p>
-                  <spanp class="bold-text">Category: </spanp>
+                  <span className="bold-text">Category: </span>
                   <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
                 </p>
               </div>
@@ -161,22 +162,7 @@ const RecipePage = () => {
 
             </div>
 
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
+            <NutritionTable recipe={recipe} />
 
 
 
