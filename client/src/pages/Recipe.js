@@ -113,7 +113,7 @@ const RecipePage = () => {
                 <p>{capitalizeFirstLetter(recipe.Description)}</p>
 
               </div>
-              <div className='Description-details'>
+              <div className='description-details'>
                 <p>
                   <spanp class="bold-text">Servings: </spanp>
                   <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
@@ -129,48 +129,29 @@ const RecipePage = () => {
               </div>
             </div>
 
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-            <br></br>
-
-
-
-
-
-
             <div className='recipe-body'>
 
-              <div className='ingredients'>
-                <h3>Ingredients</h3>
-                {ingredients.map((ingredient, index) => (
-                  <div className='step-container' key={index}>
-                    <span className='ingredient-text' key={ingredient.name}>{ingredient.name}</span>
-                    <br key={`br-${index}`} />
-                  </div>
-                ))}
+              <div className='ingredients-container'>
+                <div className='ingredients'>
+                  <span className="ingredients-steps-title">Ingredients</span>
+                  {ingredients.map((ingredient, index) => (
+                    <div className='step-container' key={index}>
+                      <span className='ingredient-text' key={ingredient.name}>{ingredient.name}</span>
+                      <br key={`br-${index}`} />
+                    </div>
+                  ))}
+                </div>
+
               </div>
 
               <div className='instructions'>
-                <h3>Instructions</h3>
+                <span className='ingredients-steps-title'>Instructions</span>
                 {recipe.RecipeInstructions.split('.').map((instruction, index) => {
                   const formattedInstruction = instruction.trim().charAt(0).toUpperCase() + instruction.trim().slice(1);
                   return instruction.trim() !== "" && (
                     <div className='step-container' key={index}>
                       <span className='step-index'>{index < 9 ? "0" : ""}{index + 1}. </span>
-                      <span className='step-text'>{formattedInstruction}</span>
+                      <span className='step-text'>{formattedInstruction}.</span>
                       <br />
                     </div>
                   );
@@ -179,6 +160,27 @@ const RecipePage = () => {
               </div>
 
             </div>
+
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+            <br></br>
+
+
+
+
 
 
           </div>

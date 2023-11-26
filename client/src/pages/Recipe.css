@@ -1,46 +1,3 @@
-.recipe-container {
-  margin: 0 6%;
-  margin-top: 80px;
-}
-
-.step-container {
-  margin-top: 20px;
-  display: flex;
-  align-items: flex-start;
-}
-
-.step-index {
-  font-size: 20px;
-  color: rgb(56, 55, 55);
-  font-weight: 500;
-  line-height: 1;
-}
-
-.step-text {
-  color: rgb(155, 151, 151);
-  margin-left: 10px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.ingredient-text::before {
-  content: "•";
-  /* Use the bullet character as the list item icon */
-  color: green;
-  margin-right: 5px;
-  /* Add some space between the icon and the text */
-  font-size: 1.5em;
-  /* adjust as needed */
-  margin-right: 0.5em;
-  /* optional spacing */
-}
-
-
-.instructions,
-.ingredients {
-  margin-top: 40px;
-}
-
 #recipe-name {
   margin-right: 15px;
   font-weight: bold;
@@ -52,27 +9,20 @@
   /* font-family: 'Helvetica', sans-serif; */
 }
 
-
 .author-separator {
   border-left: 1px solid rgb(201, 198, 198);
-  /* Vertical line in light gray */
   height: 20px;
-  /* Adjust the height of the line as needed */
   margin: 0 10px;
-  /* Adjust the margin for spacing */
 }
-
 
 .recipe-header {
   margin-top: 11%;
   display: flex;
   align-items: flex-start;
-  /* Align items to the top of the container */
 }
 
 .recipe-details {
   flex: 1;
-  /* Allow the details to grow and take available space */
 }
 
 .recipe-image {
@@ -106,16 +56,16 @@
 #btn-like {
   background-color: white;
   border-color: orange;
-  border-width: 2px; /* Increase the border thickness as needed */
+  border-width: 2px;
   color: orange;
   border-radius: 10px;
-  width: 235px; /* Set width to 100% */
+  width: 235px;
   display: block;
   margin-top: 30px;
   margin-left: 7px;
-  font-weight: 600; /* Use 600 for semi-bold */
-  text-align: left; /* Align the text to the left */
-  padding-left: 10px; /* Add some left padding */
+  font-weight: 600;
+  text-align: left;
+  padding-left: 10px;
   font-size: 25px;
 }
 
@@ -140,17 +90,67 @@
 .description-text{
   border-left: 3px solid orange;
   padding-left: 10px;
-  margin: 0; /* Remove margin from the p element */
+  margin: 0;
   width: 60%;
   font-size: 19px;
   text-align: justify;
 }
 
-.Description-details {
+.description-details {
   margin-left:10%;
   font-size: 19px;
 }
 
 .bold-text{
   font-weight: bold;
+}
+
+.recipe-body {
+  display: flex;
+  align-items: flex-start; /* Adjust the alignment */
+  margin-top: 70px;
+}
+
+.ingredients-container {
+  width: 40%;
+  font-size: 19px;
+}
+
+.instructions {
+  width: 40%; /* Adjust the width of the Instructions section */
+}
+
+.ingredient-text::before {
+  content: "•";
+  color: orange;
+  font-size: 1.5em;
+  margin-right: 0.5em;
+}
+
+.ingredients-steps-title {
+  font-weight: bold;
+  font-size: 35px;
+}
+
+.recipe-container {
+  margin: 0 6%;
+  margin-top: 80px;
+}
+
+.step-container {
+  margin-top: 20px;
+  display: flex;
+}
+
+.step-index {
+  font-size: 20px;
+  color: rgb(56, 55, 55);
+  line-height: 1;
+}
+
+.step-text {
+  color: rgb(155, 151, 151);
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
 }
