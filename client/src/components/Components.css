@@ -131,20 +131,19 @@ ul{
   color: white;
 }
 
-<<<<<<< HEAD
+
 .search-bar{
   width: 20%;
   position: sticky
 }
 
-=======
 .nutrition-table {
   display: flex;
   align-items: center;
   margin-top: 20px;
   color:#797979;
 }
->>>>>>> 1c1a43a93b5ea691a7face4f45e7e019b0964327
+
 
 .nutrition-field {
   padding: 5px 10px;
