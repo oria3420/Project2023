@@ -64,7 +64,11 @@ const RecipePage = () => {
 
   return (
     <div>
+<<<<<<< HEAD
       {recipe ? (
+=======
+      {name && recipe ? (
+>>>>>>> 3d31cfb9fadf270cbb07a7a03796dbef7c6c810e
         <>
           {name && <Navbar name={name} />}
           <div className='recipe-container'>
