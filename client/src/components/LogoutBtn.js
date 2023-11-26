@@ -7,7 +7,7 @@ const LogoutBtn = () => {
     const logOut = (event) => {
         event.preventDefault()
         localStorage.clear('')
-        navigate('/login')
+        navigate('/')
     }
 
     return (

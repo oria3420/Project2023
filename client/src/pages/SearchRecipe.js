@@ -4,6 +4,8 @@ import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom';
+
 
 const SearchRecipe = () => {
     const navigate = useNavigate()
@@ -15,6 +17,10 @@ const SearchRecipe = () => {
     const [recipesCategories, setRecipesCategories] = useState([]);
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
+    const { query } = useParams();
+    const [searchRecipes, setSearchRecipes] = useState([]);
+
+
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -78,6 +84,7 @@ const SearchRecipe = () => {
         filterRecipes(); // apply filters when checkbox changes
     };
 
+
     const filterRecipes = useCallback(() => {
         let filteredIds = {};
         let anyChecked = false;
@@ -118,6 +125,8 @@ const SearchRecipe = () => {
             const filteredRecipes = recipes.filter((recipe) => filteredIds[recipe.RecipeId]);
             setFilteredRecipes(filteredRecipes);
         }
+    
+
     }, [checkedItems, categories, recipes, recipesCategories]);
 
     useEffect(() => {
@@ -125,6 +134,30 @@ const SearchRecipe = () => {
     }, [checkedItems, filterRecipes]);
 
 
+
+    const filterRecipesByQuery = useCallback((searchQuery) => {
+        // Check if the searchQuery is empty
+        if (!searchQuery) {
+            setFilteredRecipes(recipes);  // Show all recipes when the search query is empty
+            return;
+        }
+console.log("search")
+        // Convert the search query to lowercase for case-insensitive matching
+        const lowercaseSearchQuery = searchQuery.toLowerCase();
+
+        // Filter recipes based on the search query
+        const searchRecipes = recipes.filter((recipe) =>
+            recipe.title.toLowerCase().includes(lowercaseSearchQuery)
+        );
+
+        // Update the state with the filtered recipes
+        setFilteredRecipes(searchRecipes);
+    }, [recipes]); // Add recipes as a dependency
+
+    useEffect(() => {
+        // Call a function to fetch and filter recipes based on the query
+        filterRecipesByQuery(query);
+    }, [query, filterRecipesByQuery]);
 
     return (
         <div>
@@ -155,6 +188,7 @@ const SearchRecipe = () => {
                             );
                         })}
                 </div>
+               
                 <div className='recipes-container'>
                     {filteredRecipes.map((recipe, index) => (
                         <div className='recipe-card-wrapper' key={index}>
