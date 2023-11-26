@@ -127,4 +127,9 @@ ul{
   color: white;
 }
 
+.search-bar{
+  width: 20%;
+  position: sticky
+}
+
 

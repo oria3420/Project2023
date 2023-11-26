@@ -78,6 +78,7 @@ const SearchRecipe = () => {
         filterRecipes(); // apply filters when checkbox changes
     };
 
+
     const filterRecipes = useCallback(() => {
         let filteredIds = {};
         let anyChecked = false;
@@ -118,6 +119,8 @@ const SearchRecipe = () => {
             const filteredRecipes = recipes.filter((recipe) => filteredIds[recipe.RecipeId]);
             setFilteredRecipes(filteredRecipes);
         }
+    
+
     }, [checkedItems, categories, recipes, recipesCategories]);
 
     useEffect(() => {
@@ -155,6 +158,7 @@ const SearchRecipe = () => {
                             );
                         })}
                 </div>
+               
                 <div className='recipes-container'>
                     {filteredRecipes.map((recipe, index) => (
                         <div className='recipe-card-wrapper' key={index}>
