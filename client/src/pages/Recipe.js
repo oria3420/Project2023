@@ -236,7 +236,9 @@ const RecipePage = () => {
                   ))
                 ) : (
                   <div className='no-comments-container'>
-                    <span>No comments yet. Be the first to comment!</span>
+                    <span id="no-comment-first">No comments yet. </span>
+                    <br/>
+                    <span id="no-comment-second">Be the first to comment!</span>
                   </div>
                 )}
               </div>

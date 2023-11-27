@@ -181,7 +181,7 @@
 
 .comments-container {
   margin-top: 60px;
-  width: 70%;
+  width: 65%;
 }
 
 .comment-line{
@@ -256,4 +256,21 @@
 #comment-text {
   margin-left: 55px;
   width: 80%; /* Adjust the width as needed */
+}
+
+.no-comments-container {
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  height: 100px;
+}
+
+.no-comments-container span {
+  text-align: center; /* Center text horizontally */
+  display: block;
+}
+
+#no-comment-first{
+  margin-top: 55px;
+  font-weight: bold;
+  font-size: 18px;
 }
