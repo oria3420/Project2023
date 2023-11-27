@@ -92,6 +92,12 @@ const RecipePage = () => {
     return new Date(inputDate).toLocaleDateString('en-US', options);
   }
 
+  function formatDateComment(dateString) {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formattedDate = new Date(dateString).toLocaleDateString('en-US', options);
+    return formattedDate;
+  }
+
   function capitalizeFirstLetter(text) {
     return text && text.charAt(0).toUpperCase() + text.slice(1);
   }
@@ -151,7 +157,7 @@ const RecipePage = () => {
                 </p>
                 <p>
                   <span className="bold-text">Kosher: </span>
-                  <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
+                  <span> {capitalizeFirstLetter(recipe.Kosher)}</span>
                 </p>
                 <p>
                   <span className="bold-text">Category: </span>
@@ -211,18 +217,22 @@ const RecipePage = () => {
                 <div id="rating-text">Overall rating</div>
                 <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 
-                <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'comment' : 'comments'}`}</div>
+                <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}`}</div>
                 <hr className="comment-line" />
                 {comments.length > 0 ? (
                   comments.map((comment, index) => (
                     <div key={index} className="comment">
-                      <div className='user-container'>
-                        <i id="user-icon" className="bi bi-person-circle"></i>
-                        <span id="user-name">{comment.user_name}</span>
-                      </div>
-                      <span id="comment-text">{comment.comment_text}</span>
-                      <hr className="comment-line" />
+                    <div className='comment-top'>
+                    <div className='user-container'>
+                      <i id="user-icon" className="bi bi-person-circle"></i>
+                      <span id="user-name">{comment.user_name}</span>
                     </div>
+                    <span id="comment-date">{formatDateComment(comment.comment_date)}</span>
+                  </div>
+                    <span id="comment-text">{comment.comment_text}</span>
+                    <hr className="comment-line" />
+                  </div>
+                  
                   ))
                 ) : (
                   <div className='no-comments-container'>
