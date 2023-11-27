@@ -148,6 +148,19 @@ const SearchRecipe = () => {
         // you can use the searchTerm state variable here.
     }, [location.search]);
 
+    useEffect(() => {
+        if (query) {
+            const lowercaseQuery = query.toLowerCase();
+            const filteredByName = recipes.filter(
+                (recipe) => recipe.Name.toLowerCase().includes(lowercaseQuery)
+            );
+            setFilteredRecipes(filteredByName);
+        } else {
+            // If query is empty, show all recipes
+            setFilteredRecipes(recipes);
+        }
+    }, [query, location, recipes]);  // Include query in the dependency array
+
     return (
         <div>
             {name && <Navbar name={name} />}
