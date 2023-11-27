@@ -115,6 +115,7 @@ tableRoutes.forEach(route => {
 
 // recipe
 app.get('/api/recipes/:id', (req, res) => {
+
   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
   const id = parseInt(req.params.id);
   Recipe.findOne({ RecipeId: id }, (err, recipe) => {
@@ -150,14 +151,42 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
 
 
 app.get('/api/recipes/:id/tags', async (req, res) => {
-  console.log("server")
   try {
+    const AllergiesCategories = Collection.getModel(TABLE_NAMES.ALLERGY_CATEGORIES);
+    const RecipeAllergiesCategories = Collection.getModel(TABLE_NAMES.RECIPE_ALLERGY_CATEGORIES);
+    const recipeId = parseInt(req.params.id);
+    console.log(recipeId)
+    const recipeAllergies = await RecipeAllergiesCategories.find({ recipe_ID: recipeId });
+    console.log(recipeAllergies);
+    if (!recipeAllergies || recipeAllergies.length === 0) {
+      return res.json([]);
+    }
+    const categoryIDs = recipeAllergies.map(allergy => allergy.category_ID);
+
+    console.log(categoryIDs);
+
+    // Fetch the allergy details from AllergiesCategories based on category_ID
+    const allergyPromises = categoryIDs.map(async (categoryID) => {
+      return await AllergiesCategories.findOne({ id: categoryID });
+    });
+    const allergies = await Promise.all(allergyPromises);
+    const allergyNames = allergies.map(allergy => allergy.allergy);
+    console.log(allergyNames);
+    res.json(allergyNames);
+
+    // Respond with the allergy details
+    // res.json([allergy.allergy]);
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
   }
 });
 
+
+// const allergiesCategoriesData = await AllergiesCategories.find();
+// const recipeAllergiesCategoriesData = await RecipeAllergiesCategories.find();
+// console.log('Allergies Categories:', allergiesCategoriesData);
+// console.log('Recipe Allergies Categories:', recipeAllergiesCategoriesData);
 
 // filters
 app.get('/api/search_recipe', async (req, res) => {

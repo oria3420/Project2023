@@ -21,15 +21,18 @@ const RecipePage = () => {
   useEffect(() => {
     async function fetchIngredients() {
       try {
-        console.log("client")
+        console.log("client");
         const response = await fetch(`http://localhost:1337/api/recipes/${id}/tags`);
+        const tags = await response.json();
+        console.log(tags); // Now you can use the tags data as needed
       } catch (error) {
         console.error(error);
       }
     }
-
+  
     fetchIngredients();
   }, [id]);
+  
 
   useEffect(() => {
     async function fetchRecipe() {
