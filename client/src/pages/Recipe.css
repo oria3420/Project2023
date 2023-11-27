@@ -178,3 +178,7 @@
   min-width: 100px; /* Set a minimum width */
   box-sizing: border-box; /* Include padding and border in width calculation */
 }
+
+.comments-container {
+  margin-top: 60px;
+}

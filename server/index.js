@@ -149,13 +149,44 @@ const getRecipeIngredients = async (req, res) => {
 
 app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
 
+app.get('/api/recipes/:id/comments', async (req, res) => {
+  try {
+    const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
+    const Users = Collection.getModel(TABLE_NAMES.USERS);
+
+    const recipeId = parseInt(req.params.id);
+
+    const comments = await Comments.find({ recipe_id: recipeId });
+
+    const commentsWithSelectedFields = await Promise.all(comments.map(async (comment) => {
+      const user = await Users.findOne({ email: comment.user_id });
+      const userName = user ? user.name : 'Unknown User'; // Handle if the user is not found
+
+      return {
+        comment_text: comment.comment_text,
+        comment_date: comment.comment_date,
+        user_name: userName
+      };
+    }));
+
+    console.log(commentsWithSelectedFields)
+    
+    res.status(200).json(commentsWithSelectedFields);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
+
+
+
 
 app.get('/api/recipes/:id/tags', async (req, res) => {
   try {
     const recipeId = parseInt(req.params.id);
     const tagCategories = Object.keys(TABLE_NAMES).filter(name => name.endsWith('_CATEGORIES') && !name.startsWith('RECIPE_'));
-    console.log("tagCategories: "+tagCategories)
-    console.log("length: "+tagCategories.length)
+    // console.log("tagCategories: "+tagCategories)
+    // console.log("length: "+tagCategories.length)
 
     const tagPromises = tagCategories.map(async tableName => {
       const RecipeTagsCategories = Collection.getModel(TABLE_NAMES[`RECIPE_${tableName}`]);
@@ -173,7 +204,7 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
       });
 
       const tags = await Promise.all(tagPromises);
-      console.log(tableName +":\n"+tags)
+      // console.log(tableName +":\n"+tags)
       const modifiedTags = tags.map(tag => {
         const keys = Object.keys(tag);
         const lastKey = keys[keys.length - 1];
@@ -181,16 +212,16 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
         return modifiedTag;
       });
       
-      console.log(modifiedTags);
+      // console.log(modifiedTags);
       return modifiedTags;
     });
 
     const allTags = await Promise.all(tagPromises);
-    console.log("allTags: "+allTags)
+    // console.log("allTags: "+allTags)
     const flattenedTags = [].concat(...allTags);
-    console.log("flattenedTags: ", flattenedTags);
+    // console.log("flattenedTags: ", flattenedTags);
     const valuesOnly = flattenedTags.map(tag => Object.values(tag)[0]);
-    console.log("valuesOnly: ", valuesOnly);
+    // console.log("valuesOnly: ", valuesOnly);
     res.json(valuesOnly);
     
   } catch (err) {
@@ -198,13 +229,6 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
-
-
-// const allergiesCategoriesData = await AllergiesCategories.find();
-// const recipeAllergiesCategoriesData = await RecipeAllergiesCategories.find();
-// console.log('Allergies Categories:', allergiesCategoriesData);
-// console.log('Recipe Allergies Categories:', recipeAllergiesCategoriesData);
 
 // filters
 app.get('/api/search_recipe', async (req, res) => {

@@ -16,6 +16,7 @@ const RecipePage = () => {
   const [recipe, setRecipe] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [ingredients, setIngredients] = useState([]);
+  const [comments, setComments] = useState([]);
   const [recipeTags, setRecipeTags] = useState([]);
 
   useEffect(() => {
@@ -55,7 +56,20 @@ const RecipePage = () => {
     fetchIngredients();
   }, [id]);
 
+  useEffect(() => {
+    async function fetchComments() {
+      try {
+        const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
+        const data = await response.json();
+        setComments(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchComments();
+  }, [id]);
 
+  console.log(comments)
 
   useEffect(() => {
     async function getImageUrl() {
@@ -80,6 +94,7 @@ const RecipePage = () => {
   function capitalizeFirstLetter(text) {
     return text && text.charAt(0).toUpperCase() + text.slice(1);
   }
+
 
   return (
     <div>
@@ -131,7 +146,7 @@ const RecipePage = () => {
               <div className='description-details'>
                 <p>
                   <span className="bold-text">Servings: </span>
-                  <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
+                  <span> {capitalizeFirstLetter(recipe.RecipeServings)}</span>
                 </p>
                 <p>
                   <span className="bold-text">Kosher: </span>
@@ -179,7 +194,7 @@ const RecipePage = () => {
             <NutritionTable recipe={recipe} />
 
             <div className='tags-container'>
-            <div className='title'>Recipe Tags</div>
+              <div className='title'>Recipe Tags</div>
 
               {recipeTags.map((tag, index) => (
                 <span key={index} className='tag'>
@@ -187,7 +202,12 @@ const RecipePage = () => {
                 </span>
               ))}
 
-          </div>
+            </div>
+
+            <div className='comments-container'>
+              <div className='title'>Comments</div>
+
+            </div>
 
             <br></br>
             <br></br>
