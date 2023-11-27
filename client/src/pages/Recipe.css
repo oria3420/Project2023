@@ -224,3 +224,36 @@
 #user-name{
   font-weight: bold;
 }
+
+.comment-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.user-container {
+  display: flex;
+  align-items: center;
+}
+
+#user-icon {
+  margin-right: 15px;
+  font-size: 40px;
+  color: rgba(182, 119, 2, 0.875);
+}
+
+#user-name {
+  font-weight: bold;
+}
+
+#comment-date {
+  margin-left: auto; /* Push the comment-date to the right as much as possible */
+  font-size: 15px;
+}
+
+
+#comment-text {
+  margin-left: 55px;
+  width: 80%; /* Adjust the width as needed */
+}
