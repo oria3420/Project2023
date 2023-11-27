@@ -16,7 +16,8 @@ const SearchBar = () => {
     // Navigate to a new page with the search results
     console.log(searchTerm)
     navigate(`/search_recipe?query=${searchTerm}`);
-    
+     // Clear the search term in the input field
+    setSearchTerm('');
   };
 
   return (
