@@ -151,7 +151,7 @@ const RecipePage = () => {
                 </p>
                 <p>
                   <span className="bold-text">Kosher: </span>
-                  <span> {capitalizeFirstLetter(recipe.kosher)}</span>
+                  <span> {capitalizeFirstLetter(recipe.Kosher)}</span>
                 </p>
                 <p>
                   <span className="bold-text">Category: </span>
@@ -211,7 +211,7 @@ const RecipePage = () => {
                 <div id="rating-text">Overall rating</div>
                 <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 
-                <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'comment' : 'comments'}`}</div>
+                <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}`}</div>
                 <hr className="comment-line" />
                 {comments.length > 0 ? (
                   comments.map((comment, index) => (
