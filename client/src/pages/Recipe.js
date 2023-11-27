@@ -151,7 +151,7 @@ const RecipePage = () => {
                 </p>
                 <p>
                   <span className="bold-text">Kosher: </span>
-                  <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
+                  <span> {capitalizeFirstLetter(recipe.kosher)}</span>
                 </p>
                 <p>
                   <span className="bold-text">Category: </span>
@@ -216,10 +216,16 @@ const RecipePage = () => {
                 {comments.length > 0 ? (
                   comments.map((comment, index) => (
                     <div key={index} className="comment">
+                    
                       <div className='user-container'>
+
                         <i id="user-icon" className="bi bi-person-circle"></i>
-                        <span id="user-name">{comment.user_name}</span>
+
+                          <span id="user-name">{comment.user_name}</span>
+                          <span>{new Date(comment.comment_date).toLocaleDateString('en-US')}</span>
+
                       </div>
+
                       <span id="comment-text">{comment.comment_text}</span>
                       <hr className="comment-line" />
                     </div>
