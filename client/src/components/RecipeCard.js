@@ -13,6 +13,9 @@ const RecipeCard = (props) => {
   const user = props.user;
 
   const name = user.name
+  const user_id = user.email
+  console.log(name)
+  console.log(user_id)
   const navigate = useNavigate();
   const [isHeartFilled, setIsHeartFilled] = useState(false);
 
@@ -59,7 +62,7 @@ const RecipeCard = (props) => {
 
   const handleClick = (recipeId) => {
     console.log(props)
-    navigate(`/recipes/${recipeId}`, { state: { name: name } });
+    navigate(`/recipes/${recipeId}`, { state: { name: name, user_id: user_id } });
   };
 
   const handleHeartClick = () => {

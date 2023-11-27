@@ -194,7 +194,7 @@
   align-items: flex-start;
 }
 
-#rating-text{
+.comment-title{
   margin-top: 15px;
   font-weight: bold;
   font-size: 18px;
