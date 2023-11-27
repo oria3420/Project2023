@@ -149,17 +149,19 @@ const SearchRecipe = () => {
     }, [location.search]);
 
     useEffect(() => {
-        if (query) {
-            const lowercaseQuery = query.toLowerCase();
+        if (searchTerm) {
+            console.log("query: " + searchTerm);
+            const lowercaseQuery = searchTerm.toLowerCase();
             const filteredByName = recipes.filter(
                 (recipe) => recipe.Name.toLowerCase().includes(lowercaseQuery)
             );
             setFilteredRecipes(filteredByName);
         } else {
+            console.log("no query");
             // If query is empty, show all recipes
             setFilteredRecipes(recipes);
         }
-    }, [query, location, recipes]);  // Include query in the dependency array
+    }, [searchTerm, recipes]);
 
     return (
         <div>
