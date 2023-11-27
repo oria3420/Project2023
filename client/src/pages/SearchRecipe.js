@@ -3,7 +3,7 @@ import RecipeCard from '../components/RecipeCard';
 import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,useLocation } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 
 
@@ -18,8 +18,8 @@ const SearchRecipe = () => {
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
     const { query } = useParams();
-    const [searchRecipes, setSearchRecipes] = useState([]);
-
+    const location = useLocation();
+    const [searchTerm, setSearchTerm] = useState('');
 
 
     useEffect(() => {
@@ -133,36 +133,37 @@ const SearchRecipe = () => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
 
+    useEffect(() => {
+        // Extract the query parameter from the search string
+        const searchParams = new URLSearchParams(location.search);
+        const queryFromURL = searchParams.get('query');
 
+        // Update the state with the query parameter
+        setSearchTerm(queryFromURL || '');
 
-    const filterRecipesByQuery = useCallback((searchQuery) => {
-        // Check if the searchQuery is empty
-        if (!searchQuery) {
-            setFilteredRecipes(recipes);  // Show all recipes when the search query is empty
-            return;
-        }
-console.log("search")
-        // Convert the search query to lowercase for case-insensitive matching
-        const lowercaseSearchQuery = searchQuery.toLowerCase();
+        // Other logic based on the search term
+        console.log('Search term from URL:', queryFromURL);
 
-        // Filter recipes based on the search query
-        const searchRecipes = recipes.filter((recipe) =>
-            recipe.title.toLowerCase().includes(lowercaseSearchQuery)
-        );
-
-        // Update the state with the filtered recipes
-        setFilteredRecipes(searchRecipes);
-    }, [recipes]); // Add recipes as a dependency
+        // If you want to perform additional logic when the search term changes,
+        // you can use the searchTerm state variable here.
+    }, [location.search]);
 
     useEffect(() => {
-        // Call a function to fetch and filter recipes based on the query
-        filterRecipesByQuery(query);
-    }, [query, filterRecipesByQuery]);
+        if (query) {
+            const lowercaseQuery = query.toLowerCase();
+            const filteredByName = recipes.filter(
+                (recipe) => recipe.Name.toLowerCase().includes(lowercaseQuery)
+            );
+            setFilteredRecipes(filteredByName);
+        } else {
+            // If query is empty, show all recipes
+            setFilteredRecipes(recipes);
+        }
+    }, [query, location, recipes]);  // Include query in the dependency array
 
     return (
         <div>
             {name && <Navbar name={name} />}
-            div
             <div className='search-recipe-container'>
                 <div className='filter-menu'>
                     {Object.keys(categories)
