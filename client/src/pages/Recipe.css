@@ -182,3 +182,44 @@
 .comments-container {
   margin-top: 60px;
 }
+
+.comment-line{
+  width: 70%;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column; /* Stack items vertically */
+  align-items: flex-start; /* Align items to the start of the container */
+}
+
+#rating-text{
+  margin-top: 15px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.comment-count{
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.user-container {
+  display: flex;
+  align-items: center; /* Align items vertically in the center */
+}
+
+#user-icon {
+  margin-right: 15px; /* Adjust the margin as needed */
+  font-size: 40px;
+  color: rgba(182, 119, 2, 0.875);
+}
+
+#comment-text{
+  margin-left: 55px;
+}
+
+#user-name{
+  font-weight: bold;
+}
