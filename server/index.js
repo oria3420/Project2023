@@ -182,12 +182,8 @@ app.post('/api/recipes/new_comment', async (req, res) => {
   const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
 
   try {
-    const { comment_text, recipe_id } = req.body;
+    const { comment_text, recipe_id, user_id } = req.body;
     const parsedRecipeId = parseInt(recipe_id, 10);
-    console.log(comment_text)
-    console.log(recipe_id)
-
-    const user_id = "perki@gmail.com";  // Replace with the actual user_id
 
     Comments.create({
       recipe_id: parsedRecipeId,

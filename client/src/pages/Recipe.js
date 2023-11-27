@@ -13,6 +13,8 @@ const defaultImageUrl = '/images/pizza.jpg'
 const RecipePage = () => {
   const location = useLocation();
   const name = location.state.name;
+  const user_id = location.state.user_id;
+
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
@@ -22,20 +24,14 @@ const RecipePage = () => {
   const [newComment, setNewComment] = useState('');
 
   const handleCommentSubmit = async () => {
-    // You can add your logic to send the new comment to the server here
-    // For example, using fetch or any other method you prefer
     try {
       const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ comment_text: newComment,recipe_id:id }),
+        body: JSON.stringify({ comment_text: newComment,recipe_id:id, user_id: user_id }),
       });
-
-      // Handle the response as needed
-
-      // Clear the input field after submitting
       setNewComment('');
     } catch (error) {
       console.error('Error submitting comment:', error);
