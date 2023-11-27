@@ -19,20 +19,18 @@ const RecipePage = () => {
   const [recipeTags, setRecipeTags] = useState([]);
 
   useEffect(() => {
-    async function fetchIngredients() {
+    async function fetchTags() {
       try {
-        console.log("client");
         const response = await fetch(`http://localhost:1337/api/recipes/${id}/tags`);
         const tags = await response.json();
-        console.log(tags); // Now you can use the tags data as needed
+        setRecipeTags(tags);
       } catch (error) {
         console.error(error);
       }
     }
-  
-    fetchIngredients();
+
+    fetchTags();
   }, [id]);
-  
 
   useEffect(() => {
     async function fetchRecipe() {
@@ -181,10 +179,14 @@ const RecipePage = () => {
             <NutritionTable recipe={recipe} />
 
             <div className='tags-container'>
-            <span className='title'>Recipe Tags</span>
-            <ul>
+            <div className='title'>Recipe Tags</div>
 
-            </ul>
+              {recipeTags.map((tag, index) => (
+                <span key={index} className='tag'>
+                  {tag}
+                </span>
+              ))}
+
           </div>
 
             <br></br>
