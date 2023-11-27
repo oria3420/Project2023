@@ -182,28 +182,19 @@ app.post('/api/recipes/new_comment', async (req, res) => {
   const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
 
   try {
-    const { comment_text } = req.body;
+    const { comment_text, recipe_id } = req.body;
+    const parsedRecipeId = parseInt(recipe_id, 10);
     console.log(comment_text)
-    // You may need to get the recipe_id and user_id from the request or elsewhere
-    const recipe_id = 378053;  // Replace with the actual recipe_id
+    console.log(recipe_id)
+
     const user_id = "perki@gmail.com";  // Replace with the actual user_id
 
-    const newComment = {
-      // comment_id: new ObjectId(),  // Generate a unique comment_id
-      recipe_id: recipe_id,
-      user_id:user_id,
-      comment_text: comment_text,
-      comment_date: new Date().toISOString(),
-    };
-
     Comments.create({
-      recipe_id: recipe_id,
+      recipe_id: parsedRecipeId,
       user_id:user_id,
       comment_text: comment_text,
       comment_date: new Date().toISOString(),
     })
-
-    console.log(newComment)
 
     res.status(201).json({ message: 'Comment added successfully' });
   }  catch (error) {

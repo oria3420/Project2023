@@ -25,13 +25,12 @@ const RecipePage = () => {
     // You can add your logic to send the new comment to the server here
     // For example, using fetch or any other method you prefer
     try {
-      console.log("check")
       const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ comment_text: newComment }),
+        body: JSON.stringify({ comment_text: newComment,recipe_id:id }),
       });
 
       // Handle the response as needed
