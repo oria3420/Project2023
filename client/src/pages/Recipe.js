@@ -19,6 +19,30 @@ const RecipePage = () => {
   const [ingredients, setIngredients] = useState([]);
   const [comments, setComments] = useState([]);
   const [recipeTags, setRecipeTags] = useState([]);
+  const [newComment, setNewComment] = useState('');
+
+  const handleCommentSubmit = async () => {
+    // You can add your logic to send the new comment to the server here
+    // For example, using fetch or any other method you prefer
+    try {
+      console.log("check")
+      const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ comment_text: newComment }),
+      });
+
+      // Handle the response as needed
+
+      // Clear the input field after submitting
+      setNewComment('');
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+    }
+  };
+
 
   useEffect(() => {
     async function fetchTags() {
@@ -69,8 +93,6 @@ const RecipePage = () => {
     }
     fetchComments();
   }, [id]);
-
-  console.log(comments)
 
   useEffect(() => {
     async function getImageUrl() {
@@ -214,7 +236,20 @@ const RecipePage = () => {
             <div>
               <div className='comments-container'>
                 <div className='title'>Reviews & Comments</div>
-                <div id="rating-text">Overall rating</div>
+                <div className="comment-title">Your Review</div>
+                {/* Input field for new comment */}
+                <input
+                  type="text"
+                  placeholder="Add your comment..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                />
+
+                {/* Submit button */}
+                <button onClick={handleCommentSubmit}>Submit Comment</button>
+
+
+                <div className="comment-title">Overall rating</div>
                 <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 
                 <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}`}</div>
@@ -222,22 +257,22 @@ const RecipePage = () => {
                 {comments.length > 0 ? (
                   comments.map((comment, index) => (
                     <div key={index} className="comment">
-                    <div className='comment-top'>
-                    <div className='user-container'>
-                      <i id="user-icon" className="bi bi-person-circle"></i>
-                      <span id="user-name">{comment.user_name}</span>
+                      <div className='comment-top'>
+                        <div className='user-container'>
+                          <i id="user-icon" className="bi bi-person-circle"></i>
+                          <span id="user-name">{comment.user_name}</span>
+                        </div>
+                        <span id="comment-date">{formatDateComment(comment.comment_date)}</span>
+                      </div>
+                      <span id="comment-text">{comment.comment_text}</span>
+                      <hr className="comment-line" />
                     </div>
-                    <span id="comment-date">{formatDateComment(comment.comment_date)}</span>
-                  </div>
-                    <span id="comment-text">{comment.comment_text}</span>
-                    <hr className="comment-line" />
-                  </div>
-                  
+
                   ))
                 ) : (
                   <div className='no-comments-container'>
                     <span id="no-comment-first">No comments yet. </span>
-                    <br/>
+                    <br />
                     <span id="no-comment-second">Be the first to comment!</span>
                   </div>
                 )}

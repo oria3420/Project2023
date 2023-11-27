@@ -170,7 +170,7 @@ app.get('/api/recipes/:id/comments', async (req, res) => {
     }));
 
     console.log(commentsWithSelectedFields)
-    
+
     res.status(200).json(commentsWithSelectedFields);
   } catch (error) {
     console.error(error);
@@ -178,8 +178,40 @@ app.get('/api/recipes/:id/comments', async (req, res) => {
   }
 });
 
+app.post('/api/recipes/new_comment', async (req, res) => {
+  const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
 
+  try {
+    const { comment_text } = req.body;
+    console.log(comment_text)
+    // You may need to get the recipe_id and user_id from the request or elsewhere
+    const recipe_id = 378053;  // Replace with the actual recipe_id
+    const user_id = "perki@gmail.com";  // Replace with the actual user_id
 
+    const newComment = {
+      // comment_id: new ObjectId(),  // Generate a unique comment_id
+      recipe_id: recipe_id,
+      user_id:user_id,
+      comment_text: comment_text,
+      comment_date: new Date().toISOString(),
+    };
+
+    Comments.create({
+      recipe_id: recipe_id,
+      user_id:user_id,
+      comment_text: comment_text,
+      comment_date: new Date().toISOString(),
+    })
+
+    console.log(newComment)
+
+    res.status(201).json({ message: 'Comment added successfully' });
+  }  catch (error) {
+    console.error('Error adding comment:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+
+});
 
 app.get('/api/recipes/:id/tags', async (req, res) => {
   try {
