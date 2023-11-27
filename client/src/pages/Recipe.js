@@ -6,6 +6,7 @@ import Loading from '../components/Loading';
 import NutritionTable from '../components/NutritionTable';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const defaultImageUrl = '/images/pizza.jpg'
 
@@ -204,10 +205,33 @@ const RecipePage = () => {
 
             </div>
 
-            <div className='comments-container'>
-              <div className='title'>Comments</div>
+            <div>
+              <div className='comments-container'>
+                <div className='title'>Reviews & Comments</div>
+                <div id="rating-text">Overall rating</div>
+                <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 
+                <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'comment' : 'comments'}`}</div>
+                <hr className="comment-line" />
+                {comments.length > 0 ? (
+                  comments.map((comment, index) => (
+                    <div key={index} className="comment">
+                      <div className='user-container'>
+                        <i id="user-icon" className="bi bi-person-circle"></i>
+                        <span id="user-name">{comment.user_name}</span>
+                      </div>
+                      <span id="comment-text">{comment.comment_text}</span>
+                      <hr className="comment-line" />
+                    </div>
+                  ))
+                ) : (
+                  <div className='no-comments-container'>
+                    <span>No comments yet. Be the first to comment!</span>
+                  </div>
+                )}
+              </div>
             </div>
+
 
             <br></br>
             <br></br>
@@ -229,3 +253,7 @@ const RecipePage = () => {
 }
 
 export default RecipePage;
+
+// <p>{comment.comment_text}</p>
+// <p>{comment.comment_date}</p>
+// <p>{comment.user_name}</p>
