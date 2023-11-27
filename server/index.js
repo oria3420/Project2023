@@ -152,35 +152,54 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
 
 app.get('/api/recipes/:id/tags', async (req, res) => {
   try {
-    const AllergiesCategories = Collection.getModel(TABLE_NAMES.ALLERGY_CATEGORIES);
-    const RecipeAllergiesCategories = Collection.getModel(TABLE_NAMES.RECIPE_ALLERGY_CATEGORIES);
     const recipeId = parseInt(req.params.id);
-    console.log(recipeId)
-    const recipeAllergies = await RecipeAllergiesCategories.find({ recipe_ID: recipeId });
-    console.log(recipeAllergies);
-    if (!recipeAllergies || recipeAllergies.length === 0) {
-      return res.json([]);
-    }
-    const categoryIDs = recipeAllergies.map(allergy => allergy.category_ID);
+    const tagCategories = Object.keys(TABLE_NAMES)
+      .filter(name => name.endsWith('_CATEGORIES') && !name.startsWith('RECIPE_'));
+    console.log(tagCategories)
+    console.log(tagCategories.length)
 
-    console.log(categoryIDs);
+    const tagPromises = tagCategories.map(async tableName => {
+      const RecipeTagsCategories = Collection.getModel(TABLE_NAMES[`RECIPE_${tableName}`]);
+      const recipeTags = await RecipeTagsCategories.find({ recipe_ID: recipeId });
 
-    // Fetch the allergy details from AllergiesCategories based on category_ID
-    const allergyPromises = categoryIDs.map(async (categoryID) => {
-      return await AllergiesCategories.findOne({ id: categoryID });
+      if (!recipeTags || recipeTags.length === 0) {
+        return [];
+      }
+
+      const categoryIDs = recipeTags.map(tag => tag.category_ID);
+      console.log(categoryIDs)
+      const tagPromises = categoryIDs.map(async (categoryID) => {
+        const TagsCategories = Collection.getModel(TABLE_NAMES[tableName]);
+        return await TagsCategories.findOne({ id: categoryID });
+      });
+
+      const tags = await Promise.all(tagPromises);
+      console.log("tags: "+tags)
+      const modifiedTags = tags.map(tag => {
+        const keys = Object.keys(tag);
+        const lastKey = keys[keys.length - 1];
+        const modifiedTag = { [lastKey]: tag[lastKey] };
+        return modifiedTag;
+      });
+      
+      console.log(modifiedTags);
+      return modifiedTags;
     });
-    const allergies = await Promise.all(allergyPromises);
-    const allergyNames = allergies.map(allergy => allergy.allergy);
-    console.log(allergyNames);
-    res.json(allergyNames);
 
-    // Respond with the allergy details
-    // res.json([allergy.allergy]);
+    const allTags = await Promise.all(tagPromises);
+    console.log("allTags: "+allTags)
+    const flattenedTags = [].concat(...allTags);
+    console.log("flattenedTags: ", flattenedTags);
+    const valuesOnly = flattenedTags.map(tag => Object.values(tag)[0]);
+    console.log("valuesOnly: ", valuesOnly);
+    res.json(valuesOnly);
+    
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 
 // const allergiesCategoriesData = await AllergiesCategories.find();
