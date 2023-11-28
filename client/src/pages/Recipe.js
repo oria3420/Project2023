@@ -22,7 +22,7 @@ const RecipePage = () => {
   const [recipeTags, setRecipeTags] = useState([]);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-
+  console.log(comments)
 const handleCommentSubmit = async () => {
   try {
     const response = await fetch('http://localhost:1337/api/recipes/new_comment', {

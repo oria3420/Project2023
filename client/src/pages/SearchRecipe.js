@@ -7,7 +7,6 @@ import { useNavigate,useLocation } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 
-
 const SearchRecipe = () => {
     console.log("SearchRecipe")
     const navigate = useNavigate()
