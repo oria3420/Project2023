@@ -8,6 +8,7 @@ import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import LikeButton from '../components/LikeBtn';
+import CommentsContainer from '../components/CommentsContainer';
 
 const defaultImageUrl = '/images/pizza.jpg'
 
@@ -21,6 +22,7 @@ const RecipePage = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [recipeTags, setRecipeTags] = useState([]);
+<<<<<<< HEAD
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 
@@ -55,6 +57,8 @@ const handleCommentSubmit = async () => {
     }
     fetchComments();
   }, [id]);
+=======
+>>>>>>> 36667ba4745b568f0a368d2ed2482961a65fe939
 
   useEffect(() => {
     async function fetchTags() {
@@ -113,34 +117,6 @@ const handleCommentSubmit = async () => {
     return new Date(inputDate).toLocaleDateString('en-US', options);
   }
 
-  function formatDateComment(dateString) {
-    const isoDate = new Date(dateString);
-  
-    // Month names array
-    const monthNames = [
-      'January', 'February', 'March', 'April',
-      'May', 'June', 'July', 'August',
-      'September', 'October', 'November', 'December'
-    ];
-  
-    const day = isoDate.getDate();
-    const month = monthNames[isoDate.getMonth()];
-    const year = isoDate.getFullYear();
-    const hours = isoDate.getHours();
-    const minutes = isoDate.getMinutes();
-  
-    // Function to add the ordinal suffix to the day (e.g., 1st, 2nd, 3rd)
-    const getOrdinalSuffix = (number) => {
-      const suffixes = ['st', 'nd', 'rd'];
-      const v = number % 100;
-      return number + (suffixes[(v - 20) % 10] || suffixes[v] || 'th');
-    };
-  
-    const formattedDate = `${month} ${getOrdinalSuffix(day)}, ${year} at ${hours}:${minutes.toString().padStart(2, '0')}`;
-  
-    return formattedDate;
-  }
-  
   function capitalizeFirstLetter(text) {
     return text && text.charAt(0).toUpperCase() + text.slice(1);
   }
@@ -180,9 +156,9 @@ const handleCommentSubmit = async () => {
 
 
                 <input id="btn-like" className="btn btn-primary" value="LIKE" />
-                  <LikeButton recipeId={id} userEmail={user_id}/>
+                <LikeButton recipeId={id} userEmail={user_id} />
 
-              
+
               </div>
 
               <div className='recipe-image-container'>
@@ -257,49 +233,8 @@ const handleCommentSubmit = async () => {
 
             </div>
 
-            <div className='comments-container'>
-              <div className='title'>Reviews & Comments</div>
-              <div className="comment-title">Your Review</div>
-          
-              <input
-                type="text"
-                placeholder="Add your comment..."
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-              />
-          
-              <button onClick={handleCommentSubmit}>Submit Comment</button>
-          
-              <div className="comment-title">Overall rating</div>
-              <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
-          
-              <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}`}</div>
-              <hr className="comment-line" />
-          
-              {comments.length > 0 ? (
-                comments.slice().reverse().map((comment, index) => (
-                  <div key={index} className="comment">
-                    <div className='comment-top'>
-                      <div className='user-container'>
-                        <i id="user-icon" className="bi bi-person-circle"></i>
-                        <span id="user-name">{comment.user_name}</span>
-                      </div>
-                      <span id="comment-date">{formatDateComment(comment.comment_date)}</span>
-                    </div>
-                    <span id="comment-text">{comment.comment_text}</span>
-                    <hr className="comment-line" />
-                  </div>
-                ))
-              ) : (
-                <div className='no-comments-container'>
-                  <span id="no-comment-first">No comments yet. </span>
-                  <br />
-                  <span id="no-comment-second">Be the first to comment!</span>
-                </div>
-              )}
-            </div>
-
-
+            <CommentsContainer id={id} user_id={user_id} user_name={user_name} recipe={recipe} />
+            
             <br></br>
             <br></br>
             <br></br>

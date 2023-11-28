@@ -191,6 +191,7 @@ app.post('/api/recipes/new_comment', async (req, res) => {
       comment_date: new Date().toISOString(),
     });
 
+    console.log(newComment._id)
     res.status(201).json({
       message: 'Comment added successfully',
       newComment: {
