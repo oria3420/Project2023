@@ -14,6 +14,7 @@ const SearchRecipe = () => {
     const [recipes, setRecipes] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
     const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const [filteredRecipesByName, setFilteredRecipeByNames] = useState([]);
     const [recipesCategories, setRecipesCategories] = useState([]);
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
@@ -85,6 +86,37 @@ const SearchRecipe = () => {
     };
 
 
+    useEffect(() => {
+        // Extract the query parameter from the search string
+        const searchParams = new URLSearchParams(location.search);
+        const queryFromURL = searchParams.get('query');
+
+        // Update the state with the query parameter
+        setSearchTerm(queryFromURL || '');
+
+        // Other logic based on the search term
+        //console.log('Search term from URL:', queryFromURL);
+
+        // If you want to perform additional logic when the search term changes,
+        // you can use the searchTerm state variable here.
+    }, [location.search]);
+
+    useEffect(() => {
+        if (searchTerm) {
+            console.log("query: " + searchTerm);
+            const lowercaseQuery = searchTerm.toLowerCase();
+            const filteredByName = recipes.filter(
+                (recipe) => recipe.Name.toLowerCase().includes(lowercaseQuery)
+            );
+            setFilteredRecipes(filteredByName);
+            setFilteredRecipeByNames(filteredByName);
+        } else {
+            console.log("no query");
+            // If query is empty, show all recipes
+            setFilteredRecipeByNames(recipes);
+        }
+    }, [searchTerm, recipes]);
+
     const filterRecipes = useCallback(() => {
         let filteredIds = {};
         let anyChecked = false;
@@ -120,10 +152,26 @@ const SearchRecipe = () => {
             });
         });
         if (!anyChecked) {
-            setFilteredRecipes(recipes);
+            // if (filteredRecipesByName.length > 0) {
+            //     setFilteredRecipes(filteredRecipesByName);
+            //     setFilteredRecipeByNames([])
+            // }else{
+            //     setFilteredRecipes(recipes);
+            // }
+            console.log("!anyChecked:"+filteredRecipesByName.length)
+            setFilteredRecipes(filteredRecipesByName);
         } else {
-            const filteredRecipes = recipes.filter((recipe) => filteredIds[recipe.RecipeId]);
+            // if (filteredRecipesByName.length > 0) {
+            //     const filteredRecipes = filteredRecipesByName.filter((recipe) => filteredIds[recipe.RecipeId]);
+            //     setFilteredRecipes(filteredRecipes);
+            //     setFilteredRecipeByNames([])
+            // }else{
+            //     const filteredRecipes = recipes.filter((recipe) => filteredIds[recipe.RecipeId]);
+            //     setFilteredRecipes(filteredRecipes);
+            // }
+            const filteredRecipes = filteredRecipesByName.filter((recipe) => filteredIds[recipe.RecipeId]);
             setFilteredRecipes(filteredRecipes);
+            console.log("anyChecked:"+filteredRecipes.length)
         }
     
 
@@ -133,35 +181,6 @@ const SearchRecipe = () => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
 
-    useEffect(() => {
-        // Extract the query parameter from the search string
-        const searchParams = new URLSearchParams(location.search);
-        const queryFromURL = searchParams.get('query');
-
-        // Update the state with the query parameter
-        setSearchTerm(queryFromURL || '');
-
-        // Other logic based on the search term
-        console.log('Search term from URL:', queryFromURL);
-
-        // If you want to perform additional logic when the search term changes,
-        // you can use the searchTerm state variable here.
-    }, [location.search]);
-
-    useEffect(() => {
-        if (searchTerm) {
-            console.log("query: " + searchTerm);
-            const lowercaseQuery = searchTerm.toLowerCase();
-            const filteredByName = recipes.filter(
-                (recipe) => recipe.Name.toLowerCase().includes(lowercaseQuery)
-            );
-            setFilteredRecipes(filteredByName);
-        } else {
-            console.log("no query");
-            // If query is empty, show all recipes
-            setFilteredRecipes(recipes);
-        }
-    }, [searchTerm, recipes]);
 
     return (
         <div>
