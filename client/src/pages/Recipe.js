@@ -33,6 +33,7 @@ const handleCommentSubmit = async () => {
       body: JSON.stringify({ comment_text: newComment, recipe_id: id, user_id, user_name }),
     });
     const result = await response.json();
+    console.log(result)
     setComments([...comments, result.newComment]);
     setNewComment('');
   } catch (error) {
@@ -139,7 +140,6 @@ const handleCommentSubmit = async () => {
     return formattedDate;
   }
   
-
   function capitalizeFirstLetter(text) {
     return text && text.charAt(0).toUpperCase() + text.slice(1);
   }
@@ -253,7 +253,6 @@ const handleCommentSubmit = async () => {
 
             </div>
 
-            <div>
             <div className='comments-container'>
               <div className='title'>Reviews & Comments</div>
               <div className="comment-title">Your Review</div>
@@ -295,8 +294,6 @@ const handleCommentSubmit = async () => {
                 </div>
               )}
             </div>
-          </div>
-          
 
 
             <br></br>
@@ -319,7 +316,3 @@ const handleCommentSubmit = async () => {
 }
 
 export default RecipePage;
-
-// <p>{comment.comment_text}</p>
-// <p>{comment.comment_date}</p>
-// <p>{comment.user_name}</p>
