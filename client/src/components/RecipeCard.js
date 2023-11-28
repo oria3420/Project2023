@@ -1,6 +1,7 @@
 import './Components.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LikeButton from './LikeBtn';
 
 
 const defaultImageUrl = '/images/logo-image.png'
@@ -16,26 +17,6 @@ const RecipeCard = (props) => {
   const user_id = user.email
   const navigate = useNavigate();
   const [isHeartFilled, setIsHeartFilled] = useState(false);
-
-  async function getLikes() {
-   
-    const response = await fetch(`http://localhost:1337/api/favorites/${recipe.RecipeId}/${user.email}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-
-    const data = await response.json()
-
-    if (data.status === 'false') {
-      setIsHeartFilled(false);
-    }else if (data.status === 'true'){
-      setIsHeartFilled(true);
-    }
-
-  }
-  getLikes();
 
 
   useEffect(() => {
@@ -65,12 +46,6 @@ const RecipeCard = (props) => {
     navigate(`/recipes/${recipeId}`, { state: { name: name, user_id: user_id } });
   };
 
-  const handleHeartClick = () => {
-    setIsHeartFilled(!isHeartFilled);
-    const url = `http://localhost:1337/api/favorites/${recipe.RecipeId}/${user.email}`
-    const method = isHeartFilled ? 'DELETE' : 'POST';
-    fetch(url, { method });
-  };
 
   return (
     <div>
@@ -81,37 +56,8 @@ const RecipeCard = (props) => {
             <h6 className="card-title">{recipe.Name}</h6>
           </div>
           <p className="card-text">{recipe.Description}</p>
-          <div className="heart">
-          {isHeartFilled ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-heart-fill"
-              viewBox="0 0 16 16"
-              onClick={() => handleHeartClick()}
-            >
-              <path
-                fillRule="evenodd"
-                d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              className="bi bi-heart"
-              viewBox="0 0 16 16"
-              onClick={() => handleHeartClick()}
-            >
-              <path
-                d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"
-              />
-            </svg>
-          )}
+          <div>
+            <LikeButton recipeId={recipe.RecipeId} userEmail={user.email}/>
           </div>
         </div>
       </div>

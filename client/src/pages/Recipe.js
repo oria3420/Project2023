@@ -7,6 +7,7 @@ import NutritionTable from '../components/NutritionTable';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import LikeButton from '../components/LikeBtn';
 
 const defaultImageUrl = '/images/pizza.jpg'
 
@@ -22,24 +23,24 @@ const RecipePage = () => {
   const [recipeTags, setRecipeTags] = useState([]);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  console.log(comments)
-const handleCommentSubmit = async () => {
-  try {
-    const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ comment_text: newComment, recipe_id: id, user_id, user_name }),
-    });
-    const result = await response.json();
-    console.log(result)
-    setComments([...comments, result.newComment]);
-    setNewComment('');
-  } catch (error) {
-    console.error('Error submitting comment:', error);
-  }
-};
+
+  const handleCommentSubmit = async () => {
+    try {
+      const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ comment_text: newComment, recipe_id: id, user_id, user_name }),
+      });
+      const result = await response.json();
+      console.log(result)
+      setComments([...comments, result.newComment]);
+      setNewComment('');
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+    }
+  };
 
   useEffect(() => {
     async function fetchComments() {
@@ -113,32 +114,32 @@ const handleCommentSubmit = async () => {
 
   function formatDateComment(dateString) {
     const isoDate = new Date(dateString);
-  
+
     // Month names array
     const monthNames = [
       'January', 'February', 'March', 'April',
       'May', 'June', 'July', 'August',
       'September', 'October', 'November', 'December'
     ];
-  
+
     const day = isoDate.getDate();
     const month = monthNames[isoDate.getMonth()];
     const year = isoDate.getFullYear();
     const hours = isoDate.getHours();
     const minutes = isoDate.getMinutes();
-  
+
     // Function to add the ordinal suffix to the day (e.g., 1st, 2nd, 3rd)
     const getOrdinalSuffix = (number) => {
       const suffixes = ['st', 'nd', 'rd'];
       const v = number % 100;
       return number + (suffixes[(v - 20) % 10] || suffixes[v] || 'th');
     };
-  
+
     const formattedDate = `${month} ${getOrdinalSuffix(day)}, ${year} at ${hours}:${minutes.toString().padStart(2, '0')}`;
-  
+
     return formattedDate;
   }
-  
+
   function capitalizeFirstLetter(text) {
     return text && text.charAt(0).toUpperCase() + text.slice(1);
   }
@@ -176,7 +177,10 @@ const handleCommentSubmit = async () => {
                   ))}
                 </div>
 
-                <input id="btn-like" className="btn btn-primary" type="submit" value="LIKE" />
+
+                <input id="btn-like" className="btn btn-primary" value="LIKE" />
+                <LikeButton recipeId={id} userEmail={user_id} />
+
 
               </div>
 
@@ -255,22 +259,22 @@ const handleCommentSubmit = async () => {
             <div className='comments-container'>
               <div className='title'>Reviews & Comments</div>
               <div className="comment-title">Your Review</div>
-          
+
               <input
                 type="text"
                 placeholder="Add your comment..."
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
               />
-          
+
               <button onClick={handleCommentSubmit}>Submit Comment</button>
-          
+
               <div className="comment-title">Overall rating</div>
               <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
-          
+
               <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}`}</div>
               <hr className="comment-line" />
-          
+
               {comments.length > 0 ? (
                 comments.slice().reverse().map((comment, index) => (
                   <div key={index} className="comment">
