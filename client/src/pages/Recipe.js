@@ -23,7 +23,6 @@ const RecipePage = () => {
   const [recipeTags, setRecipeTags] = useState([]);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
-  const [isHeartFilled, setIsHeartFilled] = useState(false);
 
 
 const handleCommentSubmit = async () => {
