@@ -41,7 +41,6 @@ const handleCommentSubmit = async () => {
   }
 };
 
-
   useEffect(() => {
     async function fetchComments() {
       try {

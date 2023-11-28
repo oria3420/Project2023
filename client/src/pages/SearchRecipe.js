@@ -5,9 +5,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate,useLocation } from 'react-router-dom'
 import { useParams } from 'react-router-dom';
+import Loading from '../components/Loading';
 
 
 const SearchRecipe = () => {
+    console.log("SearchRecipe")
     const navigate = useNavigate()
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
@@ -21,9 +23,10 @@ const SearchRecipe = () => {
     const { query } = useParams();
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
-
+    const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
+        console.log('Effect 1');
         const token = localStorage.getItem('token')
         if (token) {
             const _user = jwt_decode(token)
@@ -38,23 +41,34 @@ const SearchRecipe = () => {
 
 
     useEffect(() => {
+        console.log('Effect 2');
         fetch(`http://localhost:1337/api/table/recipes`)
-            .then(res => res.json())
-            .then(data => {
-                setRecipes(data);
-                setFilteredRecipes(data); // initialize filteredRecipes with all recipes
-            })
-            .catch(error => console.error(error))
-    }, []);
+          .then((res) => res.json())
+          .then((data) => {
+            setRecipes(data);
+            setFilteredRecipes(data);
+            setLoading(false);  // Set loading to false when content is loaded
+          })
+          .catch((error) => console.error(error));
+      }, []);
 
-    useEffect(() => {
+      useEffect(() => {
+        console.log('Effect 3');
         fetch(`http://localhost:1337/api/recipes_categories`)
-            .then(res => res.json())
-            .then(data => setRecipesCategories(data))
-            .catch(error => console.error(error))
-    }, []);
+          .then((res) => res.json())
+          .then((data) => {
+            setRecipesCategories(data);
+            setLoading(false); // Set loading to false when content is loaded
+          })
+          .catch((error) => {
+            console.error(error);
+            setLoading(false); // Ensure loading is set to false even on error
+          });
+      }, []);
+      
 
     useEffect(() => {
+        console.log('Effect 4');
         fetch('http://localhost:1337/api/search_recipe')
             .then(response => response.json())
             .then(data => {
@@ -87,21 +101,14 @@ const SearchRecipe = () => {
 
 
     useEffect(() => {
-        // Extract the query parameter from the search string
+        console.log('Effect 4');
         const searchParams = new URLSearchParams(location.search);
         const queryFromURL = searchParams.get('query');
-
-        // Update the state with the query parameter
         setSearchTerm(queryFromURL || '');
-
-        // Other logic based on the search term
-        //console.log('Search term from URL:', queryFromURL);
-
-        // If you want to perform additional logic when the search term changes,
-        // you can use the searchTerm state variable here.
     }, [location.search]);
 
     useEffect(() => {
+        console.log('Effect 5');
         if (searchTerm) {
             console.log("query: " + searchTerm);
             const lowercaseQuery = searchTerm.toLowerCase();
@@ -111,13 +118,14 @@ const SearchRecipe = () => {
             setFilteredRecipes(filteredByName);
             setFilteredRecipeByNames(filteredByName);
         } else {
-            // console.log("no query");
+            console.log("no query");
             // If query is empty, show all recipes
             setFilteredRecipeByNames(recipes);
         }
     }, [searchTerm, recipes]);
 
     const filterRecipes = useCallback(() => {
+        console.log('Effect 6');
         let filteredIds = {};
         let anyChecked = false;
         Object.keys(checkedItems).forEach((category) => {
@@ -152,23 +160,8 @@ const SearchRecipe = () => {
             });
         });
         if (!anyChecked) {
-            // if (filteredRecipesByName.length > 0) {
-            //     setFilteredRecipes(filteredRecipesByName);
-            //     setFilteredRecipeByNames([])
-            // }else{
-            //     setFilteredRecipes(recipes);
-            // }
-            // console.log("!anyChecked:"+filteredRecipesByName.length)
             setFilteredRecipes(filteredRecipesByName);
         } else {
-            // if (filteredRecipesByName.length > 0) {
-            //     const filteredRecipes = filteredRecipesByName.filter((recipe) => filteredIds[recipe.RecipeId]);
-            //     setFilteredRecipes(filteredRecipes);
-            //     setFilteredRecipeByNames([])
-            // }else{
-            //     const filteredRecipes = recipes.filter((recipe) => filteredIds[recipe.RecipeId]);
-            //     setFilteredRecipes(filteredRecipes);
-            // }
             const filteredRecipes = filteredRecipesByName.filter((recipe) => filteredIds[recipe.RecipeId]);
             setFilteredRecipes(filteredRecipes);
             console.log("anyChecked:"+filteredRecipes.length)
@@ -178,10 +171,15 @@ const SearchRecipe = () => {
     }, [checkedItems, categories, recipes, recipesCategories]);
 
     useEffect(() => {
+        console.log('Effect 7'); 
         filterRecipes();
-    }, [checkedItems, filterRecipes]);
+    }, [checkedItems]);
 
 
+    if (loading) {
+        return <Loading />;  // Render the loading component while content is loading
+      }
+      
     return (
         <div>
             {name && <Navbar name={name} />}

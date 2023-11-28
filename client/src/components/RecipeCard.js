@@ -46,12 +46,15 @@ const RecipeCard = (props) => {
         //setImageUrl(data)
         const resp = await fetch(data);
         if (resp.ok) {
+          // console.log("if1")
           setImageUrl(data) // URL is working, send the URL as a response
         } else {
+          // console.log("if2")
           setImageUrl(defaultImageUrl)
         }
       }
       else {
+        // console.log("if3")
         setImageUrl(defaultImageUrl)
       }
     }
