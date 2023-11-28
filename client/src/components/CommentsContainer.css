@@ -1,3 +1,7 @@
+:root {
+  --comment-margin: 55px;
+}
+
 .comments-container {
     margin-top: 60px;
     width: 65%;
@@ -37,7 +41,7 @@
   }
   
   #comment-text{
-    margin-left: 55px;
+    margin-left: var(--comment-margin);
   }
   
   #user-name{
@@ -92,5 +96,35 @@
     margin-top: 55px;
     font-weight: bold;
     font-size: 18px;
+  }
+
+  .comment-input {
+    width: 93%;
+    height: 100px; /* This can be adjusted based on your preference */
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    background-color: #ffe4b5;
+    outline: none;
+    margin-left: calc(var(--comment-margin) - 5px);
+    text-align: left;
+    vertical-align: top;
+    line-height: normal;
+  }
+  
+  .comment-input::placeholder {
+    text-align: left;
+    vertical-align: top;
+    line-height: normal;
+  }
+  
+  .comment-input:focus {
+    border: 2px solid #efc2af;
+  }
+  
+  textarea {
+    resize: none; /* Disable textarea resizing */
+    width: 100%; /* Occupy 100% of the container width */
+    box-sizing: border-box; /* Include padding and border in the total width */
   }
   

@@ -40,7 +40,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     function formatDateComment(dateString) {
         const isoDate = new Date(dateString);
 
-        // Month names array
         const monthNames = [
             'January', 'February', 'March', 'April',
             'May', 'June', 'July', 'August',
@@ -70,12 +69,17 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             <div className='title'>Reviews & Comments</div>
             <div className="comment-title">Your Review</div>
 
-            <input
-                type="text"
-                placeholder="Add your comment..."
+            <div className='user-container'>
+                <i id="user-icon" className="bi bi-person-circle"></i>
+                <span id="user-name">{user_name}</span>
+            </div>
+
+            <textarea
+                className='comment-input'
+                placeholder="Write your comment here"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
-            />
+            ></textarea>
 
             <button onClick={handleCommentSubmit}>Submit Comment</button>
 
