@@ -1,5 +1,6 @@
 :root {
   --comment-margin: 55px;
+  --icon-color:  rgba(182, 119, 2, 0.875);
 }
 
 .comments-container {
@@ -37,11 +38,7 @@
   #user-icon {
     margin-right: 15px;
     font-size: 40px;
-    color: rgba(182, 119, 2, 0.875);
-  }
-  
-  #comment-text{
-    margin-left: var(--comment-margin);
+    color: var(--icon-color);
   }
   
   #user-name{
@@ -55,29 +52,13 @@
     width: 100%;
   }
   
-  .user-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  #user-icon {
-    margin-right: 15px;
-    font-size: 40px;
-    color: rgba(182, 119, 2, 0.875);
-  }
-  
-  #user-name {
-    font-weight: bold;
-  }
-  
   #comment-date {
     margin-left: auto;
     font-size: 15px;
   }
   
-  
   #comment-text {
-    margin-left: 55px;
+    margin-left: var(--comment-margin);
     width: 80%;
   }
   
@@ -98,24 +79,19 @@
     font-size: 18px;
   }
 
+  .comment-input-container {
+    flex-grow: 1; /* Take up remaining space in the flex container */
+  }
+  
   .comment-input {
-    width: 93%;
-    height: 100px; /* This can be adjusted based on your preference */
+    width: 100%;
+    height: 100px;
     padding: 10px;
     border: none;
     border-radius: 15px;
     background-color: #ffe4b5;
     outline: none;
-    margin-left: calc(var(--comment-margin) - 5px);
-    text-align: left;
-    vertical-align: top;
-    line-height: normal;
-  }
-  
-  .comment-input::placeholder {
-    text-align: left;
-    vertical-align: top;
-    line-height: normal;
+    margin-bottom: 10px;
   }
   
   .comment-input:focus {
@@ -123,8 +99,35 @@
   }
   
   textarea {
-    resize: none; /* Disable textarea resizing */
-    width: 100%; /* Occupy 100% of the container width */
-    box-sizing: border-box; /* Include padding and border in the total width */
+    resize: none;
+    width: 100%;
+    box-sizing: border-box;
   }
   
+  .new-comment {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+  }
+  
+  .submit-btn {
+    width: 90px;
+    height: 40px;
+    background-color: var(--icon-color);;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 17px;
+    cursor: pointer;
+    outline: none;
+    align-self: flex-end; /* Align the button to the right within its container */
+  }
+  
+  /* Hover effect for the button */
+  .submit-btn:hover {
+    background-color: #ff8c66;
+  }
+  
+  .new-comment-container{
+    margin-top: 10px;
+  }

@@ -69,20 +69,27 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             <div className='title'>Reviews & Comments</div>
             <div className="comment-title">Your Review</div>
 
+            <div className='new-comment-container'>
             <div className='user-container'>
                 <i id="user-icon" className="bi bi-person-circle"></i>
                 <span id="user-name">{user_name}</span>
             </div>
 
-            <textarea
-                className='comment-input'
-                placeholder="Write your comment here"
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-            ></textarea>
+            <div className='new-comment'>
+                <div className='comment-input-container'>
+                    <textarea
+                        className='comment-input'
+                        placeholder="Write your comment here"
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                    ></textarea>
+                </div>
 
-            <button onClick={handleCommentSubmit}>Submit Comment</button>
-
+                <button className='submit-btn' onClick={handleCommentSubmit}>
+                    Submit
+                </button>
+            </div>
+            </div>
             <div className="comment-title">Overall rating</div>
             <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 
