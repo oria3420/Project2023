@@ -12,32 +12,47 @@ const defaultImageUrl = '/images/pizza.jpg'
 
 const RecipePage = () => {
   const location = useLocation();
-  const name = location.state.name;
+  const user_name = location.state.name;
   const user_id = location.state.user_id;
 
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [ingredients, setIngredients] = useState([]);
-  const [comments, setComments] = useState([]);
   const [recipeTags, setRecipeTags] = useState([]);
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 
-  const handleCommentSubmit = async () => {
-    try {
-      const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ comment_text: newComment,recipe_id:id, user_id: user_id }),
-      });
-      setNewComment('');
-    } catch (error) {
-      console.error('Error submitting comment:', error);
-    }
-  };
+const handleCommentSubmit = async () => {
+  try {
+    const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ comment_text: newComment, recipe_id: id, user_id, user_name }),
+    });
+    const result = await response.json();
+    setComments([...comments, result.newComment]);
+    setNewComment('');
+  } catch (error) {
+    console.error('Error submitting comment:', error);
+  }
+};
 
+
+  useEffect(() => {
+    async function fetchComments() {
+      try {
+        const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
+        const data = await response.json();
+        setComments(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    fetchComments();
+  }, [id]);
 
   useEffect(() => {
     async function fetchTags() {
@@ -77,19 +92,6 @@ const RecipePage = () => {
   }, [id]);
 
   useEffect(() => {
-    async function fetchComments() {
-      try {
-        const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
-        const data = await response.json();
-        setComments(data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    fetchComments();
-  }, [id]);
-
-  useEffect(() => {
     async function getImageUrl() {
       const response = await fetch(`http://localhost:1337/api/recipes/images/${id}`);
       const data = await response.text();
@@ -122,9 +124,9 @@ const RecipePage = () => {
 
   return (
     <div>
-      {name && recipe ? (
+      {user_name && recipe ? (
         <>
-          {name && <Navbar name={name} />}
+          {user_name && <Navbar name={user_name} />}
           <div className='recipe-container'>
 
             <div className='recipe-header'>

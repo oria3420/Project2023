@@ -168,9 +168,7 @@ app.get('/api/recipes/:id/comments', async (req, res) => {
         user_name: userName
       };
     }));
-
     console.log(commentsWithSelectedFields)
-
     res.status(200).json(commentsWithSelectedFields);
   } catch (error) {
     console.error(error);
@@ -182,24 +180,31 @@ app.post('/api/recipes/new_comment', async (req, res) => {
   const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
 
   try {
-    const { comment_text, recipe_id, user_id } = req.body;
+    const { comment_text, recipe_id, user_id, user_name} = req.body;
     const parsedRecipeId = parseInt(recipe_id, 10);
 
-    Comments.create({
+    const newComment = await Comments.create({
       recipe_id: parsedRecipeId,
-      user_id:user_id,
+      user_id: user_id,
       comment_text: comment_text,
       comment_date: new Date().toISOString(),
-    })
+    });
 
-    res.status(201).json({ message: 'Comment added successfully' });
-  }  catch (error) {
+    res.status(201).json({
+      message: 'Comment added successfully',
+      newComment: {
+        comment_text: newComment.comment_text,
+        comment_date: newComment.comment_date,
+        user_name: user_name,
+      },
+    });
+  } catch (error) {
     console.error('Error adding comment:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
-
 });
 
+//********************** */
 app.get('/api/recipes/:id/tags', async (req, res) => {
   try {
     const recipeId = parseInt(req.params.id);
