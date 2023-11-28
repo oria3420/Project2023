@@ -25,7 +25,6 @@ const SearchRecipe = () => {
     const [loading, setLoading] = useState(true); 
 
     useEffect(() => {
-        console.log('Effect 1');
         const token = localStorage.getItem('token')
         if (token) {
             const _user = jwt_decode(token)
@@ -40,7 +39,6 @@ const SearchRecipe = () => {
 
 
     useEffect(() => {
-        console.log('Effect 2');
         fetch(`http://localhost:1337/api/table/recipes`)
           .then((res) => res.json())
           .then((data) => {
@@ -51,7 +49,6 @@ const SearchRecipe = () => {
       }, []);
 
       useEffect(() => {
-        console.log('Effect 3');
         fetch(`http://localhost:1337/api/recipes_categories`)
           .then((res) => res.json())
           .then((data) => {
@@ -59,13 +56,11 @@ const SearchRecipe = () => {
           })
           .catch((error) => {
             console.error(error);
-            // setLoading(false);
           });
       }, []);
       
 
       useEffect(() => {
-        console.log('Effect 4');
         fetch('http://localhost:1337/api/search_recipe')
             .then(response => response.json())
             .then(data => {
@@ -103,14 +98,12 @@ const SearchRecipe = () => {
 
 
     useEffect(() => {
-        console.log('Effect 5');
         const searchParams = new URLSearchParams(location.search);
         const queryFromURL = searchParams.get('query');
         setSearchTerm(queryFromURL || '');
     }, [location.search]);
 
     useEffect(() => {
-        console.log('Effect 6');
         if (searchTerm) {
             console.log("query: " + searchTerm);
             const lowercaseQuery = searchTerm.toLowerCase();
@@ -127,7 +120,6 @@ const SearchRecipe = () => {
     }, [searchTerm, recipes]);
 
     const filterRecipes = useCallback(() => {
-        console.log('Effect 7');
         let filteredIds = {};
         let anyChecked = false;
         Object.keys(checkedItems).forEach((category) => {
@@ -173,7 +165,6 @@ const SearchRecipe = () => {
     }, [checkedItems, categories, recipes, recipesCategories]);
 
     useEffect(() => {
-        console.log('Effect 8'); 
         filterRecipes();
     }, [checkedItems]);
 
