@@ -208,34 +208,25 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
   try {
     const recipeId = parseInt(req.params.id);
     const tagCategories = Object.keys(TABLE_NAMES).filter(name => name.endsWith('_CATEGORIES') && !name.startsWith('RECIPE_'));
-    // console.log("tagCategories: "+tagCategories)
-    // console.log("length: "+tagCategories.length)
 
     const tagPromises = tagCategories.map(async tableName => {
       const RecipeTagsCategories = Collection.getModel(TABLE_NAMES[`RECIPE_${tableName}`]);
       const recipeTags = await RecipeTagsCategories.find({ recipe_ID: recipeId });
-
       if (!recipeTags || recipeTags.length === 0) {
         return [];
       }
-
       const categoryIDs = recipeTags.map(tag => tag.category_ID);
-
       const tagPromises = categoryIDs.map(async (categoryID) => {
         const TagsCategories = Collection.getModel(TABLE_NAMES[tableName]);
         return await TagsCategories.findOne({ id: categoryID });
       });
-
       const tags = await Promise.all(tagPromises);
-      // console.log(tableName +":\n"+tags)
       const modifiedTags = tags.map(tag => {
         const keys = Object.keys(tag);
         const lastKey = keys[keys.length - 1];
         const modifiedTag = { [lastKey]: tag[lastKey] };
         return modifiedTag;
       });
-      
-      // console.log(modifiedTags);
       return modifiedTags;
     });
 

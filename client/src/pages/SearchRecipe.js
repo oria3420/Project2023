@@ -111,7 +111,7 @@ const SearchRecipe = () => {
             setFilteredRecipes(filteredByName);
             setFilteredRecipeByNames(filteredByName);
         } else {
-            console.log("no query");
+            // console.log("no query");
             // If query is empty, show all recipes
             setFilteredRecipeByNames(recipes);
         }
@@ -158,7 +158,7 @@ const SearchRecipe = () => {
             // }else{
             //     setFilteredRecipes(recipes);
             // }
-            console.log("!anyChecked:"+filteredRecipesByName.length)
+            // console.log("!anyChecked:"+filteredRecipesByName.length)
             setFilteredRecipes(filteredRecipesByName);
         } else {
             // if (filteredRecipesByName.length > 0) {
@@ -200,7 +200,7 @@ const SearchRecipe = () => {
                                         <span className='category-title'>{capitalizedCategoryName}</span>
                                         <button className="btn btn-light category-toggle-btn">{expandedCategories[category] ? "-" : "+"}</button>
                                     </div>
-                                    {expandedCategories[category] && categories[category].sort((a, b) => a[1].localeCompare(b[1])).map((value) => (
+                                    {expandedCategories[category] && categories[category].sort((a, b) => (a[1] && b[1]) ? a[1].localeCompare(b[1]) : 0).map((value) => (
                                         <div className="form-check" key={value}>
                                             <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
                                             <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
