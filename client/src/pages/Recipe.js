@@ -114,12 +114,31 @@ const handleCommentSubmit = async () => {
   function formatDateComment(dateString) {
     const isoDate = new Date(dateString);
   
-    const day = isoDate.getDate().toString().padStart(2, '0');
-    const month = (isoDate.getMonth() + 1).toString().padStart(2, '0');
-    const year = isoDate.getFullYear();
+    // Month names array
+    const monthNames = [
+      'January', 'February', 'March', 'April',
+      'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
+    ];
   
-    return `${day}/${month}/${year}`;
-  }  
+    const day = isoDate.getDate();
+    const month = monthNames[isoDate.getMonth()];
+    const year = isoDate.getFullYear();
+    const hours = isoDate.getHours();
+    const minutes = isoDate.getMinutes();
+  
+    // Function to add the ordinal suffix to the day (e.g., 1st, 2nd, 3rd)
+    const getOrdinalSuffix = (number) => {
+      const suffixes = ['st', 'nd', 'rd'];
+      const v = number % 100;
+      return number + (suffixes[(v - 20) % 10] || suffixes[v] || 'th');
+    };
+  
+    const formattedDate = `${month} ${getOrdinalSuffix(day)}, ${year} at ${hours}:${minutes.toString().padStart(2, '0')}`;
+  
+    return formattedDate;
+  }
+  
 
   function capitalizeFirstLetter(text) {
     return text && text.charAt(0).toUpperCase() + text.slice(1);
