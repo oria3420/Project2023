@@ -22,7 +22,6 @@ const RecipePage = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [recipeTags, setRecipeTags] = useState([]);
-<<<<<<< HEAD
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
 
@@ -57,8 +56,7 @@ const handleCommentSubmit = async () => {
     }
     fetchComments();
   }, [id]);
-=======
->>>>>>> 36667ba4745b568f0a368d2ed2482961a65fe939
+
 
   useEffect(() => {
     async function fetchTags() {
