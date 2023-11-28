@@ -47,7 +47,6 @@ const SearchRecipe = () => {
           .then((data) => {
             setRecipes(data);
             setFilteredRecipes(data);
-            setLoading(false);  // Set loading to false when content is loaded
           })
           .catch((error) => console.error(error));
       }, []);
@@ -58,16 +57,15 @@ const SearchRecipe = () => {
           .then((res) => res.json())
           .then((data) => {
             setRecipesCategories(data);
-            setLoading(false); // Set loading to false when content is loaded
           })
           .catch((error) => {
             console.error(error);
-            setLoading(false); // Ensure loading is set to false even on error
+            // setLoading(false);
           });
       }, []);
       
 
-    useEffect(() => {
+      useEffect(() => {
         console.log('Effect 4');
         fetch('http://localhost:1337/api/search_recipe')
             .then(response => response.json())
@@ -81,9 +79,14 @@ const SearchRecipe = () => {
                 setCategories(data);
                 setExpandedCategories(expandedCategories);
                 setCheckedItems(checkedItems);
+                setLoading(false); // Set loading to false when search categories have loaded
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+                setLoading(false); // Ensure loading is set to false even on error
+            });
     }, []);
+    
 
     const toggleCategory = (category) => {
         setExpandedCategories({
@@ -101,14 +104,14 @@ const SearchRecipe = () => {
 
 
     useEffect(() => {
-        console.log('Effect 4');
+        console.log('Effect 5');
         const searchParams = new URLSearchParams(location.search);
         const queryFromURL = searchParams.get('query');
         setSearchTerm(queryFromURL || '');
     }, [location.search]);
 
     useEffect(() => {
-        console.log('Effect 5');
+        console.log('Effect 6');
         if (searchTerm) {
             console.log("query: " + searchTerm);
             const lowercaseQuery = searchTerm.toLowerCase();
@@ -125,7 +128,7 @@ const SearchRecipe = () => {
     }, [searchTerm, recipes]);
 
     const filterRecipes = useCallback(() => {
-        console.log('Effect 6');
+        console.log('Effect 7');
         let filteredIds = {};
         let anyChecked = false;
         Object.keys(checkedItems).forEach((category) => {
@@ -171,7 +174,7 @@ const SearchRecipe = () => {
     }, [checkedItems, categories, recipes, recipesCategories]);
 
     useEffect(() => {
-        console.log('Effect 7'); 
+        console.log('Effect 8'); 
         filterRecipes();
     }, [checkedItems]);
 
