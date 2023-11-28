@@ -7,6 +7,7 @@ import NutritionTable from '../components/NutritionTable';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import LikeButton from '../components/LikeBtn';
 
 const defaultImageUrl = '/images/pizza.jpg'
 
@@ -22,6 +23,8 @@ const RecipePage = () => {
   const [recipeTags, setRecipeTags] = useState([]);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const [isHeartFilled, setIsHeartFilled] = useState(false);
+
 
 const handleCommentSubmit = async () => {
   try {
@@ -176,8 +179,11 @@ const handleCommentSubmit = async () => {
                   ))}
                 </div>
 
-                <input id="btn-like" className="btn btn-primary" type="submit" value="LIKE" />
 
+                <input id="btn-like" className="btn btn-primary" value="LIKE" />
+                  <LikeButton recipeId={id} userEmail={user_id}/>
+
+              
               </div>
 
               <div className='recipe-image-container'>
