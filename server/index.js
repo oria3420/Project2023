@@ -168,7 +168,6 @@ app.get('/api/recipes/:id/comments', async (req, res) => {
         user_name: userName
       };
     }));
-    console.log(commentsWithSelectedFields)
     res.status(200).json(commentsWithSelectedFields);
   } catch (error) {
     console.error(error);
@@ -204,7 +203,7 @@ app.post('/api/recipes/new_comment', async (req, res) => {
   }
 });
 
-//********************** */
+
 app.get('/api/recipes/:id/tags', async (req, res) => {
   try {
     const recipeId = parseInt(req.params.id);

@@ -235,50 +235,49 @@ const handleCommentSubmit = async () => {
             </div>
 
             <div>
-              <div className='comments-container'>
-                <div className='title'>Reviews & Comments</div>
-                <div className="comment-title">Your Review</div>
-                {/* Input field for new comment */}
-                <input
-                  type="text"
-                  placeholder="Add your comment..."
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                />
-
-                {/* Submit button */}
-                <button onClick={handleCommentSubmit}>Submit Comment</button>
-
-
-                <div className="comment-title">Overall rating</div>
-                <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
-
-                <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}`}</div>
-                <hr className="comment-line" />
-                {comments.length > 0 ? (
-                  comments.map((comment, index) => (
-                    <div key={index} className="comment">
-                      <div className='comment-top'>
-                        <div className='user-container'>
-                          <i id="user-icon" className="bi bi-person-circle"></i>
-                          <span id="user-name">{comment.user_name}</span>
-                        </div>
-                        <span id="comment-date">{formatDateComment(comment.comment_date)}</span>
+            <div className='comments-container'>
+              <div className='title'>Reviews & Comments</div>
+              <div className="comment-title">Your Review</div>
+          
+              <input
+                type="text"
+                placeholder="Add your comment..."
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+          
+              <button onClick={handleCommentSubmit}>Submit Comment</button>
+          
+              <div className="comment-title">Overall rating</div>
+              <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
+          
+              <div className="comment-count">{`${comments.length} ${comments.length === 1 ? 'Comment' : 'Comments'}`}</div>
+              <hr className="comment-line" />
+          
+              {comments.length > 0 ? (
+                comments.slice().reverse().map((comment, index) => (
+                  <div key={index} className="comment">
+                    <div className='comment-top'>
+                      <div className='user-container'>
+                        <i id="user-icon" className="bi bi-person-circle"></i>
+                        <span id="user-name">{comment.user_name}</span>
                       </div>
-                      <span id="comment-text">{comment.comment_text}</span>
-                      <hr className="comment-line" />
+                      <span id="comment-date">{formatDateComment(comment.comment_date)}</span>
                     </div>
-
-                  ))
-                ) : (
-                  <div className='no-comments-container'>
-                    <span id="no-comment-first">No comments yet. </span>
-                    <br />
-                    <span id="no-comment-second">Be the first to comment!</span>
+                    <span id="comment-text">{comment.comment_text}</span>
+                    <hr className="comment-line" />
                   </div>
-                )}
-              </div>
+                ))
+              ) : (
+                <div className='no-comments-container'>
+                  <span id="no-comment-first">No comments yet. </span>
+                  <br />
+                  <span id="no-comment-second">Be the first to comment!</span>
+                </div>
+              )}
             </div>
+          </div>
+          
 
 
             <br></br>
