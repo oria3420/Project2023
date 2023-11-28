@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
+import './CommentsContainer.css';
 
 const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [comments, setComments] = useState([]);
