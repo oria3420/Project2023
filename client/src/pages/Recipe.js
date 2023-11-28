@@ -112,10 +112,14 @@ const handleCommentSubmit = async () => {
   }
 
   function formatDateComment(dateString) {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    const formattedDate = new Date(dateString).toLocaleDateString('en-US', options);
-    return formattedDate;
-  }
+    const isoDate = new Date(dateString);
+  
+    const day = isoDate.getDate().toString().padStart(2, '0');
+    const month = (isoDate.getMonth() + 1).toString().padStart(2, '0');
+    const year = isoDate.getFullYear();
+  
+    return `${day}/${month}/${year}`;
+  }  
 
   function capitalizeFirstLetter(text) {
     return text && text.charAt(0).toUpperCase() + text.slice(1);
