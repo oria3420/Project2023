@@ -132,3 +132,11 @@
 .category-toggle-btn:hover {
     background-color: white;
 }
+/* Add this CSS to style the "No results found" message */
+.no-results-message {
+    font-size: 24px;
+    color: #555; /* Change the color to your preference */
+    margin-top: 20%;
+    margin-left: 35%;
+  }
+  
