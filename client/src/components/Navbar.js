@@ -5,6 +5,8 @@ import FavoriesBtn from './FavoritesBtn';
 import ShoppingBtn from './ShoppingBtn'
 import { useNavigate } from 'react-router-dom'
 import SearchBar from './SearchBar';
+import MyRecipesBtn from './MyRecipesBtn';
+
 
 const Navbar = ({ name }) => {
     const navigate = useNavigate()
@@ -20,6 +22,10 @@ const Navbar = ({ name }) => {
     const groceries = (event) => {
         event.preventDefault()
         navigate('/groceries')
+    }
+    const addRecipe = (event) => {
+        event.preventDefault()
+        navigate('/add_recipe')
     }
     return (
         <nav className="navbar bg-body-tertiary our-navbar">
@@ -37,6 +43,11 @@ const Navbar = ({ name }) => {
                 Groceries at Home
                 </div>
                 <SearchBar/>
+                <div className='navbar-text nevigate' onClick={addRecipe}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+                </svg>
+                </div>
                 <div className='name-container'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-person-circle" viewBox="0 0 16 16">
                         <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
@@ -50,6 +61,7 @@ const Navbar = ({ name }) => {
                         </span>
 
                         <ul className="dropdown-menu dropdown-position">
+                        <li><button type="button" className="dropdown-item"><MyRecipesBtn /></button></li>
                         <li><button type="button" className="dropdown-item"><FavoriesBtn /></button></li>
                         <li><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
                         <li><button type="button" className="dropdown-item"><SettingBtn /></button></li>
