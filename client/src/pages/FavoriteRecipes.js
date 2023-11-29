@@ -4,6 +4,8 @@ import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
+import Loading from '../components/Loading';
+
 
 const FavoriteRecipes = () => {
     const navigate = useNavigate()
@@ -15,6 +17,8 @@ const FavoriteRecipes = () => {
     const [recipesCategories, setRecipesCategories] = useState([]);
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true); 
+
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -62,8 +66,13 @@ const FavoriteRecipes = () => {
                 setCategories(data);
                 setExpandedCategories(expandedCategories);
                 setCheckedItems(checkedItems);
+                setLoading(false);
             })
-            .catch(error => console.error(error));
+            .catch(error => {
+                console.error(error);
+                setLoading(false);
+            });
+            
     }, []);
 
     const toggleCategory = (category) => {
@@ -126,7 +135,9 @@ const FavoriteRecipes = () => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
 
-
+    if (loading) {
+        return <Loading />;  // Render the loading component while content is loading
+      }
 
     return (
         <div>
