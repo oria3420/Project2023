@@ -1,10 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 import './CommentsContainer.css';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const handleSubmit = async () => {
+        console.log("handleSubmit")
+        // Trim leading and trailing spaces from the comment
+        const trimmedComment = newComment.trim();
+
+        // Check if the comment is empty
+        if (trimmedComment === '') {
+            // Set the error message
+            console.log("empty")
+            setErrorMessage('Please enter a non-empty comment.');
+            console.log(errorMessage)
+            return;
+        }
+        console.log("not here")
+        // Clear any existing error message
+        setErrorMessage('');
+
+        // Continue with the comment submission
+        handleCommentSubmit(trimmedComment);
+    };
 
     const handleCommentSubmit = async () => {
         try {
@@ -23,6 +46,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             console.error('Error submitting comment:', error);
         }
     };
+
 
     useEffect(() => {
         async function fetchComments() {
@@ -70,26 +94,41 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             <div className="comment-title">Your Review</div>
 
             <div className='new-comment-container'>
-            <div className='user-container'>
-                <i id="user-icon" className="bi bi-person-circle"></i>
-                <span id="user-name">{user_name}</span>
-            </div>
-
-            <div className='new-comment'>
-                <div className='comment-input-container'>
-                    <textarea
-                        className='comment-input'
-                        placeholder="Write your comment here"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                    ></textarea>
+                <div className='user-container'>
+                    <i id="user-icon" className="bi bi-person-circle"></i>
+                    <span id="user-name">{user_name}</span>
                 </div>
 
-                <button className='submit-btn' onClick={handleCommentSubmit}>
-                    Submit
-                </button>
+                <div className='new-comment'>
+                    <div className='comment-input-container'>
+                        <textarea
+                            className={`comment-input ${errorMessage ? 'error' : ''}`}
+                            placeholder="Write your comment here"
+                            value={newComment}
+                            onChange={(e) => {
+                                setNewComment(e.target.value);
+                                if (errorMessage && e.target.value.trim() !== '') {
+                                    setErrorMessage('');
+                                }
+                            }}
+                            onInput={() => {
+                                if (errorMessage && newComment.trim() !== '') {
+                                    setErrorMessage('');
+                                }
+                            }}
+                        ></textarea>
+
+                        {errorMessage && <div className="empty-comment-error-msg">{errorMessage}</div>}
+                    </div>
+
+                    <button className='submit-btn' onClick={handleSubmit}>
+                        <i className="bi bi-send"></i>
+                    </button>
+                </div>
             </div>
-            </div>
+
+
+
             <div className="comment-title">Overall rating</div>
             <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 

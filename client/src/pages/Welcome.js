@@ -22,9 +22,11 @@ function WelcomePage() {
       </div>
       <div className="welcome-connect">
         <img src="/images/logo_black_english.png" alt="Logo" className="logo-welcome" />
-        <h1 className="welcome-titel">WELCOME TO MA MITBASHEL</h1>
+        <h1 className="welcome-title">WELCOME TO MA
+        <br></br>
+        MITBASHEL</h1>
         <br />
-        <h3>Get started</h3>
+        <h3 className='sub-title'>Get started</h3>
         <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Login" onClick={redirectToLogin} />
         <input id="btn-register-welcome" className="btn btn-primary" type="button" value="SignUp" onClick={redirectToRegister} />
       </div>
