@@ -4,26 +4,30 @@ import React, { useState, useEffect } from 'react';
 const LikeButton = ({ recipeId, userEmail }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
 
-  const getLikes = async () => {
-    const response = await fetch(`http://localhost:1337/api/favorites/${recipeId}/${userEmail}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    const data = await response.json();
-
-    if (data.status === 'false') {
-      setIsHeartFilled(false);
-    } else if (data.status === 'true') {
-      setIsHeartFilled(true);
-    }
-  };
-
   useEffect(() => {
-    getLikes();
-  }, [getLikes]); // Add getLikes to the dependency array
+    const getLikes = async () => {
+      try {
+        const response = await fetch(`http://localhost:1337/api/favorites/${recipeId}/${userEmail}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        const data = await response.json();
+
+        if (data.status === 'false') {
+          setIsHeartFilled(false);
+        } else if (data.status === 'true') {
+          setIsHeartFilled(true);
+        }
+      } catch (error) {
+        console.error('Error fetching likes:', error);
+      }
+    };
+
+    getLikes(); // Call getLikes inside the useEffect
+  }, [recipeId, userEmail]);
 
   const handleHeartClick = () => {
     setIsHeartFilled(!isHeartFilled);
