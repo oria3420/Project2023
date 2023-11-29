@@ -4,7 +4,7 @@
 }
 
 .comments-container {
-    margin-top: 60px;
+    margin-top: 90px;
     width: 65%;
   }
   
@@ -19,9 +19,9 @@
   }
   
   .comment-title{
-    margin-top: 15px;
+    margin-top: 25px;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 24px;
   }
   
   .comment-count{
@@ -82,17 +82,6 @@
   .comment-input-container {
     flex-grow: 1; /* Take up remaining space in the flex container */
   }
-  
-  /* .comment-input {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border: none;
-    border-radius: 15px;
-    background-color: #ffe4b5;
-    outline: none;
-    margin-bottom: 10px;
-  } */
   
   .comment-input:focus {
     border: 2px solid #efc2af;
@@ -156,3 +145,8 @@
   border-color: red; /* Red border on error */
 }
 
+.comments-icon{
+  width: 40px;
+  height: 40px;
+  margin-right: 15px;
+}

@@ -7,11 +7,9 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-    const [isTyping, setIsTyping] = useState(false);
 
     const handleChange = (e) => {
         setNewComment(e.target.value);
-        setIsTyping(true);
         if (errorMessage.trim() !== '' && e.target.value.trim() !== '') {
             setErrorMessage('');
         }
@@ -21,7 +19,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         const trimmedComment = newComment.trim();
         if (trimmedComment === '') {
             setErrorMessage('Please enter a non-empty comment.');
-            setIsTyping(false); // Reset isTyping to false on error
             return;
         }
         setErrorMessage('');
@@ -89,7 +86,10 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
     return (
         <div className='comments-container'>
-            <div className='title'>Reviews & Comments</div>
+            <div className='title'>
+                <i class="comments-icon bi bi-chat-left-text-fill"></i>
+                Reviews & Comments
+            </div>
             <div className="comment-title">Your Review</div>
             <div className='new-comment-container'>
                 <div className='user-container'>
@@ -104,7 +104,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                             placeholder="Write your comment here"
                             value={newComment}
                             onChange={handleChange}
-                            onFocus={() => setIsTyping(false)} // Reset isTyping to false on focus
                         ></textarea>
 
                         {errorMessage && <div className="empty-comment-error-msg">{errorMessage}</div>}

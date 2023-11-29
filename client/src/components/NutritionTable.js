@@ -14,10 +14,13 @@ const NutritionTable = ({ recipe }) => {
         { key: 'ProteinContent', label: 'Protein' },
     ];
 
-    
+
     return (
-        <div>
-            <span className='nutrition-title'>Nutrition</span>
+        <div className='nutrition-container'>
+            <span className='nutrition-title'>
+                <i class="nutrition-icon bi bi-clipboard-data-fill"></i>
+                Nutrition
+            </span>
 
             <div className='nutrition-table'>
                 {nutritionFields.map((field, index) => (
