@@ -15,6 +15,8 @@ import FavoriteRecipes from './pages/FavoriteRecipes'
 import Shopping from './pages/Shopping';
 import Trending from './pages/Trending';
 import Groceries from './pages/Groceries';
+import AddRecipe from './pages/AddRecipe';
+import MyRecipes from './pages/MyRecipes'
 
 
 const App = () => {
@@ -34,6 +36,8 @@ const App = () => {
                 <Route path="/shopping" element={<Shopping />} />
                 <Route path="/trending" element={<Trending />} />
                 <Route path="/groceries" element={<Groceries />} />
+                <Route path="/add_recipe" element={<AddRecipe />} />
+                <Route path="/my_recipes" element={<AddRecipe />} />
             </Routes>
         </BrowserRouter>
     );
