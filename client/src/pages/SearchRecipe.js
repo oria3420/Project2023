@@ -165,7 +165,7 @@ const SearchRecipe = () => {
 
     useEffect(() => {
         filterRecipes();
-    }, [checkedItems]);
+    }, [checkedItems,filterRecipes]);
 
 
     if (loading) {
@@ -202,12 +202,18 @@ const SearchRecipe = () => {
                 </div>
                
                 <div className='recipes-container'>
-                    {filteredRecipes.map((recipe, index) => (
-                        <div className='recipe-card-wrapper' key={index}>
-                            <RecipeCard recipe={recipe} user={user} />
-                        </div>
-                    ))}
-                </div>
+                {filteredRecipes.length === 0 ? (
+                    <p className="no-results-message">No results found for: "{searchTerm}".</p>
+                ) : (
+                  filteredRecipes.map((recipe, index) => (
+                    <div className='recipe-card-wrapper' key={index}>
+                      <RecipeCard recipe={recipe} user={user} />
+                    </div>
+                  ))
+                )}
+              </div>
+              
+              
             </div>
         </div>
     )

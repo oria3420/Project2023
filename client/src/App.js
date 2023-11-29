@@ -9,12 +9,12 @@ import TablesRouter from './tables/TablesRouter';
 import RecipePage from './pages/Recipe';
 import SearchRecipe from './pages/SearchRecipe';
 import WelcomePage from './pages/Welcome'
-import Home from './pages/Home'
+//import Home from './pages/Home'
 import Setting from './pages/Setting';
 import FavoriteRecipes from './pages/FavoriteRecipes'
-import Shopping from './pages/Setting';
+import Shopping from './pages/Shopping';
 import Trending from './pages/Trending';
-// import Groceries from './pages/Groceries';
+import Groceries from './pages/Groceries';
 
 
 const App = () => {
@@ -28,12 +28,12 @@ const App = () => {
                 <Route path="/table/:type" element={<TablesRouter />} />
                 <Route path="/recipes/:id" element={<RecipePage />} />
                 <Route path="/search_recipe" element={<SearchRecipe />} />
-                <Route path="/home" element={<Home />} />
+                {/*<Route path="/home" element={<Home />} />*/}
                 <Route path="/setting" element={<Setting />} />
                 <Route path="/favorites" element={<FavoriteRecipes />} />
-                <Route path="/shoping" element={<Shopping />} />
+                <Route path="/shopping" element={<Shopping />} />
                 <Route path="/trending" element={<Trending />} />
-                 {/* <Route path="/groceries" element={<Groceries />} /> */}
+                <Route path="/groceries" element={<Groceries />} />
             </Routes>
         </BrowserRouter>
     );

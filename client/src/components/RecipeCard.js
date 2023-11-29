@@ -5,8 +5,6 @@ import LikeButton from './LikeBtn';
 
 
 const defaultImageUrl = '/images/logo-image.png'
-//const defaultImageUrl = '/images/pizza.jpg'
-
 
 const RecipeCard = (props) => {
   const [imageUrl, setImageUrl] = useState(null);
