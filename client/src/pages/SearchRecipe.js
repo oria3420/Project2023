@@ -202,15 +202,20 @@ const SearchRecipe = () => {
                 </div>
 
                 <div className='recipes-container'>
-                    {filteredRecipes.length === 0 ? (
+                {filteredRecipes.length === 0 ? (
+                    searchTerm != "" ? (
                         <p className="no-results-message">No results found for: "{searchTerm}".</p>
                     ) : (
-                        filteredRecipes.map((recipe, index) => (
-                            <div className='recipe-card-wrapper' key={index}>
-                                <RecipeCard recipe={recipe} user={user} />
-                            </div>
-                        ))
-                    )}
+                        <p className="no-results-message">No results found.</p>
+                    )
+                ) : (
+                    filteredRecipes.map((recipe, index) => (
+                        <div className='recipe-card-wrapper' key={index}>
+                            <RecipeCard recipe={recipe} user={user} />
+                        </div>
+                    ))
+                )}
+                
                 </div>
 
 
