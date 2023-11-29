@@ -165,7 +165,7 @@ const SearchRecipe = () => {
 
     useEffect(() => {
         filterRecipes();
-    }, [checkedItems]);
+    }, [checkedItems,filterRecipes]);
 
 
     if (loading) {

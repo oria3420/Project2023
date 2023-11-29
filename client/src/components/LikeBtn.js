@@ -4,10 +4,6 @@ import React, { useState, useEffect } from 'react';
 const LikeButton = ({ recipeId, userEmail }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
 
-  useEffect(() => {
-    getLikes();
-  }, []);
-  
   const getLikes = async () => {
     const response = await fetch(`http://localhost:1337/api/favorites/${recipeId}/${userEmail}`, {
       method: 'GET',
@@ -24,6 +20,10 @@ const LikeButton = ({ recipeId, userEmail }) => {
       setIsHeartFilled(true);
     }
   };
+
+  useEffect(() => {
+    getLikes();
+  }, [getLikes]); // Add getLikes to the dependency array
 
   const handleHeartClick = () => {
     setIsHeartFilled(!isHeartFilled);
