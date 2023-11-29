@@ -32,7 +32,6 @@
   color: #797979;
 }
 
-
 .time {
   display: flex;
   flex-direction: column;
@@ -47,21 +46,6 @@
 
 #time-text{
  font-size: 17px;
-}
-
-.like-wrapper {
-  position: relative;
-}
-
-#btn-like {
-  padding-right: 30px; /* Adjust the value based on the size of your LikeButton */
-}
-
-.LikeButton {
-  position: absolute;
-  top: 50%;
-  right: 5px; /* Adjust the value based on the desired distance from the right */
-  transform: translateY(-50%);
 }
 
 #time-number{
@@ -155,7 +139,6 @@
   margin-top: 90px;
 }
 
-
 .tag {
   margin-top: 35px;
   display: inline-block;
@@ -174,23 +157,6 @@
   height: 40px;
   margin-right: 15px;
 }
-
-
-/* #btn-like {
-  background-color: white;
-  border-color: orange;
-  border-width: 2px;
-  color: orange;
-  border-radius: 10px;
-  width: 235px;
-  display: block;
-  margin-top: 30px;
-  margin-left: 7px;
-  font-weight: 600;
-  text-align: left;
-  padding-left: 10px;
-  font-size: 25px;
-} */
 
 .like-button-wrapper {
   display: flex;

@@ -3,7 +3,7 @@ import RecipeCard from '../components/RecipeCard';
 import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
-import { useNavigate,useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Loading from '../components/Loading';
 
 const SearchRecipe = () => {
@@ -19,7 +19,7 @@ const SearchRecipe = () => {
     const [user, setUser] = useState(null)
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
-    const [loading, setLoading] = useState(true); 
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -37,27 +37,27 @@ const SearchRecipe = () => {
 
     useEffect(() => {
         fetch(`http://localhost:1337/api/table/recipes`)
-          .then((res) => res.json())
-          .then((data) => {
-            setRecipes(data);
-            setFilteredRecipes(data);
-          })
-          .catch((error) => console.error(error));
-      }, []);
+            .then((res) => res.json())
+            .then((data) => {
+                setRecipes(data);
+                setFilteredRecipes(data);
+            })
+            .catch((error) => console.error(error));
+    }, []);
 
-      useEffect(() => {
+    useEffect(() => {
         fetch(`http://localhost:1337/api/recipes_categories`)
-          .then((res) => res.json())
-          .then((data) => {
-            setRecipesCategories(data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }, []);
-      
+            .then((res) => res.json())
+            .then((data) => {
+                setRecipesCategories(data);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
 
-      useEffect(() => {
+
+    useEffect(() => {
         fetch('http://localhost:1337/api/search_recipe')
             .then(response => response.json())
             .then(data => {
@@ -77,7 +77,7 @@ const SearchRecipe = () => {
                 setLoading(false); // Ensure loading is set to false even on error
             });
     }, []);
-    
+
 
     const toggleCategory = (category) => {
         setExpandedCategories({
@@ -156,22 +156,22 @@ const SearchRecipe = () => {
         } else {
             const filteredRecipes = filteredRecipesByName.filter((recipe) => filteredIds[recipe.RecipeId]);
             setFilteredRecipes(filteredRecipes);
-            console.log("anyChecked:"+filteredRecipes.length)
+            console.log("anyChecked:" + filteredRecipes.length)
         }
-    
+
 
     }, [checkedItems, categories, recipesCategories, filteredRecipesByName]);
     //[checkedItems, categories, recipes, recipesCategories]);
 
     useEffect(() => {
         filterRecipes();
-    }, [checkedItems,filterRecipes]);
+    }, [checkedItems, filterRecipes]);
 
 
     if (loading) {
         return <Loading />;  // Render the loading component while content is loading
-      }
-      
+    }
+
     return (
         <div>
             {name && <Navbar name={name} />}
@@ -200,20 +200,20 @@ const SearchRecipe = () => {
                             );
                         })}
                 </div>
-               
+
                 <div className='recipes-container'>
-                {filteredRecipes.length === 0 ? (
-                    <p className="no-results-message">No results found for: "{searchTerm}".</p>
-                ) : (
-                  filteredRecipes.map((recipe, index) => (
-                    <div className='recipe-card-wrapper' key={index}>
-                      <RecipeCard recipe={recipe} user={user} />
-                    </div>
-                  ))
-                )}
-              </div>
-              
-              
+                    {filteredRecipes.length === 0 ? (
+                        <p className="no-results-message">No results found for: "{searchTerm}".</p>
+                    ) : (
+                        filteredRecipes.map((recipe, index) => (
+                            <div className='recipe-card-wrapper' key={index}>
+                                <RecipeCard recipe={recipe} user={user} />
+                            </div>
+                        ))
+                    )}
+                </div>
+
+
             </div>
         </div>
     )
