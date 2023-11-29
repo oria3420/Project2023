@@ -186,7 +186,10 @@ const RecipePage = () => {
             <NutritionTable recipe={recipe} />
 
             <div className='tags-container'>
-              <div className='title'>Recipe Tags</div>
+              <div className='title'>
+                <i class="tags-icon bi bi-bookmarks-fill"></i>
+                Recipe Tags
+              </div>
 
               {recipeTags.map((tag, index) => (
                 <span key={index} className='tag'>
@@ -197,7 +200,7 @@ const RecipePage = () => {
             </div>
 
             <CommentsContainer id={id} user_id={user_id} user_name={user_name} recipe={recipe} />
-            
+
             <br></br>
             <br></br>
             <br></br>

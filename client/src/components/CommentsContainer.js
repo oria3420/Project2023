@@ -8,24 +8,20 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [newComment, setNewComment] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleSubmit = async () => {
-        console.log("handleSubmit")
-        // Trim leading and trailing spaces from the comment
-        const trimmedComment = newComment.trim();
+    const handleChange = (e) => {
+        setNewComment(e.target.value);
+        if (errorMessage.trim() !== '' && e.target.value.trim() !== '') {
+            setErrorMessage('');
+        }
+    };
 
-        // Check if the comment is empty
+    const handleSubmit = async () => {
+        const trimmedComment = newComment.trim();
         if (trimmedComment === '') {
-            // Set the error message
-            console.log("empty")
             setErrorMessage('Please enter a non-empty comment.');
-            console.log(errorMessage)
             return;
         }
-        console.log("not here")
-        // Clear any existing error message
         setErrorMessage('');
-
-        // Continue with the comment submission
         handleCommentSubmit(trimmedComment);
     };
 
@@ -90,9 +86,11 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
     return (
         <div className='comments-container'>
-            <div className='title'>Reviews & Comments</div>
+            <div className='title'>
+                <i class="comments-icon bi bi-chat-left-text-fill"></i>
+                Reviews & Comments
+            </div>
             <div className="comment-title">Your Review</div>
-
             <div className='new-comment-container'>
                 <div className='user-container'>
                     <i id="user-icon" className="bi bi-person-circle"></i>
@@ -105,17 +103,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                             className={`comment-input ${errorMessage ? 'error' : ''}`}
                             placeholder="Write your comment here"
                             value={newComment}
-                            onChange={(e) => {
-                                setNewComment(e.target.value);
-                                if (errorMessage && e.target.value.trim() !== '') {
-                                    setErrorMessage('');
-                                }
-                            }}
-                            onInput={() => {
-                                if (errorMessage && newComment.trim() !== '') {
-                                    setErrorMessage('');
-                                }
-                            }}
+                            onChange={handleChange}
                         ></textarea>
 
                         {errorMessage && <div className="empty-comment-error-msg">{errorMessage}</div>}
