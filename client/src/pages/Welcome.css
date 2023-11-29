@@ -1,4 +1,4 @@
-.welcome-titel {
+.welcome-title {
     font-weight: bold;
     font-size: 3em;
     color: white;
@@ -56,3 +56,6 @@
     max-height: 100%;
   }
   
+  .sub-title{
+    color: bisque;
+  }

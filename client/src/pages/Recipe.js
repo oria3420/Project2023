@@ -22,7 +22,7 @@ const RecipePage = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const [ingredients, setIngredients] = useState([]);
   const [recipeTags, setRecipeTags] = useState([]);
-  
+
   useEffect(() => {
     async function fetchTags() {
       try {

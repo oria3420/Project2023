@@ -83,7 +83,7 @@
     flex-grow: 1; /* Take up remaining space in the flex container */
   }
   
-  .comment-input {
+  /* .comment-input {
     width: 100%;
     height: 100px;
     padding: 10px;
@@ -92,7 +92,7 @@
     background-color: #ffe4b5;
     outline: none;
     margin-bottom: 10px;
-  }
+  } */
   
   .comment-input:focus {
     border: 2px solid #efc2af;
@@ -111,15 +111,18 @@
   }
   
   .submit-btn {
-    width: 90px;
+    width: 40px; /* Adjust the width and height to make it a perfect circle */
     height: 40px;
-    background-color: var(--icon-color);;
+    background-color: var(--icon-color);
     color: white;
     border: none;
-    border-radius: 20px;
+    border-radius: 50%; /* Make it a rounded circle */
     font-size: 17px;
     cursor: pointer;
     outline: none;
+    display: flex; /* Enable flex properties */
+    align-items: center; /* Center the icon vertically */
+    justify-content: center; /* Center the icon horizontally */
     align-self: flex-end; /* Align the button to the right within its container */
   }
   
@@ -131,3 +134,28 @@
   .new-comment-container{
     margin-top: 10px;
   }
+
+  .comment-input {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border:none; /* Default border color */
+    border-radius: 15px;
+    background-color: #ffe4b5;
+    outline: none;
+    margin-bottom: 10px;
+    border: 2px solid transparent;
+}
+
+.comment-input.error {
+    border-color: red; /* Change border color to red on error */
+}
+
+.comment-input:focus {
+    border-color: #f1b59d; /* Reset border color on focus */
+}
+
+.empty-comment-error-msg {
+    color: red;
+    margin-left: 5px;
+}
