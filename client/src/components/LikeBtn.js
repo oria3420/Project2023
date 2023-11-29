@@ -7,7 +7,7 @@ const LikeButton = ({ recipeId, userEmail }) => {
   useEffect(() => {
     getLikes();
   }, []);
-
+  
   const getLikes = async () => {
     const response = await fetch(`http://localhost:1337/api/favorites/${recipeId}/${userEmail}`, {
       method: 'GET',
@@ -15,7 +15,7 @@ const LikeButton = ({ recipeId, userEmail }) => {
         'Content-Type': 'application/json',
       },
     });
-
+    
     const data = await response.json();
 
     if (data.status === 'false') {

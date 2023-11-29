@@ -4,11 +4,9 @@ import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate,useLocation } from 'react-router-dom'
-import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 
 const SearchRecipe = () => {
-    console.log("SearchRecipe")
     const navigate = useNavigate()
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
@@ -19,7 +17,6 @@ const SearchRecipe = () => {
     const [recipesCategories, setRecipesCategories] = useState([]);
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
-    const { query } = useParams();
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true); 
@@ -116,6 +113,7 @@ const SearchRecipe = () => {
             console.log("no query");
             // If query is empty, show all recipes
             setFilteredRecipeByNames(recipes);
+            setFilteredRecipes(recipes);
         }
     }, [searchTerm, recipes]);
 
@@ -162,7 +160,8 @@ const SearchRecipe = () => {
         }
     
 
-    }, [checkedItems, categories, recipes, recipesCategories]);
+    }, [checkedItems, categories, recipesCategories, filteredRecipesByName]);
+    //[checkedItems, categories, recipes, recipesCategories]);
 
     useEffect(() => {
         filterRecipes();

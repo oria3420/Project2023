@@ -16,7 +16,6 @@ const RecipeCard = (props) => {
   const name = user.name
   const user_id = user.email
   const navigate = useNavigate();
-  const [isHeartFilled, setIsHeartFilled] = useState(false);
 
 
   useEffect(() => {
