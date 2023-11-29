@@ -4,9 +4,6 @@ import React, { useState, useEffect } from 'react';
 const LikeButton = ({ recipeId, userEmail }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
 
-  useEffect(() => {
-    getLikes();
-  }, []);
 
   const getLikes = async () => {
     const response = await fetch(`http://localhost:1337/api/favorites/${recipeId}/${userEmail}`, {
@@ -16,6 +13,10 @@ const LikeButton = ({ recipeId, userEmail }) => {
       },
     });
 
+    useEffect(() => {
+      getLikes();
+    }, []);
+    
     const data = await response.json();
 
     if (data.status === 'false') {

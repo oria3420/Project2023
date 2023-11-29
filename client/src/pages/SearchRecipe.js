@@ -4,7 +4,6 @@ import './App.css';
 import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate,useLocation } from 'react-router-dom'
-import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 
 const SearchRecipe = () => {
@@ -161,7 +160,8 @@ const SearchRecipe = () => {
         }
     
 
-    }, [checkedItems, categories, recipes, recipesCategories]);
+    }, [checkedItems, categories, recipesCategories, filteredRecipesByName]);
+    //[checkedItems, categories, recipes, recipesCategories]);
 
     useEffect(() => {
         filterRecipes();
