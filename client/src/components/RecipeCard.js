@@ -1,4 +1,4 @@
-import './Components.css';
+import './RecipeCard.css';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LikeButton from './LikeBtn';

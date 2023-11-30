@@ -113,12 +113,12 @@
     height: fit-content;
 }
 
-.recipe-card-wrapper:hover {
+/* .recipe-card-wrapper:hover {
     transform: scale(1.03);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     border-radius: 15px;
     background-color: transparent;
-}
+} */
 
 .category-header {
     display: flex;
