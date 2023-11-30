@@ -87,7 +87,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     return (
         <div className='comments-container'>
             <div className='title'>
-                <i class="comments-icon bi bi-chat-left-text-fill"></i>
+                <i className="comments-icon bi bi-chat-left-text-fill"></i>
                 Reviews & Comments
             </div>
             <div className="comment-title">Your Review</div>

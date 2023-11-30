@@ -129,12 +129,11 @@
 }
 
 /* Style for the heart icon */
-.like-wrapper svg {
-  width: 22px;
-  height: 22px;
+.like-wrapper i {
   fill: currentColor;
-  margin-left: 10px;
-  margin-right: 5px;
+  margin-left: 15px;
+  margin-right: 8px;
+  font-size: 25px;
 }
 
 .like-wrapper .bi-heart {
@@ -145,6 +144,10 @@
   color: orange;
 }
 
+.heart-icon{
+  width: 16px;
+  height: 16px;
+}
 
   .bi-heart {
     color: #000000;

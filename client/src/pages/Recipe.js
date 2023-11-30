@@ -187,7 +187,7 @@ const RecipePage = () => {
 
             <div className='tags-container'>
               <div className='title'>
-                <i class="tags-icon bi bi-bookmarks-fill"></i>
+                <i className="tags-icon bi bi-bookmarks-fill"></i>
                 Recipe Tags
               </div>
 
