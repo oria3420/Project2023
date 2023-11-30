@@ -102,7 +102,6 @@ const SearchRecipe = () => {
 
     useEffect(() => {
         if (searchTerm) {
-            console.log("query: " + searchTerm);
             const lowercaseQuery = searchTerm.toLowerCase();
             const filteredByName = recipes.filter(
                 (recipe) => recipe.Name.toLowerCase().includes(lowercaseQuery)
@@ -110,8 +109,6 @@ const SearchRecipe = () => {
             setFilteredRecipes(filteredByName);
             setFilteredRecipeByNames(filteredByName);
         } else {
-            console.log("no query");
-            // If query is empty, show all recipes
             setFilteredRecipeByNames(recipes);
             setFilteredRecipes(recipes);
         }
@@ -168,14 +165,16 @@ const SearchRecipe = () => {
     }, [checkedItems, filterRecipes]);
 
 
-    if (loading) {
-        return <Loading />;  // Render the loading component while content is loading
-    }
-
     return (
         <div>
             {name && <Navbar name={name} />}
             <div className='search-recipe-container'>
+
+            {loading ? (
+                <Loading />
+            ) : (
+                <>
+
                 <div className='filter-menu'>
                     {Object.keys(categories)
                         .sort((a, b) => a.localeCompare(b))
@@ -218,7 +217,8 @@ const SearchRecipe = () => {
                 
                 </div>
 
-
+                </>
+                )}
             </div>
         </div>
     )

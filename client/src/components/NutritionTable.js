@@ -18,7 +18,7 @@ const NutritionTable = ({ recipe }) => {
     return (
         <div className='nutrition-container'>
             <span className='nutrition-title'>
-                <i class="nutrition-icon bi bi-clipboard-data-fill"></i>
+                <i className="nutrition-icon bi bi-clipboard-data-fill"></i>
                 Nutrition
             </span>
 

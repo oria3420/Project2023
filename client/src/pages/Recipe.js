@@ -87,9 +87,9 @@ const RecipePage = () => {
 
   return (
     <div>
+    <Navbar name={user_name} />
       {user_name && recipe ? (
         <>
-          {user_name && <Navbar name={user_name} />}
           <div className='recipe-container'>
 
             <div className='recipe-header'>
@@ -221,10 +221,3 @@ const RecipePage = () => {
 }
 
 export default RecipePage;
-
-
-// <div className="like-button-wrapper">
-// <span className='like-text'>LIKE</span>
-// </div>
-
-// <input id="btn-like" className="btn btn-primary" value="LIKE" />

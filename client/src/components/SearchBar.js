@@ -10,10 +10,8 @@ const SearchBar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchTerm.trim()) {
-      console.log('Search term is empty. Please enter a search term.');
       return;
     }
-    console.log(searchTerm)
     navigate(`/search_recipe?query=${searchTerm}`);
     setSearchTerm('');
   };
