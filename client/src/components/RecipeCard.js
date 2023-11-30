@@ -20,7 +20,7 @@ const RecipeCard = (props) => {
     async function getImageUrl() {
       const response = await fetch(`http://localhost:1337/api/recipes/images/${recipe.RecipeId}`);
       const data = await response.text();
-      if (data !== 'Image not found' || data!== 'Error fetching image') {
+      if (data !== 'Image not found' || data !== 'Error fetching image') {
         //setImageUrl(data)
         const resp = await fetch(data);
         if (resp.ok) {
@@ -45,17 +45,15 @@ const RecipeCard = (props) => {
 
 
   return (
-    <div>
-      <div className="card recipe-card">
-        {imageUrl && <img className="card-img-top" src={imageUrl} alt="Card cap"></img>}
-        <div className="card-body">
-          <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
-            <h6 className="card-title">{recipe.Name}</h6>
-          </div>
-          <p className="card-text">{recipe.Description}</p>
-          <div>
-            <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard"/>
-          </div>
+    <div className="card recipe-card">
+      {imageUrl && <img className="card-img-top" src={imageUrl} alt="Card cap"></img>}
+      <div className="card-body">
+        <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
+          <h6 className="card-title">{recipe.Name}</h6>
+        </div>
+        <p className="card-text">{recipe.Description}</p>
+        <div>
+          <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard" />
         </div>
       </div>
     </div>

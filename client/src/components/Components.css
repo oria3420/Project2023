@@ -84,6 +84,7 @@
   .card-body {
     flex: 2; /* Allows the card body to take up the remaining space */
     text-align: left; /* Aligns the card content to the left */
+    height: auto;
   }
 
   .card-text {

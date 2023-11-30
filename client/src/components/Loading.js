@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import styles from './Loading.module.css';
-import Navbar from './Navbar'; // Import the Navbar component
 
 const Loading = () => {
   useEffect(() => {

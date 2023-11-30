@@ -76,6 +76,7 @@
     top: 80px;
     height: calc(100vh - 80px);
     overflow-y: scroll;
+    margin-top: 10px;
     margin-right: 10px;
     margin-left: 20px;
     padding-left: 3px;

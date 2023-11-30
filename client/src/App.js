@@ -37,7 +37,7 @@ const App = () => {
                 <Route path="/trending" element={<Trending />} />
                 <Route path="/groceries" element={<Groceries />} />
                 <Route path="/add_recipe" element={<AddRecipe />} />
-                <Route path="/my_recipes" element={<AddRecipe />} />
+                <Route path="/my_recipes" element={<MyRecipes />} />
             </Routes>
         </BrowserRouter>
     );

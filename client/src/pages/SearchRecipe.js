@@ -202,7 +202,7 @@ const SearchRecipe = () => {
 
                 <div className='recipes-container'>
                 {filteredRecipes.length === 0 ? (
-                    searchTerm != "" ? (
+                    searchTerm !== "" ? (
                         <p className="no-results-message">No results found for: "{searchTerm}".</p>
                     ) : (
                         <p className="no-results-message">No results found.</p>
