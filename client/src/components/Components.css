@@ -245,3 +245,7 @@ form-control:not(:focus) {
   outline: none !important;
   -webkit-appearance: none !important;
 }
+
+.search-input::placeholder {
+  font-style: italic;
+}
