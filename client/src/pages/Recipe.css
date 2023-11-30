@@ -26,8 +26,8 @@
 }
 
 .times-container {
-  margin-top: 25px;
-  margin-bottom: 40px;
+  margin-top: 30px;
+  margin-bottom: 45px;
   display: flex;
   color: #797979;
 }
@@ -56,7 +56,7 @@
 
 #author-date{
   margin-top: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   font-size: 17px;
 }
 
