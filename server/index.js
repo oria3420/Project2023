@@ -405,6 +405,17 @@ app.get('/api/trending', async (req, res) => {
   }
 });
 
+app.get('/api/groceries', async (req, res) => {
+  const ingredient = Collection.getModel(TABLE_NAMES.INGREDIENTS);
+  try {
+    const ingredients = await ingredient.find()
+    res.json(ingredients);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.listen(1337, () => {
   console.log('Server saterted on 1337')
 })

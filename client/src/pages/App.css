@@ -142,3 +142,33 @@
     margin-top: 20%;
     margin-left: 35%;
 }
+
+.select-ingredients {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 90px;
+    margin-left: 35%;
+}
+.custom-dropdown {
+    position: relative;
+  }
+  
+  .dropdown-ingredient {
+    position: absolute;
+    top: 100%;
+    left: 35%;
+    width: 35%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    max-height: 150px;
+    overflow-y: auto;
+  }
+  
+  .dropdown-item {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  /* Add additional styling as needed */
+  

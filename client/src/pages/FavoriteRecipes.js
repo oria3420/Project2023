@@ -18,7 +18,7 @@ const FavoriteRecipes = () => {
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true); 
-
+    console.log("FavoriteRecipes")
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -135,14 +135,30 @@ const FavoriteRecipes = () => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
 
-    if (loading) {
-        return <Loading />;  // Render the loading component while content is loading
-      }
+    const handleLikeToggle = async (recipeId, isLiked) => {
+        // Handle the like toggle, e.g., refetch the favorite recipes
+        try {
+          const response = await fetch(`http://localhost:1337/api/favorites/${user.email}`);
+          const data = await response.json();
+          setRecipes(data);
+          setFilteredRecipes(data);
+        } catch (error) {
+          console.error('Error fetching favorite recipes:', error);
+        }
+      };
+
+    // if (loading) {
+    //     return <Loading />;  // Render the loading component while content is loading
+    //   }
 
     return (
         <div>
             {name && <Navbar name={name} />}
             <div className='search-recipe-container'>
+            {loading ? (
+                <Loading/>
+                ):(
+                    <>
                 <div className='filter-menu'>
                     {Object.keys(categories)
                         .sort((a, b) => a.localeCompare(b))
@@ -170,10 +186,12 @@ const FavoriteRecipes = () => {
                 <div className='recipes-container' >
                     {filteredRecipes.map((recipe, index) => (
                         <div className='recipe-card-wrapper' key={index}>
-                            <RecipeCard recipe={recipe} user={user} />
+                            <RecipeCard recipe={recipe} user={user} onLikeToggle={handleLikeToggle} />
                         </div>
                     ))}
                 </div>
+            </>
+            )}
             </div>
         </div>
     )

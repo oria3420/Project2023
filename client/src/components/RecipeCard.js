@@ -43,7 +43,6 @@ const RecipeCard = (props) => {
     navigate(`/recipes/${recipeId}`, { state: { name: name, user_id: user_id } });
   };
 
-
   return (
     <div className="card recipe-card">
         
@@ -54,8 +53,8 @@ const RecipeCard = (props) => {
           <h6 className="card-title">{recipe.Name}</h6>
         </div>
         <p className="card-text">{recipe.Description}</p>
-        <div class="card-like">
-          <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard" />
+        <div className="card-like">
+          <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard" onLikeToggle={props.onLikeToggle}/>
         </div>
       </div>
     </div>

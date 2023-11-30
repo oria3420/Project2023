@@ -2,7 +2,7 @@ import './Components.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import React, { useState, useEffect } from 'react';
 
-const LikeButton = ({ recipeId, userEmail, pageType }) => {
+const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
 
   useEffect(() => {
@@ -30,11 +30,21 @@ const LikeButton = ({ recipeId, userEmail, pageType }) => {
     getLikes(); // Call getLikes inside the useEffect
   }, [recipeId, userEmail]);
 
-  const handleHeartClick = () => {
-    setIsHeartFilled(!isHeartFilled);
-    const url = `http://localhost:1337/api/favorites/${recipeId}/${userEmail}`;
-    const method = isHeartFilled ? 'DELETE' : 'POST';
-    fetch(url, { method });
+  const handleHeartClick = async () => {
+    try {
+      setIsHeartFilled(!isHeartFilled);
+      const url = `http://localhost:1337/api/favorites/${recipeId}/${userEmail}`;
+      const method = isHeartFilled ? 'DELETE' : 'POST';
+  
+      // Wait for the fetch call to complete
+      await fetch(url, { method });
+  
+      // Call the callback function with the updated like status
+      onLikeToggle(recipeId, !isHeartFilled);
+    } catch (error) {
+      console.error('Error handling like click:', error);
+      // Handle errors as needed
+    }
   };
 
 
