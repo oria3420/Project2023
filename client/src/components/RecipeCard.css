@@ -5,57 +5,49 @@
     flex-direction: column;
     width: 19em;
     height: 25em;
-    /* Increase the height to fit the larger image */
     text-align: center;
     align-items: center;
+    border: none;
 }
 
-/* .card.recipe-card {
+.card.recipe-card {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
-  } */
+  }
 
 .card-img-top {
     flex: 1;
-    /* Allows the image to take up the full available space */
     object-fit: cover;
-    /* Ensures the image fills the available space */
     height: 50%;
     opacity: 100%;
     transition: all 1s;
+    filter: brightness(1) saturate(1.2) contrast(1.1);
 }
+
 
 .recipe-card:hover .card-img-top {
     opacity: 50%;
 }
 
-
-
 .card-body {
     flex: 2;
-    /* Allows the card body to take up the remaining space */
     text-align: left;
-    /* Aligns the card content to the left */
     height: auto;
 }
 
 .card-text {
     text-transform: capitalize;
     max-height: 8em;
-    /* Change the height value to your desired height */
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    /* Change the line clamp value to the number of lines you want to show */
     -webkit-box-orient: vertical;
     transition: max-height 0.5s ease-out;
-    /* Add a smooth transition effect */
     font-size: 14px;
 }
 
 .card-text:hover {
     max-height: none;
-    /* Remove the max-height limit on hover */
 }
 
 .card-title {
@@ -69,72 +61,20 @@
     letter-spacing: 0.1px;
 }
 
-/* Your styles.css file */
-
 .card-title::after {
     content: "";
     display: block;
     margin: 20px auto;
     width: 50px;
-    /* Adjust the width of the line as needed */
     height: 2px;
-    /* Adjust the height of the line as needed */
     background-color: rgb(166, 163, 163);
 }
 
 
-
-.like-wrapper {
-    display: inline-flex;
+.card-like {
+    display: flex;
     align-items: center;
-    padding: 8px;
-    background-color: transparent;
-    border: 2px solid orange;
-    border-radius: 10px;
-    cursor: pointer;
-    width: fit-content;
-    margin-left: 5px;
-}
-
-.like-text {
-    margin-left: 8px;
-    color: orange;
-    font-size: 25px;
-}
-
-/* Style for the heart icon */
-.like-wrapper i {
-    fill: currentColor;
-    margin-left: 15px;
-    margin-right: 8px;
-    font-size: 25px;
-}
-
-.like-wrapper .bi-heart {
-    color: orange;
-}
-
-.like-wrapper .bi-heart-fill {
-    color: orange;
-}
-
-.heart-icon {
-    width: 16px;
-    height: 16px;
-}
-
-.bi-heart {
-    color: #000000;
-}
-
-.bi-heart-fill {
-    color: #e73737;
-}
-
-.nevigate:hover {
-    cursor: pointer;
-}
-
-.heart:hover {
-    cursor: pointer;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
 }

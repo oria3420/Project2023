@@ -147,3 +147,58 @@ form-control:not(:focus) {
 .search-input::placeholder {
   font-style: italic;
 }
+
+.like-wrapper {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px;
+  background-color: transparent;
+  border: 2px solid orange;
+  border-radius: 10px;
+  cursor: pointer;
+  width: fit-content;
+  margin-left: 5px;
+}
+
+.like-text {
+  margin-left: 8px;
+  color: orange;
+  font-size: 25px;
+}
+
+/* Style for the heart icon */
+.like-wrapper i {
+  fill: currentColor;
+  margin-left: 15px;
+  margin-right: 8px;
+  font-size: 25px;
+}
+
+.like-wrapper .bi-heart {
+  color: orange;
+}
+
+.like-wrapper .bi-heart-fill {
+  color: orange;
+}
+
+.heart-icon {
+  width: 16px;
+  height: 16px;
+}
+
+.bi-heart {
+  color: #000000;
+}
+
+.bi-heart-fill {
+  color: #e73737;
+}
+
+.nevigate:hover {
+  cursor: pointer;
+}
+
+.heart:hover {
+  cursor: pointer;
+}

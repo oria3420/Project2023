@@ -46,13 +46,15 @@ const RecipeCard = (props) => {
 
   return (
     <div className="card recipe-card">
+        
       {imageUrl && <img className="card-img-top" src={imageUrl} alt="Card cap"></img>}
+      
       <div className="card-body">
         <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
           <h6 className="card-title">{recipe.Name}</h6>
         </div>
         <p className="card-text">{recipe.Description}</p>
-        <div>
+        <div class="card-like">
           <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard" />
         </div>
       </div>
