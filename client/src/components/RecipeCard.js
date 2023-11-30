@@ -54,7 +54,7 @@ const RecipeCard = (props) => {
           </div>
           <p className="card-text">{recipe.Description}</p>
           <div>
-            <LikeButton recipeId={recipe.RecipeId} userEmail={user.email}/>
+            <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard"/>
           </div>
         </div>
       </div>

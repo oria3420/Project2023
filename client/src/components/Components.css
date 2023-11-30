@@ -108,6 +108,43 @@
     cursor: pointer;
   }
 
+
+.like-wrapper {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px;
+  background-color: transparent;
+  border: 2px solid orange;
+  border-radius: 10px;
+  cursor: pointer;
+  width: fit-content;
+  margin-left: 5px;
+}
+
+.like-text {
+  margin-left: 8px;
+  color: orange;
+  font-size: 25px;
+}
+
+/* Style for the heart icon */
+.like-wrapper svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+.like-wrapper .bi-heart {
+  color: orange;
+}
+
+.like-wrapper .bi-heart-fill {
+  color: orange;
+}
+
+
   .bi-heart {
     color: #000000;
   }
@@ -125,7 +162,6 @@
 ul{
     margin-left: 50%;
   }
-
 
 .navbar-text{
   color: white;

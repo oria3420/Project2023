@@ -119,10 +119,7 @@ const RecipePage = () => {
 
 
 
-                <div className="like-button-wrapper">
-                  <span className='like-text'>LIKE</span>
-                  <LikeButton recipeId={id} userEmail={user_id} />
-                </div>
+                <LikeButton recipeId={id} userEmail={user_id} pageType="RecipePage" />
 
 
               </div>
@@ -225,5 +222,9 @@ const RecipePage = () => {
 
 export default RecipePage;
 
+
+// <div className="like-button-wrapper">
+// <span className='like-text'>LIKE</span>
+// </div>
 
 // <input id="btn-like" className="btn btn-primary" value="LIKE" />
