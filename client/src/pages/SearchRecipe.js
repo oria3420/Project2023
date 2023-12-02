@@ -5,6 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate, useLocation } from 'react-router-dom'
 import Loading from '../components/Loading';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const SearchRecipe = () => {
     const navigate = useNavigate()
@@ -170,54 +171,60 @@ const SearchRecipe = () => {
             {name && <Navbar name={name} />}
             <div className='search-recipe-container'>
 
-            {loading ? (
-                <Loading />
-            ) : (
-                <>
-
-                <div className='filter-menu'>
-                    {Object.keys(categories)
-                        .sort((a, b) => a.localeCompare(b))
-                        .map((category) => {
-                            const categoryName = category.slice(0, -11).replace(/_/g, ' ');
-                            const words = categoryName.toLowerCase().split(" ");
-                            const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
-                            const capitalizedCategoryName = capitalizedWords.join(" ");
-                            return (
-                                <div className='category' key={category}>
-                                    <div className="category-header" onClick={() => toggleCategory(category)}>
-                                        <span className='category-title'>{capitalizedCategoryName}</span>
-                                        <button className="btn btn-light category-toggle-btn">{expandedCategories[category] ? "-" : "+"}</button>
-                                    </div>
-                                    {expandedCategories[category] && categories[category].sort((a, b) => (a[1] && b[1]) ? a[1].localeCompare(b[1]) : 0).map((value) => (
-                                        <div className="form-check" key={value}>
-                                            <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
-                                            <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
-                                        </div>
-                                    ))}
-                                </div>
-                            );
-                        })}
-                </div>
-
-                <div className='recipes-container'>
-                {filteredRecipes.length === 0 ? (
-                    searchTerm !== "" ? (
-                        <p className="no-results-message">No results found for: "{searchTerm}".</p>
-                    ) : (
-                        <p className="no-results-message">No results found.</p>
-                    )
+                {loading ? (
+                    <Loading />
                 ) : (
-                    filteredRecipes.map((recipe, index) => (
-                        <div className='recipe-card-wrapper' key={index}>
-                            <RecipeCard recipe={recipe} user={user} />
-                        </div>
-                    ))
-                )}
-                
-                </div>
+                    <>
 
-                </>
+                        <div className='filter-menu'>
+                            {Object.keys(categories)
+                                .sort((a, b) => a.localeCompare(b))
+                                .map((category) => {
+                                    const categoryName = category.slice(0, -11).replace(/_/g, ' ');
+                                    const words = categoryName.toLowerCase().split(" ");
+                                    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+                                    const capitalizedCategoryName = capitalizedWords.join(" ");
+                                    return (
+                                        <div className='category' key={category}>
+                                            <div className="category-header" onClick={() => toggleCategory(category)}>
+                                                <span className='category-title'>{capitalizedCategoryName}</span>
+                                                <button className="btn btn-light category-toggle-btn">
+                                                    {expandedCategories[category] ? (
+                                                        <i className="bi bi-chevron-up"></i>
+                                                    ) : (
+                                                        <i className="bi bi-chevron-down"></i>
+                                                    )}
+                                                </button>
+                                            </div>
+                                            {expandedCategories[category] && categories[category].sort((a, b) => (a[1] && b[1]) ? a[1].localeCompare(b[1]) : 0).map((value) => (
+                                                <div className="form-check" key={value}>
+                                                    <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
+                                                    <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    );
+                                })}
+                        </div>
+
+                        <div className='recipes-container'>
+                            {filteredRecipes.length === 0 ? (
+                                searchTerm !== "" ? (
+                                    <p className="no-results-message">No results found for: "{searchTerm}".</p>
+                                ) : (
+                                    <p className="no-results-message">No results found.</p>
+                                )
+                            ) : (
+                                filteredRecipes.map((recipe, index) => (
+                                    <div className='recipe-card-wrapper' key={index}>
+                                        <RecipeCard recipe={recipe} user={user} />
+                                    </div>
+                                ))
+                            )}
+
+                        </div>
+
+                    </>
                 )}
             </div>
         </div>

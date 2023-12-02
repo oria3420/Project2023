@@ -131,13 +131,16 @@
     background-color: white;
     border: 0ch;
 }
+
 .category-toggle-btn:hover {
     background-color: white;
 }
+
 /* Add this CSS to style the "No results found" message */
 .no-results-message {
     font-size: 30px;
-    color: #555; /* Change the color to your preference */
+    color: #555;
+    /* Change the color to your preference */
     margin-top: 20%;
     margin-left: 35%;
 }
@@ -148,11 +151,12 @@
     margin-top: 90px;
     margin-left: 35%;
 }
+
 .custom-dropdown {
     position: relative;
-  }
-  
-  .dropdown-ingredient {
+}
+
+.dropdown-ingredient {
     position: absolute;
     top: 100%;
     left: 35%;
@@ -162,12 +166,17 @@
     border-top: none;
     max-height: 150px;
     overflow-y: auto;
-  }
-  
-  .dropdown-item {
+}
+
+.dropdown-item {
     padding: 8px;
     cursor: pointer;
-  }
-  
-  /* Add additional styling as needed */
-  
+}
+
+.category-title{
+    font-size: 17px;
+}
+
+.category{
+    margin-bottom: 10px;
+}
