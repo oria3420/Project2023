@@ -44,11 +44,14 @@
     font-size: 20px;
     font-family: 'Playfair Display', serif;
     letter-spacing: 0.1px;
+}
 
-    /* cuts to one line - need to remove it later*/
-    white-space: nowrap; /* Add this line to limit the title to one line */
-    overflow: hidden; /* Hide any overflowing text */
-    text-overflow: ellipsis;
+.title-container{
+    height: 30%;
+}
+
+.body-bottom-container{
+height: 70%;
 }
 
 .card-title::after {

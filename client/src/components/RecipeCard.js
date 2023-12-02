@@ -45,19 +45,23 @@ const RecipeCard = (props) => {
 
   return (
     <div className="card recipe-card">
-        
-    {imageUrl && (
-      <div className="image-wrapper">
-        <img className="card-img-top" src={imageUrl} alt="Card cap" />
-      </div>
-    )}
-      <div className="card-body">
-        <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
-          <h6 className="card-title">{recipe.Name}</h6>
+
+      {imageUrl && (
+        <div className="image-wrapper">
+          <img className="card-img-top" src={imageUrl} alt="Card cap" />
         </div>
-        <p className="card-text">{recipe.Description}</p>
-        <div className="card-like">
-          <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard" onLikeToggle={props.onLikeToggle}/>
+      )}
+      <div className="card-body">
+        <div className='title-container'>
+          <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
+            <h6 className="card-title">{recipe.Name}</h6>
+          </div>
+        </div>
+        <div className='body-bottom-container'>
+          <p className="card-text">{recipe.Description}</p>
+          <div className="card-like">
+            <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard" onLikeToggle={props.onLikeToggle} />
+          </div>
         </div>
       </div>
     </div>
