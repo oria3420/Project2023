@@ -46,8 +46,11 @@ const RecipeCard = (props) => {
   return (
     <div className="card recipe-card">
         
-      {imageUrl && <img className="card-img-top" src={imageUrl} alt="Card cap"></img>}
-      
+    {imageUrl && (
+      <div className="image-wrapper">
+        <img className="card-img-top" src={imageUrl} alt="Card cap" />
+      </div>
+    )}
       <div className="card-body">
         <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
           <h6 className="card-title">{recipe.Name}</h6>
