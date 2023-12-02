@@ -73,10 +73,9 @@
 .filter-menu {
     width: 20%;
     position: sticky;
-    top: 80px;
+    top: 90px;
     height: calc(100vh - 80px);
     overflow-y: scroll;
-    margin-top: 10px;
     margin-right: 10px;
     margin-left: 20px;
     padding-left: 3px;
