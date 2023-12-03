@@ -16,6 +16,8 @@
     border-radius: 15px;
     width: 30%;
     margin: 20px 5px 0; /* Adjusted margin to create space between buttons */
+    font-weight: 600;
+    font-size: 18px;
   }
   
   #btn-register-welcome {
@@ -42,19 +44,23 @@
     flex: 1; /* Allows the welcome content part to grow and take available space */
     padding: 20px;
     text-align: center;
+    width: 30%;
   }
-  
   .video-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Set the height to fill the viewport */
+    height: 100%; /* Set the height to fill the viewport */
+    width: 70%;
+    overflow: hidden; /* Ensure that any overflowing content is hidden */
   }
   
   .video-container video {
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* This will make the video cover the entire container */
   }
+  
   
   .sub-title{
     color: bisque;

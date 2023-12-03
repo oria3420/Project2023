@@ -14,22 +14,25 @@ function WelcomePage() {
 
   return (
     <div className="welcome-body">
+
       <div className="video-container">
         <video autoPlay loop muted onLoadedMetadata={(e) => e.target.play()}>
           <source src={bgVideo} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
       </div>
+
       <div className="welcome-connect">
         <img src="/images/logo_black_english.png" alt="Logo" className="logo-welcome" />
-        <h1 className="welcome-title">WELCOME TO MA
+        <h1 className="welcome-title">WELCOME TO
         <br></br>
+        MA
         MITBASHEL</h1>
-        <br />
         <h3 className='sub-title'>Get started</h3>
         <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Login" onClick={redirectToLogin} />
-        <input id="btn-register-welcome" className="btn btn-primary" type="button" value="SignUp" onClick={redirectToRegister} />
+        <input id="btn-register-welcome" className="btn btn-primary" type="button" value="Register" onClick={redirectToRegister} />
       </div>
+
     </div>
   );
 }
