@@ -239,6 +239,7 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     // console.log("flattenedTags: ", flattenedTags);
     const valuesOnly = flattenedTags.map(tag => Object.values(tag)[0]);
     // console.log("valuesOnly: ", valuesOnly);
+    console.log(valuesOnly)
     res.json(valuesOnly);
     
   } catch (err) {

@@ -59,7 +59,8 @@
   
   #comment-text {
     margin-left: var(--comment-margin);
-    width: 80%;
+    width: 90%;
+    word-wrap: break-word;
   }
   
   .no-comments-container {
