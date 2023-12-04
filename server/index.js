@@ -417,6 +417,17 @@ app.get('/api/groceries', async (req, res) => {
   }
 });
 
+app.get('/api/measurements', async(req,res)=>{
+  const measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
+  try {
+    const measurements = await measurement.find()
+    res.json(measurements);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 app.listen(1337, () => {
   console.log('Server saterted on 1337')
 })

@@ -9,8 +9,13 @@ const Groceries = () => {
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
     const [ingredients,setIngredients] = useState([])
+    const [measurements,setMeasurements] = useState([])
     const [searchTerm, setSearchTerm] = useState('');
-  const [filteredIngredients, setFilteredIngredients] = useState([]);
+    const [filteredIngredients, setFilteredIngredients] = useState([]);
+    const [selectedIngredient, setSelectedIngredient] = useState('');
+    const [selectedMeasurement, setSelectedMeasurement] = useState('');
+    const [amount, setAmount] = useState('');
+    const [groceryList, setGroceryList] = useState([]);
 
     
     useEffect(() => {
@@ -50,6 +55,31 @@ const Groceries = () => {
         }
       }, [searchTerm, ingredients]);
 
+    useEffect(() => {
+      if(user){
+          fetch(`http://localhost:1337/api/measurements`)
+              .then(res => res.json())
+              .then(data => {
+                setMeasurements(data)
+              })
+              .catch(error => console.error(error))
+      }
+  }, [user]);
+
+  const handleAddToGroceryList = () => {
+    if (selectedIngredient && selectedMeasurement && amount) {
+      const newItem = {
+        ingredient: selectedIngredient,
+        measurement: selectedMeasurement,
+        amount: amount,
+      };
+      setGroceryList([...groceryList, newItem]);
+      // Clear the input fields after adding to the list
+      setSelectedIngredient('');
+      setSelectedMeasurement('');
+      setAmount('');
+    }
+  };
       return (
         <div>
             {name && <Navbar name={name} />}
@@ -71,6 +101,7 @@ const Groceries = () => {
                     onClick={() => {
                       // Handle item selection, e.g., set the input value
                     setSearchTerm(ingredient.ingredient);
+                    setSelectedIngredient(ingredient.ingredient);
                 }}
                 >
                     {ingredient.ingredient}
@@ -79,6 +110,42 @@ const Groceries = () => {
               </div>
             )}
           </div>
+          <div className="custom-dropdown">
+          <select
+          className='select-measurements'
+          value={selectedMeasurement}
+          onChange={(e) => setSelectedMeasurement(e.target.value)}
+          >
+            <option value="" disabled>
+              Select Measurement
+            </option>
+            {measurements.map((measurement) => (
+              <option key={measurement.id} value={measurement.measurement}>
+                {measurement.measurement}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+        <input
+          type="number"
+          placeholder="Amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+        />
+      </div>
+
+      <button onClick={handleAddToGroceryList}>Add to List</button>
+      <div className='groceries-list'>
+        <h2>Grocery List</h2>
+        <ul>
+          {groceryList.map((item, index) => (
+            <li key={index}>
+              {item.amount} {item.measurement} of {item.ingredient}
+            </li>
+          ))}
+        </ul>
+      </div>
         </div>
       );
     };

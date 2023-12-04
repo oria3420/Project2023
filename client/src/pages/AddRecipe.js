@@ -66,6 +66,7 @@ const AddRecipe = () => {
                 console.error(error);
             });
     }, []);
+    
 
     const handleCheckboxChange = (category, id, checked) => {
         setCheckedItems((prevCheckedItems) => ({
@@ -105,6 +106,7 @@ const AddRecipe = () => {
                     type="text"
                     value={recipeName}
                     onChange={(e) => setRecipeName(e.target.value)}
+                    required
                 />
                 </label>
 
@@ -123,6 +125,7 @@ const AddRecipe = () => {
                     type="time"
                     value={prepTime}
                     onChange={(e) => setPrepTime(e.target.value)}
+                    required
                 />
                 </label>
 
@@ -158,24 +161,28 @@ const AddRecipe = () => {
                 <textarea
                     value={recipeInstructions}
                     onChange={(e) => setRecipeInstructions(e.target.value)}
+                    required
                 />
                 </label>
 
                 {Object.entries(categories).map(([category, entries]) => (
                     <div key={category} className="checkbox-container">
-                    <label className="add-recipe-lable">{category+": "}</label>
-                    {entries.map(([id, tagName]) => (
-                    <label key={id} className="checkbox-label">
-                    <input
-                    type="checkbox"
-                    checked={checkedItems[category]?.[id] || false}
-                    onChange={(e) => handleCheckboxChange(category, id, e.target.checked)}
-                    />
-                    {tagName}
-                    </label>
-                ))}
+                      <label className="add-recipe-lable">{category}</label>
+                      {entries.map(([id, tagName]) => (
+                        <label key={id} className="checkbox-label">
+                          <input
+                            type="checkbox"
+                            checked={checkedItems[category]?.[id] || false}
+                            onChange={(e) => handleCheckboxChange(category, id, e.target.checked)}
+                            // Add required attribute only for Kosher Category
+                            required={category === 'kosher_categories'}
+                          />
+                          {tagName}
+                        </label>
+                      ))}
                     </div>
-                ))}
+                  ))}
+
                 <button type="submit">Submit</button>
             </form>
             )}

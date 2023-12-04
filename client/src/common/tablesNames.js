@@ -28,4 +28,5 @@ module.exports.TABLE_NAMES = {
     RECIPES_IMAGES: 'recipes_images',
     COMMENTS: 'comments',
     FAVORITES: 'favorites',
+    MEASUREMENTS: 'measurements',
   };
