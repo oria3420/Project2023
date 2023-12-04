@@ -78,6 +78,7 @@ const Groceries = () => {
       setSelectedIngredient('');
       setSelectedMeasurement('');
       setAmount('');
+      setSearchTerm('');
     }
   };
       return (
