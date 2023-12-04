@@ -180,3 +180,12 @@
 .category{
     margin-bottom: 10px;
 }
+
+.add-recipe-lable {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.form-container {
+    margin-top: 90px; /* Adjust the margin as needed */
+}
