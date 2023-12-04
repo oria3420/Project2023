@@ -88,7 +88,7 @@
     display: flex;
     flex-wrap: wrap;
     border-left: 1px solid #dad9d9;
-    padding-left: 30px;
+    padding-left: 20px;
 }
 
 .filter-menu::-webkit-scrollbar {
