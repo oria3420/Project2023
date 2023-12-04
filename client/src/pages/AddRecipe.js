@@ -48,18 +48,17 @@ const AddRecipe = () => {
                     checkedItems[category] = {};
                 });
                 setCategories(data);
-                for (const categoryKey in data) {
-                    if (Object.hasOwnProperty.call(data, categoryKey)) {
-                      const categoryEntries = data[categoryKey];
-                      console.log(`Category: ${categoryKey}`);
+                // for (const categoryKey in data) {
+                //     if (Object.hasOwnProperty.call(data, categoryKey)) {
+                //       const categoryEntries = data[categoryKey];
+                //       console.log(`Category: ${categoryKey}`);
                       
-                      for (const entry of categoryEntries) {
-                        const [id, name] = entry;
-                        console.log(`  Entry ID: ${id}, Name: ${name}`);
-                      }
-                    }
-                  }
-                  
+                //       for (const entry of categoryEntries) {
+                //         const [id, name] = entry;
+                //         console.log(`  Entry ID: ${id}, Name: ${name}`);
+                //       }
+                //     }
+                //   }
                 setExpandedCategories(expandedCategories);
                 setCheckedItems(checkedItems);
             })
@@ -68,10 +67,30 @@ const AddRecipe = () => {
             });
     }, []);
 
+    const handleCheckboxChange = (category, id, checked) => {
+        setCheckedItems((prevCheckedItems) => ({
+          ...prevCheckedItems,
+          [category]: {
+            ...(prevCheckedItems[category] || {}),
+            [id]: checked,
+          },
+        }));
+      };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // Implement logic to submit the form data (send to backend, etc.)
         // Access form data using state variables (recipeName, cookTime, ...)
+        console.log('Form Data:', {
+            recipeName,
+            cookTime,
+            prepTime,
+            description,
+            recipeServings,
+            recipeYield,
+            recipeInstructions,
+            checkedItems,
+          });
       };
 
     return (
@@ -141,6 +160,22 @@ const AddRecipe = () => {
                     onChange={(e) => setRecipeInstructions(e.target.value)}
                 />
                 </label>
+
+                {Object.entries(categories).map(([category, entries]) => (
+                    <div key={category} className="checkbox-container">
+                    <label className="add-recipe-lable">{category+": "}</label>
+                    {entries.map(([id, tagName]) => (
+                    <label key={id} className="checkbox-label">
+                    <input
+                    type="checkbox"
+                    checked={checkedItems[category]?.[id] || false}
+                    onChange={(e) => handleCheckboxChange(category, id, e.target.checked)}
+                    />
+                    {tagName}
+                    </label>
+                ))}
+                    </div>
+                ))}
                 <button type="submit">Submit</button>
             </form>
             )}
