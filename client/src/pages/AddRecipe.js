@@ -11,6 +11,7 @@ const AddRecipe = () => {
     const [recipeName, setRecipeName] = useState('');
     const [cookTime, setCookTime] = useState('00:00');
     const [prepTime, setPrepTime] = useState('00:00');
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [description, setDescription] = useState('');
     const [recipeServings, setRecipeServings] = useState(1);
     const [recipeYield, setRecipeYield] = useState('');
@@ -19,9 +20,7 @@ const AddRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [checkedItems, setCheckedItems] = useState({});
-
-
-    console.log(user)
+    const [measurements,setMeasurements] = useState([])
     
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -67,6 +66,16 @@ const AddRecipe = () => {
             });
     }, []);
     
+    useEffect(() => {
+        if(user){
+            fetch(`http://localhost:1337/api/measurements`)
+                .then(res => res.json())
+                .then(data => {
+                  setMeasurements(data)
+                })
+                .catch(error => console.error(error))
+        }
+    }, [user]);
 
     const handleCheckboxChange = (category, id, checked) => {
         setCheckedItems((prevCheckedItems) => ({
@@ -128,6 +137,7 @@ const AddRecipe = () => {
                     required
                 />
                 </label>
+
 
                 <label className='add-recipe-lable'>
                 Description:
