@@ -34,11 +34,11 @@
   /* Add some space between the icon and the text */
 }
 
-.logout-btn {
+.dropdown-menu-text {
   background-color: transparent;
   border: 0px;
   padding: 0px;
-  font-size: inherit;
+  font-size: 15px;
   cursor: pointer;
 }
 
@@ -70,8 +70,8 @@
 }
 
 .icon{
-  width: 18px;
-  height: 18px;
+  width: 1em; /* Set the width of the icon to 1em */
+    height: 1em; /* Set the height of the icon to 1em */
   margin-right: 10px;
 }
 
