@@ -1,102 +1,119 @@
-.our-navbar{
-    background-color:rgb(26, 26, 26);
-    height: 76px;
-    color: white !important;
-    font-weight: bold;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 999;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Add a shadow */
+@import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Lato&family=Poppins:wght@300&display=swap');
+
+.our-navbar {
+  background-color: rgb(26, 26, 26);
+  height: 76px;
+  color: white !important;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  /* Add a shadow */
+  font-family: 'Poppins', sans-serif;
+  /* font-size: 17px; */
 }
 
-.our-navbar span {
-    color: white;
-    font-weight: bold;
-}
-
-
-.logo-navbar{
-    width: 100px;
-    height: 40px;;
+.logo-navbar {
+  width: 100px;
+  height: 40px;
+  ;
 }
 
 
 .name-container {
-    display: flex; /* Set the container to use flexbox */
-    align-items: center; /* Center the items vertically */
-  }
-  
-  .name-container .bi {
-    margin-right: 8px; /* Add some space between the icon and the text */
-  }
+  display: flex;
+  /* Set the container to use flexbox */
+  align-items: center;
+  /* Center the items vertically */
+}
 
-.logout-btn {
-    background-color: transparent;
-    border: 0px;
-    padding: 0px;
-    font-size: inherit;
-    cursor: pointer;
+.name-container .bi {
+  margin-right: 8px;
+  /* Add some space between the icon and the text */
+}
+
+.dropdown-menu-text {
+  background-color: transparent;
+  border: 0px;
+  padding: 0px;
+  font-size: 15px;
+  cursor: pointer;
 }
 
 .dropdown-menu-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  .dropdown-menu[data-bs-popper] {
-    left: auto; /* Set left to "auto" to remove the left positioning */
-  }
+}
 
-  .dropdown-menu.dropdown-position {
-    position: absolute;
-    top: 100%; /* Position it just below the navbar */
-    right: 0; /* Adjust this if needed to align with the right edge of the navbar */
-    z-index: 1000; /* Adjust the z-index as needed to ensure it appears above other elements */
-  }
+.dropdown-menu[data-bs-popper] {
+  left: auto;
+  /* Set left to "auto" to remove the left positioning */
+}
 
-ul{
-    margin-left: 50%;
-  }
+.dropdown-menu.dropdown-position {
+  position: absolute;
+  top: 100%;
+  /* Position it just below the navbar */
+  right: 0;
+  /* Adjust this if needed to align with the right edge of the navbar */
+  z-index: 1000;
+  /* Adjust the z-index as needed to ensure it appears above other elements */
+}
 
-.navbar-text{
+.dropdown-menu-button{
+  display: flex;
+  align-items: center;
+}
+
+.icon{
+  width: 1em; /* Set the width of the icon to 1em */
+    height: 1em; /* Set the height of the icon to 1em */
+  margin-right: 10px;
+}
+
+ul {
+  margin-left: 50%;
+}
+
+.navbar-text {
   color: white;
 }
 
-.search-bar{
+.search-bar {
   width: 20%;
   position: sticky
 }
 
 .nutrition-table {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   margin-top: 20px;
-  color:#797979;
+  color: #797979;
 }
-
 
 .nutrition-field {
   padding: 5px 10px;
-  text-align: center; /* Center the text within each field */
-  width: 10%;
+  text-align: center;
+  word-break: break-all;
 }
+
 
 .nutrition-divider {
   border-left: 2px solid orange;
-  height: 50px; /* Adjust the height as needed */
-  margin: 0 10px; /* Adjust the margin for spacing */
+  margin: 0 5px;
+  /* Adjust the margin for spacing */
 }
 
-.field-value{
+.field-value {
   font-weight: bold;
   font-size: 25px;
 }
 
-.field-label{
+.field-label {
   font-size: 18px;
 }
 
@@ -105,25 +122,26 @@ ul{
   font-size: 35px;
 }
 
-.nutrition-container{
+.nutrition-container {
   margin-top: 80px;
 }
 
-.nutrition-icon{
+.nutrition-icon {
   width: 40px;
   height: 40px;
   margin-right: 15px;
 }
 
-.search-icon{
+.search-icon {
   color: rgb(0, 0, 0);
 }
 
 .search-input {
-  border-radius: 30px; /* Adjust the value as needed for your desired radius */
+  border-radius: 30px;
+  /* Adjust the value as needed for your desired radius */
 }
 
-.input-side{
+.input-side {
   background-color: rgb(255, 255, 255);
   border-radius: 30px;
 }
@@ -134,8 +152,10 @@ ul{
 }
 
 form-control:not(:focus) {
-  box-shadow: none; /* You may also set it to 'initial' if you want to reset it to default */
-  border: none; /* You may also set it to 'initial' if you want to reset it to default */
+  box-shadow: none;
+  /* You may also set it to 'initial' if you want to reset it to default */
+  border: none;
+  /* You may also set it to 'initial' if you want to reset it to default */
 }
 
 .search-input {

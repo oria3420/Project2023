@@ -20,9 +20,11 @@
   height: 100vh;
   /* Set the height of the container to full viewport height */
   background-image: url('../../../client/public/images/bg.png');
-  background-size: cover;
-  /* to resize the image to cover the entire element */
-  background-position: center;
+
+
+  background-size: cover; /* Cover the entire container */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat;
   }
 
 .form-connect {
