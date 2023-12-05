@@ -428,6 +428,68 @@ app.get('/api/measurements', async(req,res)=>{
   }
 });
 
+app.post('/api/addRecipe', (req, res) => {
+  const id = 1
+  const {              
+    recipeName,
+    selectedImage,
+    cookTime,
+    prepTime,
+    selectedCategory,
+    groceryList,
+    description,
+    recipeServings,
+    recipeYield,
+    recipeInstructions,
+    checkedItems,
+    name,
+    userId,} = req.body;
+  const parseTimeToDuration = (time) => {
+      if (!time) {
+        return '0S';
+      }
+      const [hours, minutes] = time.split(':');
+      let duration = '';
+      if (parseInt(hours, 10) > 0) {
+        duration += `${hours}H`;
+      }
+      if (parseInt(minutes, 10) > 0) {
+        duration += `${minutes}M`;
+      }
+      return duration;
+  };
+  const sumDurations = (duration1, duration2) => {
+      const [hours1, minutes1] = duration1.split(/[HM]/).filter(Boolean).map(Number);
+      const [hours2, minutes2] = duration2.split(/[HM]/).filter(Boolean).map(Number);
+    
+      const totalHours = hours1 + hours2;
+      const totalMinutes = minutes1 + minutes2;
+    
+      // Format the result as HH:mm
+      const formattedHours = String(totalHours).padStart(2, '0');
+      const formattedMinutes = String(totalMinutes).padStart(2, '0');
+    
+      return `${formattedHours}:${formattedMinutes}`;
+  };
+  const currentDate = new Date();
+  const datePublished = currentDate.toISOString();
+  const totalCookTime = sumDurations(cookTime, prepTime);
+  const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
+  Recipes.create({
+    recipeId:id,
+    Name:recipeName,
+    AuthorId:userId,
+    AuthorName:name,
+    CookTime: parseTimeToDuration(cookTime),
+    PrepTime: parseTimeToDuration(prepTime),
+    TotalTime: parseTimeToDuration(totalCookTime),
+    DatePublished: datePublished,
+    Description:description,
+    RecipeCategory:selectedCategory,
+    AggregatedRating:"0"
+  })
+});
+
 app.listen(1337, () => {
   console.log('Server saterted on 1337')
 })

@@ -28,6 +28,7 @@ const AddRecipe = () => {
     const [selectedMeasurement, setSelectedMeasurement] = useState('');
     const [amount, setAmount] = useState('');
     const [groceryList, setGroceryList] = useState([]);
+    const userId = user.email
     
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -157,7 +158,7 @@ const handleCheckboxChange = (category, id, checked) => {
     });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const kosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {});
         const isKosherCategoryValid = kosherCategoryIds.some(
@@ -196,6 +197,41 @@ const handleCheckboxChange = (category, id, checked) => {
         setRecipeInstructions('');
         setCheckedItems({});
         setGroceryList([]);
+
+        try {
+            const response = await fetch('http://localhost:1337/api/recipes', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                recipeName,
+                selectedImage,
+                cookTime,
+                prepTime,
+                selectedCategory,
+                groceryList,
+                description,
+                recipeServings,
+                recipeYield,
+                recipeInstructions,
+                checkedItems,
+                name,
+                userId,
+              }),
+            });
+        
+            if (response.ok) {
+              const result = await response.json();
+              console.log(result); // Recipe successfully added
+            } else {
+              console.error(`HTTP Error: ${response.status}`);
+              // Handle error response
+            }
+          } catch (error) {
+            console.error(error);
+            // Handle fetch error (e.g., network error)
+          }
         };
 
     return (

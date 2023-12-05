@@ -138,7 +138,7 @@ const RecipePage = () => {
               <div className='description-details'>
                 <p>
                   <span className="bold-text">Servings: </span>
-                  <span> {capitalizeFirstLetter(recipe.RecipeServings)}</span>
+                  <span> {recipe.RecipeServings}</span>
                 </p>
                 <p>
                   <span className="bold-text">Kosher: </span>
