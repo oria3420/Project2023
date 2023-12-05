@@ -9,6 +9,7 @@ const AddRecipe = () => {
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
     const [recipeName, setRecipeName] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
     const [cookTime, setCookTime] = useState('00:00');
     const [prepTime, setPrepTime] = useState('00:00');
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -17,11 +18,8 @@ const AddRecipe = () => {
     const [recipeYield, setRecipeYield] = useState('');
     const [recipeInstructions, setRecipeInstructions] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
     const [categories, setCategories] = useState([]);
-    const [expandedCategories, setExpandedCategories] = useState({});
     const [checkedItems, setCheckedItems] = useState({});
-
     const [ingredients,setIngredients] = useState([])
     const [measurements,setMeasurements] = useState([])
     const [searchTerm, setSearchTerm] = useState('');
@@ -52,7 +50,7 @@ const AddRecipe = () => {
                 const expandedCategories = {};
                 const checkedItems = {};
                 Object.keys(data).forEach(category => {
-                    expandedCategories[category] = false;
+                    //expandedCategories[category] = false;
                     checkedItems[category] = {};
                 });
                 setCategories(data);
@@ -67,7 +65,7 @@ const AddRecipe = () => {
                 //       }
                 //     }
                 //   }
-                setExpandedCategories(expandedCategories);
+                //setExpandedCategories(expandedCategories);
                 setCheckedItems(checkedItems);
             })
             .catch(error => {
@@ -108,73 +106,72 @@ const AddRecipe = () => {
         } else {
           setFilteredIngredients([]);
         }
-      }, [searchTerm, ingredients]);
+    }, [searchTerm, ingredients]);
+    
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        setSelectedImage(file);
+    };
 
-      const handleAddToGroceryList = () => {
-        if (selectedIngredient && selectedMeasurement && amount) {
-          const newItem = {
-            ingredient: selectedIngredient,
-            measurement: selectedMeasurement,
-            amount: amount,
-          };
-          setGroceryList([...groceryList, newItem]);
-          // Clear the input fields after adding to the list
-          setSelectedIngredient('');
-          setSelectedMeasurement('');
-          setAmount('');
-          setSearchTerm('');
+    const handleAddToGroceryList = () => {
+    if (selectedIngredient && selectedMeasurement && amount) {
+        const newItem = {
+        ingredient: selectedIngredient,
+        measurement: selectedMeasurement,
+        amount: amount,
+        };
+        setGroceryList([...groceryList, newItem]);
+        // Clear the input fields after adding to the list
+        setSelectedIngredient('');
+        setSelectedMeasurement('');
+        setAmount('');
+        setSearchTerm('');
+    }
+    };
+
+const handleCheckboxChange = (category, id, checked) => {
+    setCheckedItems((prevCheckedItems) => {
+        const newCheckedItems = {
+        ...prevCheckedItems,
+        [category]: {
+            ...(prevCheckedItems[category] || {}),
+            [id]: checked,
+        },
+        };
+    
+        // If the category is kosher_categories, enforce exactly one checkbox
+        if (category === 'kosher_categories') {
+        const kosherCategoryIds = Object.keys(newCheckedItems[category]);
+        const numChecked = kosherCategoryIds.reduce(
+            (count, checkboxId) => (newCheckedItems[category][checkboxId] ? count + 1 : count),
+            0
+        );
+    
+        // If more than one checkbox is checked, uncheck the current one
+        if (numChecked > 1) {
+            newCheckedItems[category][id] = false;
         }
-      };
-
-    const handleCheckboxChange = (category, id, checked) => {
-        setCheckedItems((prevCheckedItems) => {
-          const newCheckedItems = {
-            ...prevCheckedItems,
-            [category]: {
-              ...(prevCheckedItems[category] || {}),
-              [id]: checked,
-            },
-          };
-      
-          // If the category is kosher_categories, enforce exactly one checkbox
-          if (category === 'kosher_categories') {
-            const kosherCategoryIds = Object.keys(newCheckedItems[category]);
-            const numChecked = kosherCategoryIds.reduce(
-              (count, checkboxId) => (newCheckedItems[category][checkboxId] ? count + 1 : count),
-              0
-            );
-      
-            // If more than one checkbox is checked, uncheck the current one
-            if (numChecked > 1) {
-              newCheckedItems[category][id] = false;
-            }
-          }
-      
-          return newCheckedItems;
-        });
-      };
-      
+        }
+    
+        return newCheckedItems;
+    });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-          // Check if at least one checkbox is selected in kosher_categories
         const kosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {});
         const isKosherCategoryValid = kosherCategoryIds.some(
             (checkboxId) => checkedItems['kosher_categories'][checkboxId]
         );
 
         if (!isKosherCategoryValid) {
-            // Set an error message for kosher_categories validation
             setErrorMessage('Please select at least one checkbox in kosher_categories');
             return;
         }
-
-        // Reset error message if validation passes
         setErrorMessage('');
-        // Implement logic to submit the form data (send to backend, etc.)
-        // Access form data using state variables (recipeName, cookTime, ...)
         console.log('Form Data:', {
             recipeName,
+            selectedImage,
             cookTime,
             prepTime,
             selectedCategory,
@@ -185,7 +182,21 @@ const AddRecipe = () => {
             recipeInstructions,
             checkedItems,
         });
-    };
+        setRecipeName('');
+        setSelectedImage(null);
+        setCookTime('00:00');
+        setPrepTime('00:00');
+        setSelectedCategory('');
+        setSearchTerm('');
+        setSelectedMeasurement('');
+        setAmount('');
+        setDescription('');
+        setRecipeServings(1);
+        setRecipeYield('');
+        setRecipeInstructions('');
+        setCheckedItems({});
+        setGroceryList([]);
+        };
 
     return (
         <div>
@@ -197,10 +208,19 @@ const AddRecipe = () => {
                 Recipe Name:
                 <input
                     type="text"
-                    value={recipeName}
+                    value={recipeName || ''}
                     onChange={(e) => setRecipeName(e.target.value)}
                     required
                 />
+                </label>
+
+                <label className='add-recipe-lable'>
+                    Recipe Image:
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                    />
                 </label>
 
                 <label className='add-recipe-lable'>
@@ -319,7 +339,7 @@ const AddRecipe = () => {
                 <input
                     type="number"
                     value={recipeServings}
-                    onChange={(e) => setRecipeServings(Math.max(0, parseInt(e.target.value, 10)))}
+                    onChange={(e) => setRecipeServings(Math.max(0, parseInt(e.target.value, 100)))}
                     min="0"
                 />
                 </label>
