@@ -28,7 +28,7 @@ const AddRecipe = () => {
     const [selectedMeasurement, setSelectedMeasurement] = useState('');
     const [amount, setAmount] = useState('');
     const [groceryList, setGroceryList] = useState([]);
-    const userId = user.email
+    const [userId,setUserId] = useState('')
     
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -36,6 +36,7 @@ const AddRecipe = () => {
             const _user = jwt_decode(token)
             setName(_user.name)
             setUser(_user)
+            setUserId(_user.email)
             if (!_user) {
                 localStorage.removeItem('token')
                 navigate.replace('/login')
@@ -183,30 +184,31 @@ const handleCheckboxChange = (category, id, checked) => {
             recipeInstructions,
             checkedItems,
         });
-        setRecipeName('');
-        setSelectedImage(null);
-        setCookTime('00:00');
-        setPrepTime('00:00');
-        setSelectedCategory('');
-        setSearchTerm('');
-        setSelectedMeasurement('');
-        setAmount('');
-        setDescription('');
-        setRecipeServings(1);
-        setRecipeYield('');
-        setRecipeInstructions('');
-        setCheckedItems({});
-        setGroceryList([]);
-
+        // setRecipeName('');
+        // setSelectedImage(null);
+        // setCookTime('00:00');
+        // setPrepTime('00:00');
+        // setSelectedCategory('');
+        // setSearchTerm('');
+        // setSelectedMeasurement('');
+        // setAmount('');
+        // setDescription('');
+        // setRecipeServings(1);
+        // setRecipeYield('');
+        // setRecipeInstructions('');
+        // setCheckedItems({});
+        // setGroceryList([]);
+        const formData = new FormData();
+        formData.append('selectedImage', selectedImage);
         try {
-            const response = await fetch('http://localhost:1337/api/recipes', {
+            const response = await fetch('http://localhost:1337/api/addRecipe', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
                 recipeName,
-                selectedImage,
+                formData,
                 cookTime,
                 prepTime,
                 selectedCategory,
@@ -375,7 +377,7 @@ const handleCheckboxChange = (category, id, checked) => {
                 <input
                     type="number"
                     value={recipeServings}
-                    onChange={(e) => setRecipeServings(Math.max(0, parseInt(e.target.value, 100)))}
+                    onChange={(e) => setRecipeServings(e.target.value)}
                     min="0"
                 />
                 </label>

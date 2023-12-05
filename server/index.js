@@ -285,22 +285,7 @@ app.get('/api/recipes_categories', async (req, res) => {
   }
 });
 
-app.get('/api/popular_recipes', async (req, res) => {
-  try {
-    const collections = await mongoose.connection.db.listCollections().toArray();
-    const filteredCollections = collections.filter(collection => /^(?!recipe).*categories$/.test(collection.name));
-    const result = {};
-    for (const collection of filteredCollections) {
-      const documents = await mongoose.connection.db.collection(collection.name).find().toArray();
-      const values = documents.map(doc => Object.values(doc)[2]);
-      result[collection.name] = values;
-    }
-    res.json(result);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Internal Server Error');
-  }
-});
+
 
 app.get('/api/recipes/images/:recipeId', async (req, res) => {
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
@@ -428,7 +413,10 @@ app.get('/api/measurements', async(req,res)=>{
   }
 });
 
-app.post('/api/addRecipe', (req, res) => {
+app.post('/api/addRecipe', async (req, res) => {
+  const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
+  const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
+  const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const id = 1
   const {              
     recipeName,
@@ -444,50 +432,88 @@ app.post('/api/addRecipe', (req, res) => {
     checkedItems,
     name,
     userId,} = req.body;
-  const parseTimeToDuration = (time) => {
-      if (!time) {
-        return '0S';
-      }
-      const [hours, minutes] = time.split(':');
-      let duration = '';
-      if (parseInt(hours, 10) > 0) {
-        duration += `${hours}H`;
-      }
-      if (parseInt(minutes, 10) > 0) {
-        duration += `${minutes}M`;
-      }
-      return duration;
+  const parseTimeToDuration = (timeString) => {
+    const [hours, minutes] = timeString.split(':').map(Number);
+
+    let duration = '';
+    if (hours > 0) {
+      duration += hours.toString() + 'H';
+    }
+  
+    if (minutes > 0) {
+      duration += minutes.toString() + 'M';
+    }
+  
+    return duration || '0S';
   };
-  const sumDurations = (duration1, duration2) => {
-      const [hours1, minutes1] = duration1.split(/[HM]/).filter(Boolean).map(Number);
-      const [hours2, minutes2] = duration2.split(/[HM]/).filter(Boolean).map(Number);
-    
-      const totalHours = hours1 + hours2;
-      const totalMinutes = minutes1 + minutes2;
-    
-      // Format the result as HH:mm
-      const formattedHours = String(totalHours).padStart(2, '0');
-      const formattedMinutes = String(totalMinutes).padStart(2, '0');
-    
-      return `${formattedHours}:${formattedMinutes}`;
+  const sumDurations = (duration1, duration2) => {;
+    const [hours1 = 0, minutes1 = 0] = duration1.match(/\d+/g).map(Number);
+    const [hours2 = 0, minutes2 = 0] = duration2.match(/\d+/g).map(Number);
+  
+    const totalHours = hours1 + hours2;
+    const totalMinutes = minutes1 + minutes2;
+  
+    // Format the result as HH:mm
+    const formattedHours = String(totalHours).padStart(2, '0');
+    const formattedMinutes = String(totalMinutes).padStart(2, '0');
+  
+    return `${formattedHours}:${formattedMinutes}`;
   };
   const currentDate = new Date();
+  let kosherWord;
   const datePublished = currentDate.toISOString();
   const totalCookTime = sumDurations(cookTime, prepTime);
-  const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
-  Recipes.create({
-    recipeId:id,
-    Name:recipeName,
-    AuthorId:userId,
-    AuthorName:name,
-    CookTime: parseTimeToDuration(cookTime),
-    PrepTime: parseTimeToDuration(prepTime),
-    TotalTime: parseTimeToDuration(totalCookTime),
-    DatePublished: datePublished,
-    Description:description,
-    RecipeCategory:selectedCategory,
-    AggregatedRating:"0"
-  })
+  // Extract the true value from kosherCategories
+  const checkedKosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {}).filter(
+    (checkboxId) => checkedItems['kosher_categories'][checkboxId]
+  );
+  // Ensure there's at least one true value
+  if (checkedKosherCategoryIds.length === 0) {
+    res.status(400).json({ error: 'Please select a kosher category' });
+    return;
+  }
+  const kosherCategoryId = checkedKosherCategoryIds[0];
+  try {
+    // Find the corresponding kosher word in the Kosher table
+    kosherWord = await KosherT.findOne({id: parseInt(kosherCategoryId)});
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+  
+  // Recipes.create({
+  //   RecipeId:1,
+  //   Name:recipeName,
+  //   AuthorId:userId,
+  //   AuthorName:name,
+  //   CookTime: parseTimeToDuration(cookTime),
+  //   PrepTime: parseTimeToDuration(prepTime),
+  //   TotalTime: parseTimeToDuration(totalCookTime),
+  //   DatePublished: datePublished,
+  //   Description:description,
+  //   RecipeCategory:selectedCategory,
+  //   AggregatedRating: 0,
+  //   ReviewCount: 0,
+  //   Calories:0,
+  //   FatContent:0,
+  //   SaturatedFatContent:0,
+  //   CholesterolContent:0,
+  //   SodiumContent:0,
+  //   CarbohydrateContent:0,
+  //   FiberContent:0,
+  //   SugarContent:0,
+  //   ProteinContent:0,
+  //   RecipeServings:recipeServings,
+  //   RecipeYield:recipeYield,
+  //   RecipeInstructions:recipeInstructions,
+  //   Kosher:kosherWord.kosher,
+  // })
+/*image doesnt work */
+  // Image.create({
+  //   recipe_ID:id,
+  //   image_link:selectedImage,
+  // })
 });
 
 app.listen(1337, () => {
