@@ -21,7 +21,15 @@ const AddRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [checkedItems, setCheckedItems] = useState({});
+
+    const [ingredients,setIngredients] = useState([])
     const [measurements,setMeasurements] = useState([])
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredIngredients, setFilteredIngredients] = useState([]);
+    const [selectedIngredient, setSelectedIngredient] = useState('');
+    const [selectedMeasurement, setSelectedMeasurement] = useState('');
+    const [amount, setAmount] = useState('');
+    const [groceryList, setGroceryList] = useState([]);
     
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -66,6 +74,17 @@ const AddRecipe = () => {
                 console.error(error);
             });
     }, []);
+
+    useEffect(() => {
+        if(user){
+            fetch(`http://localhost:1337/api/groceries`)
+                .then(res => res.json())
+                .then(data => {
+                    setIngredients(data)
+                })
+                .catch(error => console.error(error))
+        }
+    }, [user]);
     
     useEffect(() => {
         if(user){
@@ -77,6 +96,35 @@ const AddRecipe = () => {
                 .catch(error => console.error(error))
         }
     }, [user]);
+
+    useEffect(() => {
+        if (searchTerm.length >= 3) {
+          const filtered = ingredients.filter((ingred) =>
+            ingred && ingred.ingredient
+              ? ingred.ingredient.toLowerCase().includes(searchTerm.toLowerCase())
+              : false
+          );
+          setFilteredIngredients(filtered);
+        } else {
+          setFilteredIngredients([]);
+        }
+      }, [searchTerm, ingredients]);
+
+      const handleAddToGroceryList = () => {
+        if (selectedIngredient && selectedMeasurement && amount) {
+          const newItem = {
+            ingredient: selectedIngredient,
+            measurement: selectedMeasurement,
+            amount: amount,
+          };
+          setGroceryList([...groceryList, newItem]);
+          // Clear the input fields after adding to the list
+          setSelectedIngredient('');
+          setSelectedMeasurement('');
+          setAmount('');
+          setSearchTerm('');
+        }
+      };
 
     const handleCheckboxChange = (category, id, checked) => {
         setCheckedItems((prevCheckedItems) => {
@@ -130,6 +178,7 @@ const AddRecipe = () => {
             cookTime,
             prepTime,
             selectedCategory,
+            groceryList,
             description,
             recipeServings,
             recipeYield,
@@ -173,28 +222,89 @@ const AddRecipe = () => {
                 />
                 </label>
 
-                <label>
+                <label className='add-recipe-lable'>
                 Category:
                 <select
-                  className='add-recipe-lable'
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  required
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                required
                 >
-                  <option value="" disabled>
+                <option value="" disabled>
                     Select Category
-                  </option>
-                  {Object.entries(categories).map(([category, entries]) => (
+                </option>
+                {Object.entries(categories).map(([category, entries]) => (
                     entries.map(([id, tagName]) => (
-                      <option key={id} value={tagName}>
+                    <option key={id} value={tagName}>
                         {tagName}
-                      </option>
+                    </option>
                     ))
                   ))}
                 </select>
-              </label>
-              
-              
+                </label>
+
+                <label className='add-recipe-lable'>
+                    Ingredients:
+                    <div className="custom-dropdown">
+                    <input
+                    type="text"
+                    placeholder="Search ingredients..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                    {searchTerm.length >= 3 && (
+                    <div className="dropdown-ingredient">
+                    {filteredIngredients.map((ingredient) => (
+                        <div
+                        key={ingredient.id}
+                        className="dropdown-item"
+                        onClick={() => {
+                        setSearchTerm(ingredient.ingredient);
+                        setSelectedIngredient(ingredient.ingredient);
+                        }}
+                    >
+                    {ingredient.ingredient}
+                    </div>
+                    ))}
+                </div>
+                )}
+                    </div>
+                    <div className="custom-dropdown">
+                    <select
+                    className='select-measurements'
+                    value={selectedMeasurement}
+                    onChange={(e) => setSelectedMeasurement(e.target.value)}
+                    >
+                      <option value="" disabled>
+                        Select Measurement
+                      </option>
+                      {measurements.map((measurement) => (
+                        <option key={measurement.id} value={measurement.measurement}>
+                          {measurement.measurement}
+                        </option>
+                      ))}
+                    </select>
+                    </div>
+                    <div>
+                    <input
+                    type="number"
+                    placeholder="Amount"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    />
+                    </div>
+                    <button onClick={handleAddToGroceryList}>Add to List</button>
+                    <div className='groceries-list'>
+                    {groceryList.length > 0 && <h2>Ingredients List</h2>}
+                    <ul>
+                      {groceryList.map((item, index) => (
+                        <li key={index}>
+                          {item.amount} {item.measurement} of {item.ingredient}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                </label>
 
                 <label className='add-recipe-lable'>
                 Description:
@@ -242,7 +352,6 @@ const AddRecipe = () => {
                             type="checkbox"
                             checked={checkedItems[category]?.[id] || false}
                             onChange={(e) => handleCheckboxChange(category, id, e.target.checked)}
-                            // Add required attribute only for Kosher Category
                         />
                         {tagName}
                         </label>
