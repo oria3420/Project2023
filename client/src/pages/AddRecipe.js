@@ -16,6 +16,7 @@ const AddRecipe = () => {
     const [recipeServings, setRecipeServings] = useState(1);
     const [recipeYield, setRecipeYield] = useState('');
     const [recipeInstructions, setRecipeInstructions] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
@@ -78,30 +79,64 @@ const AddRecipe = () => {
     }, [user]);
 
     const handleCheckboxChange = (category, id, checked) => {
-        setCheckedItems((prevCheckedItems) => ({
-          ...prevCheckedItems,
-          [category]: {
-            ...(prevCheckedItems[category] || {}),
-            [id]: checked,
-          },
-        }));
+        setCheckedItems((prevCheckedItems) => {
+          const newCheckedItems = {
+            ...prevCheckedItems,
+            [category]: {
+              ...(prevCheckedItems[category] || {}),
+              [id]: checked,
+            },
+          };
+      
+          // If the category is kosher_categories, enforce exactly one checkbox
+          if (category === 'kosher_categories') {
+            const kosherCategoryIds = Object.keys(newCheckedItems[category]);
+            const numChecked = kosherCategoryIds.reduce(
+              (count, checkboxId) => (newCheckedItems[category][checkboxId] ? count + 1 : count),
+              0
+            );
+      
+            // If more than one checkbox is checked, uncheck the current one
+            if (numChecked > 1) {
+              newCheckedItems[category][id] = false;
+            }
+          }
+      
+          return newCheckedItems;
+        });
       };
+      
 
     const handleSubmit = (e) => {
         e.preventDefault();
+          // Check if at least one checkbox is selected in kosher_categories
+        const kosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {});
+        const isKosherCategoryValid = kosherCategoryIds.some(
+            (checkboxId) => checkedItems['kosher_categories'][checkboxId]
+        );
+
+        if (!isKosherCategoryValid) {
+            // Set an error message for kosher_categories validation
+            setErrorMessage('Please select at least one checkbox in kosher_categories');
+            return;
+        }
+
+        // Reset error message if validation passes
+        setErrorMessage('');
         // Implement logic to submit the form data (send to backend, etc.)
         // Access form data using state variables (recipeName, cookTime, ...)
         console.log('Form Data:', {
             recipeName,
             cookTime,
             prepTime,
+            selectedCategory,
             description,
             recipeServings,
             recipeYield,
             recipeInstructions,
             checkedItems,
-          });
-      };
+        });
+    };
 
     return (
         <div>
@@ -138,6 +173,28 @@ const AddRecipe = () => {
                 />
                 </label>
 
+                <label>
+                Category:
+                <select
+                  className='add-recipe-lable'
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  required
+                >
+                  <option value="" disabled>
+                    Select Category
+                  </option>
+                  {Object.entries(categories).map(([category, entries]) => (
+                    entries.map(([id, tagName]) => (
+                      <option key={id} value={tagName}>
+                        {tagName}
+                      </option>
+                    ))
+                  ))}
+                </select>
+              </label>
+              
+              
 
                 <label className='add-recipe-lable'>
                 Description:
@@ -174,10 +231,11 @@ const AddRecipe = () => {
                     required
                 />
                 </label>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
 
                 {Object.entries(categories).map(([category, entries]) => (
                     <div key={category} className="checkbox-container">
-                      <label className="add-recipe-lable">{category}</label>
+                      <label className="add-recipe-lable">{category+":"}</label>
                       {entries.map(([id, tagName]) => (
                         <label key={id} className="checkbox-label">
                           <input
@@ -185,9 +243,8 @@ const AddRecipe = () => {
                             checked={checkedItems[category]?.[id] || false}
                             onChange={(e) => handleCheckboxChange(category, id, e.target.checked)}
                             // Add required attribute only for Kosher Category
-                            required={category === 'kosher_categories'}
-                          />
-                          {tagName}
+                        />
+                        {tagName}
                         </label>
                       ))}
                     </div>
@@ -202,3 +259,4 @@ const AddRecipe = () => {
 }
 
 export default AddRecipe
+
