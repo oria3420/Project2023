@@ -11,7 +11,10 @@ function WelcomePage() {
     window.location.href = "/login";
   }
 
-
+  function redirectToGuest() {
+    localStorage.setItem('token', "0")
+    window.location.href = "/search_recipe";
+  }
   return (
     <div className="welcome-body">
 
@@ -33,6 +36,7 @@ function WelcomePage() {
           <div className='buttons-container'>
             <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Login" onClick={redirectToLogin} />
             <input id="btn-register-welcome" className="btn btn-primary" type="button" value="Register" onClick={redirectToRegister} />
+            <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Guest" onClick={redirectToGuest} />
           </div>
         </div>
       </div>

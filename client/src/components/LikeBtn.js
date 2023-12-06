@@ -82,7 +82,8 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
           )}
         </div>
       </div>
-      <GuestrModal
+      <GuestrModal 
+      component={"like"}
       showModal={showModal}
       onClose={() => setShowModal(false)}
     />
@@ -102,6 +103,7 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
       )}
     </div>
     <GuestrModal
+    component={"like"}
     showModal={showModal}
     onClose={() => setShowModal(false)}
   />

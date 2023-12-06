@@ -16,7 +16,7 @@ const RecipePage = () => {
   let user_name
   let user_id
   const location = useLocation();
-  console.log(location)
+  //console.log(location)
 if(location.state !== null){
   user_name = location.state.name;
   user_id = location.state.user_id;

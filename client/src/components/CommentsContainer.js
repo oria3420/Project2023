@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 import './CommentsContainer.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import GuestrModal from './GuestModal'; 
 
 const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
+
 
     const handleChange = (e) => {
         setNewComment(e.target.value);
@@ -15,7 +18,15 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         }
     };
 
+    const handleGuestClick = () => {
+        setShowModal(true);
+      };
+
     const handleSubmit = async () => {
+        if(user_id === "0"){
+            handleGuestClick();
+            return;
+        }
         const trimmedComment = newComment.trim();
         if (trimmedComment === '') {
             setErrorMessage('Please enter a non-empty comment.');
@@ -144,6 +155,11 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                     <span id="no-comment-second">Be the first to comment!</span>
                 </div>
             )}
+            <GuestrModal
+            component={"comment"}
+            showModal={showModal}
+            onClose={() => setShowModal(false)}
+          />
         </div>
     );
 };
