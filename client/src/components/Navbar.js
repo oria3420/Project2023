@@ -37,7 +37,7 @@ const Navbar = ({ name }) => {
                     Recipes
                 </div>
                 <div className='navbar-text nevigate' onClick={trending}>
-                    Trending
+                    Popular this Week
                 </div>
                 <div className='navbar-text nevigate' onClick={groceries}>
                     Groceries at Home
