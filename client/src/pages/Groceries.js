@@ -9,7 +9,6 @@ const Groceries = () => {
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
     const [ingredients,setIngredients] = useState([])
-    const [measurements,setMeasurements] = useState([])
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredIngredients, setFilteredIngredients] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState('');
