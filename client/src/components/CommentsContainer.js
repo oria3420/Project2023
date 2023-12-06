@@ -23,7 +23,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
       };
 
     const handleSubmit = async () => {
-        if(user_id === "0"){
+        if(user_id === "Guest"){
             handleGuestClick();
             return;
         }
@@ -156,7 +156,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                 </div>
             )}
             <GuestrModal
-            component={"comment"}
+            message={'To comment the recipe, please login or register'}
             showModal={showModal}
             onClose={() => setShowModal(false)}
           />

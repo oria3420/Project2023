@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'
 
-const GuestrModal = ({ showModal, onClose,component }) => {
+const GuestrModal = ({ showModal, onClose,message }) => {
     const navigate = useNavigate()
 
     const handleLogin = () => {
@@ -27,7 +27,7 @@ const GuestrModal = ({ showModal, onClose,component }) => {
                 <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
               </div>
               <div className="modal-body">
-                <p>To {component} the recipe, please login or register.</p>
+                <p>{message}.</p>
               </div>
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" onClick={handleLogin}>

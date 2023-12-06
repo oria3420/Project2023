@@ -24,8 +24,8 @@ console.log(user_name)
 console.log(user_id)
 }
 else{
-  user_name = "guest"
-  user_id = "0"
+  user_name = "Guest"
+  user_id = "Guest"
 }
 
 

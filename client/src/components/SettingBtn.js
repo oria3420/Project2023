@@ -6,7 +6,7 @@ const SettingBtn = () => {
 
     const setting = (event) => {
         event.preventDefault()
-        navigate('/setting')
+        //navigate('/setting')
     }
 
     return (

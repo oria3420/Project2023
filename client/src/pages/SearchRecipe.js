@@ -23,16 +23,25 @@ const SearchRecipe = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const token = localStorage.getItem('token')
+        const token = localStorage.getItem('token');
         if (token) {
-            const _user = jwt_decode(token)
-            setName(_user.name)
-            setUser(_user)
-            if (!_user) {
-                localStorage.removeItem('token')
-                navigate.replace('/login')
+            try {
+              const _user = jwt_decode(token);
+              // Handle user or guest based on your logic
+              setName(_user.name);
+              setUser(_user);
+            } catch (error) {
+              // Handle token decoding error
+              setName('Guest');
+              setUser(null);
+              console.error('Error decoding token:', error);
+              // You might want to redirect to login or handle the error in some way
             }
-        }
+          } else {
+            // Handle the case where there's no token (e.g., guest user)
+            setName('Guest');
+            setUser(null); // Set user to null or handle guest user data
+          }
     }, [navigate])
 
 
@@ -164,7 +173,7 @@ const SearchRecipe = () => {
     useEffect(() => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
-
+console.log(name)
 
     return (
         <div>

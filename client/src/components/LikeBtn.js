@@ -12,9 +12,6 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
   };
 
   useEffect(() => {
-    if (userEmail === "0") {
-      return;
-    }
     const getLikes = async () => {
       try {
         const response = await fetch(`http://localhost:1337/api/favorites/${recipeId}/${userEmail}`, {
@@ -46,7 +43,7 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
 
   const handleHeartClick = async () => {
     // Check if userEmail is "0" and show a message to the user
-    if (userEmail === "0") {
+    if (userEmail === "Guest") {
       handleGuestClick();
       return;
     }
@@ -83,7 +80,7 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
         </div>
       </div>
       <GuestrModal 
-      component={"like"}
+      message={'To like the recipe, please login or register'}
       showModal={showModal}
       onClose={() => setShowModal(false)}
     />
@@ -103,7 +100,7 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
       )}
     </div>
     <GuestrModal
-    component={"like"}
+    message={'To like the recipe, please login or register'}
     showModal={showModal}
     onClose={() => setShowModal(false)}
   />

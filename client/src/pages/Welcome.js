@@ -12,7 +12,7 @@ function WelcomePage() {
   }
 
   function redirectToGuest() {
-    localStorage.setItem('token', "0")
+    localStorage.setItem('guestUser', 'true');
     window.location.href = "/search_recipe";
   }
   return (
