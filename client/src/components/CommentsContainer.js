@@ -7,6 +7,13 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedImage(file);
+    };
+    
 
     const handleChange = (e) => {
         setNewComment(e.target.value);
@@ -27,21 +34,29 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
     const handleCommentSubmit = async () => {
         try {
+            const formData = new FormData();
+            formData.append('comment_text', newComment);
+            formData.append('recipe_id', id);
+            formData.append('user_id', user_id);
+            formData.append('user_name', user_name);
+            formData.append('image', selectedImage);
+            
+            console.log(formData)
             const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ comment_text: newComment, recipe_id: id, user_id, user_name }),
+                body: new FormData(),
             });
+    
             const result = await response.json();
-            console.log(result)
+            console.log(result);
             setComments([...comments, result.newComment]);
             setNewComment('');
+            setSelectedImage(null); // Reset selected image after submission
         } catch (error) {
             console.error('Error submitting comment:', error);
         }
     };
+    
 
 
     useEffect(() => {
@@ -109,9 +124,18 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                         {errorMessage && <div className="empty-comment-error-msg">{errorMessage}</div>}
                     </div>
 
-                    <button className='submit-btn' onClick={handleSubmit}>
-                        <i className="bi bi-send"></i>
-                    </button>
+                    <div className="button-container">
+
+                        <label className='add-image-btn'>
+                            <input type='file' accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+                            <i className="bi bi-image"></i>
+                        </label>
+
+                        <button className='submit-btn' onClick={handleSubmit}>
+                            <i className="bi bi-send"></i>
+                        </button>
+
+                    </div>
                 </div>
             </div>
 

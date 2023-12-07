@@ -1,141 +1,156 @@
 :root {
   --comment-margin: 55px;
-  --icon-color:  rgba(182, 119, 2, 0.875);
+  --icon-color: rgba(182, 119, 2, 0.875);
 }
 
 .comments-container {
-    margin-top: 90px;
-    width: 65%;
-  }
-  
-  .comment-line{
-    width: 100%;
-  }
-  
-  .comment {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .comment-title{
-    margin-top: 25px;
-    font-weight: bold;
-    font-size: 24px;
-  }
-  
-  .comment-count{
-    margin-top: 20px;
-    font-weight: bold;
-    font-size: 18px;
-  }
-  
-  .user-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  #user-icon {
-    margin-right: 15px;
-    font-size: 40px;
-    color: var(--icon-color);
-  }
-  
-  #user-name{
-    font-weight: bold;
-  }
-  
-  .comment-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  #comment-date {
-    margin-left: auto;
-    font-size: 15px;
-  }
-  
-  #comment-text {
-    margin-left: var(--comment-margin);
-    width: 90%;
-    word-wrap: break-word;
-  }
-  
-  .no-comments-container {
-    align-items: center;
-    justify-content: center;
-    height: 100px;
-  }
-  
-  .no-comments-container span {
-    text-align: center;
-    display: block;
-  }
-  
-  #no-comment-first{
-    margin-top: 55px;
-    font-weight: bold;
-    font-size: 18px;
-  }
+  margin-top: 90px;
+  width: 65%;
+}
 
-  .comment-input-container {
-    flex-grow: 1; /* Take up remaining space in the flex container */
-  }
-  
-  .comment-input:focus {
-    border: 2px solid #efc2af;
-  }
-  
-  textarea {
-    resize: none;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .new-comment {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-  }
-  
-  .submit-btn {
-    width: 40px; /* Adjust the width and height to make it a perfect circle */
-    height: 40px;
-    background-color: var(--icon-color);
-    color: white;
-    border: none;
-    border-radius: 50%; /* Make it a rounded circle */
-    font-size: 17px;
-    cursor: pointer;
-    outline: none;
-    display: flex; /* Enable flex properties */
-    align-items: center; /* Center the icon vertically */
-    justify-content: center; /* Center the icon horizontally */
-    align-self: flex-end; /* Align the button to the right within its container */
-  }
-  
-  /* Hover effect for the button */
-  .submit-btn:hover {
-    background-color: #ff8c66;
-  }
-  
-  .new-comment-container{
-    margin-top: 10px;
-  }
+.comment-line {
+  width: 100%;
+}
+
+.comment {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.comment-title {
+  margin-top: 25px;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.comment-count {
+  margin-top: 20px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.user-container {
+  display: flex;
+  align-items: center;
+}
+
+#user-icon {
+  margin-right: 15px;
+  font-size: 40px;
+  color: var(--icon-color);
+}
+
+#user-name {
+  font-weight: bold;
+}
+
+.comment-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+#comment-date {
+  margin-left: auto;
+  font-size: 15px;
+}
+
+#comment-text {
+  margin-left: var(--comment-margin);
+  width: 90%;
+  word-wrap: break-word;
+}
+
+.no-comments-container {
+  align-items: center;
+  justify-content: center;
+  height: 100px;
+}
+
+.no-comments-container span {
+  text-align: center;
+  display: block;
+}
+
+#no-comment-first {
+  margin-top: 55px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.comment-input-container {
+  flex-grow: 1;
+}
+
+.comment-input:focus {
+  border: 2px solid #efc2af;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.new-comment {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+}
+
+.button-container {
+  display: flex;
+}
+
+.submit-btn,
+.add-image-btn {
+  width: 40px;
+  height: 40px;
+  background-color: var(--icon-color);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 17px;
+  cursor: pointer;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.add-image-btn {
+  align-self: flex-start;
+  margin-left: 5px;
+}
+
+.submit-btn {
+  margin-left: auto;
+}
+
+.submit-btn:hover,
+.add-image-btn:hover {
+  background-color: #ff8c66;
+}
+
+.new-comment-container {
+  margin-top: 10px;
+}
 
 
 .empty-comment-error-msg {
-    color: red;
-    margin-left: 5px;
+  color: red;
+  margin-left: 5px;
 }
 
 .comment-input {
   width: 100%;
   height: 100px;
   padding: 10px;
-  border: 2px solid #ffe4b5; /* Default border color without focus */
+  border: 2px solid #ffe4b5;
+  /* Default border color without focus */
   border-radius: 15px;
   background-color: #ffe4b5;
   outline: none;
@@ -143,10 +158,11 @@
 }
 
 .comment-input.error {
-  border-color: red; /* Red border on error */
+  border-color: red;
+  /* Red border on error */
 }
 
-.comments-icon{
+.comments-icon {
   width: 40px;
   height: 40px;
   margin-right: 15px;

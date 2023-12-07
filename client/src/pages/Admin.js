@@ -35,7 +35,7 @@ const Admin = () => {
     return (
         <div className='admin-container'>
           {name && <Navbar name={name + " (Admin)"} />}
-          <div class='collections-container'>
+          <div className='collections-container'>
             <h2>Collections:</h2>
             <ul>
               {collections.sort().map((collection, index) => (
