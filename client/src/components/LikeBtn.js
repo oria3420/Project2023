@@ -1,9 +1,15 @@
 import './Components.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import React, { useState, useEffect } from 'react';
+import GuestrModal from './GuestModal';
 
 const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const handleGuestClick = () => {
+    setShowModal(true);
+  };
 
   useEffect(() => {
     const getLikes = async () => {
@@ -28,9 +34,20 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
     };
 
     getLikes(); // Call getLikes inside the useEffect
+
+    // Return a clean-up function (or undefined if no clean-up is needed)
+    return () => {
+      // Clean-up logic (if needed)
+    };
   }, [recipeId, userEmail]);
 
   const handleHeartClick = async () => {
+    // Check if userEmail is "0" and show a message to the user
+    if (userEmail === "Guest") {
+      handleGuestClick();
+      return;
+    }
+
     try {
       setIsHeartFilled(!isHeartFilled);
       const url = `http://localhost:1337/api/favorites/${recipeId}/${userEmail}`;
@@ -47,10 +64,9 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
     }
   };
 
-
-
   if (pageType === 'RecipePage') {
     return (
+      <>
       <div className="like-wrapper" onClick={handleHeartClick}>
 
         <span className="like-text">LIKE</span>
@@ -62,13 +78,20 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
             <i className="bi bi-heart"></i>
           )}
         </div>
-
       </div>
+      <GuestrModal 
+      message={'To like the recipe, please login or register'}
+      showModal={showModal}
+      onClose={() => setShowModal(false)}
+    />
+
+      </>
     );
   }
 
   // Default rendering for other page types
   return (
+    <>
     <div onClick={handleHeartClick}>
       {isHeartFilled ? (
         <i className="bi bi-heart-fill heart-icon"></i>
@@ -76,6 +99,13 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
         <i className="bi bi-heart heart-icon"></i>
       )}
     </div>
+    <GuestrModal
+    message={'To like the recipe, please login or register'}
+    showModal={showModal}
+    onClose={() => setShowModal(false)}
+  />
+
+    </>
   );
 };
 

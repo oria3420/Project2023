@@ -6,7 +6,7 @@ const FavoritesBtn = () => {
 
     const favorites = (event) => {
         event.preventDefault()
-        navigate('/favorites')
+        //navigate('/favorites')
     }
 
     return (

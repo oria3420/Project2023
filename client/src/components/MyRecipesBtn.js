@@ -6,7 +6,7 @@ const MyRecipesBtn = () => {
 
     const myRecipes = (event) => {
         event.preventDefault()
-        navigate('/my_recipes')
+        //navigate('/my_recipes')
     }
 
     return (

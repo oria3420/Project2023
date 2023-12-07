@@ -212,7 +212,7 @@ form-control:not(:focus) {
 }
 
 .bi-heart-fill {
-  color: #e73737;
+  color: orange;
 }
 
 .nevigate:hover {

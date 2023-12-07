@@ -10,9 +10,17 @@ const RecipeCard = (props) => {
   const [imageUrl, setImageUrl] = useState(null);
   const recipe = props.recipe;
   const user = props.user;
+  let name;
+  let user_id
+if(user !== null){
+  name = user.name
+  user_id = user.email
+}
+else{
+  name = "Guest"
+  user_id = "Guest"
+}
 
-  const name = user.name
-  const user_id = user.email
   const navigate = useNavigate();
 
 
@@ -60,7 +68,7 @@ const RecipeCard = (props) => {
         <div className='body-bottom-container'>
           <p className="card-text">{recipe.Description}</p>
           <div className="card-like">
-            <LikeButton recipeId={recipe.RecipeId} userEmail={user.email} pageType="RecipeCard" onLikeToggle={props.onLikeToggle} />
+            <LikeButton recipeId={recipe.RecipeId} userEmail={user_id} pageType="RecipeCard" onLikeToggle={props.onLikeToggle} />
           </div>
         </div>
       </div>

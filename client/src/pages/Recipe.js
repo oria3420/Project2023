@@ -13,9 +13,21 @@ import CommentsContainer from '../components/CommentsContainer';
 const defaultImageUrl = '/images/pizza.jpg'
 
 const RecipePage = () => {
+  let user_name
+  let user_id
   const location = useLocation();
-  const user_name = location.state.name;
-  const user_id = location.state.user_id;
+  //console.log(location)
+if(location.state !== null){
+  user_name = location.state.name;
+  user_id = location.state.user_id;
+console.log(user_name)
+console.log(user_id)
+}
+else{
+  user_name = "Guest"
+  user_id = "Guest"
+}
+
 
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);

@@ -4,12 +4,34 @@ import SettingBtn from './SettingBtn';
 import FavoriesBtn from './FavoritesBtn';
 import ShoppingBtn from './ShoppingBtn'
 import { useNavigate } from 'react-router-dom'
+import { useState } from 'react';
 import SearchBar from './SearchBar';
 import MyRecipesBtn from './MyRecipesBtn';
+import GuestrModal from './GuestModal';
+
 
 
 const Navbar = ({ name }) => {
     const navigate = useNavigate()
+    const [showModal, setShowModal] = useState(false);
+    const [pressButton, setpressButton] = useState("");
+    const [message, setMessage] = useState("");
+
+    const handleGuestClick = (obj) => {
+        setpressButton(obj);
+        console.log(obj)
+        setMessage(`To enter the ${obj} page, please login or register`)
+        setShowModal(true);
+      };
+    
+      const handleItemClick = (component) => {
+        if (name === "Guest") {
+          handleGuestClick(component.name);
+        } else {
+          navigate(component.path);
+        }
+      };
+
 
     const recipes = (event) => {
         event.preventDefault()
@@ -21,13 +43,23 @@ const Navbar = ({ name }) => {
     }
     const groceries = (event) => {
         event.preventDefault()
+        if (name === "Guest") {
+            handleGuestClick('groceries');
+            return;
+          }
         navigate('/groceries')
     }
     const addRecipe = (event) => {
         event.preventDefault()
+        if (name === "Guest") {
+            handleGuestClick("add recipe");
+            return;
+          }
         navigate('/add_recipe')
     }
+    console.log("message "+pressButton)
     return (
+        <>
         <nav className="navbar bg-body-tertiary our-navbar">
             <div className="container-fluid d-flex justify-content-between align-items-center">
                 <a href='/search_recipe'>
@@ -37,7 +69,7 @@ const Navbar = ({ name }) => {
                     Recipes
                 </div>
                 <div className='navbar-text nevigate' onClick={trending}>
-                    Trending
+                    Popular this Week
                 </div>
                 <div className='navbar-text nevigate' onClick={groceries}>
                     Groceries at Home
@@ -61,10 +93,10 @@ const Navbar = ({ name }) => {
                         </span>
 
                         <ul className="dropdown-menu dropdown-position">
-                            <li><button type="button" className="dropdown-item"><MyRecipesBtn /></button></li>
-                            <li><button type="button" className="dropdown-item"><FavoriesBtn /></button></li>
-                            <li><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
-                            <li><button type="button" className="dropdown-item"><SettingBtn /></button></li>
+                            <li onClick={() => handleItemClick({ path: '/my_recipes',name:'my recipe' })}><button type="button" className="dropdown-item"><MyRecipesBtn /></button></li>
+                            <li onClick={() => handleItemClick({ path: '/favorites',name:'favorites' })}><button type="button" className="dropdown-item"><FavoriesBtn /></button></li>
+                            <li onClick={() => handleItemClick({ path: '/shopping',name:'shopping list' })}><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
+                            <li onClick={() => handleItemClick({ path: '/setting',name:'setting' })}><button type="button" className="dropdown-item"><SettingBtn /></button></li>
                             <li><hr className="dropdown-divider" /></li>
                             <li><button type="button" className="dropdown-item"><LogoutBtn /></button></li>
                         </ul>
@@ -73,6 +105,14 @@ const Navbar = ({ name }) => {
                 </div>
             </div>
         </nav>
+        {showModal && (
+            <GuestrModal
+              message={message} // Set a default component if needed
+              showModal={showModal}
+              onClose={() => setShowModal(false)}
+            />
+          )}
+    </>
     )
 }
 
