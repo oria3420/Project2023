@@ -19,21 +19,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         // setImageUploadStatus('Image uploaded successfully');
     };
 
-    useEffect(() => {
-        if (selectedImage) {
-            const imageUrl = URL.createObjectURL(selectedImage);
-            console.log(imageUrl); // Log the image URL
-
-            // Optionally, you can display the image on the page
-            const imgElement = document.createElement('img');
-            imgElement.src = imageUrl;
-            document.body.appendChild(imgElement);
-
-            // Remember to revoke the URL to release resources when the image is no longer needed
-            return () => URL.revokeObjectURL(imageUrl);
-        }
-    }, [selectedImage]);
-
     const handleChange = (e) => {
         setNewComment(e.target.value);
         if (errorMessage.trim() !== '' && e.target.value.trim() !== '') {

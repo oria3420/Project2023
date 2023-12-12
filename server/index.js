@@ -215,6 +215,7 @@ app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req,
               comment_text: newComment.comment_text,
               comment_date: newComment.comment_date,
               user_name: user_name,
+              comment_image: commentImageDetails,
           },
       });
   } catch (error) {

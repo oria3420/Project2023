@@ -36,7 +36,7 @@ function WelcomePage() {
           <div className='buttons-container'>
             <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Login" onClick={redirectToLogin} />
             <input id="btn-register-welcome" className="btn btn-primary" type="button" value="Register" onClick={redirectToRegister} />
-            <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Guest" onClick={redirectToGuest} />
+
           </div>
         </div>
       </div>
@@ -46,13 +46,4 @@ function WelcomePage() {
 
 export default WelcomePage;
 
-
-// <div className="welcome-body">
-//       <div className='welcome-video'>
-//         <video autoPlay loop muted>
-//           <source src="bgVideo1.mp4" type="video/mp4" />
-//           Your browser does not support the video tag.
-//         </video>
-//       </div>
-
-//     </div>
+// <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Guest" onClick={redirectToGuest} />
