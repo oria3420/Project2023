@@ -2,12 +2,37 @@ import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 import './CommentsContainer.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import GuestrModal from './GuestModal'; 
+import GuestrModal from './GuestModal';
+import FormData from 'form-data';
 
 const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [showModal, setShowModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState(null);
+    // const [imageUploadStatus, setImageUploadStatus] = useState('');
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedImage(file);
+        // setImageUploadStatus('Image uploaded successfully');
+    };
+
+    useEffect(() => {
+        if (selectedImage) {
+            const imageUrl = URL.createObjectURL(selectedImage);
+            console.log(imageUrl); // Log the image URL
+
+            // Optionally, you can display the image on the page
+            const imgElement = document.createElement('img');
+            imgElement.src = imageUrl;
+            document.body.appendChild(imgElement);
+
+            // Remember to revoke the URL to release resources when the image is no longer needed
+            return () => URL.revokeObjectURL(imageUrl);
+        }
+    }, [selectedImage]);
 
     const handleChange = (e) => {
         setNewComment(e.target.value);
@@ -18,10 +43,10 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
     const handleGuestClick = () => {
         setShowModal(true);
-      };
+    };
 
     const handleSubmit = async () => {
-        if(user_id === "Guest"){
+        if (user_id === "Guest") {
             handleGuestClick();
             return;
         }
@@ -41,24 +66,29 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             formData.append('recipe_id', id);
             formData.append('user_id', user_id);
             formData.append('user_name', user_name);
-            formData.append('image', selectedImage);
-            
-            console.log(formData)
+            formData.append('comment_image', selectedImage); // Add this line to append the image
+
+            // Convert formData to an object for logging
+            const formDataObject = {};
+            formData.forEach((value, key) => {
+                formDataObject[key] = value;
+            });
+
+            console.log('formData:', formDataObject);
+
             const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
                 method: 'POST',
-                body: new FormData(),
+                body: formData,
             });
-    
+
             const result = await response.json();
-            console.log(result);
             setComments([...comments, result.newComment]);
             setNewComment('');
-            setSelectedImage(null); // Reset selected image after submission
         } catch (error) {
             console.error('Error submitting comment:', error);
         }
     };
-    
+
 
 
     useEffect(() => {
@@ -66,13 +96,17 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             try {
                 const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
                 const data = await response.json();
+
+                // Update state with comments including image details
                 setComments(data);
             } catch (error) {
                 console.error(error);
             }
         }
+
         fetchComments();
     }, [id]);
+
 
     function formatDateComment(dateString) {
         const isoDate = new Date(dateString);
@@ -159,7 +193,14 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                             </div>
                             <span id="comment-date">{formatDateComment(comment.comment_date)}</span>
                         </div>
-                        <span id="comment-text">{comment.comment_text}</span>
+                        <div className='comment-bottom'>
+                            <span id="comment-text">{comment.comment_text}</span>
+                            <div className='comment-image'>
+                                {comment.comment_image && (
+                                    <img src={`http://localhost:1337/api/comments/images/${comment.comment_image.filename}`} alt="Comment Image" />
+                                )}
+                            </div>
+                        </div>
                         <hr className="comment-line" />
                     </div>
                 ))
@@ -171,12 +212,25 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                 </div>
             )}
             <GuestrModal
-            message={'To comment the recipe, please login or register'}
-            showModal={showModal}
-            onClose={() => setShowModal(false)}
-          />
+                message={'To comment the recipe, please login or register'}
+                showModal={showModal}
+                onClose={() => setShowModal(false)}
+            />
         </div>
     );
 };
 
 export default CommentsContainer;
+
+
+// {imageUploadStatus && (
+//     <div className="upload-status">
+//         {imageUploadStatus}
+//         <button onClick={handleImageUploadReset}>Clear</button>
+//     </div>
+// )}
+
+// const handleImageUploadReset = () => {
+// setSelectedImage(null);
+// setImageUploadStatus('');
+// };

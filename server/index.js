@@ -10,8 +10,9 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { ObjectId } = require('mongodb');
 
+const desktopPath = 'C:\\Users\\oria3\\Desktop'; // Update with your actual desktop path
 
-
+app.use('/api/comments/images', express.static(desktopPath));
 
 app.use(cors())
 app.use(express.json())
@@ -153,56 +154,72 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
 
 app.get('/api/recipes/:id/comments', async (req, res) => {
   try {
-    const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
-    const Users = Collection.getModel(TABLE_NAMES.USERS);
+      const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
+      const Users = Collection.getModel(TABLE_NAMES.USERS);
 
-    const recipeId = parseInt(req.params.id);
+      const recipeId = parseInt(req.params.id);
 
-    const comments = await Comments.find({ recipe_id: recipeId });
+      const comments = await Comments.find({ recipe_id: recipeId });
 
-    const commentsWithSelectedFields = await Promise.all(comments.map(async (comment) => {
-      const user = await Users.findOne({ email: comment.user_id });
-      const userName = user ? user.name : 'Unknown User'; // Handle if the user is not found
+      const commentsWithSelectedFields = await Promise.all(comments.map(async (comment) => {
+          const user = await Users.findOne({ email: comment.user_id });
+          const userName = user ? user.name : 'Unknown User'; // Handle if the user is not found
 
-      return {
-        comment_text: comment.comment_text,
-        comment_date: comment.comment_date,
-        user_name: userName
-      };
-    }));
-    res.status(200).json(commentsWithSelectedFields);
+          return {
+              comment_text: comment.comment_text,
+              comment_date: comment.comment_date,
+              user_name: userName,
+              comment_image: comment.comment_image, // Include image details
+          };
+      }));
+
+      res.status(200).json(commentsWithSelectedFields);
   } catch (error) {
-    console.error(error);
-    res.status(500).send('Server error');
+      console.error(error);
+      res.status(500).send('Server error');
   }
 });
 
-app.post('/api/recipes/new_comment', async (req, res) => {
+
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+
+app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req, res) => {
   const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
 
   try {
-    const { comment_text, recipe_id, user_id, user_name} = req.body;
-    const parsedRecipeId = parseInt(recipe_id, 10);
+      const { comment_text, recipe_id, user_id, user_name } = req.body;
+      const parsedRecipeId = parseInt(recipe_id, 10);
 
-    const newComment = await Comments.create({
-      recipe_id: parsedRecipeId,
-      user_id: user_id,
-      comment_text: comment_text,
-      comment_date: new Date().toISOString(),
-    });
+      // Access the uploaded image details from req.file
+      const commentImageDetails = req.file ? {
+          filename: req.file.originalname,
+      } : null;
 
-    console.log(newComment._id)
-    res.status(201).json({
-      message: 'Comment added successfully',
-      newComment: {
-        comment_text: newComment.comment_text,
-        comment_date: newComment.comment_date,
-        user_name: user_name,
-      },
-    });
+      // Log the image details for debugging
+      console.log('Image Details:', commentImageDetails);
+
+      // Assuming you don't save the image externally, just use its buffer
+      const newComment = await Comments.create({
+          recipe_id: parsedRecipeId,
+          user_id: user_id,
+          comment_text: comment_text,
+          comment_date: new Date().toISOString(),
+          comment_image: commentImageDetails, // Save image details instead of buffer
+      });
+
+      res.status(201).json({
+          message: 'Comment added successfully',
+          newComment: {
+              comment_text: newComment.comment_text,
+              comment_date: newComment.comment_date,
+              user_name: user_name,
+          },
+      });
   } catch (error) {
-    console.error('Error adding comment:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+      console.error('Error adding comment:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
@@ -239,7 +256,7 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     // console.log("flattenedTags: ", flattenedTags);
     const valuesOnly = flattenedTags.map(tag => Object.values(tag)[0]);
     // console.log("valuesOnly: ", valuesOnly);
-    console.log(valuesOnly)
+    // console.log(valuesOnly)
     res.json(valuesOnly);
     
   } catch (err) {

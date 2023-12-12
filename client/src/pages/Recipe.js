@@ -20,8 +20,8 @@ const RecipePage = () => {
 if(location.state !== null){
   user_name = location.state.name;
   user_id = location.state.user_id;
-console.log(user_name)
-console.log(user_id)
+// console.log(user_name)
+// console.log(user_id)
 }
 else{
   user_name = "Guest"

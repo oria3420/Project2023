@@ -19,7 +19,7 @@ const Navbar = ({ name }) => {
 
     const handleGuestClick = (obj) => {
         setpressButton(obj);
-        console.log(obj)
+        // console.log(obj)
         setMessage(`To enter the ${obj} page, please login or register`)
         setShowModal(true);
       };
@@ -57,7 +57,7 @@ const Navbar = ({ name }) => {
           }
         navigate('/add_recipe')
     }
-    console.log("message "+pressButton)
+    // console.log("message "+pressButton)
     return (
         <>
         <nav className="navbar bg-body-tertiary our-navbar">
