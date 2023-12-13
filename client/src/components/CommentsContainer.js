@@ -13,8 +13,12 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageUploadStatus, setImageUploadStatus] = useState('');
 
-    const handleImageUploadReset = () => {
+    useEffect(() => {
         setSelectedImage(null);
+    }, []);
+
+
+    const handleImageUploadReset = () => {
         setImageUploadStatus('');
     };
 
@@ -23,6 +27,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         setSelectedImage(file);
         setImageUploadStatus('Image uploaded successfully');
     };
+
 
     const handleChange = (e) => {
         setNewComment(e.target.value);
@@ -38,7 +43,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         }
         const trimmedComment = newComment.trim();
         if (trimmedComment === '') {
-            setErrorMessage('Please enter a non-empty comment.');
+            setErrorMessage('Please enter a non-empty comment text.');
             return;
         }
         setErrorMessage('');
@@ -52,9 +57,8 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             formData.append('recipe_id', id);
             formData.append('user_id', user_id);
             formData.append('user_name', user_name);
-            formData.append('comment_image', selectedImage); // Add this line to append the image
+            formData.append('comment_image', selectedImage);
 
-            // Convert formData to an object for logging
             const formDataObject = {};
             formData.forEach((value, key) => {
                 formDataObject[key] = value;
@@ -70,10 +74,11 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             const result = await response.json();
             setComments([...comments, result.newComment]);
             setNewComment('');
-            
-            handleImageUploadReset();
         } catch (error) {
             console.error('Error submitting comment:', error);
+        }
+        finally {
+            handleImageUploadReset();
         }
     };
 
@@ -85,10 +90,12 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                 const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
                 const data = await response.json();
 
-                // Update state with comments including image details
                 setComments(data);
             } catch (error) {
                 console.error(error);
+            }
+            finally {
+                handleImageUploadReset();
             }
         }
 
@@ -153,16 +160,19 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
                     <div className="button-container">
 
-                        <label className='add-image-btn'>
-                            <input type='file' accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
-                            <i className="bi bi-image"></i>
-                        </label>
-                        {imageUploadStatus && (
-                            <div className="upload-status">
-                                {imageUploadStatus}
-                                <button onClick={handleImageUploadReset}>Clear</button>
-                            </div>
-                        )}
+                    <div className="image-upload-container">
+                    <label className='add-image-btn'>
+                        <input type='file' accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+                        <i className="bi bi-image"></i>
+                    </label>
+                
+                    {imageUploadStatus && (
+                        <div className="upload-status">
+                            <span className="upload-message">{imageUploadStatus}</span>
+                        </div>
+                    )}
+                </div>
+
                         <button className='submit-btn' onClick={handleSubmit}>
                             <i className="bi bi-send"></i>
                         </button>
