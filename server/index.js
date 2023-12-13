@@ -532,33 +532,33 @@ app.post('/api/addRecipe', async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
   
-  // Recipes.create({
-  //   RecipeId:1,
-  //   Name:recipeName,
-  //   AuthorId:userId,
-  //   AuthorName:name,
-  //   CookTime: parseTimeToDuration(cookTime),
-  //   PrepTime: parseTimeToDuration(prepTime),
-  //   TotalTime: parseTimeToDuration(totalCookTime),
-  //   DatePublished: datePublished,
-  //   Description:description,
-  //   RecipeCategory:selectedCategory,
-  //   AggregatedRating: 0,
-  //   ReviewCount: 0,
-  //   Calories:0,
-  //   FatContent:0,
-  //   SaturatedFatContent:0,
-  //   CholesterolContent:0,
-  //   SodiumContent:0,
-  //   CarbohydrateContent:0,
-  //   FiberContent:0,
-  //   SugarContent:0,
-  //   ProteinContent:0,
-  //   RecipeServings:recipeServings,
-  //   RecipeYield:recipeYield,
-  //   RecipeInstructions:recipeInstructions,
-  //   Kosher:kosherWord.kosher,
-  // })
+  Recipes.create({
+    RecipeId:1,
+    Name:recipeName,
+    AuthorId:userId,
+    AuthorName:name,
+    CookTime: parseTimeToDuration(cookTime),
+    PrepTime: parseTimeToDuration(prepTime),
+    TotalTime: parseTimeToDuration(totalCookTime),
+    DatePublished: datePublished,
+    Description:description,
+    RecipeCategory:selectedCategory,
+    AggregatedRating: 0,
+    ReviewCount: 0,
+    Calories:0,
+    FatContent:0,
+    SaturatedFatContent:0,
+    CholesterolContent:0,
+    SodiumContent:0,
+    CarbohydrateContent:0,
+    FiberContent:0,
+    SugarContent:0,
+    ProteinContent:0,
+    RecipeServings:recipeServings,
+    RecipeYield:recipeYield,
+    RecipeInstructions:recipeInstructions,
+    Kosher:kosherWord.kosher,
+  })
 /*image doesnt work */
   // Image.create({
   //   recipe_ID:id,
@@ -566,6 +566,27 @@ app.post('/api/addRecipe', async (req, res) => {
   // })
 });
 
+
+app.get('/api/my_recipes/:userId', async (req, res) => {
+  const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
+  try {
+    const user_id = req.params.userId;
+
+    // Find the favorites for the given user
+    const my_recipes = await Recipe.find({ AuthorId: user_id });
+
+    if (my_recipes.length === 0) {
+      console.log("empty")
+      res.json([]); 
+      return;
+    }
+    console.log(my_recipes)
+    res.json(my_recipes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error fetching favorites');
+  }
+});
 app.listen(1337, () => {
   console.log('Server saterted on 1337')
 })

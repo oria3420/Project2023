@@ -184,20 +184,20 @@ const handleCheckboxChange = (category, id, checked) => {
             recipeInstructions,
             checkedItems,
         });
-        // setRecipeName('');
-        // setSelectedImage(null);
-        // setCookTime('00:00');
-        // setPrepTime('00:00');
-        // setSelectedCategory('');
-        // setSearchTerm('');
-        // setSelectedMeasurement('');
-        // setAmount('');
-        // setDescription('');
-        // setRecipeServings(1);
-        // setRecipeYield('');
-        // setRecipeInstructions('');
-        // setCheckedItems({});
-        // setGroceryList([]);
+        setRecipeName('');
+        setSelectedImage(null);
+        setCookTime('00:00');
+        setPrepTime('00:00');
+        setSelectedCategory('');
+        setSearchTerm('');
+        setSelectedMeasurement('');
+        setAmount('');
+        setDescription('');
+        setRecipeServings(1);
+        setRecipeYield('');
+        setRecipeInstructions('');
+        setCheckedItems({});
+        setGroceryList([]);
         const formData = new FormData();
         formData.append('selectedImage', selectedImage);
         try {
