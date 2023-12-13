@@ -23,7 +23,6 @@ const connection = mongoose.connection;
 let gfs;
 
 connection.once('open', () => {
-  // Initialize GridFS
   gfs = new mongoose.mongo.GridFSBucket(connection.db, {
     bucketName: 'uploads'
   });
@@ -43,8 +42,6 @@ const storage = new GridFsStorage({
 
 const upload = multer({ storage });
 
-const desktopPath = 'C:\\Users\\oria3\\Desktop'; // Update with your actual desktop path
-
 app.use(cors());
 app.use(express.json());
 
@@ -53,11 +50,6 @@ app.use('/api/comments/images', express.static(path.join(__dirname, 'uploads')))
 
 app.get('/api/comments/images/:filename', (req, res) => {
   const filename = req.params.filename;
-
-  // Example using filename:
-  // const readstream = gfs.openDownloadStreamByName(filename);
-  
-  // Example using fileId:
   const readstream = gfs.openDownloadStream(ObjectId(filename));
 
   readstream.on('error', (error) => {
