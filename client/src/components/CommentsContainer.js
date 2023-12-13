@@ -26,81 +26,70 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         const file = event.target.files[0];
         setSelectedImage(file);
         setImageUploadStatus('Image uploaded successfully');
-    };
-
-
-    const handleChange = (e) => {
+      };
+      
+      const handleChange = (e) => {
         setNewComment(e.target.value);
         if (errorMessage.trim() !== '' && e.target.value.trim() !== '') {
-            setErrorMessage('');
+          setErrorMessage('');
         }
-    };
-
-    const handleSubmit = async () => {
+      };
+      
+      const handleSubmit = async () => {
         if (user_id === "Guest") {
-            handleGuestClick();
-            return;
+          handleGuestClick();
+          return;
         }
         const trimmedComment = newComment.trim();
         if (trimmedComment === '') {
-            setErrorMessage('Please enter a non-empty comment text.');
-            return;
+          setErrorMessage('Please enter a non-empty comment text.');
+          return;
         }
         setErrorMessage('');
         handleCommentSubmit(trimmedComment);
-    };
-
-    const handleCommentSubmit = async () => {
+      };
+      
+      const handleCommentSubmit = async (trimmedComment) => {
         try {
-            const formData = new FormData();
-            formData.append('comment_text', newComment);
-            formData.append('recipe_id', id);
-            formData.append('user_id', user_id);
-            formData.append('user_name', user_name);
-            formData.append('comment_image', selectedImage);
-
-            const formDataObject = {};
-            formData.forEach((value, key) => {
-                formDataObject[key] = value;
-            });
-
-            console.log('formData:', formDataObject);
-
-            const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const result = await response.json();
-            setComments([...comments, result.newComment]);
-            setNewComment('');
+          const formData = new FormData();
+          formData.append('comment_text', trimmedComment);
+          formData.append('recipe_id', id);
+          formData.append('user_id', user_id);
+          formData.append('user_name', user_name);
+          formData.append('comment_image', selectedImage);
+      
+          const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
+            method: 'POST',
+            body: formData,
+          });
+      
+          const result = await response.json();
+          setComments([...comments, result.newComment]);
+          setNewComment('');
         } catch (error) {
-            console.error('Error submitting comment:', error);
+          console.error('Error submitting comment:', error);
+        } finally {
+          handleImageUploadReset();
         }
-        finally {
-            handleImageUploadReset();
-        }
-    };
-
-
-
-    useEffect(() => {
+      };
+      
+      useEffect(() => {
         async function fetchComments() {
-            try {
-                const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
-                const data = await response.json();
-
-                setComments(data);
-            } catch (error) {
-                console.error(error);
-            }
-            finally {
-                handleImageUploadReset();
-            }
+          try {
+            const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
+            const data = await response.json();
+      
+            setComments(data);
+          } catch (error) {
+            console.error(error);
+          } finally {
+            handleImageUploadReset();
+          }
         }
-
+      
         fetchComments();
-    }, [id]);
+      }, [id]);
+      
 
     const handleGuestClick = () => {
         setShowModal(true);
@@ -160,18 +149,18 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
                     <div className="button-container">
 
-                    <div className="image-upload-container">
-                    <label className='add-image-btn'>
-                        <input type='file' accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
-                        <i className="bi bi-image"></i>
-                    </label>
-                
-                    {imageUploadStatus && (
-                        <div className="upload-status">
-                            <span className="upload-message">{imageUploadStatus}</span>
+                        <div className="image-upload-container">
+                            <label className='add-image-btn'>
+                                <input type='file' accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
+                                <i className="bi bi-image"></i>
+                            </label>
+
+                            {imageUploadStatus && (
+                                <div className="upload-status">
+                                    <span className="upload-message">{imageUploadStatus}</span>
+                                </div>
+                            )}
                         </div>
-                    )}
-                </div>
 
                         <button className='submit-btn' onClick={handleSubmit}>
                             <i className="bi bi-send"></i>
@@ -204,9 +193,10 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                             <span id="comment-text">{comment.comment_text}</span>
                             <div className='comment-image'>
                                 {comment.comment_image && (
-                                    <img src={`http://localhost:1337/api/comments/images/${comment.comment_image.filename}`} alt="Comment Image" />
+                                    <img src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`} alt="Comment Image" />
                                 )}
                             </div>
+
                         </div>
                         <hr className="comment-line" />
                     </div>

@@ -9,24 +9,128 @@ const Collection = require('./models/collection.model');
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 const { ObjectId } = require('mongodb');
+const { GridFsStorage } = require('multer-gridfs-storage');
+const multer = require('multer');
+const path = require('path');
+
+// Connect to MongoDB
+mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+const connection = mongoose.connection;
+let gfs;
+
+connection.once('open', () => {
+  // Initialize GridFS
+  gfs = new mongoose.mongo.GridFSBucket(connection.db, {
+    bucketName: 'uploads'
+  });
+  console.log('GridFS initialized');
+});
+
+const storage = new GridFsStorage({
+  url: 'mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023',
+  options: { useNewUrlParser: true, useUnifiedTopology: true },
+  file: (req, file) => {
+    return {
+      filename: file.originalname,
+      bucketName: 'uploads'
+    };
+  }
+});
+
+const upload = multer({ storage });
 
 const desktopPath = 'C:\\Users\\oria3\\Desktop'; // Update with your actual desktop path
 
-app.use('/api/comments/images', express.static(desktopPath));
+app.use(cors());
+app.use(express.json());
 
-app.use(cors())
-app.use(express.json())
-try {
-  mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  console.log('connected to db successfuly')
-}
-catch (error) {
-  console.log(error)
-  console.log('connection failed')
-}
+// Serve static files
+app.use('/api/comments/images', express.static(path.join(__dirname, 'uploads')));
+
+app.get('/api/comments/images/:filename', (req, res) => {
+  const filename = req.params.filename;
+
+  // Example using filename:
+  // const readstream = gfs.openDownloadStreamByName(filename);
+  
+  // Example using fileId:
+  const readstream = gfs.openDownloadStream(ObjectId(filename));
+
+  readstream.on('error', (error) => {
+    console.error('Error retrieving image:', error);
+    res.status(404).send('Image not found');
+  });
+
+  readstream.pipe(res);
+});
+
+
+app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req, res) => {
+  const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
+
+  try {
+    const { comment_text, recipe_id, user_id, user_name } = req.body;
+    const parsedRecipeId = parseInt(recipe_id, 10);
+
+    const commentImageDetails = req.file ? {
+      filename: req.file.filename,
+      fileId: req.file.id,
+    } : null;
+
+    const newComment = await Comments.create({
+      recipe_id: parsedRecipeId,
+      user_id: user_id,
+      comment_text: comment_text,
+      comment_date: new Date().toISOString(),
+      comment_image: commentImageDetails,
+    });
+
+    res.status(201).json({
+      message: 'Comment added successfully',
+      newComment: {
+        comment_text: newComment.comment_text,
+        comment_date: newComment.comment_date,
+        user_name: user_name,
+        comment_image: commentImageDetails,
+      },
+    });
+  } catch (error) {
+    console.error('Error adding comment:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/api/recipes/:id/comments', async (req, res) => {
+  try {
+    const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
+    const Users = Collection.getModel(TABLE_NAMES.USERS);
+
+    const recipeId = parseInt(req.params.id);
+
+    const comments = await Comments.find({ recipe_id: recipeId });
+
+    const commentsWithSelectedFields = await Promise.all(comments.map(async (comment) => {
+      const user = await Users.findOne({ email: comment.user_id });
+      const userName = user ? user.name : 'Unknown User';
+
+      return {
+        comment_text: comment.comment_text,
+        comment_date: comment.comment_date,
+        user_name: userName,
+        comment_image: comment.comment_image,
+      };
+    }));
+
+    res.status(200).json(commentsWithSelectedFields);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Server error');
+  }
+});
 
 
 app.get('/api/admin', (req, res) => {
@@ -151,78 +255,6 @@ const getRecipeIngredients = async (req, res) => {
 };
 
 app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
-
-app.get('/api/recipes/:id/comments', async (req, res) => {
-  try {
-      const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
-      const Users = Collection.getModel(TABLE_NAMES.USERS);
-
-      const recipeId = parseInt(req.params.id);
-
-      const comments = await Comments.find({ recipe_id: recipeId });
-
-      const commentsWithSelectedFields = await Promise.all(comments.map(async (comment) => {
-          const user = await Users.findOne({ email: comment.user_id });
-          const userName = user ? user.name : 'Unknown User'; // Handle if the user is not found
-
-          return {
-              comment_text: comment.comment_text,
-              comment_date: comment.comment_date,
-              user_name: userName,
-              comment_image: comment.comment_image, // Include image details
-          };
-      }));
-
-      res.status(200).json(commentsWithSelectedFields);
-  } catch (error) {
-      console.error(error);
-      res.status(500).send('Server error');
-  }
-});
-
-
-const multer = require('multer');
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-
-app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req, res) => {
-  const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
-
-  try {
-      const { comment_text, recipe_id, user_id, user_name } = req.body;
-      const parsedRecipeId = parseInt(recipe_id, 10);
-
-      // Access the uploaded image details from req.file
-      const commentImageDetails = req.file ? {
-          filename: req.file.originalname,
-      } : null;
-
-      // Log the image details for debugging
-      console.log('Image Details:', commentImageDetails);
-
-      // Assuming you don't save the image externally, just use its buffer
-      const newComment = await Comments.create({
-          recipe_id: parsedRecipeId,
-          user_id: user_id,
-          comment_text: comment_text,
-          comment_date: new Date().toISOString(),
-          comment_image: commentImageDetails, // Save image details instead of buffer
-      });
-
-      res.status(201).json({
-          message: 'Comment added successfully',
-          newComment: {
-              comment_text: newComment.comment_text,
-              comment_date: newComment.comment_date,
-              user_name: user_name,
-              comment_image: commentImageDetails,
-          },
-      });
-  } catch (error) {
-      console.error('Error adding comment:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
 
 
 app.get('/api/recipes/:id/tags', async (req, res) => {
