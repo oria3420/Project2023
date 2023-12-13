@@ -173,6 +173,8 @@ textarea {
   height: auto;     /* Let the height adjust proportionally */
 }
 
-.comment-bottom{
+.comment-bottom {
+  width: calc(100% - var(--comment-margin)); /* Calculate the width with margin */
   margin-left: var(--comment-margin);
+  box-sizing: border-box; /* Include padding and border in the width */
 }

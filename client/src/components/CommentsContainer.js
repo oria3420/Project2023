@@ -11,12 +11,17 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [errorMessage, setErrorMessage] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
-    // const [imageUploadStatus, setImageUploadStatus] = useState('');
+    const [imageUploadStatus, setImageUploadStatus] = useState('');
+
+    const handleImageUploadReset = () => {
+        setSelectedImage(null);
+        setImageUploadStatus('');
+    };
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         setSelectedImage(file);
-        // setImageUploadStatus('Image uploaded successfully');
+        setImageUploadStatus('Image uploaded successfully');
     };
 
     const handleChange = (e) => {
@@ -24,10 +29,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         if (errorMessage.trim() !== '' && e.target.value.trim() !== '') {
             setErrorMessage('');
         }
-    };
-
-    const handleGuestClick = () => {
-        setShowModal(true);
     };
 
     const handleSubmit = async () => {
@@ -69,6 +70,8 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
             const result = await response.json();
             setComments([...comments, result.newComment]);
             setNewComment('');
+            
+            handleImageUploadReset();
         } catch (error) {
             console.error('Error submitting comment:', error);
         }
@@ -92,6 +95,9 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         fetchComments();
     }, [id]);
 
+    const handleGuestClick = () => {
+        setShowModal(true);
+    };
 
     function formatDateComment(dateString) {
         const isoDate = new Date(dateString);
@@ -151,10 +157,16 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                             <input type='file' accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
                             <i className="bi bi-image"></i>
                         </label>
-
+                        {imageUploadStatus && (
+                            <div className="upload-status">
+                                {imageUploadStatus}
+                                <button onClick={handleImageUploadReset}>Clear</button>
+                            </div>
+                        )}
                         <button className='submit-btn' onClick={handleSubmit}>
                             <i className="bi bi-send"></i>
                         </button>
+
 
                     </div>
                 </div>
@@ -208,14 +220,4 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 export default CommentsContainer;
 
 
-// {imageUploadStatus && (
-//     <div className="upload-status">
-//         {imageUploadStatus}
-//         <button onClick={handleImageUploadReset}>Clear</button>
-//     </div>
-// )}
 
-// const handleImageUploadReset = () => {
-// setSelectedImage(null);
-// setImageUploadStatus('');
-// };
