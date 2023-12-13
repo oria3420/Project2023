@@ -24,8 +24,10 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
-        setSelectedImage(file);
-        setImageUploadStatus('Image uploaded successfully');
+        if (file) {
+            setSelectedImage(file);
+            setImageUploadStatus('Image uploaded successfully');
+          }
       };
       
       const handleChange = (e) => {
@@ -70,6 +72,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
           console.error('Error submitting comment:', error);
         } finally {
           handleImageUploadReset();
+          setSelectedImage(null);
         }
       };
       
@@ -193,7 +196,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                             <span id="comment-text">{comment.comment_text}</span>
                             <div className='comment-image'>
                                 {comment.comment_image && (
-                                    <img src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`} alt="Comment Image" />
+                                    <img src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`} alt="Comment" />
                                 )}
                             </div>
 
