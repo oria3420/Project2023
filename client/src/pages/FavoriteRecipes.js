@@ -18,7 +18,6 @@ const FavoriteRecipes = () => {
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true); 
-    console.log("FavoriteRecipes")
 
     useEffect(() => {
         const token = localStorage.getItem('token')
