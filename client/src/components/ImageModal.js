@@ -1,3 +1,5 @@
+import React from 'react';
+
 const ImageModal = ({ imageUrl, closeModal }) => {
     const handleClick = (event) => {
         event.stopPropagation();
@@ -5,9 +7,9 @@ const ImageModal = ({ imageUrl, closeModal }) => {
     };
 
     return (
-        <div className="image-modal" onClick={closeModal}>
+        <div className="image-modal">
             <div className="image-modal-content">
-                <span className="close" onClick={closeModal}>&times;</span>
+                <span className="close" onClick={handleClick}>&times;</span>
                 <img className="modal-content" src={imageUrl} alt="Modal" />
             </div>
         </div>
