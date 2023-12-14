@@ -10,7 +10,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import LikeButton from '../components/LikeBtn';
 import CommentsContainer from '../components/CommentsContainer';
 
-const defaultImageUrl = '/images/pizza.jpg'
+const defaultImageUrl = '/images/logo-image.png'
 
 const RecipePage = () => {
   let user_name
@@ -74,16 +74,50 @@ else{
 
   useEffect(() => {
     async function getImageUrl() {
-      const response = await fetch(`http://localhost:1337/api/recipes/images/${id}`);
-      const data = await response.text();
-      if (data !== 'Image not found') {
-        setImageUrl(data)
+      try {
+        const response = await fetch(`http://localhost:1337/api/recipes/images/${id}`);
+        if (response.ok) {
+          const data = await response.text(); // Read response as text
+          if (data.startsWith('http')) {
+            const imageUrlResponse = await fetch(data);
+            if (imageUrlResponse.ok) {
+              // URL is valid, use it
+              setImageUrl(data);
+            } else {
+              // URL is not valid, set default image
+              setImageUrl(defaultImageUrl);
+            }
+          } else {
+            // If data is not a URL, try parsing it as JSON
+            try {
+              const jsonData = JSON.parse(data);
+              if (jsonData && jsonData.filename && jsonData.fileId) {
+                // If it's a valid JSON with filename and fileId
+                const { filename, fileId } = jsonData;
+                const imageResponse = await fetch(`http://localhost:1337/api/addRecipe/images/${fileId}`);
+                if (imageResponse.ok) {
+                  const imageUrl = URL.createObjectURL(await imageResponse.blob());
+                  setImageUrl(imageUrl);
+                } else {
+                  setImageUrl(defaultImageUrl);
+                }
+              } else {
+                setImageUrl(defaultImageUrl);
+              }
+            } catch (jsonError) {
+              console.error(jsonError);
+              setImageUrl(defaultImageUrl);
+            }
+          }
+        } else {
+          setImageUrl(defaultImageUrl);
+        }
+      } catch (error) {
+        console.error(error);
+        setImageUrl(defaultImageUrl);
       }
-      else {
-        setImageUrl(defaultImageUrl)
-      }
-
     }
+  
     getImageUrl();
   }, [id]);
 
