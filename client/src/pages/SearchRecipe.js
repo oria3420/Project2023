@@ -66,7 +66,6 @@ const SearchRecipe = () => {
             });
     }, []);
 
-
     useEffect(() => {
         fetch('http://localhost:1337/api/search_recipe')
             .then(response => response.json())
@@ -88,7 +87,6 @@ const SearchRecipe = () => {
             });
     }, []);
 
-
     const toggleCategory = (category) => {
         setExpandedCategories({
             ...expandedCategories,
@@ -102,7 +100,6 @@ const SearchRecipe = () => {
         setCheckedItems(checkedItemsCopy);
         filterRecipes(); // apply filters when checkbox changes
     };
-
 
     useEffect(() => {
         const searchParams = new URLSearchParams(location.search);
@@ -175,6 +172,41 @@ const SearchRecipe = () => {
     }, [checkedItems, filterRecipes]);
 console.log(name)
 
+const filterRecipesByGroceryList = async () => {
+    // Check if there are ingredients in the groceryList
+    const groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
+    if (groceryList.length === 0) {
+      console.log('Grocery list is empty');
+      return;
+    }
+  
+    // Array to store filtered recipe IDs
+    const filteredRecipeIds = [];
+  
+    // Iterate over each recipe and each ingredient in the groceryList
+    for (const recipe of filteredRecipesByName) {
+      for (const ingredient of groceryList) {
+        const ingredientId = ingredient.id
+        try {
+          // Make a request to the server to check if the ingredient is in the recipe
+          const response = await fetch(`http://localhost:1337/api/search_recipes/${recipe.RecipeId}/${ingredientId}`);
+          
+          // Check if the status is 200 (ingredient is in the recipe)
+          if (response.status === 200) {
+            filteredRecipeIds.push(recipe.RecipeId);
+          }
+        } catch (error) {
+          console.error('Error checking ingredient in recipe:', error);
+        }
+      }
+    }
+  
+    // Filter the recipes based on the IDs
+    const filteredRecipes = filteredRecipesByName.filter(recipe => filteredRecipeIds.includes(recipe.RecipeId));
+    setFilteredRecipes(filteredRecipes);
+  };
+  
+
     return (
         <div>
             {name && <Navbar name={name} />}
@@ -215,6 +247,9 @@ console.log(name)
                                     );
                                 })}
                         </div>
+<button className="btn btn-primary" onClick={filterRecipesByGroceryList}>
+  Filter by Grocery List
+</button>
 
                         <div className='recipes-container'>
                             {filteredRecipes.length === 0 ? (

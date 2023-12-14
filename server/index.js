@@ -341,7 +341,6 @@ app.get('/api/recipes/images/:recipeId', async (req, res) => {
       const image_link = recipe.image_link;
       //console.log(typeof image_link)
       if (typeof image_link === "string") {
-        console.log("hi ", recipe.image_link)
         // If image_link is a string, assume it's a URL
         res.send(recipe.image_link);
       } else if (image_link && image_link.filename && image_link.fileId) {
@@ -638,6 +637,28 @@ app.get('/api/my_recipes/:userId', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send('Error fetching favorites');
+  }
+});
+
+app.get('/api/search_recipes/:recipeId/:ingredientId', async (req, res) => {
+  const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS);
+  const recipeId = parseInt(req.params.recipeId);
+  const ingredientId = parseInt(req.params.ingredientId);
+
+  try {
+    const result = await RecipeIngredients.findOne({ recipe_ID:recipeId, ingredient_ID:ingredientId });
+    console.log(result)
+
+    if (result) {
+      // Combination of recipeId and ingredientId exists in the table
+      res.status(200).json({ message: 'Found the combination in the table' });
+    } else {
+      // Combination does not exist in the table
+      res.status(404).json({ message: 'Combination not found in the table' });
+    }
+  } catch (error) {
+    console.error('Error checking combination in the table:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
