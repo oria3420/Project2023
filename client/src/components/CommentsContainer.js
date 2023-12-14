@@ -3,6 +3,7 @@ import StarRating from './StarRating';
 import './CommentsContainer.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import GuestrModal from './GuestModal';
+import ImageModal from './ImageModal';
 import FormData from 'form-data';
 
 const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
@@ -12,6 +13,20 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [showModal, setShowModal] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageUploadStatus, setImageUploadStatus] = useState('');
+    const [modalOpen, setModalOpen] = useState(false);
+
+
+    const openModal = () => {
+        setModalOpen(true);
+        console.log('Modal opened!', modalOpen);
+      };
+
+
+    const closeModal = () => {
+        console.log('Modal closed!');
+        setModalOpen(false);
+    };
+
 
     useEffect(() => {
         setSelectedImage(null);
@@ -24,72 +39,77 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
-        setSelectedImage(file);
-        setImageUploadStatus('Image uploaded successfully');
-      };
-      
-      const handleChange = (e) => {
+        if (file) {
+            setSelectedImage(file);
+            setImageUploadStatus('Image uploaded successfully');
+        }
+    };
+
+    const handleChange = (e) => {
         setNewComment(e.target.value);
         if (errorMessage.trim() !== '' && e.target.value.trim() !== '') {
-          setErrorMessage('');
+            setErrorMessage('');
         }
-      };
-      
-      const handleSubmit = async () => {
+    };
+
+    const handleSubmit = async () => {
         if (user_id === "Guest") {
-          handleGuestClick();
-          return;
+            handleGuestClick();
+            return;
         }
         const trimmedComment = newComment.trim();
         if (trimmedComment === '') {
-          setErrorMessage('Please enter a non-empty comment text.');
-          return;
+            setErrorMessage('Please enter a non-empty comment text.');
+            return;
         }
         setErrorMessage('');
         handleCommentSubmit(trimmedComment);
-      };
-      
-      const handleCommentSubmit = async (trimmedComment) => {
+    };
+
+    const handleCommentSubmit = async (trimmedComment) => {
         try {
-          const formData = new FormData();
-          formData.append('comment_text', trimmedComment);
-          formData.append('recipe_id', id);
-          formData.append('user_id', user_id);
-          formData.append('user_name', user_name);
-          formData.append('comment_image', selectedImage);
-      
-          const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
-            method: 'POST',
-            body: formData,
-          });
-      
-          const result = await response.json();
-          setComments([...comments, result.newComment]);
-          setNewComment('');
+            console.log("trying to add a new comment")
+            const formData = new FormData();
+            formData.append('comment_text', trimmedComment);
+            formData.append('recipe_id', id);
+            formData.append('user_id', user_id);
+            formData.append('user_name', user_name);
+            formData.append('comment_image', selectedImage);
+
+            const response = await fetch('http://localhost:1337/api/recipes/new_comment', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+            setComments([...comments, result.newComment]);
+            setNewComment('');
         } catch (error) {
-          console.error('Error submitting comment:', error);
+            console.error('Error submitting comment:', error);
         } finally {
-          handleImageUploadReset();
-        }
-      };
-      
-      useEffect(() => {
-        async function fetchComments() {
-          try {
-            const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
-            const data = await response.json();
-      
-            setComments(data);
-          } catch (error) {
-            console.error(error);
-          } finally {
+            console.log("success")
             handleImageUploadReset();
-          }
+            setSelectedImage(null);
         }
-      
+    };
+
+    useEffect(() => {
+        async function fetchComments() {
+            try {
+                const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
+                const data = await response.json();
+
+                setComments(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                handleImageUploadReset();
+            }
+        }
+
         fetchComments();
-      }, [id]);
-      
+    }, [id]);
+
 
     const handleGuestClick = () => {
         setShowModal(true);
@@ -121,6 +141,8 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
         return formattedDate;
     }
+
+    console.log(comments)
 
     return (
         <div className='comments-container'>
@@ -192,10 +214,18 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                         <div className='comment-bottom'>
                             <span id="comment-text">{comment.comment_text}</span>
                             <div className='comment-image'>
-                                {comment.comment_image && (
-                                    <img src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`} alt="Comment Image" />
+                                {comment.comment_image && comment.comment_image.fileId && (
+                                    <img
+                                    src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`}
+                                    alt="Comment"
+                                    onClick={openModal}
+                                  />
+
                                 )}
                             </div>
+
+                            {modalOpen && <ImageModal imageUrl={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`} closeModal={closeModal} />}
+
 
                         </div>
                         <hr className="comment-line" />
