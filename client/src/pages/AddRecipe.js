@@ -110,17 +110,21 @@ const AddRecipe = () => {
         }
     }, [searchTerm, ingredients]);
     
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        setSelectedImage(file);
+    const handleImageChange = (event) => {
+      const file = event.target.files[0];
+      setSelectedImage(file);
     };
 
     const handleAddToGroceryList = () => {
     if (selectedIngredient && selectedMeasurement && amount) {
+        const selectedIngredientObject = filteredIngredients.find(item => item.ingredient === selectedIngredient);
+        const selectedMeasurementObject = measurements.find(item => item.measurement === selectedMeasurement);
         const newItem = {
-        ingredient: selectedIngredient,
-        measurement: selectedMeasurement,
-        amount: amount,
+          ingredientId: selectedIngredientObject?.id,
+          measurementId: selectedMeasurementObject?.id,
+          amount: amount,
+          ingredientName: selectedIngredient,
+          measurementName: selectedMeasurement
         };
         setGroceryList([...groceryList, newItem]);
         // Clear the input fields after adding to the list
@@ -184,45 +188,40 @@ const handleCheckboxChange = (category, id, checked) => {
             recipeInstructions,
             checkedItems,
         });
-        setRecipeName('');
-        setSelectedImage(null);
-        setCookTime('00:00');
-        setPrepTime('00:00');
-        setSelectedCategory('');
-        setSearchTerm('');
-        setSelectedMeasurement('');
-        setAmount('');
-        setDescription('');
-        setRecipeServings(1);
-        setRecipeYield('');
-        setRecipeInstructions('');
-        setCheckedItems({});
-        setGroceryList([]);
+        // setRecipeName('');
+        // setSelectedImage(null);
+        // setCookTime('00:00');
+        // setPrepTime('00:00');
+        // setSelectedCategory('');
+        // setSearchTerm('');
+        // setSelectedMeasurement('');
+        // setAmount('');
+        // setDescription('');
+        // setRecipeServings(1);
+        // setRecipeYield('');
+        // setRecipeInstructions('');
+        // setCheckedItems({});
+        // setGroceryList([]);
         const formData = new FormData();
         formData.append('selectedImage', selectedImage);
-        try {
-            const response = await fetch('http://localhost:1337/api/addRecipe', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                recipeName,
-                formData,
-                cookTime,
-                prepTime,
-                selectedCategory,
-                groceryList,
-                description,
-                recipeServings,
-                recipeYield,
-                recipeInstructions,
-                checkedItems,
-                name,
-                userId,
-              }),
-            });
-        
+        formData.append('recipeName', recipeName);
+        formData.append('cookTime', cookTime);
+        formData.append('prepTime', prepTime);
+        formData.append('selectedCategory', selectedCategory);
+        formData.append('groceryList', JSON.stringify(groceryList)); // Assuming groceryList is an array
+        formData.append('description', description);
+        formData.append('recipeServings', recipeServings);
+        formData.append('recipeYield', recipeYield);
+        formData.append('recipeInstructions', recipeInstructions);
+        formData.append('checkedItems', JSON.stringify(checkedItems));
+        formData.append('name', name);
+        formData.append('userId', userId);
+
+            try {
+              const response = await fetch('http://localhost:1337/api/addRecipe', {
+                method: 'POST',
+                body: formData,
+              });
             if (response.ok) {
               const result = await response.json();
               console.log(result); // Recipe successfully added
@@ -254,11 +253,7 @@ const handleCheckboxChange = (category, id, checked) => {
 
                 <label className='add-recipe-lable'>
                     Recipe Image:
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                    />
+                    <input type='file' accept='image/*' onChange={handleImageChange} />
                 </label>
 
                 <label className='add-recipe-lable'>
@@ -356,7 +351,7 @@ const handleCheckboxChange = (category, id, checked) => {
                     <ul>
                       {groceryList.map((item, index) => (
                         <li key={index}>
-                          {item.amount} {item.measurement} of {item.ingredient}
+                          {item.amount} {item.measurementName} of {item.ingredientName}
                         </li>
                       ))}
                     </ul>

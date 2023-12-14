@@ -13,6 +13,7 @@ const { GridFsStorage } = require('multer-gridfs-storage');
 const multer = require('multer');
 const path = require('path');
 
+
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
   useNewUrlParser: true,
@@ -327,8 +328,6 @@ app.get('/api/recipes_categories', async (req, res) => {
   }
 });
 
-
-
 app.get('/api/recipes/images/:recipeId', async (req, res) => {
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const id = parseInt(req.params.recipeId);
@@ -339,7 +338,20 @@ app.get('/api/recipes/images/:recipeId', async (req, res) => {
     } else if (!recipe) {
       res.status(404).send('Image not found');
     } else {
-      res.send(recipe.image_link);
+      const image_link = recipe.image_link;
+      //console.log(typeof image_link)
+      if (typeof image_link === "string") {
+        console.log("hi ", recipe.image_link)
+        // If image_link is a string, assume it's a URL
+        res.send(recipe.image_link);
+      } else if (image_link && image_link.filename && image_link.fileId) {
+        // If image_link is an object with filename and fileId
+        const { filename, fileId } = image_link;
+        res.send({ filename, fileId });
+      } else {
+        // Handle other cases as needed
+        res.status(500).send('Invalid image_link format');
+      }
     }
   });
 });
@@ -388,7 +400,6 @@ app.delete('/api/favorites/:recipeId/:userId', (req, res) => {
     }
   });
 });
-
 
 app.get('/api/favorites/:userId', async (req, res) => {
   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
@@ -455,14 +466,16 @@ app.get('/api/measurements', async(req,res)=>{
   }
 });
 
-app.post('/api/addRecipe', async (req, res) => {
+app.use('/api/addRecipe/images', express.static(path.join(__dirname, 'uploads')));
+
+app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
+  const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS)
   const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const id = 1
   const {              
     recipeName,
-    selectedImage,
     cookTime,
     prepTime,
     selectedCategory,
@@ -474,6 +487,7 @@ app.post('/api/addRecipe', async (req, res) => {
     checkedItems,
     name,
     userId,} = req.body;
+    
   const parseTimeToDuration = (timeString) => {
     const [hours, minutes] = timeString.split(':').map(Number);
 
@@ -506,8 +520,9 @@ app.post('/api/addRecipe', async (req, res) => {
   const datePublished = currentDate.toISOString();
   const totalCookTime = sumDurations(cookTime, prepTime);
   // Extract the true value from kosherCategories
-  const checkedKosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {}).filter(
-    (checkboxId) => checkedItems['kosher_categories'][checkboxId]
+  console.log('Received checkedItems:', JSON.parse(checkedItems));
+  const checkedKosherCategoryIds = Object.keys(JSON.parse(checkedItems)['kosher_categories'] || {}).filter(
+    (checkboxId) => JSON.parse(checkedItems)['kosher_categories'][checkboxId]
   );
   // Ensure there's at least one true value
   if (checkedKosherCategoryIds.length === 0) {
@@ -551,13 +566,59 @@ app.post('/api/addRecipe', async (req, res) => {
     RecipeInstructions:recipeInstructions,
     Kosher:kosherWord.kosher,
   })
-/*image doesnt work */
-  // Image.create({
-  //   recipe_ID:id,
-  //   image_link:selectedImage,
-  // })
+
+const recipeImage = req.file ? {
+  filename: req.file.filename,
+  fileId: req.file.id,
+} : null;
+
+  Image.create({
+    recipe_ID:id,
+    image_link:recipeImage,
+  })
+
+  // Insert RecipeIngredients 
+  for (const groceryItem of JSON.parse(groceryList)) {
+    const { ingredientId, measurementId, amount } = groceryItem;
+
+    await RecipeIngredients.create({
+      recipe_ID: id,
+      ingredient_ID: ingredientId,
+      measurement_ID: measurementId,
+      amount: amount,
+    });
+  }
+  /*/Insert categories*/
+  for (const [category, selectedItems] of Object.entries(JSON.parse(checkedItems))) {
+    if (Object.keys(selectedItems).length > 0) {
+      // Construct the table name based on the category
+      console.log(selectedItems)
+      const tableName = `recipe_${category.toLowerCase()}`;
+      const trueItems = Object.entries(selectedItems)
+      .filter(([itemId, isSelected]) => isSelected)
+      .map(([itemId]) => itemId);
+      // Insert rows into the corresponding table
+      for (const itemId of trueItems) {
+        await Collection.getModel(tableName).create({
+          recipe_ID: id,
+          category_ID: parseInt(itemId),
+        });
+      }
+    }
+  }
 });
 
+app.get('/api/addRecipe/images/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const readstream = gfs.openDownloadStream(ObjectId(filename));
+
+  readstream.on('error', (error) => {
+    console.error('Error retrieving image:', error);
+    res.status(404).send('Image not found');
+  });
+
+  readstream.pipe(res);
+});
 
 app.get('/api/my_recipes/:userId', async (req, res) => {
   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
@@ -579,6 +640,7 @@ app.get('/api/my_recipes/:userId', async (req, res) => {
     res.status(500).send('Error fetching favorites');
   }
 });
+
 app.listen(1337, () => {
   console.log('Server saterted on 1337')
 })

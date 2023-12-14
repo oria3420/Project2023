@@ -26,26 +26,53 @@ else{
 
   useEffect(() => {
     async function getImageUrl() {
-      const response = await fetch(`http://localhost:1337/api/recipes/images/${recipe.RecipeId}`);
-      const data = await response.text();
-      if (data !== 'Image not found' || data !== 'Error fetching image') {
-        //setImageUrl(data)
-        const resp = await fetch(data);
-        if (resp.ok) {
-          // console.log("if1")
-          setImageUrl(data) // URL is working, send the URL as a response
+      try {
+        const response = await fetch(`http://localhost:1337/api/recipes/images/${recipe.RecipeId}`);
+        if (response.ok) {
+          const data = await response.text(); // Read response as text
+          if (data.startsWith('http')) {
+            const imageUrlResponse = await fetch(data);
+            if (imageUrlResponse.ok) {
+              // URL is valid, use it
+              setImageUrl(data);
+            } else {
+              // URL is not valid, set default image
+              setImageUrl(defaultImageUrl);
+            }
+          } else {
+            // If data is not a URL, try parsing it as JSON
+            try {
+              const jsonData = JSON.parse(data);
+              if (jsonData && jsonData.filename && jsonData.fileId) {
+                // If it's a valid JSON with filename and fileId
+                const { filename, fileId } = jsonData;
+                const imageResponse = await fetch(`http://localhost:1337/api/addRecipe/images/${fileId}`);
+                if (imageResponse.ok) {
+                  const imageUrl = URL.createObjectURL(await imageResponse.blob());
+                  setImageUrl(imageUrl);
+                } else {
+                  setImageUrl(defaultImageUrl);
+                }
+              } else {
+                setImageUrl(defaultImageUrl);
+              }
+            } catch (jsonError) {
+              console.error(jsonError);
+              setImageUrl(defaultImageUrl);
+            }
+          }
         } else {
-          // console.log("if2")
-          setImageUrl(defaultImageUrl)
+          setImageUrl(defaultImageUrl);
         }
-      }
-      else {
-        // console.log("if3")
-        setImageUrl(defaultImageUrl)
+      } catch (error) {
+        console.error(error);
+        setImageUrl(defaultImageUrl);
       }
     }
+  
     getImageUrl();
   }, [recipe.RecipeId]);
+  
 
   const handleClick = (recipeId) => {
     navigate(`/recipes/${recipeId}`, { state: { name: name, user_id: user_id } });
