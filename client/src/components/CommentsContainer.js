@@ -14,17 +14,24 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageUploadStatus, setImageUploadStatus] = useState('');
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalOpenArray, setModalOpenArray] = useState([]);
 
+    const openModal = (index) => {
+        // Update the specific index in modalOpenArray
+        setModalOpenArray((prev) => {
+            const newArray = [...prev];
+            newArray[index] = true;
+            return newArray;
+        });
+    };
 
-    const openModal = () => {
-        setModalOpen(true);
-        console.log('Modal opened!', modalOpen);
-      };
-
-
-    const closeModal = () => {
-        console.log('Modal closed!');
-        setModalOpen(false);
+    const closeModal = (index) => {
+        // Update the specific index in modalOpenArray
+        setModalOpenArray((prev) => {
+            const newArray = [...prev];
+            newArray[index] = false;
+            return newArray;
+        });
     };
 
 
@@ -216,17 +223,19 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                             <div className='comment-image'>
                                 {comment.comment_image && comment.comment_image.fileId && (
                                     <img
-                                    src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`}
-                                    alt="Comment"
-                                    onClick={openModal}
-                                  />
-
+                                        src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`}
+                                        alt="Comment"
+                                        onClick={() => openModal(index)} // Pass the index to openModal
+                                    />
                                 )}
                             </div>
 
-                            {modalOpen && <ImageModal imageUrl={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`} closeModal={closeModal} />}
-
-
+                            {modalOpenArray[index] && (
+                                <ImageModal
+                                    imageUrl={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`}
+                                    closeModal={() => closeModal(index)} // Pass the index to closeModal
+                                />
+                            )}
                         </div>
                         <hr className="comment-line" />
                     </div>
