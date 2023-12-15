@@ -1,3 +1,7 @@
+:root {
+  --ring-color: #ffd000;
+}
+
 .bodyBackground {
   background-color:#262626; /* Add your desired background color here */
 }
@@ -10,17 +14,17 @@
   width: 150px;
   height: 150px;
   background: transparent;
-  border: 3px solid #3c3c3c;
+  border: 3px solid #2c2c2c;
   border-radius: 50%;
   display: flex; /* Use flexbox to center the content */
   align-items: center; /* Vertically center the content */
   justify-content: center; /* Horizontally center the content */
   font-family: sans-serif;
   font-size: 12px;
-  color: #fff000;
+  color: var(--ring-color);
   letter-spacing: 4px;
   text-transform: uppercase;
-  text-shadow: 0 0 10px #fff000;
+  text-shadow: 0 0 10px var(--ring-color);
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   text-align: center; /* Center the text within the circular element */
   line-height: normal; /* Reset the line-height for centering */
@@ -34,8 +38,8 @@
   width: 100%;
   height: 100%;
   border: 3px solid transparent;
-  border-top: 3px solid #fff000;
-  border-right: 3px solid #fff000;
+  border-top: 3px solid var(--ring-color);
+  border-right: 3px solid var(--ring-color);
   border-radius: 50%;
   animation: animateC 2s linear infinite;
 }
@@ -58,10 +62,10 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: #fff000;
+  background: var(--ring-color);
   top: -6px;
   right: -8px;
-  box-shadow: 0 0 20px #fff000;
+  box-shadow: 0 0 20px var(--ring-color);
 }
 
 @keyframes animateC {
