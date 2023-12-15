@@ -11,7 +11,7 @@ const Groceries = () => {
     const [ingredients,setIngredients] = useState([])
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredIngredients, setFilteredIngredients] = useState([]);
-    const [selectedIngredient, setSelectedIngredient] = useState('');
+    const [selectedIngredient, setSelectedIngredient] = useState({});
     const [groceryList, setGroceryList] = useState([]);
 
     
@@ -52,18 +52,35 @@ const Groceries = () => {
         }
       }, [searchTerm, ingredients]);
 
+    useEffect(() => {
+      // Load grocery list from local storage when the component mounts
+      const storedGroceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
+      setGroceryList(storedGroceryList);
+    }, []);
+  
+    useEffect(() => {
+      // Save grocery list to local storage whenever it changes
+      localStorage.setItem('groceryList', JSON.stringify(groceryList));
+    }, [groceryList]);
 
   const handleAddToGroceryList = () => {
     if (selectedIngredient) {
       const newItem = {
-        ingredient: selectedIngredient,
+        id: selectedIngredient.id,
+        ingredient: selectedIngredient.ingredient,
       };
       setGroceryList([...groceryList, newItem]);
       // Clear the input fields after adding to the list
-      setSelectedIngredient('');
+      setSelectedIngredient({});
       setSearchTerm('');
     }
   };
+
+  const handleDeleteFromGroceryList = (id) => {
+    const updatedList = groceryList.filter((item) => item.id !== id);
+    setGroceryList(updatedList);
+  };
+  
       return (
         <div>
             {name && <Navbar name={name} />}
@@ -84,7 +101,10 @@ const Groceries = () => {
                     className="dropdown-item"
                     onClick={() => {
                     setSearchTerm(ingredient.ingredient);
-                    setSelectedIngredient(ingredient.ingredient);
+                    setSelectedIngredient({
+                      id: ingredient.id,
+                      ingredient: ingredient.ingredient,
+                    });
                     }}
                 >
                   {ingredient.ingredient}
@@ -100,6 +120,7 @@ const Groceries = () => {
               {groceryList.map((item, index) => (
                 <li key={index}>
                   {item.ingredient}
+                  <button onClick={() => handleDeleteFromGroceryList(item.id)}>Delete</button>
                 </li>
               ))}
             </ul>
