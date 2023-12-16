@@ -41,7 +41,7 @@ function LoginPage() {
 
     }
     else {
-   setErrorMessage('Please check your username and password');
+      setErrorMessage('Please check your username and password');
     }
   }
 
@@ -49,34 +49,48 @@ function LoginPage() {
 
   return (
     <div className="connect-body">
-      <div className="form-connect">
-        <form onSubmit={loginUser}>
-          <img src="/images/logo_black_english.png" alt="Logo" className="logo-login" />
-          <label className="form-title">Login</label>
-          <input
-            className={`form-control input-login ${errorMessage ? 'error' : ''}` }
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            placeholder='Email'
-          />
-          <br />
-          <input
-            className={`form-control input-login ${errorMessage ? 'error' : ''}`}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            placeholder='Password'
-          />
-          <div className={`error-message ${errorMessage ? 'visible' : ''}`}>
-            {errorMessage && <p>{errorMessage}</p>}
+      <div className='image-container-login'>
+        <img src="/images/connect-image.jpg" alt="Connect" className="connect-image" />
+      </div>
+      <div className='form-container-login'>
+        <div className='logo-form-login'>
+
+          <img src="/images/logo_white_english.png" alt="Logo" className="logo-login" />
+          <div className="form-connect">
+            <form onSubmit={loginUser}>
+
+              <label className="form-title">Login</label>
+
+              <input
+                className={`form-control input-login ${errorMessage ? 'error' : ''}`}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="email"
+                placeholder='Email'
+              />
+              <br />
+              <input
+                className={`form-control input-login ${errorMessage ? 'error' : ''}`}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+                placeholder='Password'
+              />
+              <div className={`error-message ${errorMessage ? 'visible' : ''}`}>
+                {errorMessage && <p>{errorMessage}</p>}
+              </div>
+              <div className='login-buttons'>
+              <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
+              <input id="btn-register" className="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
+              </div>
+            </form>
+
           </div>
-          <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
-          <input id="btn-register" className="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
-        </form>
+        </div>
       </div>
     </div>
   );
 }
 
 export default LoginPage;
+

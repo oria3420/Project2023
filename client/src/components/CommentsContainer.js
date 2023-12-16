@@ -230,14 +230,14 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                         <div className='comment-bottom'>
                             <span id="comment-text">{comment.comment_text}</span>
                             <div className='comment-image'>
-                            {comment.comment_image && comment.comment_image.fileId && (
-                                <img
-                                    src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`}
-                                    alt="Comment"
-                                    onClick={() => openModal(index)}
-                                />
-                            )}
-                        </div>
+                                {comment.comment_image && comment.comment_image.fileId && (
+                                    <img
+                                        src={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`}
+                                        alt="Comment"
+                                        onClick={() => openModal(index)}
+                                    />
+                                )}
+                            </div>
                             {modalOpenArray[index] && (
                                 <ImageModal
                                     imageUrl={`http://localhost:1337/api/comments/images/${comment.comment_image.fileId}`}
