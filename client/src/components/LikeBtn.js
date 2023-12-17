@@ -1,5 +1,4 @@
 import './Components.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import React, { useState, useEffect } from 'react';
 import GuestrModal from './GuestModal';
 

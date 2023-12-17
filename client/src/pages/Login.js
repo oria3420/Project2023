@@ -57,32 +57,36 @@ function LoginPage() {
 
           <img src="/images/logo_white_english.png" alt="Logo" className="logo-login" />
           <div className="form-connect">
-            <form onSubmit={loginUser}>
+            <form onSubmit={loginUser} id='login-form'>
 
               <label className="form-title">Login</label>
-
-              <input
-                className={`form-control input-login ${errorMessage ? 'error' : ''}`}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                type="email"
-                placeholder='Email'
-              />
-              <br />
-              <input
-                className={`form-control input-login ${errorMessage ? 'error' : ''}`}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                type="password"
-                placeholder='Password'
-              />
-              <div className={`error-message ${errorMessage ? 'visible' : ''}`}>
-                {errorMessage && <p>{errorMessage}</p>}
+              <div className='input-fields-login'>
+                <input
+                  id="input-login-email"
+                  className={`form-control ${errorMessage ? 'error' : ''}`}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  placeholder='Email'
+                />
+                <br />
+                <input
+                  id="input-login-password"
+                  className={`form-control ${errorMessage ? 'error' : ''}`}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  placeholder='Password'
+                />
+                <div className={`error-message ${errorMessage ? 'visible' : ''}`}>
+                  {errorMessage && <p>{errorMessage}</p>}
+                </div>
               </div>
               <div className='login-buttons'>
-              <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
-              <input id="btn-register" className="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
+                <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
+                <input id="btn-register" className="btn btn-primary" type="button" value="New Account" onClick={redirectToRegister} />
               </div>
+
             </form>
 
           </div>

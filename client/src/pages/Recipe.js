@@ -6,7 +6,6 @@ import Loading from '../components/Loading';
 import NutritionTable from '../components/NutritionTable';
 import { useLocation } from 'react-router-dom';
 import './Recipe.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import LikeButton from '../components/LikeBtn';
 import CommentsContainer from '../components/CommentsContainer';
 

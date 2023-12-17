@@ -45,54 +45,80 @@
 }
 
 .logo-login {
-  width: 100px;
-  /* Set the width as needed */
+  width:18%;
   height: auto;
-  /* Maintain the aspect ratio */
-  margin-bottom: 20px;
+  padding-bottom: 35px;
+}
+
+#login-form {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .form-connect {
-  width: 50%;
+  width: 80%; /* Adjust as needed */
+  max-width: 400px; /* Add max-width for better responsiveness */
   height: 60%;
   background-color: white;
   padding: 20px;
-  /* Add padding as needed */
   border-radius: 60px;
-  /* Adjust border-radius as needed for rounded corners */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .form-title {
-  display: block;
   font-weight: bold;
   font-size: 1.2em;
+  margin-top: 5px;
   margin-bottom: 20px;
-  margin-top: 20px;
   color: orange;
 }
 
-.input-login {
+.input-fields-login {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#input-login-email,
+#input-login-password {
+  height: 40px;
+  margin-bottom: 10px;
   background-color: #dedbdb;
   border-color: #dedbdb;
   border-radius: 30px;
 }
 
+#input-login-email:focus,
+#input-login-password:focus {
+  background-color: #dedbdb;
+  border-color: #dedbdb;
+}
+
 .login-buttons {
   display: flex;
-  flex-direction: column; /* Stack items vertically */
-  align-items: center; /* Center items horizontally */
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
 }
 
 #btn-login,
 #btn-register {
   background-color: orange;
   border-color: orange;
-  border-radius: 15px;
+  border-radius:30px;
   margin: 20px 5px 0;
-  /* Adjusted margin to create space between buttons */
   font-weight: 600;
   font-size: 18px;
-  width: 150px; /* Adjust the width as needed */
+  width: 150px; 
   color: white;
 }
 
@@ -101,6 +127,15 @@
   border-color: orange;
   color: orange;
 }
+
+.error-message {
+  text-align: center;
+}
+
+.error-message.visible {
+  display: block;
+}
+
 
 /* 
 

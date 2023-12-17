@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 import './CommentsContainer.css';
-import 'bootstrap-icons/font/bootstrap-icons.css';
 import GuestrModal from './GuestModal';
 import ImageModal from './ImageModal';
 import FormData from 'form-data';
