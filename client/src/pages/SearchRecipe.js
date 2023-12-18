@@ -247,7 +247,7 @@ const filterRecipesByGroceryList = async () => {
                                     );
                                 })}
                         </div>
-<button className="btn btn-primary" onClick={filterRecipesByGroceryList}>
+<button className="btn btn-primary grocery-btn" onClick={filterRecipesByGroceryList}>
   Filter by Grocery List
 </button>
 
