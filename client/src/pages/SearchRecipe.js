@@ -183,28 +183,33 @@ const filterRecipesByGroceryList = async () => {
     // Array to store filtered recipe IDs
     const filteredRecipeIds = [];
   
-    // Iterate over each recipe and each ingredient in the groceryList
-    for (const recipe of filteredRecipesByName) {
-      for (const ingredient of groceryList) {
-        const ingredientId = ingredient.id
-        try {
-          // Make a request to the server to check if the ingredient is in the recipe
-          const response = await fetch(`http://localhost:1337/api/search_recipes/${recipe.RecipeId}/${ingredientId}`);
-          
-          // Check if the status is 200 (ingredient is in the recipe)
-          if (response.status === 200) {
-            filteredRecipeIds.push(recipe.RecipeId);
-          }
-        } catch (error) {
-          console.error('Error checking ingredient in recipe:', error);
-        }
-      }
-    }
+    // Use Promise.all with map to make the loops asynchronous
+    await Promise.all(
+      filteredRecipesByName.map(async (recipe) => {
+        await Promise.all(
+          groceryList.map(async (ingredient) => {
+            const ingredientId = ingredient.id;
+            try {
+              // Make a request to the server to check if the ingredient is in the recipe
+              const response = await fetch(`http://localhost:1337/api/search_recipes/${recipe.RecipeId}/${ingredientId}`);
+  
+              // Check if the status is 200 (ingredient is in the recipe)
+              if (response.status === 200) {
+                filteredRecipeIds.push(recipe.RecipeId);
+              }
+            } catch (error) {
+              console.error('Error checking ingredient in recipe:', error);
+            }
+          })
+        );
+      })
+    );
   
     // Filter the recipes based on the IDs
-    const filteredRecipes = filteredRecipesByName.filter(recipe => filteredRecipeIds.includes(recipe.RecipeId));
+    const filteredRecipes = filteredRecipesByName.filter((recipe) => filteredRecipeIds.includes(recipe.RecipeId));
     setFilteredRecipes(filteredRecipes);
   };
+  
   
 
     return (
