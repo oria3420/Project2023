@@ -8,7 +8,7 @@ import { useState } from 'react';
 import SearchBar from './SearchBar';
 import MyRecipesBtn from './MyRecipesBtn';
 import GuestrModal from './GuestModal';
-
+import LoginRegisterBtn from './LoginRegisterBtn'
 
 
 const Navbar = ({ name }) => {
@@ -98,7 +98,11 @@ const Navbar = ({ name }) => {
                             <li onClick={() => handleItemClick({ path: '/shopping',name:'shopping list' })}><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
                             <li onClick={() => handleItemClick({ path: '/setting',name:'setting' })}><button type="button" className="dropdown-item"><SettingBtn /></button></li>
                             <li><hr className="dropdown-divider" /></li>
-                            <li><button type="button" className="dropdown-item"><LogoutBtn /></button></li>
+                            {name === 'Guest' ? (
+                                <li><button type="button" className="dropdown-item"><LoginRegisterBtn /></button></li>
+                            ) : (
+                                <li><button type="button" className="dropdown-item"><LogoutBtn /></button></li>
+                            )}
                         </ul>
 
                     </div>

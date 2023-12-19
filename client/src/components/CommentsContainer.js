@@ -65,6 +65,14 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         }
     };
 
+    const handleImageUploadClick = (event) => {
+        if (user_id === "Guest") {
+            event.preventDefault();
+            handleGuestClick();
+            return;
+        }
+    };
+
     const handleSubmit = async () => {
         if (user_id === "Guest") {
             handleGuestClick();
@@ -183,7 +191,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                     <div className="button-container">
 
                         <div className="image-upload-container">
-                            <label className='add-image-btn'>
+                            <label className='add-image-btn' onClick={handleImageUploadClick}>
                                 <input type='file' accept='image/*' style={{ display: 'none' }} onChange={handleImageChange} />
                                 <i className="bi bi-image"></i>
                             </label>
@@ -251,7 +259,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                 </div>
             )}
             <GuestrModal
-                message={'To comment the recipe, please login or register'}
+                message={'To comment or upload a image in the recipe, please login or register'}
                 showModal={showModal}
                 onClose={() => setShowModal(false)}
             />
