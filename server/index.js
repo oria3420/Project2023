@@ -215,7 +215,6 @@ tableRoutes.forEach(route => {
 
 // recipe
 app.get('/api/recipes/:id', (req, res) => {
-
   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
   const id = parseInt(req.params.id);
   Recipe.findOne({ RecipeId: id }, (err, recipe) => {
@@ -297,17 +296,24 @@ app.get('/api/search_recipe', async (req, res) => {
     const collections = await mongoose.connection.db.listCollections().toArray();
     const filteredCollections = collections.filter(collection => /^(?!recipe).*categories$/.test(collection.name));
     const result = {};
-    for (const collection of filteredCollections) {
+
+    // Asynchronously fetch documents for each collection
+    const fetchDocumentsPromises = filteredCollections.map(async collection => {
       const documents = await mongoose.connection.db.collection(collection.name).find().toArray();
       const values = documents.map(doc => [Object.values(doc)[1], Object.values(doc)[2]]);
       result[collection.name] = values;
-    }
+    });
+
+    // Wait for all promises to complete
+    await Promise.all(fetchDocumentsPromises);
+
     res.json(result);
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 app.get('/api/recipes_categories', async (req, res) => {
   try {
@@ -316,10 +322,15 @@ app.get('/api/recipes_categories', async (req, res) => {
 
     const result = {};
 
-    for (const collection of recipeCollections) {
+    // Asynchronously fetch documents for each collection
+    const fetchDocumentsPromises = recipeCollections.map(async collection => {
       const docs = await mongoose.connection.db.collection(collection.name).find().toArray();
       result[collection.name] = docs;
-    }
+    });
+
+    // Wait for all promises to complete
+    await Promise.all(fetchDocumentsPromises);
+
     res.json(result);
 
   } catch (err) {
@@ -327,6 +338,7 @@ app.get('/api/recipes_categories', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 app.get('/api/recipes/images/:recipeId', async (req, res) => {
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
