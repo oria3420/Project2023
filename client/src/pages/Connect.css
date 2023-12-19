@@ -133,59 +133,30 @@
   text-align: center;
 }
 
-.error-message.visible {
-  display: block;
-}
-
-
-/* 
-
-.logo-register {
-  width: 20%;
-  height: 20%;
-  margin-bottom: 7px;
-}
-
-
-.input-select {
-  height: max-content;
-  font-size: 15px;
-}
-
-.input-login.error {
-  border-color: red;
-  background-color: #f5c6c6;
-}
-
 .error-message {
   display: none;
 }
 
 .visible {
+  margin-bottom: -15px;
+  font-size: 15px;
   display: block;
   color: red;
-  font-weight: bold;
 }
+
+.error {
+  border: 1px solid red; /* Set a solid red border */
+  box-shadow: 0 0 5px red; /* Add a red glow effect using box-shadow */
+}
+
+
+/* 
+
+
 
 .input-register.error {
   border-color: red;
   background-color: #f5c6c6;
 }
 
-.recipe_image {
-  width: 50px;
-  height: 30px;
-} */
-
-
-/* Media Query for smaller screens */
-/* @media (max-width: 600px) {
-  .form-connect {
-    width: 90%;
-  }
-
-  #btn-login,
-  #btn-register {
-    width: 100%; 
-  }
-} */
+*/

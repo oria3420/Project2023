@@ -45,7 +45,15 @@ function LoginPage() {
     }
   }
 
+  function handleEmailChange(e) {
+    setEmail(e.target.value);
+    setErrorMessage(''); // Clear error message when typing in the email field
+  }
 
+  function handlePasswordChange(e) {
+    setPassword(e.target.value);
+    setErrorMessage(''); // Clear error message when typing in the password field
+  }
 
   return (
     <div className="connect-body">
@@ -65,7 +73,7 @@ function LoginPage() {
                   id="input-login-email"
                   className={`form-control ${errorMessage ? 'error' : ''}`}
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={handleEmailChange}
                   type="email"
                   placeholder='Email'
                 />
@@ -74,13 +82,14 @@ function LoginPage() {
                   id="input-login-password"
                   className={`form-control ${errorMessage ? 'error' : ''}`}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                   type="password"
                   placeholder='Password'
                 />
-                <div className={`error-message ${errorMessage ? 'visible' : ''}`}>
-                  {errorMessage && <p>{errorMessage}</p>}
-                </div>
+
+              </div>
+              <div className={`error-message ${errorMessage ? 'visible' : ''}`}>
+                {errorMessage && <p>{errorMessage}</p>}
               </div>
               <div className='login-buttons'>
                 <input id="btn-login" className="btn btn-primary" type="submit" value="Login" />
