@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap');
 
 .welcome-title-up {
-  font-size: 30px;
+  font-size: 25px;
   color: orange;
   margin-bottom: 30px;
   font-family: 'Pacifico', cursive;
@@ -10,9 +10,9 @@
 
 .welcome-title-bottom {
   font-weight: bold;
-  font-size: 60px;
+  font-size: 55px;
   color: rgb(255, 255, 255);
-  margin-bottom: 60px;
+  margin-bottom: 50px;
   font-family: 'Fjalla One', sans-serif;
   letter-spacing: 1px;
 }
@@ -32,7 +32,7 @@
   /* Adjusted margin to create space between buttons */
   font-weight: 600;
   font-size: 18px;
-  width: 150px; /* Adjust the width as needed */
+  width: 120px; /* Adjust the width as needed */
   color: black;
 }
 
@@ -40,6 +40,7 @@
   background-color: transparent;
   border-color: orange;
   color: orange;
+  margin-left: 10px;
 }
 
 .welcome-body {
@@ -105,6 +106,7 @@
 
 
 .sub-title {
+  font-size: 25px;
   color: rgb(236, 195, 146);
 }
 
@@ -119,7 +121,6 @@
   border: none;
 }
 
-
 #guest-label-welcome {
   font-style: italic;
   color: orange;
@@ -128,7 +129,19 @@
 }
 
 .guest-arrow {
-  margin-top: -10px;
   font-size: 1em;
   transform: scaleX(2);
+  animation: moveArrow 1s ease-in-out infinite;
+}
+
+@keyframes moveArrow {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(5px); /* Adjust the distance the arrow moves */
+  }
+  100% {
+    transform: translateX(0);
+  }
 }
