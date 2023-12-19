@@ -70,13 +70,13 @@ const SearchRecipe = () => {
         fetch('http://localhost:1337/api/search_recipe')
             .then(response => response.json())
             .then(data => {
+                setCategories(data);
                 const expandedCategories = {};
                 const checkedItems = {};
                 Object.keys(data).forEach(category => {
                     expandedCategories[category] = false;
                     checkedItems[category] = {};
                 });
-                setCategories(data);
                 setExpandedCategories(expandedCategories);
                 setCheckedItems(checkedItems);
                 setLoading(false); // Set loading to false when search categories have loaded
@@ -251,10 +251,11 @@ const SearchRecipe = () => {
                                         </div>
                                     );
                                 })}
+                            <button className="btn btn-primary grocery-btn" onClick={filterRecipesByGroceryList}>
+                                Filter by Grocery List
+                            </button>
                         </div>
-                        <button className="btn btn-primary grocery-btn" onClick={filterRecipesByGroceryList}>
-                            Filter by Grocery List
-                        </button>
+
 
                         <div className='recipes-container'>
                             {filteredRecipes.length === 0 ? (

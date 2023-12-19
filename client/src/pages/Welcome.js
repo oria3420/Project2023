@@ -37,6 +37,9 @@ function WelcomePage() {
             <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Login" onClick={redirectToLogin} />
             <input id="btn-register-welcome" className="btn btn-primary" type="button" value="Register" onClick={redirectToRegister} />
           </div>
+          <div className='guest-button'>
+          <input id="" className="btn btn-primary" type="submit" value="Guest" onClick={redirectToGuest} />
+          </div>
         </div>
       </div>
     </div>
@@ -45,4 +48,3 @@ function WelcomePage() {
 
 export default WelcomePage;
 
-// <input id="btn-login-welcome" className="btn btn-primary" type="submit" value="Guest" onClick={redirectToGuest} />

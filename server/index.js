@@ -598,7 +598,7 @@ const recipeImage = req.file ? {
       measurement_ID: measurementId,
       amount: amount,
     });
-  }
+  }userId
   /*/Insert categories*/
   for (const [category, selectedItems] of Object.entries(JSON.parse(checkedItems))) {
     if (Object.keys(selectedItems).length > 0) {
