@@ -81,7 +81,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
     const handleCommentSubmit = async (trimmedComment) => {
         try {
-            console.log("trying to add a new comment")
             const formData = new FormData();
             formData.append('comment_text', trimmedComment);
             formData.append('recipe_id', id);
@@ -101,7 +100,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         } catch (error) {
             console.error('Error submitting comment:', error);
         } finally {
-            console.log('success');
             handleImageUploadReset();
             setSelectedImage(null);
         }
@@ -156,8 +154,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         return formattedDate;
     }
 
-
-    console.log(comments)
 
     return (
         <div className='comments-container'>

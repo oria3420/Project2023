@@ -45,9 +45,7 @@
 .welcome-body {
   display: flex;
   justify-content: space-between;
-  /* Creates space between the two parts */
   align-items: center;
-  /* Vertically center the content */
   height: 100vh;
   background-size: cover;
   background-position: center;
@@ -108,4 +106,29 @@
 
 .sub-title {
   color: rgb(236, 195, 146);
+}
+
+.guest-welcome {
+  margin-top: -30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: orange;
+  position: relative; /* Required for positioning the arrow */
+}
+
+#guest-button-welcome {
+  font-style: italic; /* Assuming you want italic text */
+  color: orange;
+  text-decoration-line: underline;
+  text-decoration-color: orange; /* Set the color of the underline */
+  text-decoration-thickness: 1px; /* Adjust the thickness of the underline */
+}
+
+
+
+.guest-arrow {
+  margin-top: -10px;
+  font-size: 1em; /* Adjust the size as needed */
+  transform: scaleX(2); /* Adjust the scale factor for width */
 }

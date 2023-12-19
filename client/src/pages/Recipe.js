@@ -16,16 +16,16 @@ const RecipePage = () => {
   let user_id
   const location = useLocation();
   //console.log(location)
-if(location.state !== null){
-  user_name = location.state.name;
-  user_id = location.state.user_id;
-// console.log(user_name)
-// console.log(user_id)
-}
-else{
-  user_name = "Guest"
-  user_id = "Guest"
-}
+  if (location.state !== null) {
+    user_name = location.state.name;
+    user_id = location.state.user_id;
+    // console.log(user_name)
+    // console.log(user_id)
+  }
+  else {
+    user_name = "Guest"
+    user_id = "Guest"
+  }
 
 
   const { id } = useParams();
@@ -116,7 +116,7 @@ else{
         setImageUrl(defaultImageUrl);
       }
     }
-  
+
     getImageUrl();
   }, [id]);
 
@@ -132,7 +132,7 @@ else{
 
   return (
     <div>
-    <Navbar name={user_name} />
+      <Navbar name={user_name} />
       {user_name && recipe ? (
         <>
           <div className='recipe-container'>
