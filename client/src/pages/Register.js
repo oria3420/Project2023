@@ -42,26 +42,26 @@ function RegisterPage() {
     })
 
     const data = await response.json()
-    if(name === ""){
+    if (name === "") {
       setNameError("Please write your name")
     }
-    else{
+    else {
       setNameError("")
     }
 
-    if(email === ""){
+    if (email === "") {
       setEmailError("Enter your email");
     }
-    else if(data.error === 'Duplicate email'){
+    else if (data.error === 'Duplicate email') {
       setEmailError("This email already exist");
     }
-    else{
+    else {
       setEmailError("");
     }
     if (password !== confirmPassword) {
       setConfirmPasswordError("Passwords do not match");
       return;
-    }else{
+    } else {
       setConfirmPasswordError("");
     }
     if (data.status === 'ok') {
@@ -72,96 +72,115 @@ function RegisterPage() {
 
   return (
     <div className="connect-body">
-      <div className="form-connect">
-        <form onSubmit={registerUser}>
-          <img src="/images/logo_black_english.png" alt="Logo" className="logo-register" />
-          <label for="validationCustom01" className="form-title">Create a new account</label>
-          <input
-            className={`form-control input-register ${nameError ? 'error' : ''}` }
-            value={name}
-            id="validationCustom01"
-            onChange={(e) => setName(e.target.value)}
-            type="text"
-            placeholder='Full Name'
-          />
-          {nameError ? (
-            <div className="error-message visible">
-              <p>{nameError}</p>
-            </div>
-          ) : (
-            <br/>
-          )}
-          <input
-            className={`form-control input-register ${emailError ? 'error' : ''}` }
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            type="email"
-            placeholder='Email'
-          />
-          {emailError ? (
-            <div className="error-message visible">
-              <p>{emailError}</p>
-            </div>
-          ) : (
-            <br/>
-          )}
-          <select className="form-select input-register input-select" value={gender} onChange={(e) => setGender(e.target.value)} required>
-            <option value="">Select Gender</option>
-            <option value="female">Female</option>
-            <option value="male">Male</option>
-          </select>
-          <br />
-          <input
-            className="form-control input-register"
-            value={birthDate}
-            onChange={(e) => setBirthDate(e.target.value)}
-            type="date"
-            placeholder='Birth Date'
-            required
-          />
-          <br />
-          <select className="form-select input-register input-select" value={district} onChange={(e) => setDistrict(e.target.value)} required>
-            <option value="">Select district</option>
-            <option value="northern">Northern District (HaTzafon)</option>
-            <option value="haifa">Haifa District (Hefa)</option>
-            <option value="central">Central District (HaMerkaz)</option>
-            <option value="tel_aviv">Tel Aviv District (Gush Dan)</option>
-            <option value="southern">Southern District (HaDarom)</option>
-            <option value="jerusalem">Jerusalem District (Yerushalayim)</option>
-          </select>
-          <br />
-          <input
-            className={`form-control input-register ${!validatePassword(password) ? 'error' : ''}` }
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-            placeholder='Password'
-            required
-          />
-          <div className={`error-message ${password && !validatePassword(password) ? 'visible' : ''}`}>
-          {password && !validatePassword(password) && <p>Password must be between 6 and 20 characters and include at least one letter and one number</p>}
-          </div>
-          <br />
-          <input
-            className={`form-control input-register ${confirmPasswordError ? 'error' : ''}` }
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            type="password"
-            placeholder='Confirm Password'
-          />
-          {confirmPasswordError ? (
-            <div className="error-message visible">
-              <p>{confirmPasswordError}</p>
-            </div>
-          ) : (
-            <br/>
-          )}
-          <p>Already have an account? <Link to="/login">Log in</Link></p>
-          <input id="btn-register" className="btn btn-primary" type="submit" value="Register" />
-        </form>
+
+      <div className='image-container-connect'>
+        <img src="/images/connect-image.jpg" alt="Connect" className="connect-image" />
       </div>
-    </div>
+
+      <div className='form-container-login'>
+        <div className='logo-form-register'>
+          <img src="/images/logo_white_english.png" alt="Logo" className="logo-register" />
+
+
+
+
+          <div className="form-register">
+            <form onSubmit={registerUser} id='login-form'>
+
+              <label className="form-title">Create a new account</label>
+              <div className='input-fields-login'>
+                <input
+                  className={`form-control input-register ${nameError ? 'error' : ''}`}
+                  value={name}
+                  id="validationCustom01"
+                  onChange={(e) => setName(e.target.value)}
+                  type="text"
+                  placeholder='Full Name'
+                />
+                {nameError ? (
+                  <div className="error-message visible">
+                    <p>{nameError}</p>
+                  </div>
+                ) : (
+                  <br />
+                )}
+                <input
+                  className={`form-control input-register ${emailError ? 'error' : ''}`}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  placeholder='Email'
+                />
+                {emailError ? (
+                  <div className="error-message visible">
+                    <p>{emailError}</p>
+                  </div>
+                ) : (
+                  <br />
+                )}
+                <select className="form-select input-register input-select" value={gender} onChange={(e) => setGender(e.target.value)} required>
+                  <option value="">Select Gender</option>
+                  <option value="female">Female</option>
+                  <option value="male">Male</option>
+                </select>
+                <br />
+                <input
+                  className="form-control input-register"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                  type="date"
+                  placeholder='Birth Date'
+                  required
+                />
+                <br />
+                <select className="form-select input-register input-select" value={district} onChange={(e) => setDistrict(e.target.value)} required>
+                  <option value="">Select district</option>
+                  <option value="northern">Northern District (HaTzafon)</option>
+                  <option value="haifa">Haifa District (Hefa)</option>
+                  <option value="central">Central District (HaMerkaz)</option>
+                  <option value="tel_aviv">Tel Aviv District (Gush Dan)</option>
+                  <option value="southern">Southern District (HaDarom)</option>
+                  <option value="jerusalem">Jerusalem District (Yerushalayim)</option>
+                </select>
+                <br />
+                <input
+                  className={`form-control input-register ${!validatePassword(password) ? 'error' : ''}`}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  type="password"
+                  placeholder='Password'
+                  required
+                />
+                <div className={`error-message ${password && !validatePassword(password) ? 'visible' : ''}`}>
+                  {password && !validatePassword(password) && <p></p>}
+                </div>
+                <br />
+                <input
+                  className={`form-control input-register ${confirmPasswordError ? 'error' : ''}`}
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  type="password"
+                  placeholder='Confirm Password'
+                />
+              </div>
+              {confirmPasswordError ? (
+                <div className="error-message visible">
+                  <p>{confirmPasswordError}</p>
+                </div>
+              ) : (
+                <br />
+              )}
+              <p>Already have an account? <Link to="/login">Log in</Link></p>
+              <input id="btn-register" className="btn btn-primary" type="submit" value="Register" />
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div >
   );
 }
 
 export default RegisterPage;
+
+// Password must be between 6 and 20 characters and include at least one letter and one number

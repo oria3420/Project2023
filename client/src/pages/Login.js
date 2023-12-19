@@ -57,14 +57,16 @@ function LoginPage() {
 
   return (
     <div className="connect-body">
-      <div className='image-container-login'>
+
+      <div className='image-container-connect'>
         <img src="/images/connect-image.jpg" alt="Connect" className="connect-image" />
       </div>
+      
       <div className='form-container-login'>
         <div className='logo-form-login'>
 
           <img src="/images/logo_white_english.png" alt="Logo" className="logo-login" />
-          <div className="form-connect">
+          <div className="form-login">
             <form onSubmit={loginUser} id='login-form'>
 
               <label className="form-title">Login</label>

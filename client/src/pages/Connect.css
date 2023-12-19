@@ -11,7 +11,7 @@
   transform: scaleX(-1);
 }
 
-.image-container-login {
+.image-container-connect {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -51,6 +51,13 @@
   padding-bottom: 35px;
 }
 
+.logo-register{
+  width: 80px;
+  height: auto;
+  align-self: flex-start;
+  padding: 10px;
+}
+
 #login-form {
   height: 100%;
   width: 100%;
@@ -60,7 +67,7 @@
   align-items: center;
 }
 
-.form-connect {
+.form-login, .form-register {
   width: 500px; /* Adjust as needed */
   height: 400px;
   max-width: 400px; /* Add max-width for better responsiveness */
@@ -72,6 +79,7 @@
   align-items: center;
   justify-content: space-between;
 }
+
 
 .form-title {
   font-weight: bold;
@@ -149,6 +157,16 @@
   box-shadow: 0 0 5px red; /* Add a red glow effect using box-shadow */
 }
 
+.logo-form-register{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-register{
+  height: 650px;
+}
 
 /* 
 
