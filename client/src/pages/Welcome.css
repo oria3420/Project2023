@@ -108,27 +108,27 @@
   color: rgb(236, 195, 146);
 }
 
-.guest-welcome {
+#guest-welcome {
   margin-top: -30px;
   display: flex;
   flex-direction: column;
   align-items: center;
   color: orange;
-  position: relative; /* Required for positioning the arrow */
+  position: relative;
+  outline: none;
+  border: none;
 }
 
-#guest-button-welcome {
-  font-style: italic; /* Assuming you want italic text */
+
+#guest-label-welcome {
+  font-style: italic;
   color: orange;
-  text-decoration-line: underline;
-  text-decoration-color: orange; /* Set the color of the underline */
-  text-decoration-thickness: 1px; /* Adjust the thickness of the underline */
+  position: relative;
+  outline: none; 
 }
-
-
 
 .guest-arrow {
   margin-top: -10px;
-  font-size: 1em; /* Adjust the size as needed */
-  transform: scaleX(2); /* Adjust the scale factor for width */
+  font-size: 1em;
+  transform: scaleX(2);
 }

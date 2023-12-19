@@ -42,14 +42,8 @@ function WelcomePage() {
 
         </div>
 
-        <div className='guest-welcome'>
-          <input
-            id="guest-button-welcome"
-            className="btn"
-            type="submit"
-            value="Continue as a Guest"
-            onClick={redirectToGuest}
-          />
+        <div className='btn' id="guest-welcome" type="submit" onClick={redirectToGuest}>
+          <label id="guest-label-welcome">Continue as a Guest</label>
           <i class="guest-arrow bi bi-arrow-right"></i>
         </div>
 
