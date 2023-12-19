@@ -26,22 +26,22 @@ const SearchRecipe = () => {
         const token = localStorage.getItem('token');
         if (token) {
             try {
-              const _user = jwt_decode(token);
-              // Handle user or guest based on your logic
-              setName(_user.name);
-              setUser(_user);
+                const _user = jwt_decode(token);
+                // Handle user or guest based on your logic
+                setName(_user.name);
+                setUser(_user);
             } catch (error) {
-              // Handle token decoding error
-              setName('Guest');
-              setUser(null);
-              console.error('Error decoding token:', error);
-              // You might want to redirect to login or handle the error in some way
+                // Handle token decoding error
+                setName('Guest');
+                setUser(null);
+                console.error('Error decoding token:', error);
+                // You might want to redirect to login or handle the error in some way
             }
-          } else {
+        } else {
             // Handle the case where there's no token (e.g., guest user)
             setName('Guest');
             setUser(null); // Set user to null or handle guest user data
-          }
+        }
     }, [navigate])
 
 
@@ -170,42 +170,42 @@ const SearchRecipe = () => {
     useEffect(() => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
-console.log(name)
+    console.log(name)
 
-const filterRecipesByGroceryList = async () => {
-    // Check if there are ingredients in the groceryList
-    const groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
-    if (groceryList.length === 0) {
-      console.log('Grocery list is empty');
-      return;
-    }
-  
-    // Array to store filtered recipe IDs
-    const filteredRecipeIds = [];
-  
-    // Iterate over each recipe and each ingredient in the groceryList
-    for (const recipe of filteredRecipesByName) {
-      for (const ingredient of groceryList) {
-        const ingredientId = ingredient.id
-        try {
-          // Make a request to the server to check if the ingredient is in the recipe
-          const response = await fetch(`http://localhost:1337/api/search_recipes/${recipe.RecipeId}/${ingredientId}`);
-          
-          // Check if the status is 200 (ingredient is in the recipe)
-          if (response.status === 200) {
-            filteredRecipeIds.push(recipe.RecipeId);
-          }
-        } catch (error) {
-          console.error('Error checking ingredient in recipe:', error);
+    const filterRecipesByGroceryList = async () => {
+        // Check if there are ingredients in the groceryList
+        const groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
+        if (groceryList.length === 0) {
+            console.log('Grocery list is empty');
+            return;
         }
-      }
-    }
-  
-    // Filter the recipes based on the IDs
-    const filteredRecipes = filteredRecipesByName.filter(recipe => filteredRecipeIds.includes(recipe.RecipeId));
-    setFilteredRecipes(filteredRecipes);
-  };
-  
+
+        // Array to store filtered recipe IDs
+        const filteredRecipeIds = [];
+
+        // Iterate over each recipe and each ingredient in the groceryList
+        for (const recipe of filteredRecipesByName) {
+            for (const ingredient of groceryList) {
+                const ingredientId = ingredient.id
+                try {
+                    // Make a request to the server to check if the ingredient is in the recipe
+                    const response = await fetch(`http://localhost:1337/api/search_recipes/${recipe.RecipeId}/${ingredientId}`);
+
+                    // Check if the status is 200 (ingredient is in the recipe)
+                    if (response.status === 200) {
+                        filteredRecipeIds.push(recipe.RecipeId);
+                    }
+                } catch (error) {
+                    console.error('Error checking ingredient in recipe:', error);
+                }
+            }
+        }
+
+        // Filter the recipes based on the IDs
+        const filteredRecipes = filteredRecipesByName.filter(recipe => filteredRecipeIds.includes(recipe.RecipeId));
+        setFilteredRecipes(filteredRecipes);
+    };
+
 
     return (
         <div>
@@ -247,9 +247,9 @@ const filterRecipesByGroceryList = async () => {
                                     );
                                 })}
                         </div>
-<button className="btn btn-primary" onClick={filterRecipesByGroceryList}>
-  Filter by Grocery List
-</button>
+                        <button className="btn btn-primary" onClick={filterRecipesByGroceryList}>
+                            Filter by Grocery List
+                        </button>
 
                         <div className='recipes-container'>
                             {filteredRecipes.length === 0 ? (
