@@ -33,6 +33,19 @@
   z-index: 2;
 }
 
+.form-login {
+  width: 500px; /* Adjust as needed */
+  height: 400px;
+  max-width: 400px; /* Add max-width for better responsiveness */
+  background-color: white;
+  padding: 20px;
+  border-radius: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
 
 .logo-form-login {
   text-align: center;
