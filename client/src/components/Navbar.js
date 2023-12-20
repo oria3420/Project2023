@@ -8,17 +8,16 @@ import { useState } from 'react';
 import SearchBar from './SearchBar';
 import MyRecipesBtn from './MyRecipesBtn';
 import GuestrModal from './GuestModal';
-import LoginRegisterBtn from './LoginRegisterBtn'
 
 
 const Navbar = ({ name }) => {
     const navigate = useNavigate()
     const [showModal, setShowModal] = useState(false);
-    const [pressButton, setpressButton] = useState("");
+    const [_pressButton, setPressButton] = useState(""); // eslint-disable-line no-unused-vars
     const [message, setMessage] = useState("");
 
     const handleGuestClick = (obj) => {
-        setpressButton(obj);
+        setPressButton(obj);
         // console.log(obj)
         setMessage(`To enter the ${obj} page, please login or register`)
         setShowModal(true);
@@ -98,11 +97,7 @@ const Navbar = ({ name }) => {
                             <li onClick={() => handleItemClick({ path: '/shopping',name:'shopping list' })}><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
                             <li onClick={() => handleItemClick({ path: '/setting',name:'setting' })}><button type="button" className="dropdown-item"><SettingBtn /></button></li>
                             <li><hr className="dropdown-divider" /></li>
-                            {name === 'Guest' ? (
-                                <li><button type="button" className="dropdown-item"><LoginRegisterBtn /></button></li>
-                            ) : (
-                                <li><button type="button" className="dropdown-item"><LogoutBtn /></button></li>
-                            )}
+                            <li><button type="button" className="dropdown-item"><LogoutBtn userName={name} /></button></li>
                         </ul>
 
                     </div>
