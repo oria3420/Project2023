@@ -206,7 +206,7 @@ function RegisterPage() {
               )}
 
 
-              <p className='link-reg'>Already have an account? <Link className='login-link' to="/login">Log in</Link></p>
+              <p className='link-reg'>Already have an account? <Link id='login-link' to="/login">Log in</Link></p>
 
               <input id="btn-register2" className="btn" type="submit" value="Register" />
             </form>

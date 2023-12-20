@@ -243,7 +243,7 @@ const SearchRecipe = () => {
                                             </div>
                                             {expandedCategories[category] && categories[category].sort((a, b) => (a[1] && b[1]) ? a[1].localeCompare(b[1]) : 0).map((value) => (
                                                 <div className="form-check" key={value}>
-                                                    <input className="form-check-input" type="checkbox" id={`checkbox_${value}`} defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
+                                                    <input className="form-check-input" type="checkbox" id="check-box" defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
                                                     <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
                                                 </div>
                                             ))}

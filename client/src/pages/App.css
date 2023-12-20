@@ -211,3 +211,24 @@
 .grocery-btn{
     height: 60px;
 }
+
+.form-check-input:checked{
+    background-color: orange;
+    border-color: orange  !important;
+    /* box-shadow: 0 0 5px rgba(255, 165, 0, 0.5); */
+}
+
+.form-check-input:focus {
+    border-color: orange;
+    outline: 0;
+    box-shadow:none;
+}
+
+/* Unfocus styles */
+.form-check-input:not(:focus) {
+    box-shadow: none; /* Remove the box-shadow */
+}
+
+#check-box{
+    border-color: #aeacac;
+}
