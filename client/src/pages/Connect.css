@@ -69,17 +69,21 @@
 }
 
 #register-form{
+  height: fit-content;
   align-self: center;
-  width: 100%;
+  width: 400px;
+  background-color: white;
+  border-radius: 60px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.form-login, .form-register-wrapper {
-  width: 500px; /* Adjust as needed */
-  height: 400px;
-  max-width: 400px; /* Add max-width for better responsiveness */
-  background-color: white;
-  padding: 20px;
-  border-radius: 60px;
+.form-register-wrapper {
+  height:100%; 
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -139,17 +143,16 @@
   margin-bottom: 5px;
 }
 
+
 #btn-register {
   background-color: transparent;
   border-color: orange;
   color: orange;
 }
 
-.error-message {
-  text-align: center;
-}
 
-.error-message {
+.error-message, .error-msg-reg {
+  text-align: center;
   display: none;
 }
 
@@ -160,7 +163,8 @@
   color: red;
 }
 
-.error {
+.form-control.error,
+.form-control.error:focus {
   border: 1px solid red; /* Set a solid red border */
   box-shadow: 0 0 5px red; /* Add a red glow effect using box-shadow */
 }
@@ -168,21 +172,6 @@
 .logo-form-register {
   width: 100%;
   display: flex;
-}
-
-.form-register-wrapper {
-  /* Take up the remaining width */
-  flex-grow: 1;
-  box-sizing: border-box; /* Ensure padding and border are included in the width */
-  margin-left:150px; /* Add margin or adjust as needed */
-  /* Fixed height */
-  height: 650px;
-
-  /* Center the content vertically and horizontally */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
 }
 
 .logo-container-registger{
@@ -201,7 +190,7 @@
 #input-register-gender,
 #input-register-district{
   height: 32px;
-  margin-bottom: 5px;
+  margin-bottom: 10px;
   background-color: #dedbdb;
   border-color: #dedbdb;
   border-radius: 30px;
@@ -213,13 +202,12 @@
 #input-register-birth::placeholder,
 #input-register-password::placeholder,
 #input-register-password2::placeholder,
-#input-register-gender::placeholder,
-#input-register-district::placeholder {
+.form-select {
   font-size: 14px; /* Adjust the font size as needed */
   color: #555; /* Adjust the color as needed */
 }
 
-#login-link{
+.login-link{
   color: orange;
 }
 
@@ -227,16 +215,17 @@
   margin-top:10px;
 }
 
-.form-select::focus{
-  
-}
-/* 
-
-
-
-.input-register.error {
-  border-color: red;
-  background-color: #f5c6c6;
+.form-select:focus{
+  box-shadow: none;
 }
 
-*/
+.visible-reg {
+  margin-bottom: 0px;
+  font-size: 14px;
+  display: block;
+  color: red;
+}
+
+.link-reg{
+  margin-top: -5px;
+}
