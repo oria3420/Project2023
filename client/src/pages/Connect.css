@@ -21,6 +21,7 @@
 }
 
 .form-container-login {
+  overflow-y: auto;
   background-color: black;
   flex: 1;
   display: flex;
@@ -58,7 +59,7 @@
   padding: 10px;
 }
 
-#login-form {
+#login-form, #register-form {
   height: 100%;
   width: 100%;
   display: flex;
@@ -67,7 +68,12 @@
   align-items: center;
 }
 
-.form-login, .form-register {
+#register-form{
+  align-self: center;
+  width: 100%;
+}
+
+.form-login, .form-register-wrapper {
   width: 500px; /* Adjust as needed */
   height: 400px;
   max-width: 400px; /* Add max-width for better responsiveness */
@@ -89,7 +95,7 @@
   color: orange;
 }
 
-.input-fields-login {
+.input-fields-login, .input-fields-register {
   width: 80%;
   display: flex;
   flex-direction: column;
@@ -120,7 +126,8 @@
 }
 
 #btn-login,
-#btn-register {
+#btn-register,
+#btn-register2 {
   background-color: orange;
   border-color: orange;
   border-radius:30px;
@@ -129,6 +136,7 @@
   font-size: 18px;
   width: 150px; 
   color: white;
+  margin-bottom: 5px;
 }
 
 #btn-register {
@@ -157,15 +165,66 @@
   box-shadow: 0 0 5px red; /* Add a red glow effect using box-shadow */
 }
 
-.logo-form-register{
+.logo-form-register {
   width: 100%;
   display: flex;
+}
+
+.form-register-wrapper {
+  /* Take up the remaining width */
+  flex-grow: 1;
+  box-sizing: border-box; /* Ensure padding and border are included in the width */
+  margin-left:150px; /* Add margin or adjust as needed */
+  /* Fixed height */
+  height: 650px;
+
+  /* Center the content vertically and horizontally */
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-.form-register{
-  height: 650px;
+.logo-container-registger{
+  display: flex;
+}
+
+#new-account-title{
+  margin-top: -5px;
+}
+
+#input-register-name, 
+#input-register-email,
+#input-register-birth,
+#input-register-password,
+#input-register-password2,
+#input-register-gender,
+#input-register-district{
+  height: 32px;
+  margin-bottom: 5px;
+  background-color: #dedbdb;
+  border-color: #dedbdb;
+  border-radius: 30px;
+}
+
+#input-register-name::placeholder,
+#input-register-name::placeholder, 
+#input-register-email::placeholder,
+#input-register-birth::placeholder,
+#input-register-password::placeholder,
+#input-register-password2::placeholder,
+#input-register-gender::placeholder,
+#input-register-district::placeholder {
+  font-size: 14px; /* Adjust the font size as needed */
+  color: #555; /* Adjust the color as needed */
+}
+
+#login-link{
+  color: orange;
+}
+
+#btn-register2{
+  margin-top:10px;
 }
 
 /* 

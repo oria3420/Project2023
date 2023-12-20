@@ -79,20 +79,22 @@ function RegisterPage() {
 
       <div className='form-container-login'>
         <div className='logo-form-register'>
+
+        <div className='logo-container-registger'>
           <img src="/images/logo_white_english.png" alt="Logo" className="logo-register" />
 
+          </div>
 
 
+          <div className="form-register-wrapper">
+            <form onSubmit={registerUser} id='register-form'>
 
-          <div className="form-register">
-            <form onSubmit={registerUser} id='login-form'>
-
-              <label className="form-title">Create a new account</label>
-              <div className='input-fields-login'>
+              <label id='new-account-title' className="form-title">Create a new account</label>
+              <div className='input-fields-register'>
                 <input
-                  className={`form-control input-register ${nameError ? 'error' : ''}`}
+                  className={`form-control ${nameError ? 'error' : ''}`}
                   value={name}
-                  id="validationCustom01"
+                  id="input-register-name"
                   onChange={(e) => setName(e.target.value)}
                   type="text"
                   placeholder='Full Name'
@@ -105,8 +107,9 @@ function RegisterPage() {
                   <br />
                 )}
                 <input
-                  className={`form-control input-register ${emailError ? 'error' : ''}`}
+                  className={`form-control ${emailError ? 'error' : ''}`}
                   value={email}
+                  id="input-register-email"
                   onChange={(e) => setEmail(e.target.value)}
                   type="email"
                   placeholder='Email'
@@ -118,22 +121,23 @@ function RegisterPage() {
                 ) : (
                   <br />
                 )}
-                <select className="form-select input-register input-select" value={gender} onChange={(e) => setGender(e.target.value)} required>
+                <select id="input-register-gender" className="form-select input-select" value={gender} onChange={(e) => setGender(e.target.value)} required>
                   <option value="">Select Gender</option>
                   <option value="female">Female</option>
                   <option value="male">Male</option>
                 </select>
                 <br />
                 <input
-                  className="form-control input-register"
+                  className="form-control"
                   value={birthDate}
+                  id="input-register-birth"
                   onChange={(e) => setBirthDate(e.target.value)}
                   type="date"
                   placeholder='Birth Date'
                   required
                 />
                 <br />
-                <select className="form-select input-register input-select" value={district} onChange={(e) => setDistrict(e.target.value)} required>
+                <select id="input-register-district" className="form-select input-select" value={district} onChange={(e) => setDistrict(e.target.value)} required>
                   <option value="">Select district</option>
                   <option value="northern">Northern District (HaTzafon)</option>
                   <option value="haifa">Haifa District (Hefa)</option>
@@ -144,8 +148,9 @@ function RegisterPage() {
                 </select>
                 <br />
                 <input
-                  className={`form-control input-register ${!validatePassword(password) ? 'error' : ''}`}
+                  className={`form-control ${!validatePassword(password) ? 'error' : ''}`}
                   value={password}
+                  id='input-register-password'
                   onChange={(e) => setPassword(e.target.value)}
                   type="password"
                   placeholder='Password'
@@ -156,8 +161,9 @@ function RegisterPage() {
                 </div>
                 <br />
                 <input
-                  className={`form-control input-register ${confirmPasswordError ? 'error' : ''}`}
+                  className={`form-control ${confirmPasswordError ? 'error' : ''}`}
                   value={confirmPassword}
+                  id='input-register-password2'
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   type="password"
                   placeholder='Confirm Password'
@@ -170,8 +176,8 @@ function RegisterPage() {
               ) : (
                 <br />
               )}
-              <p>Already have an account? <Link to="/login">Log in</Link></p>
-              <input id="btn-register" className="btn btn-primary" type="submit" value="Register" />
+              <p>Already have an account? <Link id='login-link' to="/login">Log in</Link></p>
+              <input id="btn-register2" className="btn btn-primary" type="submit" value="Register" />
             </form>
 
           </div>
