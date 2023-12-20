@@ -221,7 +221,6 @@ const SearchRecipe = () => {
                     <Loading />
                 ) : (
                     <>
-
                         <div className='filter-menu'>
                             {Object.keys(categories)
                                 .sort((a, b) => a.localeCompare(b))
@@ -251,11 +250,14 @@ const SearchRecipe = () => {
                                         </div>
                                     );
                                 })}
-                            <button className="btn btn-primary grocery-btn" onClick={filterRecipesByGroceryList}>
+                                {name === 'Guest' ? ( 
+                                    <div></div>                           
+                            ):(
+                                <button className="btn btn-primary grocery-btn" onClick={filterRecipesByGroceryList}>
                                 Filter by Grocery List
-                            </button>
+                                </button>
+                            )}
                         </div>
-
 
                         <div className='recipes-container'>
                             {filteredRecipes.length === 0 ? (
