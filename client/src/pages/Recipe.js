@@ -151,21 +151,18 @@ const RecipePage = () => {
                 <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 
                 <div className='times-container'>
-                  {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (
-                    <React.Fragment key={timeKey}>
-                      <div className='time'>
-                        <span id="time-number">{recipe[timeKey]}</span>
-                        <span id="time-text">{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
-                      </div>
-                      {index < 2 && <div className='time-separator'></div>}
-                    </React.Fragment>
-                  ))}
-                </div>
-
-
-
+                {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (
+                  <React.Fragment key={timeKey}>
+                    <div className='time'>
+                      <span id="time-number">{recipe[timeKey] || "0S"}</span>
+                      <span id="time-text">{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
+                    </div>
+                    {index < 2 && <div className='time-separator'></div>}
+                  </React.Fragment>
+                ))}
+              </div>
+              
                 <LikeButton recipeId={id} userEmail={user_id} pageType="RecipePage" />
-
 
               </div>
 
@@ -181,10 +178,12 @@ const RecipePage = () => {
 
               </div>
               <div className='description-details'>
+              {recipe.RecipeServings || recipe.RecipeYield ? (
                 <p>
                   <span className="bold-text">Servings: </span>
-                  <span> {recipe.RecipeServings}</span>
+                  <span>{recipe.RecipeServings || recipe.RecipeYield}</span>
                 </p>
+              ) : null}              
                 <p>
                   <span className="bold-text">Kosher: </span>
                   <span> {capitalizeFirstLetter(recipe.Kosher)}</span>
