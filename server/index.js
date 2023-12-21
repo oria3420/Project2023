@@ -253,13 +253,13 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
   try {
     const recipeId = parseInt(req.params.id);
     const tagCategories = Object.keys(TABLE_NAMES).filter(name => name.endsWith('_CATEGORIES') && !name.startsWith('RECIPE_'));
-
     const tagPromises = tagCategories.map(async tableName => {
       const RecipeTagsCategories = Collection.getModel(TABLE_NAMES[`RECIPE_${tableName}`]);
       const recipeTags = await RecipeTagsCategories.find({ recipe_ID: recipeId });
       if (!recipeTags || recipeTags.length === 0) {
         return [];
       }
+      
       const categoryIDs = recipeTags.map(tag => tag.category_ID);
       const tagPromises = categoryIDs.map(async (categoryID) => {
         const TagsCategories = Collection.getModel(TABLE_NAMES[tableName]);
@@ -588,7 +588,7 @@ const recipeImage = req.file ? {
     image_link:recipeImage,
   })
 
-  // Insert RecipeIngredients 
+//   // Insert RecipeIngredients 
   for (const groceryItem of JSON.parse(groceryList)) {
     const { ingredientId, measurementId, amount } = groceryItem;
 
@@ -598,12 +598,11 @@ const recipeImage = req.file ? {
       measurement_ID: measurementId,
       amount: amount,
     });
-  }userId
+  }
   /*/Insert categories*/
   for (const [category, selectedItems] of Object.entries(JSON.parse(checkedItems))) {
     if (Object.keys(selectedItems).length > 0) {
       // Construct the table name based on the category
-      console.log(selectedItems)
       const tableName = `recipe_${category.toLowerCase()}`;
       const trueItems = Object.entries(selectedItems)
       .filter(([itemId, isSelected]) => isSelected)
