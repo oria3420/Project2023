@@ -36,9 +36,9 @@
 }
 
 .recipe-image-container{
-  width: 300px; /* Set your preferred width */
-  height: 300px; /* Set your preferred height */
-  overflow: hidden; /* Hide any overflowing content */
+  width: 450px; 
+  height: 350px; 
+  overflow: hidden; 
 }
 
 .time {
