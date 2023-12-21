@@ -183,15 +183,19 @@ const RecipePage = () => {
                   <span className="bold-text">Servings: </span>
                   <span>{recipe.RecipeServings || recipe.RecipeYield}</span>
                 </p>
-              ) : null}              
+              ) : null} 
+              {recipe.Kosher ? (
                 <p>
-                  <span className="bold-text">Kosher: </span>
-                  <span> {capitalizeFirstLetter(recipe.Kosher)}</span>
-                </p>
+                <span className="bold-text">Kosher: </span>
+                <span> {capitalizeFirstLetter(recipe.Kosher)}</span>
+              </p>
+              ) : null}             
+              {recipe.RecipeCategory ? (
                 <p>
-                  <span className="bold-text">Category: </span>
-                  <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
-                </p>
+                <span className="bold-text">Category: </span>
+                <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
+              </p>
+              ) : null}
               </div>
             </div>
 
