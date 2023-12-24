@@ -170,9 +170,9 @@ const RecipePage = () => {
 
               <div className='recipe-image-container'>
               {imageUrl.length > 1 ? (
-                <Carousel  images={imageUrl} />
+                <Carousel images={imageUrl} />
                 ):(
-                  <img src={imageUrl[0]} alt="Card cap"></img>
+                  <img className="recipe-image" src={imageUrl[0]} alt="Card cap"></img>
                 )}
 
               </div>
