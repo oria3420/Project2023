@@ -13,18 +13,19 @@ import GuestrModal from './GuestModal';
 const Navbar = ({ name }) => {
     const navigate = useNavigate()
     const [showModal, setShowModal] = useState(false);
-    const [_pressButton, setPressButton] = useState(""); // eslint-disable-line no-unused-vars
+    //const [_pressButton, setPressButton] = useState(""); // eslint-disable-line no-unused-vars
     const [message, setMessage] = useState("");
+    const token = localStorage.getItem('token');
 
     const handleGuestClick = (obj) => {
-        setPressButton(obj);
+        //setPressButton(obj);
         // console.log(obj)
         setMessage(`To enter the ${obj} page, please login or register`)
         setShowModal(true);
       };
     
       const handleItemClick = (component) => {
-        if (name === "Guest") {
+        if (!token && name === "Guest") {
           handleGuestClick(component.name);
         } else {
           navigate(component.path);
@@ -42,7 +43,7 @@ const Navbar = ({ name }) => {
     }
     const groceries = (event) => {
         event.preventDefault()
-        if (name === "Guest") {
+        if (!token && name === "Guest") {
             handleGuestClick('groceries');
             return;
           }
@@ -50,7 +51,7 @@ const Navbar = ({ name }) => {
     }
     const addRecipe = (event) => {
         event.preventDefault()
-        if (name === "Guest") {
+        if (!token && name === "Guest") {
             handleGuestClick("add recipe");
             return;
           }

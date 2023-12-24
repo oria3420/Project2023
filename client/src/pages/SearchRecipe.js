@@ -250,7 +250,7 @@ const SearchRecipe = () => {
                                         </div>
                                     );
                                 })}
-                                {name === 'Guest' ? ( 
+                                {name === 'Guest' && user === null ? ( 
                                     <div></div>                           
                             ):(
                                 <button className="btn btn-primary grocery-btn" onClick={filterRecipesByGroceryList}>
