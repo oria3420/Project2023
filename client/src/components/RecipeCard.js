@@ -7,7 +7,7 @@ import LikeButton from './LikeBtn';
 const defaultImageUrl = '/images/logo-image.png'
 
 const RecipeCard = (props) => {
-  const [imageUrl, setImageUrl] = useState(null);
+  const [imageUrl, setImageUrls] = useState([]);
   const recipe = props.recipe;
   const user = props.user;
   let name;
@@ -25,54 +25,52 @@ else{
 
 
   useEffect(() => {
-    async function getImageUrl() {
+    async function getImageUrls() {
       try {
         const response = await fetch(`http://localhost:1337/api/recipes/images/${recipe.RecipeId}`);
         if (response.ok) {
-          const data = await response.text(); // Read response as text
-          if (data.startsWith('http')) {
-            const imageUrlResponse = await fetch(data);
-            if (imageUrlResponse.ok) {
-              // URL is valid, use it
-              setImageUrl(data);
-            } else {
-              // URL is not valid, set default image
-              setImageUrl(defaultImageUrl);
-            }
-          } else {
-            // If data is not a URL, try parsing it as JSON
-            try {
-              const jsonData = JSON.parse(data);
-              if (jsonData && jsonData.filename && jsonData.fileId) {
-                // If it's a valid JSON with filename and fileId
-                const { filename, fileId } = jsonData;
-                const imageResponse = await fetch(`http://localhost:1337/api/addRecipe/images/${fileId}`);
-                if (imageResponse.ok) {
-                  const imageUrl = URL.createObjectURL(await imageResponse.blob());
-                  setImageUrl(imageUrl);
+          const data = await response.json();
+          if (Array.isArray(data) && data.length > 0) {
+            const urls = await Promise.all(
+              data.map(async (imageData) => {
+                if (typeof imageData === 'string' && imageData.startsWith('http')) {
+                  // Check if the URL is valid
+                  const urlResponse = await fetch(imageData, { method: 'HEAD' });
+                  if (urlResponse.ok) {
+                    return imageData;
+                  } else {
+                    console.warn(`Invalid URL: ${imageData}`);
+                    return null;
+                  }
                 } else {
-                  setImageUrl(defaultImageUrl);
+                  console.warn(`Invalid URL format: ${imageData}`);
+                  return null;
                 }
-              } else {
-                setImageUrl(defaultImageUrl);
-              }
-            } catch (jsonError) {
-              console.error(jsonError);
-              setImageUrl(defaultImageUrl);
-            }
+              })
+            );
+
+            // Remove null values (invalid URLs) from the array
+            const filteredUrls = urls.filter((url) => url !== null);
+
+            // Set default image URL if the array becomes empty
+            setImageUrls(filteredUrls.length > 0 ? filteredUrls : [defaultImageUrl]);
+          } else {
+            // Handle the case when the server response is not an array or is empty
+            setImageUrls([defaultImageUrl]);
           }
         } else {
-          setImageUrl(defaultImageUrl);
+          // Handle the case when the server response is not okay
+          setImageUrls([defaultImageUrl]);
         }
       } catch (error) {
         console.error(error);
-        setImageUrl(defaultImageUrl);
+        // Handle the error
+        setImageUrls([defaultImageUrl]);
       }
     }
-  
-    getImageUrl();
-  }, [recipe.RecipeId]);
-  
+
+    getImageUrls();
+  }, [recipe.RecipeId, defaultImageUrl]);
 
   const handleClick = (recipeId) => {
     navigate(`/recipes/${recipeId}`, { state: { name: name, user_id: user_id } });
@@ -83,7 +81,7 @@ else{
 
       {imageUrl && (
         <div className="image-wrapper">
-          <img className="card-img-top" src={imageUrl} alt="Card cap" />
+          <img className="card-img-top" src={imageUrl[0]} alt="Card cap" />
         </div>
       )}
       <div className="card-body">
