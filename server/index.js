@@ -343,28 +343,35 @@ app.get('/api/recipes_categories', async (req, res) => {
 app.get('/api/recipes/images/:recipeId', async (req, res) => {
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const id = parseInt(req.params.recipeId);
-  Image.findOne({ recipe_ID: id }, (err, recipe) => {
-    if (err) {
-      console.error(err);
-      res.status(500).send('Error fetching image');
-    } else if (!recipe) {
-      res.status(404).send('Image not found');
-    } else {
-      const image_link = recipe.image_link;
-      //console.log(typeof image_link)
+  
+  try {
+    const distinctImageLinkFields = await Image.find({ recipe_ID: id }).distinct('image_link');
+    
+    if (!distinctImageLinkFields || distinctImageLinkFields.length === 0) {
+      console.log("Images not found");
+      res.status(404).send('Images not found');
+      return;
+    }
+
+    const images = distinctImageLinkFields.map(image_link => {
       if (typeof image_link === "string") {
-        // If image_link is a string, assume it's a URL
-        res.send(recipe.image_link);
+        console.log("if");
+        return image_link;
       } else if (image_link && image_link.filename && image_link.fileId) {
-        // If image_link is an object with filename and fileId
+        console.log("elseif");
         const { filename, fileId } = image_link;
-        res.send({ filename, fileId });
+        return { filename, fileId };
       } else {
-        // Handle other cases as needed
+        console.log("else");
         res.status(500).send('Invalid image_link format');
       }
-    }
-  });
+    });
+
+    res.send(images.filter(Boolean)); // Filter out null values
+  } catch (err) {
+    console.error("Error fetching images:", err);
+    res.status(500).send('Error fetching images');
+  }
 });
 
 app.get('/api/favorites/:recipeId/:userId', (req, res) => {
