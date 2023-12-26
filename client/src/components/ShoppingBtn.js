@@ -6,7 +6,7 @@ const ShoppingBtn = () => {
 
     const shopping = (event) => {
         event.preventDefault()
-        //navigate('/shopping')
+        navigate('/shopping')
     }
 
     return (

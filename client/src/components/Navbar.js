@@ -91,16 +91,20 @@ const Navbar = ({ name }) => {
                         <span className="navbar-text dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             {name}
                         </span>
-
-                        <ul className="dropdown-menu dropdown-position">
-                            <li onClick={() => handleItemClick({ path: '/my_recipes',name:'my recipe' })}><button type="button" className="dropdown-item"><MyRecipesBtn /></button></li>
-                            <li onClick={() => handleItemClick({ path: '/favorites',name:'favorites' })}><button type="button" className="dropdown-item"><FavoriesBtn /></button></li>
-                            <li onClick={() => handleItemClick({ path: '/shopping',name:'shopping list' })}><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
-                            <li onClick={() => handleItemClick({ path: '/setting',name:'setting' })}><button type="button" className="dropdown-item"><SettingBtn /></button></li>
+                        {!token && name === "Guest"? (
+                            <ul className="dropdown-menu dropdown-position">
+                            <li><button type="button" className="dropdown-item"><LogoutBtn userName={name} /></button></li>
+                            </ul>
+                            ):(
+                            <ul className="dropdown-menu dropdown-position">
+                            <li><button type="button" className="dropdown-item"><MyRecipesBtn /></button></li>
+                            <li><button type="button" className="dropdown-item"><FavoriesBtn /></button></li>
+                            <li><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
+                            <li><button type="button" className="dropdown-item"><SettingBtn /></button></li>
                             <li><hr className="dropdown-divider" /></li>
                             <li><button type="button" className="dropdown-item"><LogoutBtn userName={name} /></button></li>
                         </ul>
-
+                        )}
                     </div>
                 </div>
             </div>
