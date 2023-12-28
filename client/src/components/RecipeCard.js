@@ -42,6 +42,20 @@ else{
                     console.warn(`Invalid URL: ${imageData}`);
                     return null;
                   }
+                }else if (
+                  imageData &&
+                  imageData.filename &&
+                  imageData.fileId
+                ) {
+                  const imageResponse = await fetch(
+                    `http://localhost:1337/api/addRecipe/images/${imageData.fileId}`
+                  );
+                  if (imageResponse.ok) {
+                    const imageUrl = URL.createObjectURL(
+                      await imageResponse.blob()
+                    );
+                    return imageUrl;
+                  }
                 } else {
                   console.warn(`Invalid URL format: ${imageData}`);
                   return null;
