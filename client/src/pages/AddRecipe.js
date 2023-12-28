@@ -251,10 +251,60 @@ const handleCheckboxChange = (category, id, checked) => {
               <div className='image-details-recipe-right'>
               <div className='description-head'>Add Your Recipe</div>
               <div  className='description-bottom'>
-              <span className='description-bottom-title'>Recipe Name & Description</span>
-              </div>
+
+              <div className='description-bottom-title'>Recipe Name & Description</div>
+
+              <div className='description-fields'>
+              <div className='desc-field'>
+              <label className='input-title'>Recipe Name</label>
+              <input
+              className='input-field'
+                  type="text"
+                  value={recipeName || ''}
+                  onChange={(e) => setRecipeName(e.target.value)}
+                  required
+              />
               </div>
 
+              <div className='times-yields'>
+
+              <div className='desc-field'>
+              <label className='input-title'>Prep Time</label>
+              <input
+              className='input-field time-field'
+              type="time"
+              value={prepTime}
+              onChange={(e) => setPrepTime(e.target.value)}
+              required
+              />
+              </div>
+
+              <div className='desc-field'>
+              <label className='input-title'>Cook Time</label>
+              <input
+              className='input-field time-field'
+    type="time"
+    value={cookTime}
+    onChange={(e) => setCookTime(e.target.value)}
+/>
+              </div>
+
+              <div className='desc-field yields-field'>
+              <label className='input-title'>Yields /Servings</label>
+              <input
+              className='input-field'
+    type="text"
+    value={recipeYield}
+    onChange={(e) => setRecipeYield(e.target.value)}
+/>
+              </div>
+
+
+              </div>
+
+              </div>
+              </div>
+              </div>
               </div>
             </form>
             )}
@@ -265,39 +315,14 @@ const handleCheckboxChange = (category, id, checked) => {
 
 export default AddRecipe
 
-// <label className='add-recipe-lable'>
-// Recipe Name:
-// <input
-//     type="text"
-//     value={recipeName || ''}
-//     onChange={(e) => setRecipeName(e.target.value)}
-//     required
-// />
-// </label>
+
 
 // <label className='add-recipe-lable'>
 //     Recipe Image:
 //     <input type='file' accept='image/*' onChange={handleImageChange} />
 // </label>
 
-// <label className='add-recipe-lable'>
-// Cook Time:
-// <input
-//     type="time"
-//     value={cookTime}
-//     onChange={(e) => setCookTime(e.target.value)}
-// />
-// </label>
 
-// <label className='add-recipe-lable'>
-// Prep Time:
-// <input
-//     type="time"
-//     value={prepTime}
-//     onChange={(e) => setPrepTime(e.target.value)}
-//     required
-// />
-// </label>
 
 // <label className='add-recipe-lable'>
 // Category:
@@ -391,24 +416,6 @@ export default AddRecipe
 // />
 // </label>
 
-// <label className='add-recipe-lable'>
-// Recipe Servings:
-// <input
-//     type="number"
-//     value={recipeServings}
-//     onChange={(e) => setRecipeServings(e.target.value)}
-//     min="0"
-// />
-// </label>
-
-// <label className='add-recipe-lable'>
-// Recipe Yield:
-// <input
-//     type="text"
-//     value={recipeYield}
-//     onChange={(e) => setRecipeYield(e.target.value)}
-// />
-// </label>
 
 // <label className='add-recipe-lable'>
 // Recipe Instructions:
