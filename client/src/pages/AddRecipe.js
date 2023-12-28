@@ -1,5 +1,6 @@
 import Navbar from '../components/Navbar';
 import './App.css';
+import './AddRecipe.css'
 import React, { useState, useEffect} from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
@@ -240,179 +241,21 @@ const handleCheckboxChange = (category, id, checked) => {
             {name && <Navbar name={name} />}
             <div>
             {user && (
-            <form className="form-container" onSubmit={handleSubmit}>
-                <label className='add-recipe-lable'>
-                Recipe Name:
-                <input
-                    type="text"
-                    value={recipeName || ''}
-                    onChange={(e) => setRecipeName(e.target.value)}
-                    required
-                />
-                </label>
+            <form className='add-recipe-form' onSubmit={handleSubmit}>
 
-                <label className='add-recipe-lable'>
-                    Recipe Image:
-                    <input type='file' accept='image/*' onChange={handleImageChange} />
-                </label>
+              <div className='image-details-recipe'>
+              <div className='image-details-recipe-left'>
+              <div className='add-image-head'>Add Image</div>
+              </div>
 
-                <label className='add-recipe-lable'>
-                Cook Time:
-                <input
-                    type="time"
-                    value={cookTime}
-                    onChange={(e) => setCookTime(e.target.value)}
-                />
-                </label>
+              <div className='image-details-recipe-right'>
+              <div className='description-head'>Add Your Recipe</div>
+              <div  className='description-bottom'>
+              <span className='description-bottom-title'>Recipe Name & Description</span>
+              </div>
+              </div>
 
-                <label className='add-recipe-lable'>
-                Prep Time:
-                <input
-                    type="time"
-                    value={prepTime}
-                    onChange={(e) => setPrepTime(e.target.value)}
-                    required
-                />
-                </label>
-
-                <label className='add-recipe-lable'>
-                Category:
-                <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                required
-                >
-                <option value="" disabled>
-                    Select Category
-                </option>
-                {Object.entries(categories).map(([category, entries]) => (
-                    entries.map(([id, tagName]) => (
-                    <option key={id} value={tagName}>
-                        {tagName}
-                    </option>
-                    ))
-                  ))}
-                </select>
-                </label>
-
-                <label className='add-recipe-lable'>
-                    Ingredients:
-                    <div className="custom-dropdown">
-                    <input
-                    type="text"
-                    placeholder="Search ingredients..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    {searchTerm.length >= 3 && (
-                    <div className="dropdown-ingredient">
-                    {filteredIngredients.map((ingredient) => (
-                        <div
-                        key={ingredient.id}
-                        className="dropdown-item"
-                        onClick={() => {
-                        setSearchTerm(ingredient.ingredient);
-                        setSelectedIngredient(ingredient.ingredient);
-                        }}
-                    >
-                    {ingredient.ingredient}
-                    </div>
-                    ))}
-                </div>
-                )}
-                    </div>
-                    <div className="custom-dropdown">
-                    <select
-                    className='select-measurements'
-                    value={selectedMeasurement}
-                    onChange={(e) => setSelectedMeasurement(e.target.value)}
-                    >
-                      <option value="" disabled>
-                        Select Measurement
-                      </option>
-                      {measurements.map((measurement) => (
-                        <option key={measurement.id} value={measurement.measurement}>
-                          {measurement.measurement}
-                        </option>
-                      ))}
-                    </select>
-                    </div>
-                    <div>
-                    <input
-                    type="number"
-                    placeholder="Amount"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    />
-                    </div>
-                    <button onClick={handleAddToGroceryList}>Add to List</button>
-                    <div className='groceries-list'>
-                    {groceryList.length > 0 && <h2>Ingredients List</h2>}
-                    <ul>
-                      {groceryList.map((item, index) => (
-                        <li key={index}>
-                          {item.amount} {item.measurementName} of {item.ingredientName}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                </label>
-
-                <label className='add-recipe-lable'>
-                Description:
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                />
-                </label>
-
-                <label className='add-recipe-lable'>
-                Recipe Servings:
-                <input
-                    type="number"
-                    value={recipeServings}
-                    onChange={(e) => setRecipeServings(e.target.value)}
-                    min="0"
-                />
-                </label>
-
-                <label className='add-recipe-lable'>
-                Recipe Yield:
-                <input
-                    type="text"
-                    value={recipeYield}
-                    onChange={(e) => setRecipeYield(e.target.value)}
-                />
-                </label>
-
-                <label className='add-recipe-lable'>
-                Recipe Instructions:
-                <textarea
-                    value={recipeInstructions}
-                    onChange={(e) => setRecipeInstructions(e.target.value)}
-                    required
-                />
-                </label>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-                {Object.entries(categories).map(([category, entries]) => (
-                    <div key={category} className="checkbox-container">
-                      <label className="add-recipe-lable">{category+":"}</label>
-                      {entries.map(([id, tagName]) => (
-                        <label key={id} className="checkbox-label">
-                          <input
-                            type="checkbox"
-                            checked={checkedItems[category]?.[id] || false}
-                            onChange={(e) => handleCheckboxChange(category, id, e.target.checked)}
-                        />
-                        {tagName}
-                        </label>
-                      ))}
-                    </div>
-                  ))}
-
-                <button type="submit">Submit</button>
+              </div>
             </form>
             )}
           </div>
@@ -422,3 +265,175 @@ const handleCheckboxChange = (category, id, checked) => {
 
 export default AddRecipe
 
+// <label className='add-recipe-lable'>
+// Recipe Name:
+// <input
+//     type="text"
+//     value={recipeName || ''}
+//     onChange={(e) => setRecipeName(e.target.value)}
+//     required
+// />
+// </label>
+
+// <label className='add-recipe-lable'>
+//     Recipe Image:
+//     <input type='file' accept='image/*' onChange={handleImageChange} />
+// </label>
+
+// <label className='add-recipe-lable'>
+// Cook Time:
+// <input
+//     type="time"
+//     value={cookTime}
+//     onChange={(e) => setCookTime(e.target.value)}
+// />
+// </label>
+
+// <label className='add-recipe-lable'>
+// Prep Time:
+// <input
+//     type="time"
+//     value={prepTime}
+//     onChange={(e) => setPrepTime(e.target.value)}
+//     required
+// />
+// </label>
+
+// <label className='add-recipe-lable'>
+// Category:
+// <select
+// value={selectedCategory}
+// onChange={(e) => setSelectedCategory(e.target.value)}
+// required
+// >
+// <option value="" disabled>
+//     Select Category
+// </option>
+// {Object.entries(categories).map(([category, entries]) => (
+//     entries.map(([id, tagName]) => (
+//     <option key={id} value={tagName}>
+//         {tagName}
+//     </option>
+//     ))
+//   ))}
+// </select>
+// </label>
+
+// <label className='add-recipe-lable'>
+//     Ingredients:
+//     <div className="custom-dropdown">
+//     <input
+//     type="text"
+//     placeholder="Search ingredients..."
+//     value={searchTerm}
+//     onChange={(e) => setSearchTerm(e.target.value)}
+//     />
+//     {searchTerm.length >= 3 && (
+//     <div className="dropdown-ingredient">
+//     {filteredIngredients.map((ingredient) => (
+//         <div
+//         key={ingredient.id}
+//         className="dropdown-item"
+//         onClick={() => {
+//         setSearchTerm(ingredient.ingredient);
+//         setSelectedIngredient(ingredient.ingredient);
+//         }}
+//     >
+//     {ingredient.ingredient}
+//     </div>
+//     ))}
+// </div>
+// )}
+//     </div>
+//     <div className="custom-dropdown">
+//     <select
+//     className='select-measurements'
+//     value={selectedMeasurement}
+//     onChange={(e) => setSelectedMeasurement(e.target.value)}
+//     >
+//       <option value="" disabled>
+//         Select Measurement
+//       </option>
+//       {measurements.map((measurement) => (
+//         <option key={measurement.id} value={measurement.measurement}>
+//           {measurement.measurement}
+//         </option>
+//       ))}
+//     </select>
+//     </div>
+//     <div>
+//     <input
+//     type="number"
+//     placeholder="Amount"
+//     value={amount}
+//     onChange={(e) => setAmount(e.target.value)}
+//     />
+//     </div>
+//     <button onClick={handleAddToGroceryList}>Add to List</button>
+//     <div className='groceries-list'>
+//     {groceryList.length > 0 && <h2>Ingredients List</h2>}
+//     <ul>
+//       {groceryList.map((item, index) => (
+//         <li key={index}>
+//           {item.amount} {item.measurementName} of {item.ingredientName}
+//         </li>
+//       ))}
+//     </ul>
+//   </div>
+  
+// </label>
+
+// <label className='add-recipe-lable'>
+// Description:
+// <textarea
+//     value={description}
+//     onChange={(e) => setDescription(e.target.value)}
+// />
+// </label>
+
+// <label className='add-recipe-lable'>
+// Recipe Servings:
+// <input
+//     type="number"
+//     value={recipeServings}
+//     onChange={(e) => setRecipeServings(e.target.value)}
+//     min="0"
+// />
+// </label>
+
+// <label className='add-recipe-lable'>
+// Recipe Yield:
+// <input
+//     type="text"
+//     value={recipeYield}
+//     onChange={(e) => setRecipeYield(e.target.value)}
+// />
+// </label>
+
+// <label className='add-recipe-lable'>
+// Recipe Instructions:
+// <textarea
+//     value={recipeInstructions}
+//     onChange={(e) => setRecipeInstructions(e.target.value)}
+//     required
+// />
+// </label>
+// {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+// {Object.entries(categories).map(([category, entries]) => (
+//     <div key={category} className="checkbox-container">
+//       <label className="add-recipe-lable">{category+":"}</label>
+//       {entries.map(([id, tagName]) => (
+//         <label key={id} className="checkbox-label">
+//           <input
+//             type="checkbox"
+//             checked={checkedItems[category]?.[id] || false}
+//             onChange={(e) => handleCheckboxChange(category, id, e.target.checked)}
+//         />
+//         {tagName}
+//         </label>
+//       ))}
+//     </div>
+//   ))}
+
+// <button type="submit">Submit</button>

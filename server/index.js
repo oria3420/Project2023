@@ -355,7 +355,7 @@ app.get('/api/recipes/images/:recipeId', async (req, res) => {
 
     const images = distinctImageLinkFields.map(image_link => {
       if (typeof image_link === "string") {
-        console.log("if");
+        // console.log("if");
         return image_link;
       } else if (image_link && image_link.filename && image_link.fileId) {
         console.log("elseif");
