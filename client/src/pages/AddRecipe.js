@@ -1,7 +1,7 @@
 import Navbar from '../components/Navbar';
 import './App.css';
 import './AddRecipe.css'
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 
@@ -21,16 +21,16 @@ const AddRecipe = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const [categories, setCategories] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
-    const [ingredients,setIngredients] = useState([])
-    const [measurements,setMeasurements] = useState([])
+    const [ingredients, setIngredients] = useState([])
+    const [measurements, setMeasurements] = useState([])
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredIngredients, setFilteredIngredients] = useState([]);
     const [selectedIngredient, setSelectedIngredient] = useState('');
     const [selectedMeasurement, setSelectedMeasurement] = useState('');
     const [amount, setAmount] = useState('');
     const [groceryList, setGroceryList] = useState([]);
-    const [userId,setUserId] = useState('')
-    
+    const [userId, setUserId] = useState('')
+
     useEffect(() => {
         const token = localStorage.getItem('token')
         if (token) {
@@ -61,7 +61,7 @@ const AddRecipe = () => {
                 //     if (Object.hasOwnProperty.call(data, categoryKey)) {
                 //       const categoryEntries = data[categoryKey];
                 //       console.log(`Category: ${categoryKey}`);
-                      
+
                 //       for (const entry of categoryEntries) {
                 //         const [id, name] = entry;
                 //         console.log(`  Entry ID: ${id}, Name: ${name}`);
@@ -77,7 +77,7 @@ const AddRecipe = () => {
     }, []);
 
     useEffect(() => {
-        if(user){
+        if (user) {
             fetch(`http://localhost:1337/api/groceries`)
                 .then(res => res.json())
                 .then(data => {
@@ -86,13 +86,13 @@ const AddRecipe = () => {
                 .catch(error => console.error(error))
         }
     }, [user]);
-    
+
     useEffect(() => {
-        if(user){
+        if (user) {
             fetch(`http://localhost:1337/api/measurements`)
                 .then(res => res.json())
                 .then(data => {
-                  setMeasurements(data)
+                    setMeasurements(data)
                 })
                 .catch(error => console.error(error))
         }
@@ -100,68 +100,68 @@ const AddRecipe = () => {
 
     useEffect(() => {
         if (searchTerm.length >= 3) {
-          const filtered = ingredients.filter((ingred) =>
-            ingred && ingred.ingredient
-              ? ingred.ingredient.toLowerCase().includes(searchTerm.toLowerCase())
-              : false
-          );
-          setFilteredIngredients(filtered);
+            const filtered = ingredients.filter((ingred) =>
+                ingred && ingred.ingredient
+                    ? ingred.ingredient.toLowerCase().includes(searchTerm.toLowerCase())
+                    : false
+            );
+            setFilteredIngredients(filtered);
         } else {
-          setFilteredIngredients([]);
+            setFilteredIngredients([]);
         }
     }, [searchTerm, ingredients]);
-    
+
     const handleImageChange = (event) => {
-      const file = event.target.files[0];
-      setSelectedImage(file);
+        const file = event.target.files[0];
+        setSelectedImage(file);
     };
 
     const handleAddToGroceryList = () => {
-    if (selectedIngredient && selectedMeasurement && amount) {
-        const selectedIngredientObject = filteredIngredients.find(item => item.ingredient === selectedIngredient);
-        const selectedMeasurementObject = measurements.find(item => item.measurement === selectedMeasurement);
-        const newItem = {
-          ingredientId: selectedIngredientObject?.id,
-          measurementId: selectedMeasurementObject?.id,
-          amount: amount,
-          ingredientName: selectedIngredient,
-          measurementName: selectedMeasurement
-        };
-        setGroceryList([...groceryList, newItem]);
-        // Clear the input fields after adding to the list
-        setSelectedIngredient('');
-        setSelectedMeasurement('');
-        setAmount('');
-        setSearchTerm('');
-    }
+        if (selectedIngredient && selectedMeasurement && amount) {
+            const selectedIngredientObject = filteredIngredients.find(item => item.ingredient === selectedIngredient);
+            const selectedMeasurementObject = measurements.find(item => item.measurement === selectedMeasurement);
+            const newItem = {
+                ingredientId: selectedIngredientObject?.id,
+                measurementId: selectedMeasurementObject?.id,
+                amount: amount,
+                ingredientName: selectedIngredient,
+                measurementName: selectedMeasurement
+            };
+            setGroceryList([...groceryList, newItem]);
+            // Clear the input fields after adding to the list
+            setSelectedIngredient('');
+            setSelectedMeasurement('');
+            setAmount('');
+            setSearchTerm('');
+        }
     };
 
-const handleCheckboxChange = (category, id, checked) => {
-    setCheckedItems((prevCheckedItems) => {
-        const newCheckedItems = {
-        ...prevCheckedItems,
-        [category]: {
-            ...(prevCheckedItems[category] || {}),
-            [id]: checked,
-        },
-        };
-    
-        // If the category is kosher_categories, enforce exactly one checkbox
-        if (category === 'kosher_categories') {
-        const kosherCategoryIds = Object.keys(newCheckedItems[category]);
-        const numChecked = kosherCategoryIds.reduce(
-            (count, checkboxId) => (newCheckedItems[category][checkboxId] ? count + 1 : count),
-            0
-        );
-    
-        // If more than one checkbox is checked, uncheck the current one
-        if (numChecked > 1) {
-            newCheckedItems[category][id] = false;
-        }
-        }
-    
-        return newCheckedItems;
-    });
+    const handleCheckboxChange = (category, id, checked) => {
+        setCheckedItems((prevCheckedItems) => {
+            const newCheckedItems = {
+                ...prevCheckedItems,
+                [category]: {
+                    ...(prevCheckedItems[category] || {}),
+                    [id]: checked,
+                },
+            };
+
+            // If the category is kosher_categories, enforce exactly one checkbox
+            if (category === 'kosher_categories') {
+                const kosherCategoryIds = Object.keys(newCheckedItems[category]);
+                const numChecked = kosherCategoryIds.reduce(
+                    (count, checkboxId) => (newCheckedItems[category][checkboxId] ? count + 1 : count),
+                    0
+                );
+
+                // If more than one checkbox is checked, uncheck the current one
+                if (numChecked > 1) {
+                    newCheckedItems[category][id] = false;
+                }
+            }
+
+            return newCheckedItems;
+        });
     };
 
     const handleSubmit = async (e) => {
@@ -218,97 +218,123 @@ const handleCheckboxChange = (category, id, checked) => {
         formData.append('name', name);
         formData.append('userId', userId);
 
-            try {
-              const response = await fetch('http://localhost:1337/api/addRecipe', {
+        try {
+            const response = await fetch('http://localhost:1337/api/addRecipe', {
                 method: 'POST',
                 body: formData,
-              });
+            });
             if (response.ok) {
-              const result = await response.json();
-              console.log(result); // Recipe successfully added
+                const result = await response.json();
+                console.log(result); // Recipe successfully added
             } else {
-              console.error(`HTTP Error: ${response.status}`);
-              // Handle error response
+                console.error(`HTTP Error: ${response.status}`);
+                // Handle error response
             }
-          } catch (error) {
+        } catch (error) {
             console.error(error);
             // Handle fetch error (e.g., network error)
-          }
-        };
+        }
+    };
 
     return (
         <div>
             {name && <Navbar name={name} />}
             <div>
-            {user && (
-            <form className='add-recipe-form' onSubmit={handleSubmit}>
+                {user && (
+                    <form className='add-recipe-form' onSubmit={handleSubmit}>
+                        <div className='image-details-recipe'>
+                            <div className='image-details-recipe-left'>
+                                <div className='add-image-head'>Add Image</div>
+                            </div>
 
-              <div className='image-details-recipe'>
-              <div className='image-details-recipe-left'>
-              <div className='add-image-head'>Add Image</div>
-              </div>
+                            <div className='image-details-recipe-right'>
+                                <div className='description-head'>Add Your Recipe</div>
+                                <div className='description-bottom'>
+                                    <div className='description-bottom-title'>Recipe Name & Description</div>
 
-              <div className='image-details-recipe-right'>
-              <div className='description-head'>Add Your Recipe</div>
-              <div  className='description-bottom'>
+                                    <div className='description-fields'>
+                                        <div className='desc-field'>
+                                            <label className='input-title'>Recipe Name</label>
+                                            <input
+                                                className='input-field'
+                                                type="text"
+                                                value={recipeName || ''}
+                                                onChange={(e) => setRecipeName(e.target.value)}
+                                                required
+                                            />
+                                        </div>
 
-              <div className='description-bottom-title'>Recipe Name & Description</div>
+                                        <div className='times-yields'>
 
-              <div className='description-fields'>
-              <div className='desc-field'>
-              <label className='input-title'>Recipe Name</label>
-              <input
-              className='input-field'
-                  type="text"
-                  value={recipeName || ''}
-                  onChange={(e) => setRecipeName(e.target.value)}
-                  required
-              />
-              </div>
+                                            <div className='desc-field'>
+                                                <label className='input-title'>Prep Time</label>
+                                                <input
+                                                    className='input-field time-field'
+                                                    type="time"
+                                                    value={prepTime}
+                                                    onChange={(e) => setPrepTime(e.target.value)}
+                                                    required
+                                                />
+                                            </div>
 
-              <div className='times-yields'>
+                                            <div className='desc-field'>
+                                                <label className='input-title'>Cook Time</label>
+                                                <input
+                                                    className='input-field time-field'
+                                                    type="time"
+                                                    value={cookTime}
+                                                    onChange={(e) => setCookTime(e.target.value)}
+                                                />
+                                            </div>
 
-              <div className='desc-field'>
-              <label className='input-title'>Prep Time</label>
-              <input
-              className='input-field time-field'
-              type="time"
-              value={prepTime}
-              onChange={(e) => setPrepTime(e.target.value)}
-              required
-              />
-              </div>
+                                            <div className='desc-field yields-field'>
+                                                <label className='input-title'>Yields /Servings</label>
+                                                <input
+                                                    className='input-field'
+                                                    type="text"
+                                                    value={recipeYield}
+                                                    onChange={(e) => setRecipeYield(e.target.value)}
+                                                />
+                                            </div>
+                                        </div>
 
-              <div className='desc-field'>
-              <label className='input-title'>Cook Time</label>
-              <input
-              className='input-field time-field'
-    type="time"
-    value={cookTime}
-    onChange={(e) => setCookTime(e.target.value)}
-/>
-              </div>
+                                        <div className='desc-field'>
+                                            <label className='input-title'>Description</label>
+                                            <textarea
+                                                className='input-field desc-textbox'
+                                                value={description}
+                                                onChange={(e) => setDescription(e.target.value)}
+                                            />
+                                        </div>
 
-              <div className='desc-field yields-field'>
-              <label className='input-title'>Yields /Servings</label>
-              <input
-              className='input-field'
-    type="text"
-    value={recipeYield}
-    onChange={(e) => setRecipeYield(e.target.value)}
-/>
-              </div>
+                                        <div className='desc-field'>
+                                            <label className='input-title'>Category</label>
+                                            <select
+                                            className='input-field category-desc'
+                                                value={selectedCategory}
+                                                onChange={(e) => setSelectedCategory(e.target.value)}
+                                                required
+                                            >
+                                                <option value="" disabled>
+                                                    Select Category
+                                                </option>
+                                                {Object.entries(categories).map(([category, entries]) => (
+                                                    entries.map(([id, tagName]) => (
+                                                        <option key={id} value={tagName}>
+                                                            {tagName}
+                                                        </option>
+                                                    ))
+                                                ))}
+                                            </select>
+                                        </div>
 
-
-              </div>
-
-              </div>
-              </div>
-              </div>
-              </div>
-            </form>
-            )}
-          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                )}
+            </div>
         </div>
     )
 }
@@ -317,130 +343,3 @@ export default AddRecipe
 
 
 
-// <label className='add-recipe-lable'>
-//     Recipe Image:
-//     <input type='file' accept='image/*' onChange={handleImageChange} />
-// </label>
-
-
-
-// <label className='add-recipe-lable'>
-// Category:
-// <select
-// value={selectedCategory}
-// onChange={(e) => setSelectedCategory(e.target.value)}
-// required
-// >
-// <option value="" disabled>
-//     Select Category
-// </option>
-// {Object.entries(categories).map(([category, entries]) => (
-//     entries.map(([id, tagName]) => (
-//     <option key={id} value={tagName}>
-//         {tagName}
-//     </option>
-//     ))
-//   ))}
-// </select>
-// </label>
-
-// <label className='add-recipe-lable'>
-//     Ingredients:
-//     <div className="custom-dropdown">
-//     <input
-//     type="text"
-//     placeholder="Search ingredients..."
-//     value={searchTerm}
-//     onChange={(e) => setSearchTerm(e.target.value)}
-//     />
-//     {searchTerm.length >= 3 && (
-//     <div className="dropdown-ingredient">
-//     {filteredIngredients.map((ingredient) => (
-//         <div
-//         key={ingredient.id}
-//         className="dropdown-item"
-//         onClick={() => {
-//         setSearchTerm(ingredient.ingredient);
-//         setSelectedIngredient(ingredient.ingredient);
-//         }}
-//     >
-//     {ingredient.ingredient}
-//     </div>
-//     ))}
-// </div>
-// )}
-//     </div>
-//     <div className="custom-dropdown">
-//     <select
-//     className='select-measurements'
-//     value={selectedMeasurement}
-//     onChange={(e) => setSelectedMeasurement(e.target.value)}
-//     >
-//       <option value="" disabled>
-//         Select Measurement
-//       </option>
-//       {measurements.map((measurement) => (
-//         <option key={measurement.id} value={measurement.measurement}>
-//           {measurement.measurement}
-//         </option>
-//       ))}
-//     </select>
-//     </div>
-//     <div>
-//     <input
-//     type="number"
-//     placeholder="Amount"
-//     value={amount}
-//     onChange={(e) => setAmount(e.target.value)}
-//     />
-//     </div>
-//     <button onClick={handleAddToGroceryList}>Add to List</button>
-//     <div className='groceries-list'>
-//     {groceryList.length > 0 && <h2>Ingredients List</h2>}
-//     <ul>
-//       {groceryList.map((item, index) => (
-//         <li key={index}>
-//           {item.amount} {item.measurementName} of {item.ingredientName}
-//         </li>
-//       ))}
-//     </ul>
-//   </div>
-  
-// </label>
-
-// <label className='add-recipe-lable'>
-// Description:
-// <textarea
-//     value={description}
-//     onChange={(e) => setDescription(e.target.value)}
-// />
-// </label>
-
-
-// <label className='add-recipe-lable'>
-// Recipe Instructions:
-// <textarea
-//     value={recipeInstructions}
-//     onChange={(e) => setRecipeInstructions(e.target.value)}
-//     required
-// />
-// </label>
-// {errorMessage && <p className="error-message">{errorMessage}</p>}
-
-// {Object.entries(categories).map(([category, entries]) => (
-//     <div key={category} className="checkbox-container">
-//       <label className="add-recipe-lable">{category+":"}</label>
-//       {entries.map(([id, tagName]) => (
-//         <label key={id} className="checkbox-label">
-//           <input
-//             type="checkbox"
-//             checked={checkedItems[category]?.[id] || false}
-//             onChange={(e) => handleCheckboxChange(category, id, e.target.checked)}
-//         />
-//         {tagName}
-//         </label>
-//       ))}
-//     </div>
-//   ))}
-
-// <button type="submit">Submit</button>

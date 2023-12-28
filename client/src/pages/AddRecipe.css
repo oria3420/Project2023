@@ -1,5 +1,5 @@
 :root {
-    --height-left: 400px;
+    --height-left: 550px;
     --height-head: 50px;
     --head-margin: 10px;
     --padding-description: 10px
@@ -114,4 +114,12 @@
 
 .description-fields>div:last-child {
     margin-bottom: 0;
+}
+
+.desc-textbox{
+    height: 100px;
+}
+
+.category-desc{
+    width: 250px;
 }
