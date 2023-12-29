@@ -201,13 +201,11 @@
     object-position: center; /* Center the image within the container */
   }
 
-  .ingredients-steps-left{
+  .ingredients-steps{
     height: fit-content;
-    border: 1px solid #e6e5e5;
   }
 
-  .ingredients-steps-right{
-    height: fit-content;
+  .ingredients-steps-section{
     border: 1px solid #e6e5e5;
   }
 

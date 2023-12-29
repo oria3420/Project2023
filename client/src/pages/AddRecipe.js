@@ -372,7 +372,7 @@ const AddRecipe = () => {
 
                         <div className='ingredients-steps two-sections-wrapper'>
 
-                            <div className='section-left ingredients-steps-left'>
+                            <div className='section-left ingredients-steps-section'>
                                 <label className='black-title'>Ingredients</label>
 
                                 <div className='steps-container'>
@@ -381,7 +381,7 @@ const AddRecipe = () => {
 
                                         <div className="custom-dropdown">
                                             <input
-                                            className='input-field'
+                                                className='input-field'
                                                 type="text"
                                                 placeholder="Ingredient 1"
                                                 value={searchTerm}
@@ -424,7 +424,7 @@ const AddRecipe = () => {
 
                                         <div>
                                             <input
-                                            className='input-field'
+                                                className='input-field'
                                                 type="number"
                                                 placeholder="Amount"
                                                 value={amount}
@@ -432,11 +432,9 @@ const AddRecipe = () => {
                                             />
                                         </div>
                                         <i className='bi bi-x-circle remove-icon'
-                                        title='Remove Instruction'
-                                    ></i>
+                                            title='Remove Instruction'
+                                        ></i>
                                     </div>
-
-                                    <button onClick={handleAddToGroceryList}>Add to List</button>
 
                                     <div className='groceries-list'>
                                         {groceryList.length > 0 && <h2>Ingredients List</h2>}
@@ -458,7 +456,7 @@ const AddRecipe = () => {
 
                             </div>
 
-                            <div className='section-right ingredients-steps-right'>
+                            <div className='section-right ingredients-steps-section'>
                                 <label className='black-title'>Instructions</label>
 
                                 <div className='steps-container'>
