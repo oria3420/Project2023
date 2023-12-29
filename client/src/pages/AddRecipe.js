@@ -17,7 +17,7 @@ const AddRecipe = () => {
     const [description, setDescription] = useState('');
     const [recipeServings, setRecipeServings] = useState(1);
     const [recipeYield, setRecipeYield] = useState('');
-    const [recipeInstructions, setRecipeInstructions] = useState('');
+    const [instructions, setInstructions] = useState(['']);;
     const [errorMessage, setErrorMessage] = useState('');
     const [categories, setCategories] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
@@ -29,7 +29,23 @@ const AddRecipe = () => {
     const [selectedMeasurement, setSelectedMeasurement] = useState('');
     const [amount, setAmount] = useState('');
     const [groceryList, setGroceryList] = useState([]);
-    const [userId, setUserId] = useState('')
+    const [userId, setUserId] = useState('');
+
+    const addInstruction = () => {
+        setInstructions([...instructions, '']);
+      };
+    
+      const removeInstruction = (index) => {
+        const updatedInstructions = [...instructions];
+        updatedInstructions.splice(index, 1);
+        setInstructions(updatedInstructions);
+      };
+    
+      const handleInstructionChange = (index, value) => {
+        const updatedInstructions = [...instructions];
+        updatedInstructions[index] = value;
+        setInstructions(updatedInstructions);
+      };
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -186,7 +202,7 @@ const AddRecipe = () => {
             description,
             recipeServings,
             recipeYield,
-            recipeInstructions,
+            recipeInstructions: instructions,
             checkedItems,
         });
         // setRecipeName('');
@@ -213,7 +229,7 @@ const AddRecipe = () => {
         formData.append('description', description);
         formData.append('recipeServings', recipeServings);
         formData.append('recipeYield', recipeYield);
-        formData.append('recipeInstructions', recipeInstructions);
+        formData.append('recipeInstructions', instructions);
         formData.append('checkedItems', JSON.stringify(checkedItems));
         formData.append('name', name);
         formData.append('userId', userId);
@@ -362,16 +378,35 @@ const AddRecipe = () => {
 
                             <div className='section-right ingredients-steps-right'>
                                 <label className='black-title'>Instructions</label>
-                                <div className='steps-container'>
 
-                                </div>
+                                <div className='steps-container'>
+                                {instructions.map((instruction, index) => (
+                                  <div key={index} className='instruction-row'>
+                                    <textarea
+                                      placeholder={`Instruction ${index + 1}`}
+                                      value={instruction}
+                                      onChange={(e) => handleInstructionChange(index, e.target.value)}
+                                      required
+                                    />
+                                    <i
+                                    onClick={() => removeInstruction(index)}
+                                    className='bi bi-x-circle remove-icon'
+                                    title='Remove Instruction'
+                                  ></i>
+                                  </div>
+                                ))}
+                                <button onClick={addInstruction} className='add-btn'>
+                                <i class="bi bi-plus-circle"></i>
+                                  Add another instruction
+                                </button>
+                              </div>
 
                             </div>
 
                         </div>
 
                         <div className='tags-section'>
-                        <label className='black-title'>Tags</label>
+                            <label className='black-title'>Tags</label>
 
                         </div>
 
