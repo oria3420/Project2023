@@ -33,19 +33,19 @@ const AddRecipe = () => {
 
     const addInstruction = () => {
         setInstructions([...instructions, '']);
-      };
-    
-      const removeInstruction = (index) => {
+    };
+
+    const removeInstruction = (index) => {
         const updatedInstructions = [...instructions];
         updatedInstructions.splice(index, 1);
         setInstructions(updatedInstructions);
-      };
-    
-      const handleInstructionChange = (index, value) => {
+    };
+
+    const handleInstructionChange = (index, value) => {
         const updatedInstructions = [...instructions];
         updatedInstructions[index] = value;
         setInstructions(updatedInstructions);
-      };
+    };
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -380,26 +380,30 @@ const AddRecipe = () => {
                                 <label className='black-title'>Instructions</label>
 
                                 <div className='steps-container'>
-                                {instructions.map((instruction, index) => (
-                                  <div key={index} className='instruction-row'>
-                                    <textarea
-                                      placeholder={`Instruction ${index + 1}`}
-                                      value={instruction}
-                                      onChange={(e) => handleInstructionChange(index, e.target.value)}
-                                      required
-                                    />
-                                    <i
-                                    onClick={() => removeInstruction(index)}
-                                    className='bi bi-x-circle remove-icon'
-                                    title='Remove Instruction'
-                                  ></i>
-                                  </div>
-                                ))}
-                                <button onClick={addInstruction} className='add-btn'>
-                                <i class="bi bi-plus-circle"></i>
-                                  Add another instruction
-                                </button>
-                              </div>
+
+                                    {instructions.map((instruction, index) => (
+                                        <div key={index} className='instruction-row'>
+                                            <input
+                                                className='input-field step-input'
+                                                placeholder={`Instruction ${index + 1}`}
+                                                value={instruction}
+                                                onChange={(e) => handleInstructionChange(index, e.target.value)}
+                                                required
+                                            />
+                                            <i
+                                                onClick={() => removeInstruction(index)}
+                                                className='bi bi-x-circle remove-icon'
+                                                title='Remove Instruction'
+                                            ></i>
+                                        </div>
+                                    ))}
+
+                                    <button onClick={addInstruction} className='add-btn'>
+                                        <i class="bi bi-plus-circle add-icon"></i>
+                                        <span>Add another instruction</span>
+                                    </button>
+
+                                </div>
 
                             </div>
 
