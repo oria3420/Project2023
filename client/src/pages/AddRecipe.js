@@ -405,6 +405,16 @@ const AddRecipe = () => {
                                             )}
                                         </div>
 
+                                        <div>
+                                            <input
+                                                className='input-field'
+                                                type="number"
+                                                placeholder="Amount"
+                                                value={amount}
+                                                onChange={(e) => setAmount(e.target.value)}
+                                            />
+                                        </div>
+
                                         <div className="custom-dropdown">
                                             <select
                                                 className='select-measurements input-field ingredient-input'
@@ -422,15 +432,7 @@ const AddRecipe = () => {
                                             </select>
                                         </div>
 
-                                        <div>
-                                            <input
-                                                className='input-field'
-                                                type="number"
-                                                placeholder="Amount"
-                                                value={amount}
-                                                onChange={(e) => setAmount(e.target.value)}
-                                            />
-                                        </div>
+
                                         <i className='bi bi-x-circle remove-icon'
                                             title='Remove Instruction'
                                         ></i>
