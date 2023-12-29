@@ -242,15 +242,36 @@ const AddRecipe = () => {
             <div>
                 {user && (
                     <form className='add-recipe-form' onSubmit={handleSubmit}>
-                        <div className='image-details-recipe'>
-                            <div className='image-details-recipe-left'>
-                                <div className='add-image-head'>Add Image</div>
+
+                        <div className='image-details two-sections-wrapper'>
+
+                            <div className='section-left image-details-left'>
+                                <div className='add-image-head'>
+                                    <label className='black-title'>Add Images</label>
+                                </div>
+
+                                <div className='image-container'>
+                                    {selectedImage ? (
+                                        <>
+                                            <img className='recipe-image' src={URL.createObjectURL(selectedImage)} alt="Selected" />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <label className="custom-file-upload">
+                                                <i className="bi bi-images"></i>
+                                                <input className="input-file" type="file" accept="image/*" onChange={handleImageChange} />
+                                            </label>
+                                            <label className='add-file-title'>Upload images</label>
+                                        </>
+                                    )}
+                                </div>
+
                             </div>
 
-                            <div className='image-details-recipe-right'>
+                            <div className='section-right image-details-right'>
                                 <div className='description-head'>Add Your Recipe</div>
                                 <div className='description-bottom'>
-                                    <div className='description-bottom-title'>Recipe Name & Description</div>
+                                    <div className='black-title'>Recipe Name & Description</div>
 
                                     <div className='description-fields'>
                                         <div className='desc-field'>
@@ -310,7 +331,7 @@ const AddRecipe = () => {
                                         <div className='desc-field'>
                                             <label className='input-title'>Category</label>
                                             <select
-                                            className='input-field category-desc'
+                                                className='input-field category-desc'
                                                 value={selectedCategory}
                                                 onChange={(e) => setSelectedCategory(e.target.value)}
                                                 required
@@ -331,6 +352,31 @@ const AddRecipe = () => {
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
+                        <div className='ingredients-steps two-sections-wrapper'>
+
+                            <div className='section-left ingredients-steps-left'>
+                                <label className='black-title'>Ingredients</label>
+                            </div>
+
+                            <div className='section-right ingredients-steps-right'>
+                                <label className='black-title'>Instructions</label>
+                                <div className='steps-container'>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div className='tags-section'>
+                        <label className='black-title'>Tags</label>
+
+                        </div>
+
+                        <div className='submit-section'>
+                            <button className='publish-btn' type="submit">Publish</button>
                         </div>
                     </form>
                 )}
