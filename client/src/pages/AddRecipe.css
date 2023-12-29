@@ -202,7 +202,7 @@
   }
 
   .ingredients-steps-left{
-    height: var(--ingredients-steps-height);
+    height: fit-content;
     border: 1px solid #e6e5e5;
   }
 
@@ -263,5 +263,9 @@
 .add-icon{
     color: orange;
     font-size: 20px;
+    margin-right: 10px;
+}
+
+.custom-dropdown{
     margin-right: 10px;
 }

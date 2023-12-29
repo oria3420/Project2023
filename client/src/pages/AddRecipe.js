@@ -374,6 +374,88 @@ const AddRecipe = () => {
 
                             <div className='section-left ingredients-steps-left'>
                                 <label className='black-title'>Ingredients</label>
+
+                                <div className='steps-container'>
+
+                                    <div className='instruction-row'>
+
+                                        <div className="custom-dropdown">
+                                            <input
+                                            className='input-field'
+                                                type="text"
+                                                placeholder="Ingredient 1"
+                                                value={searchTerm}
+                                                onChange={(e) => setSearchTerm(e.target.value)}
+                                            />
+                                            {searchTerm.length >= 3 && (
+                                                <div className="dropdown-ingredient">
+                                                    {filteredIngredients.map((ingredient) => (
+                                                        <div
+                                                            key={ingredient.id}
+                                                            className="dropdown-item"
+                                                            onClick={() => {
+                                                                setSearchTerm(ingredient.ingredient);
+                                                                setSelectedIngredient(ingredient.ingredient);
+                                                            }}
+                                                        >
+                                                            {ingredient.ingredient}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="custom-dropdown">
+                                            <select
+                                                className='select-measurements input-field ingredient-input'
+                                                value={selectedMeasurement}
+                                                onChange={(e) => setSelectedMeasurement(e.target.value)}
+                                            >
+                                                <option value="" disabled>
+                                                    Select Measurement
+                                                </option>
+                                                {measurements.map((measurement) => (
+                                                    <option key={measurement.id} value={measurement.measurement}>
+                                                        {measurement.measurement}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <input
+                                            className='input-field'
+                                                type="number"
+                                                placeholder="Amount"
+                                                value={amount}
+                                                onChange={(e) => setAmount(e.target.value)}
+                                            />
+                                        </div>
+                                        <i className='bi bi-x-circle remove-icon'
+                                        title='Remove Instruction'
+                                    ></i>
+                                    </div>
+
+                                    <button onClick={handleAddToGroceryList}>Add to List</button>
+
+                                    <div className='groceries-list'>
+                                        {groceryList.length > 0 && <h2>Ingredients List</h2>}
+                                        <ul>
+                                            {groceryList.map((item, index) => (
+                                                <li key={index}>
+                                                    {item.amount} {item.measurementName} of {item.ingredientName}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+
+                                    <button className='add-btn'>
+                                        <i className="bi bi-plus-circle add-icon"></i>
+                                        <span>Add another ingredient</span>
+                                    </button>
+
+                                </div>
+
                             </div>
 
                             <div className='section-right ingredients-steps-right'>
@@ -399,7 +481,7 @@ const AddRecipe = () => {
                                     ))}
 
                                     <button onClick={addInstruction} className='add-btn'>
-                                        <i class="bi bi-plus-circle add-icon"></i>
+                                        <i className="bi bi-plus-circle add-icon"></i>
                                         <span>Add another instruction</span>
                                     </button>
 
