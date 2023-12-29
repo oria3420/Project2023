@@ -17,7 +17,9 @@ const AddRecipe = () => {
     const [description, setDescription] = useState('');
     const [recipeServings, setRecipeServings] = useState(1);
     const [recipeYield, setRecipeYield] = useState('');
+
     const [instructions, setInstructions] = useState(['']);;
+    const [recipeIngredients, setRecipeIngredients] = useState(['']);;
     const [errorMessage, setErrorMessage] = useState('');
     const [categories, setCategories] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
@@ -28,8 +30,27 @@ const AddRecipe = () => {
     const [selectedIngredient, setSelectedIngredient] = useState('');
     const [selectedMeasurement, setSelectedMeasurement] = useState('');
     const [amount, setAmount] = useState('');
-    const [groceryList, setGroceryList] = useState([]);
+    const [ingredientsList, setIngredientsList] = useState([]);
     const [userId, setUserId] = useState('');
+
+
+
+    const addIngredient = () => {
+        setRecipeIngredients([...recipeIngredients, '']);
+        console.log(recipeIngredients);
+    };
+
+    const removeIngredient = (index) => {
+        const updatedIngredients = [...recipeIngredients];
+        updatedIngredients.splice(index, 1);
+        setRecipeIngredients(updatedIngredients);
+    };
+
+    const handleIngredientChange = (index, value) => {
+        const updatedIngredients = [...recipeIngredients];
+        updatedIngredients[index] = value;
+        setRecipeIngredients(updatedIngredients);
+    };
 
     const addInstruction = () => {
         setInstructions([...instructions, '']);
@@ -127,10 +148,6 @@ const AddRecipe = () => {
         }
     }, [searchTerm, ingredients]);
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        setSelectedImage(file);
-    };
 
     const handleAddToGroceryList = () => {
         if (selectedIngredient && selectedMeasurement && amount) {
@@ -143,13 +160,18 @@ const AddRecipe = () => {
                 ingredientName: selectedIngredient,
                 measurementName: selectedMeasurement
             };
-            setGroceryList([...groceryList, newItem]);
+            setIngredientsList([...ingredientsList, newItem]);
             // Clear the input fields after adding to the list
             setSelectedIngredient('');
             setSelectedMeasurement('');
             setAmount('');
             setSearchTerm('');
         }
+    };
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setSelectedImage(file);
     };
 
     const handleCheckboxChange = (category, id, checked) => {
@@ -198,7 +220,7 @@ const AddRecipe = () => {
             cookTime,
             prepTime,
             selectedCategory,
-            groceryList,
+            groceryList: ingredientsList,
             description,
             recipeServings,
             recipeYield,
@@ -225,7 +247,7 @@ const AddRecipe = () => {
         formData.append('cookTime', cookTime);
         formData.append('prepTime', prepTime);
         formData.append('selectedCategory', selectedCategory);
-        formData.append('groceryList', JSON.stringify(groceryList)); // Assuming groceryList is an array
+        formData.append('groceryList', JSON.stringify(ingredientsList)); // Assuming groceryList is an array
         formData.append('description', description);
         formData.append('recipeServings', recipeServings);
         formData.append('recipeYield', recipeYield);
@@ -379,77 +401,28 @@ const AddRecipe = () => {
 
                                     <div className='instruction-row'>
 
-                                        <div className="custom-dropdown">
-                                            <input
-                                                className='input-field'
-                                                type="text"
-                                                placeholder="Ingredient 1"
-                                                value={searchTerm}
-                                                onChange={(e) => setSearchTerm(e.target.value)}
-                                            />
-                                            {searchTerm.length >= 3 && (
-                                                <div className="dropdown-ingredient">
-                                                    {filteredIngredients.map((ingredient) => (
-                                                        <div
-                                                            key={ingredient.id}
-                                                            className="dropdown-item"
-                                                            onClick={() => {
-                                                                setSearchTerm(ingredient.ingredient);
-                                                                setSelectedIngredient(ingredient.ingredient);
-                                                            }}
-                                                        >
-                                                            {ingredient.ingredient}
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-
-                                        <div>
-                                            <input
-                                                className='input-field'
-                                                type="number"
-                                                placeholder="Amount"
-                                                value={amount}
-                                                onChange={(e) => setAmount(e.target.value)}
-                                            />
-                                        </div>
-
-                                        <div className="custom-dropdown">
-                                            <select
-                                                className='select-measurements input-field ingredient-input'
-                                                value={selectedMeasurement}
-                                                onChange={(e) => setSelectedMeasurement(e.target.value)}
-                                            >
-                                                <option value="" disabled>
-                                                    Select Measurement
-                                                </option>
-                                                {measurements.map((measurement) => (
-                                                    <option key={measurement.id} value={measurement.measurement}>
-                                                        {measurement.measurement}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
+                                        {recipeIngredients.map((ingredient, index) => (
+                                            <div key={index} className='instruction-row'>
+                                                <input
+                                                    className='input-field step-input'
+                                                    placeholder={`Ingredient ${index + 1}`}
+                                                    value={ingredient}
+                                                    onChange={(e) => handleIngredientChange(index, e.target.value)}
+                                                    required
+                                                />
+                                                <i
+                                                    onClick={() => removeIngredient(index)}
+                                                    className='bi bi-x-circle remove-icon'
+                                                    title='Remove Ingredient'
+                                                ></i>
+                                            </div>
+                                        ))}
 
 
-                                        <i className='bi bi-x-circle remove-icon'
-                                            title='Remove Instruction'
-                                        ></i>
                                     </div>
 
-                                    <div className='groceries-list'>
-                                        {groceryList.length > 0 && <h2>Ingredients List</h2>}
-                                        <ul>
-                                            {groceryList.map((item, index) => (
-                                                <li key={index}>
-                                                    {item.amount} {item.measurementName} of {item.ingredientName}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
 
-                                    <button className='add-btn'>
+                                    <button onClick={addIngredient} className='add-btn'>
                                         <i className="bi bi-plus-circle add-icon"></i>
                                         <span>Add another ingredient</span>
                                     </button>
