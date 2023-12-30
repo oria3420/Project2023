@@ -17,9 +17,6 @@ const AddRecipe = () => {
     const [description, setDescription] = useState('');
     const [recipeServings, setRecipeServings] = useState(1);
     const [recipeYield, setRecipeYield] = useState('');
-
-    const [instructions, setInstructions] = useState(['']);;
-    const [recipeIngredients, setRecipeIngredients] = useState(['']);;
     const [errorMessage, setErrorMessage] = useState('');
     const [categories, setCategories] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
@@ -32,12 +29,15 @@ const AddRecipe = () => {
     const [amount, setAmount] = useState('');
     const [ingredientsList, setIngredientsList] = useState([]);
     const [userId, setUserId] = useState('');
+    const [instructions, setInstructions] = useState(['']);;
+    const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '' }]);
 
+
+    console.log(recipeIngredients)
 
 
     const addIngredient = () => {
-        setRecipeIngredients([...recipeIngredients, '']);
-        console.log(recipeIngredients);
+        setRecipeIngredients([...recipeIngredients, { ingredient: '', amount: '' }]);
     };
 
     const removeIngredient = (index) => {
@@ -46,11 +46,12 @@ const AddRecipe = () => {
         setRecipeIngredients(updatedIngredients);
     };
 
-    const handleIngredientChange = (index, value) => {
+    const handleIngredientChange = (index, field, value) => {
         const updatedIngredients = [...recipeIngredients];
-        updatedIngredients[index] = value;
+        updatedIngredients[index][field] = value;
         setRecipeIngredients(updatedIngredients);
     };
+
 
     const addInstruction = () => {
         setInstructions([...instructions, '']);
@@ -397,29 +398,42 @@ const AddRecipe = () => {
                             <div className='section-left ingredients-steps-section'>
                                 <label className='black-title'>Ingredients</label>
 
+
                                 <div className='steps-container'>
 
-                                    <div className='instruction-row'>
 
-                                        {recipeIngredients.map((ingredient, index) => (
-                                            <div key={index} className='instruction-row'>
-                                                <input
-                                                    className='input-field step-input'
-                                                    placeholder={`Ingredient ${index + 1}`}
-                                                    value={ingredient}
-                                                    onChange={(e) => handleIngredientChange(index, e.target.value)}
-                                                    required
-                                                />
-                                                <i
-                                                    onClick={() => removeIngredient(index)}
-                                                    className='bi bi-x-circle remove-icon'
-                                                    title='Remove Ingredient'
-                                                ></i>
-                                            </div>
-                                        ))}
+                                    {recipeIngredients.map((ingredient, index) => (
+                                        <div key={index} className='instruction-row'>
+
+                                            <input
+                                                className='input-field step-input'
+                                                placeholder={`Ingredient ${index + 1}`}
+                                                value={ingredient.ingredient}
+                                                onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
+                                                required
+                                            />
 
 
-                                    </div>
+                                            <input
+                                                type="number"
+                                                className='input-field step-input'
+                                                placeholder={`Amount ${index + 1}`}
+                                                value={ingredient.amount}
+                                                onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
+                                                required
+                                            />
+
+                                            <i
+                                                onClick={() => removeIngredient(index)}
+                                                className='bi bi-x-circle remove-icon'
+                                                title='Remove Ingredient'
+                                            ></i>
+                                        </div>
+                                    ))}
+
+
+
+
 
 
                                     <button onClick={addIngredient} className='add-btn'>
