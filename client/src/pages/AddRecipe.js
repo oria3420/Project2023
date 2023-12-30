@@ -15,24 +15,25 @@ const AddRecipe = () => {
     const [prepTime, setPrepTime] = useState('00:00');
     const [selectedCategory, setSelectedCategory] = useState('');
     const [description, setDescription] = useState('');
-    const [recipeServings, setRecipeServings] = useState(1);
     const [recipeYield, setRecipeYield] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
     const [categories, setCategories] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
     const [ingredients, setIngredients] = useState([])
     const [measurements, setMeasurements] = useState([])
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredIngredients, setFilteredIngredients] = useState([]);
-    const [selectedIngredient, setSelectedIngredient] = useState('');
-    const [selectedMeasurement, setSelectedMeasurement] = useState('');
-    const [amount, setAmount] = useState('');
-    const [ingredientsList, setIngredientsList] = useState([]);
     const [userId, setUserId] = useState('');
     const [instructions, setInstructions] = useState(['']);;
     const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '' }]);
+    const [selectedMeasurement, setSelectedMeasurement] = useState('');
 
+    // ... (existing code)
 
+    const handleMeasurementChange = (index, value) => {
+        const updatedIngredients = [...recipeIngredients];    
+        updatedIngredients[index].measurementId = value;
+        setRecipeIngredients(updatedIngredients);
+    };
+    
+    
     console.log(recipeIngredients)
 
 
@@ -136,39 +137,39 @@ const AddRecipe = () => {
         }
     }, [user]);
 
-    useEffect(() => {
-        if (searchTerm.length >= 3) {
-            const filtered = ingredients.filter((ingred) =>
-                ingred && ingred.ingredient
-                    ? ingred.ingredient.toLowerCase().includes(searchTerm.toLowerCase())
-                    : false
-            );
-            setFilteredIngredients(filtered);
-        } else {
-            setFilteredIngredients([]);
-        }
-    }, [searchTerm, ingredients]);
+    // useEffect(() => {
+    //     if (searchTerm.length >= 3) {
+    //         const filtered = ingredients.filter((ingred) =>
+    //             ingred && ingred.ingredient
+    //                 ? ingred.ingredient.toLowerCase().includes(searchTerm.toLowerCase())
+    //                 : false
+    //         );
+    //         setFilteredIngredients(filtered);
+    //     } else {
+    //         setFilteredIngredients([]);
+    //     }
+    // }, [searchTerm, ingredients]);
 
 
-    const handleAddToGroceryList = () => {
-        if (selectedIngredient && selectedMeasurement && amount) {
-            const selectedIngredientObject = filteredIngredients.find(item => item.ingredient === selectedIngredient);
-            const selectedMeasurementObject = measurements.find(item => item.measurement === selectedMeasurement);
-            const newItem = {
-                ingredientId: selectedIngredientObject?.id,
-                measurementId: selectedMeasurementObject?.id,
-                amount: amount,
-                ingredientName: selectedIngredient,
-                measurementName: selectedMeasurement
-            };
-            setIngredientsList([...ingredientsList, newItem]);
-            // Clear the input fields after adding to the list
-            setSelectedIngredient('');
-            setSelectedMeasurement('');
-            setAmount('');
-            setSearchTerm('');
-        }
-    };
+    // const handleAddToGroceryList = () => {
+    //     if (selectedIngredient && selectedMeasurement && amount) {
+    //         const selectedIngredientObject = filteredIngredients.find(item => item.ingredient === selectedIngredient);
+    //         const selectedMeasurementObject = measurements.find(item => item.measurement === selectedMeasurement);
+    //         const newItem = {
+    //             ingredientId: selectedIngredientObject?.id,
+    //             measurementId: selectedMeasurementObject?.id,
+    //             amount: amount,
+    //             ingredientName: selectedIngredient,
+    //             measurementName: selectedMeasurement
+    //         };
+    //         setIngredientsList([...ingredientsList, newItem]);
+    //         // Clear the input fields after adding to the list
+    //         setSelectedIngredient('');
+    //         setSelectedMeasurement('');
+    //         setAmount('');
+    //         setSearchTerm('');
+    //     }
+    // };
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
@@ -203,84 +204,84 @@ const AddRecipe = () => {
         });
     };
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        const kosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {});
-        const isKosherCategoryValid = kosherCategoryIds.some(
-            (checkboxId) => checkedItems['kosher_categories'][checkboxId]
-        );
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     const kosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {});
+    //     const isKosherCategoryValid = kosherCategoryIds.some(
+    //         (checkboxId) => checkedItems['kosher_categories'][checkboxId]
+    //     );
 
-        if (!isKosherCategoryValid) {
-            setErrorMessage('Please select at least one checkbox in kosher_categories');
-            return;
-        }
-        setErrorMessage('');
-        console.log('Form Data:', {
-            recipeName,
-            selectedImage,
-            cookTime,
-            prepTime,
-            selectedCategory,
-            groceryList: ingredientsList,
-            description,
-            recipeServings,
-            recipeYield,
-            recipeInstructions: instructions,
-            checkedItems,
-        });
-        // setRecipeName('');
-        // setSelectedImage(null);
-        // setCookTime('00:00');
-        // setPrepTime('00:00');
-        // setSelectedCategory('');
-        // setSearchTerm('');
-        // setSelectedMeasurement('');
-        // setAmount('');
-        // setDescription('');
-        // setRecipeServings(1);
-        // setRecipeYield('');
-        // setRecipeInstructions('');
-        // setCheckedItems({});
-        // setGroceryList([]);
-        const formData = new FormData();
-        formData.append('selectedImage', selectedImage);
-        formData.append('recipeName', recipeName);
-        formData.append('cookTime', cookTime);
-        formData.append('prepTime', prepTime);
-        formData.append('selectedCategory', selectedCategory);
-        formData.append('groceryList', JSON.stringify(ingredientsList)); // Assuming groceryList is an array
-        formData.append('description', description);
-        formData.append('recipeServings', recipeServings);
-        formData.append('recipeYield', recipeYield);
-        formData.append('recipeInstructions', instructions);
-        formData.append('checkedItems', JSON.stringify(checkedItems));
-        formData.append('name', name);
-        formData.append('userId', userId);
+    //     if (!isKosherCategoryValid) {
+    //         setErrorMessage('Please select at least one checkbox in kosher_categories');
+    //         return;
+    //     }
+    //     setErrorMessage('');
+    //     console.log('Form Data:', {
+    //         recipeName,
+    //         selectedImage,
+    //         cookTime,
+    //         prepTime,
+    //         selectedCategory,
+    //         groceryList: ingredientsList,
+    //         description,
+    //         recipeServings,
+    //         recipeYield,
+    //         recipeInstructions: instructions,
+    //         checkedItems,
+    //     });
+    //     // setRecipeName('');
+    //     // setSelectedImage(null);
+    //     // setCookTime('00:00');
+    //     // setPrepTime('00:00');
+    //     // setSelectedCategory('');
+    //     // setSearchTerm('');
+    //     // setSelectedMeasurement('');
+    //     // setAmount('');
+    //     // setDescription('');
+    //     // setRecipeServings(1);
+    //     // setRecipeYield('');
+    //     // setRecipeInstructions('');
+    //     // setCheckedItems({});
+    //     // setGroceryList([]);
+    //     const formData = new FormData();
+    //     formData.append('selectedImage', selectedImage);
+    //     formData.append('recipeName', recipeName);
+    //     formData.append('cookTime', cookTime);
+    //     formData.append('prepTime', prepTime);
+    //     formData.append('selectedCategory', selectedCategory);
+    //     formData.append('groceryList', JSON.stringify(ingredientsList)); // Assuming groceryList is an array
+    //     formData.append('description', description);
+    //     formData.append('recipeServings', recipeServings);
+    //     formData.append('recipeYield', recipeYield);
+    //     formData.append('recipeInstructions', instructions);
+    //     formData.append('checkedItems', JSON.stringify(checkedItems));
+    //     formData.append('name', name);
+    //     formData.append('userId', userId);
 
-        try {
-            const response = await fetch('http://localhost:1337/api/addRecipe', {
-                method: 'POST',
-                body: formData,
-            });
-            if (response.ok) {
-                const result = await response.json();
-                console.log(result); // Recipe successfully added
-            } else {
-                console.error(`HTTP Error: ${response.status}`);
-                // Handle error response
-            }
-        } catch (error) {
-            console.error(error);
-            // Handle fetch error (e.g., network error)
-        }
-    };
+    //     try {
+    //         const response = await fetch('http://localhost:1337/api/addRecipe', {
+    //             method: 'POST',
+    //             body: formData,
+    //         });
+    //         if (response.ok) {
+    //             const result = await response.json();
+    //             console.log(result); // Recipe successfully added
+    //         } else {
+    //             console.error(`HTTP Error: ${response.status}`);
+    //             // Handle error response
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         // Handle fetch error (e.g., network error)
+    //     }
+    // };
 
     return (
         <div>
             {name && <Navbar name={name} />}
             <div>
                 {user && (
-                    <form className='add-recipe-form' onSubmit={handleSubmit}>
+                    <form className='add-recipe-form' onSubmit={"handleSubmit"}>
 
                         <div className='image-details two-sections-wrapper'>
 
@@ -404,7 +405,6 @@ const AddRecipe = () => {
 
                                     {recipeIngredients.map((ingredient, index) => (
                                         <div key={index} className='instruction-row'>
-
                                             <input
                                                 className='input-field step-input'
                                                 placeholder={`Ingredient ${index + 1}`}
@@ -412,8 +412,6 @@ const AddRecipe = () => {
                                                 onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
                                                 required
                                             />
-
-
                                             <input
                                                 type="number"
                                                 className='input-field step-input'
@@ -422,6 +420,21 @@ const AddRecipe = () => {
                                                 onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
                                                 required
                                             />
+                                            
+                                            <select
+                                            className='input-field step-input'
+                                            value={ingredient.measurementId || ''}
+                                            onChange={(e) => handleMeasurementChange(index, e.target.value)}
+                                            required
+                                        >
+                                            <option value='' disabled>{`Measurement ${index + 1}`}</option>
+                                            {measurements.map((measurement, measurementIndex) => (
+                                                <option key={measurementIndex} value={measurement.measurement}>
+                                                    {measurement.measurement}
+                                                </option>
+                                            ))}
+                                        </select>
+                                        
 
                                             <i
                                                 onClick={() => removeIngredient(index)}
@@ -497,3 +510,9 @@ export default AddRecipe
 
 
 
+// const [searchTerm, setSearchTerm] = useState('');
+// const [filteredIngredients, setFilteredIngredients] = useState([]);
+// const [selectedIngredient, setSelectedIngredient] = useState('');
+// const [selectedMeasurement, setSelectedMeasurement] = useState('');
+// const [amount, setAmount] = useState('');
+// const [ingredientsList, setIngredientsList] = useState([]);
