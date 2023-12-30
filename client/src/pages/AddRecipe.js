@@ -82,12 +82,6 @@ const AddRecipe = () => {
         setRecipeIngredients(updatedIngredients);
     };
 
-    // const handleIngredientChange = (index, field, value) => {
-    //     const updatedIngredients = [...recipeIngredients];
-    //     updatedIngredients[index][field] = value;
-    //     setRecipeIngredients(updatedIngredients);
-    // };
-
 
     const addInstruction = () => {
         setInstructions([...instructions, '']);
@@ -467,7 +461,7 @@ const AddRecipe = () => {
 
                                             <input
                                                 type="number"
-                                                className='input-field step-input'
+                                                className='input-field step-input amount-input'
                                                 placeholder={`Amount ${index + 1}`}
                                                 value={ingredient.amount}
                                                 onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
@@ -475,7 +469,7 @@ const AddRecipe = () => {
                                             />
 
                                             <select
-                                                className='input-field step-input'
+                                                className='input-field step-input amount-input'
                                                 value={ingredient.measurementId || ''}
                                                 onChange={(e) => handleMeasurementChange(index, e.target.value)}
                                                 required
