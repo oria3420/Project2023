@@ -268,3 +268,35 @@
 .custom-dropdown{
     margin-right: 10px;
 }
+
+.input-container {
+    position: relative;
+    width: 50%;
+  }
+  
+  .ingredient-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .ingredient-suggestions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .ingredient-suggestions li {
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .ingredient-suggestions li:hover {
+    background-color: #f0f0f0;
+  }
+  

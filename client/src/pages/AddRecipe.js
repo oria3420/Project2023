@@ -18,24 +18,59 @@ const AddRecipe = () => {
     const [recipeYield, setRecipeYield] = useState('');
     const [categories, setCategories] = useState([]);
     const [checkedItems, setCheckedItems] = useState({});
-    const [ingredients, setIngredients] = useState([])
-    const [measurements, setMeasurements] = useState([])
     const [userId, setUserId] = useState('');
-    const [instructions, setInstructions] = useState(['']);;
-    const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '' }]);
-    const [selectedMeasurement, setSelectedMeasurement] = useState('');
 
-    // ... (existing code)
+    const [ingredients, setIngredients] = useState([])
+    const [instructions, setInstructions] = useState(['']);;
+    const [measurements, setMeasurements] = useState([]);
+    const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '' }]);
+
+    const [suggestions, setSuggestions] = useState([]);
 
     const handleMeasurementChange = (index, value) => {
-        const updatedIngredients = [...recipeIngredients];    
+        const updatedIngredients = [...recipeIngredients];
         updatedIngredients[index].measurementId = value;
         setRecipeIngredients(updatedIngredients);
     };
-    
-    
-    console.log(recipeIngredients)
 
+    const handleIngredientChange = (index, field, value) => {
+        const updatedIngredients = [...recipeIngredients];
+        updatedIngredients[index][field] = value;
+        setRecipeIngredients(updatedIngredients);
+        // Call a function to filter and update the suggestions based on the current input value
+        updateIngredientSuggestions(value, index);
+    };
+
+    const updateIngredientSuggestions = (inputValue, index) => {
+        // Check if the length of inputValue is at least 3 before searching for suggestions
+        if (inputValue.length >= 3) {
+          const filteredIngredients = ingredients
+            .filter((ingredient) =>
+              typeof ingredient.ingredient === 'string' &&
+              ingredient.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
+            )
+            .map((ingredient) => ingredient.ingredient);
+      
+          setSuggestions(filteredIngredients, index);
+        } else {
+          // Clear suggestions if inputValue is less than 3 letters
+          setSuggestions([], index);
+        }
+      };
+      
+
+
+    const handleSuggestionClick = (index, suggestion) => {
+        const updatedIngredients = [...recipeIngredients];
+        updatedIngredients[index].ingredient = suggestion;
+        setRecipeIngredients(updatedIngredients);
+        // Clear suggestions for the clicked input field
+        setSuggestions([], index);
+    };
+
+
+    console.log(suggestions)
+    console.log(recipeIngredients)
 
     const addIngredient = () => {
         setRecipeIngredients([...recipeIngredients, { ingredient: '', amount: '' }]);
@@ -47,11 +82,11 @@ const AddRecipe = () => {
         setRecipeIngredients(updatedIngredients);
     };
 
-    const handleIngredientChange = (index, field, value) => {
-        const updatedIngredients = [...recipeIngredients];
-        updatedIngredients[index][field] = value;
-        setRecipeIngredients(updatedIngredients);
-    };
+    // const handleIngredientChange = (index, field, value) => {
+    //     const updatedIngredients = [...recipeIngredients];
+    //     updatedIngredients[index][field] = value;
+    //     setRecipeIngredients(updatedIngredients);
+    // };
 
 
     const addInstruction = () => {
@@ -281,7 +316,7 @@ const AddRecipe = () => {
             {name && <Navbar name={name} />}
             <div>
                 {user && (
-                    <form className='add-recipe-form' onSubmit={"handleSubmit"}>
+                    <form className='add-recipe-form'>
 
                         <div className='image-details two-sections-wrapper'>
 
@@ -405,13 +440,31 @@ const AddRecipe = () => {
 
                                     {recipeIngredients.map((ingredient, index) => (
                                         <div key={index} className='instruction-row'>
-                                            <input
-                                                className='input-field step-input'
-                                                placeholder={`Ingredient ${index + 1}`}
-                                                value={ingredient.ingredient}
-                                                onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
-                                                required
-                                            />
+                                        <div className="input-container">
+                                        <input
+                                          className='input-field step-input'
+                                          placeholder={`Ingredient ${index + 1}`}
+                                          value={ingredient.ingredient}
+                                          onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
+                                          required
+                                        />
+                                        {/* Display suggestions if input length is greater than or equal to 3 */}
+                                        {Array.isArray(suggestions) && suggestions.length > 0 && (
+                                          <div className='ingredient-suggestions'>
+                                            <ul>
+                                              {suggestions.map((suggestion, suggestionIndex) => (
+                                                <li key={suggestionIndex} onClick={() => handleSuggestionClick(index, suggestion)}>
+                                                  {suggestion}
+                                                </li>
+                                              ))}
+                                            </ul>
+                                          </div>
+                                        )}
+                                      </div>
+
+
+
+
                                             <input
                                                 type="number"
                                                 className='input-field step-input'
@@ -420,21 +473,20 @@ const AddRecipe = () => {
                                                 onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
                                                 required
                                             />
-                                            
+
                                             <select
-                                            className='input-field step-input'
-                                            value={ingredient.measurementId || ''}
-                                            onChange={(e) => handleMeasurementChange(index, e.target.value)}
-                                            required
-                                        >
-                                            <option value='' disabled>{`Measurement ${index + 1}`}</option>
-                                            {measurements.map((measurement, measurementIndex) => (
-                                                <option key={measurementIndex} value={measurement.measurement}>
-                                                    {measurement.measurement}
-                                                </option>
-                                            ))}
-                                        </select>
-                                        
+                                                className='input-field step-input'
+                                                value={ingredient.measurementId || ''}
+                                                onChange={(e) => handleMeasurementChange(index, e.target.value)}
+                                                required
+                                            >
+                                                <option value='' disabled>{`Measurement ${index + 1}`}</option>
+                                                {measurements.map((measurement, measurementIndex) => (
+                                                    <option key={measurementIndex} value={measurement.measurement}>
+                                                        {measurement.measurement}
+                                                    </option>
+                                                ))}
+                                            </select>
 
                                             <i
                                                 onClick={() => removeIngredient(index)}
