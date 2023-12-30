@@ -44,20 +44,29 @@ const AddRecipe = () => {
     const updateIngredientSuggestions = (inputValue, index) => {
         // Check if the length of inputValue is at least 3 before searching for suggestions
         if (inputValue.length >= 3) {
-          const filteredIngredients = ingredients
-            .filter((ingredient) =>
-              typeof ingredient.ingredient === 'string' &&
-              ingredient.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
-            )
-            .map((ingredient) => ingredient.ingredient);
-      
-          setSuggestions(filteredIngredients, index);
+            const filteredIngredients = ingredients
+                .filter((ingredient) =>
+                    typeof ingredient.ingredient === 'string' &&
+                    ingredient.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
+                )
+                .map((ingredient) => ingredient.ingredient);
+    
+            // Update the suggestions array at the specified index
+            setSuggestions((prevSuggestions) => {
+                const updatedSuggestions = [...prevSuggestions];
+                updatedSuggestions[index] = filteredIngredients;
+                return updatedSuggestions;
+            });
         } else {
-          // Clear suggestions if inputValue is less than 3 letters
-          setSuggestions([], index);
+            // Clear suggestions if inputValue is less than 3 letters
+            setSuggestions((prevSuggestions) => {
+                const updatedSuggestions = [...prevSuggestions];
+                updatedSuggestions[index] = [];
+                return updatedSuggestions;
+            });
         }
-      };
-      
+    };
+
 
 
     const handleSuggestionClick = (index, suggestion) => {
@@ -434,27 +443,29 @@ const AddRecipe = () => {
 
                                     {recipeIngredients.map((ingredient, index) => (
                                         <div key={index} className='instruction-row'>
-                                        <div className="input-container">
-                                        <input
-                                          className='input-field step-input'
-                                          placeholder={`Ingredient ${index + 1}`}
-                                          value={ingredient.ingredient}
-                                          onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
-                                          required
-                                        />
-                                        {/* Display suggestions if input length is greater than or equal to 3 */}
-                                        {Array.isArray(suggestions) && suggestions.length > 0 && (
-                                          <div className='ingredient-suggestions'>
-                                            <ul>
-                                              {suggestions.map((suggestion, suggestionIndex) => (
-                                                <li key={suggestionIndex} onClick={() => handleSuggestionClick(index, suggestion)}>
-                                                  {suggestion}
-                                                </li>
-                                              ))}
-                                            </ul>
-                                          </div>
-                                        )}
-                                      </div>
+
+                                            <div className="input-container">
+                                                <input
+                                                    className='input-field step-input'
+                                                    placeholder={`Ingredient ${index + 1}`}
+                                                    value={ingredient.ingredient}
+                                                    onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
+                                                    required
+                                                />
+
+                                                {Array.isArray(suggestions[index]) && suggestions[index].length > 0 && (
+                                                    <div className='ingredient-suggestions'>
+                                                        <ul>
+                                                            {suggestions[index].map((suggestion, suggestionIndex) => (
+                                                                <li key={suggestionIndex} onClick={() => handleSuggestionClick(index, suggestion)}>
+                                                                    {suggestion}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+
+                                            </div>
 
 
 
