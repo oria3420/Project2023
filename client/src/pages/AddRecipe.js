@@ -620,6 +620,7 @@ const AddRecipe = () => {
                                         <div key={category} className="select-container">
                                             <label>{formatCategoryName(category) + ":"}</label>
                                             <select
+                                            className='input-field'
                                                 value={selectedOptions[category] || ''}
                                                 onChange={(e) => handleSelectChange(category, e.target.value)}
                                             >
