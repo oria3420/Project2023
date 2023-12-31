@@ -25,7 +25,6 @@ const AddRecipe = () => {
     const [measurements, setMeasurements] = useState([]);
     const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '', measurementId: '' }]);
     const [suggestions, setSuggestions] = useState([]);
-    // const [selectedOptions, setSelectedOptions] = useState({});
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -257,30 +256,6 @@ const AddRecipe = () => {
         }));
     }, [prepTime, cookTime]);
 
-
-    // const handleSelectChange = (category, selectedValues) => {
-    //     console.log('category: ' + category);
-    //     console.log('selectedValues: ' + selectedValues);
-
-    //     // setSelectedOptions((prevSelectedOptions) => ({
-    //     //     ...prevSelectedOptions,
-    //     //     [category]: selectedValues,
-    //     // }));
-
-    //     // Update checkedItems based on the selected options
-    //     const categoryIds = selectedValues.map(value => parseInt(value, 10));
-    //     setRecipeCategories((prevCheckedItems) => ({
-    //         ...prevCheckedItems,
-    //         [category]: {
-    //             ...prevCheckedItems[category], // Preserve existing selections
-    //             ...categoryIds.reduce((acc, categoryId) => {
-    //                 acc[categoryId] = true;
-    //                 return acc;
-    //             }, {}),
-    //         },
-    //     }));
-    // };
-
     const handleRemoveTag = (category, id) => {
         setRecipeCategories((prevCheckedItems) => {
             const updatedCheckedItems = { ...prevCheckedItems };
@@ -292,7 +267,6 @@ const AddRecipe = () => {
         });
     };
 
-    // console.log(categories)
     console.log(recipeCategories)
 
     useEffect(() => {
@@ -316,13 +290,13 @@ const AddRecipe = () => {
 
     const handleSelectChange = (category, id) => {
         setRecipeCategories((prevCategories) => ({
-          ...prevCategories,
-          [category]: {
-            ...(prevCategories[category] || {}),
-            [id]: !prevCategories[category]?.[id],
-          },
+            ...prevCategories,
+            [category]: {
+                ...(prevCategories[category] || {}),
+                [id]: !prevCategories[category]?.[id],
+            },
         }));
-      };
+    };
 
     return (
         <div>
@@ -564,25 +538,26 @@ const AddRecipe = () => {
                             <label className='black-title'>Tags</label>
 
                             <div className='tags-container'>
-                            {categories && Object.entries(categories).map(([category, entries]) => (
-                              category !== 'time_categories' && (
-                                <div key={category} className="select-container">
-                                  <label>{formatCategoryName(category) + ":"}</label>
-                                  <select
-                                    value={recipeCategories[category]}
-                                    onChange={(e) => handleSelectChange(category, e.target.value)}
-                                  >
-                                    <option value="">Select {formatCategoryName(category)}</option>
-                                    {entries && entries.map(([id, tagName]) => (
-                                      <option key={id} value={id}>
-                                        {tagName}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </div>
-                              )
-                            ))}
-                          </div>
+                                {categories && Object.entries(categories).map(([category, entries]) => (
+                                    category !== 'time_categories' && (
+                                        <div key={category} className="select-container">
+                                            <label>{formatCategoryName(category) + ":"}</label>
+                                            <select
+                                                className='input-field'
+                                                value={recipeCategories[category]}
+                                                onChange={(e) => handleSelectChange(category, e.target.value)}
+                                            >
+                                                <option value="">Select {formatCategoryName(category)}</option>
+                                                {entries && entries.map(([id, tagName]) => (
+                                                    <option key={id} value={id}>
+                                                        {tagName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )
+                                ))}
+                            </div>
 
                             <div className='selected-tags'>
                                 <label className='black-title'>Selected Tags</label>
