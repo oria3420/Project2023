@@ -65,6 +65,7 @@ const RecipePage = () => {
         const response = await fetch(`http://localhost:1337/api/recipes/${id}/ingredients`);
         const data = await response.json();
         setIngredients(data);
+        console.log(data)
       } catch (error) {
         console.error(error);
       }
@@ -227,10 +228,17 @@ const RecipePage = () => {
                   <span className="title">Ingredients</span>
                   {ingredients.map((ingredient, index) => (
                     <div className='step-container' key={index}>
-                      <span className='ingredient-text' key={ingredient.name}>{ingredient.name}</span>
+                      <span className='ingredient-text' key={ingredient.name}>
+                        {ingredient.amount && ingredient.measurement ? (
+                          `${ingredient.amount} ${ingredient.measurement} of ${ingredient.name}`
+                        ) : (
+                          ingredient.name
+                        )}
+                      </span>
                       <br key={`br-${index}`} />
                     </div>
                   ))}
+                  
                 </div>
 
               </div>
