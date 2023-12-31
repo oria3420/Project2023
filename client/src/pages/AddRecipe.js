@@ -4,7 +4,6 @@ import './AddRecipe.css'
 import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
-import { Card } from 'react-bootstrap';
 
 const AddRecipe = () => {
     const navigate = useNavigate()
@@ -27,28 +26,6 @@ const AddRecipe = () => {
     const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '' }]);
     const [suggestions, setSuggestions] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState({});
-    
-    const computeTimeCategoryTag = (prep, cook) => {
-        const totalMinutes = calculateTotalMinutes(prep) + calculateTotalMinutes(cook);
-
-        if (totalMinutes >= 60) {
-            return 'more than 1 hour';
-        } else if (totalMinutes >= 30) {
-            return '30-60 min';
-        } else if (totalMinutes >= 15) {
-            return '15-30 min';
-        } else {
-            return '0-15 min';
-        }
-    };
-
-    const calculateTotalMinutes = (time) => {
-        const [hours, minutes] = time.split(':').map(Number);
-        return hours * 60 + minutes;
-    };
-
-    // You can call these functions when needed, such as when submitting the form
-    const timeTag = computeTimeCategoryTag(prepTime, cookTime);
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -108,7 +85,6 @@ const AddRecipe = () => {
         setRecipeIngredients(updatedIngredients);
     };
 
-
     const addInstruction = () => {
         setInstructions([...instructions, '']);
     };
@@ -144,7 +120,7 @@ const AddRecipe = () => {
         fetch('http://localhost:1337/api/search_recipe')
             .then(response => response.json())
             .then(data => {
-                const expandedCategories = {};
+                // const expandedCategories = {};
                 const checkedItems = {};
                 Object.keys(data).forEach(category => {
                     //expandedCategories[category] = false;
@@ -364,6 +340,38 @@ const AddRecipe = () => {
     };
     // console.log(categories)
 
+    const calculateTotalMinutes = (time) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+    };
+
+    const computeTimeCategoryTag = (prep, cook) => {
+        const totalMinutes = calculateTotalMinutes(prep) + calculateTotalMinutes(cook);
+
+        if (totalMinutes >= 60) {
+            return 'more than 1 hour';
+        } else if (totalMinutes >= 30) {
+            return '30-60 min';
+        } else if (totalMinutes >= 15) {
+            return '15-30 min';
+        } else {
+            return '0-15 min';
+        }
+    };
+
+
+
+    useEffect(() => {
+        const timeTag = computeTimeCategoryTag(prepTime, cookTime);
+
+        // Update the time category in checkedItems
+        setCheckedItems((prevCheckedItems) => ({
+            ...prevCheckedItems,
+            time_categories: {
+                [timeTag]: true,
+            },
+        }));
+    }, [prepTime, cookTime]);
 
     return (
         <div>
@@ -626,9 +634,6 @@ const AddRecipe = () => {
                                 ))}
                             </div>
 
-                            <div>
-                                <p>Total Time: {timeTag}</p>
-                            </div>
                             <div className='selected-tags'>
                                 <label className='black-title'>Selected Tags</label>
                                 <ul>
