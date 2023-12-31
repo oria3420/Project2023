@@ -9,6 +9,8 @@ import './Recipe.css';
 import LikeButton from '../components/LikeBtn';
 import CommentsContainer from '../components/CommentsContainer';
 import Carousel from '../components/Carousel';
+import '@fortawesome/fontawesome-free/css/all.css';
+
 
 
 
@@ -202,18 +204,21 @@ const RecipePage = () => {
               <div className='description-details'>
               {recipe.RecipeServings || recipe.RecipeYield ? (
                 <p>
-                  <span className="bold-text">Servings: </span>
-                  <span>{recipe.RecipeServings || recipe.RecipeYield}</span>
+                <i className="icon-recipe fa-solid fa-utensils fa-2xl"></i>
+                <span className="bold-text">Servings: </span>
+                <span>{recipe.RecipeServings || recipe.RecipeYield}</span>
                 </p>
               ) : null} 
               {recipe.Kosher ? (
                 <p>
+                <i className="icon-recipe fa-solid fa-bowl-food fa-2xl"></i>
                 <span className="bold-text">Kosher: </span>
                 <span> {capitalizeFirstLetter(recipe.Kosher)}</span>
               </p>
               ) : null}             
               {recipe.RecipeCategory ? (
                 <p>
+                <i className="icon-recipe fa-solid fa-spoon fa-2xl"></i>
                 <span className="bold-text">Category: </span>
                 <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
               </p>
