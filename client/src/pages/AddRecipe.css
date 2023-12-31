@@ -272,6 +272,7 @@
 .input-container {
     position: relative;
     width: 50%;
+    margin-right: 10px;
   }
   
   .ingredient-suggestions {
@@ -279,12 +280,23 @@
     top: 100%;
     left: 0;
     width: 100%;
+    max-height: 150px; /* Set the maximum height as per your preference */
+    overflow-y: auto; /* Enable vertical scrolling if the content exceeds the max height */
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
   }
+  
+  .toggle-bar {
+    height: 200px; /* Adjust the height of the toggle bar */
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 5px; /* Adjust spacing between suggestions and toggle bar */
+  }
+  
   
   .ingredient-suggestions ul {
     list-style: none;
@@ -303,4 +315,22 @@
   
   .amount-input{
     width: 100px;
+    margin-left: 10px;
   }
+
+  .tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust the gap between select menus */
+}
+
+.select-container {
+    display: flex;
+    flex-direction: column; /* Stack label and select vertically */
+    margin-bottom: 10px; /* Adjust the space between each select menu */
+}
+
+/* Optional: Adjust the width of each select menu if needed */
+.select-container select {
+    width: 150px; /* Adjust as per your design */
+}

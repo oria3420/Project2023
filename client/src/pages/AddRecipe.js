@@ -4,6 +4,7 @@ import './AddRecipe.css'
 import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
+import { Card } from 'react-bootstrap';
 
 const AddRecipe = () => {
     const navigate = useNavigate()
@@ -24,8 +25,30 @@ const AddRecipe = () => {
     const [instructions, setInstructions] = useState(['']);;
     const [measurements, setMeasurements] = useState([]);
     const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '' }]);
-
     const [suggestions, setSuggestions] = useState([]);
+    const [selectedOptions, setSelectedOptions] = useState({});
+    
+    const computeTimeCategoryTag = (prep, cook) => {
+        const totalMinutes = calculateTotalMinutes(prep) + calculateTotalMinutes(cook);
+
+        if (totalMinutes >= 60) {
+            return 'more than 1 hour';
+        } else if (totalMinutes >= 30) {
+            return '30-60 min';
+        } else if (totalMinutes >= 15) {
+            return '15-30 min';
+        } else {
+            return '0-15 min';
+        }
+    };
+
+    const calculateTotalMinutes = (time) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+    };
+
+    // You can call these functions when needed, such as when submitting the form
+    const timeTag = computeTimeCategoryTag(prepTime, cookTime);
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -50,7 +73,7 @@ const AddRecipe = () => {
                     ingredient.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
                 )
                 .map((ingredient) => ingredient.ingredient);
-    
+
             // Update the suggestions array at the specified index
             setSuggestions((prevSuggestions) => {
                 const updatedSuggestions = [...prevSuggestions];
@@ -67,8 +90,6 @@ const AddRecipe = () => {
         }
     };
 
-
-
     const handleSuggestionClick = (index, suggestion) => {
         const updatedIngredients = [...recipeIngredients];
         updatedIngredients[index].ingredient = suggestion;
@@ -76,10 +97,6 @@ const AddRecipe = () => {
         // Clear suggestions for the clicked input field
         setSuggestions([], index);
     };
-
-
-    console.log(suggestions)
-    console.log(recipeIngredients)
 
     const addIngredient = () => {
         setRecipeIngredients([...recipeIngredients, { ingredient: '', amount: '' }]);
@@ -242,6 +259,8 @@ const AddRecipe = () => {
         });
     };
 
+    console.log(checkedItems)
+
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
     //     const kosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {});
@@ -313,6 +332,38 @@ const AddRecipe = () => {
     //         // Handle fetch error (e.g., network error)
     //     }
     // };
+
+
+
+    const handleSelectChange = (category, selectedValue) => {
+        setSelectedOptions((prevSelectedOptions) => ({
+            ...prevSelectedOptions,
+            [category]: selectedValue,
+        }));
+
+        // Update checkedItems based on the selected option
+        const categoryId = parseInt(selectedValue, 10);
+        setCheckedItems((prevCheckedItems) => ({
+            ...prevCheckedItems,
+            [category]: {
+                [categoryId]: true,
+            },
+        }));
+    };
+
+
+    const formatCategoryName = (category) => {
+        // Replace underscores with spaces, remove the word "categories," and capitalize the first letter of each word
+        return category
+            .replace(/_/g, ' ')
+            .replace(/categories/g, '')
+            .trim()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    };
+    // console.log(categories)
+
 
     return (
         <div>
@@ -455,13 +506,15 @@ const AddRecipe = () => {
 
                                                 {Array.isArray(suggestions[index]) && suggestions[index].length > 0 && (
                                                     <div className='ingredient-suggestions'>
-                                                        <ul>
-                                                            {suggestions[index].map((suggestion, suggestionIndex) => (
-                                                                <li key={suggestionIndex} onClick={() => handleSuggestionClick(index, suggestion)}>
-                                                                    {suggestion}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
+                                                        <div class='toggle-bar'>
+                                                            <ul>
+                                                                {suggestions[index].map((suggestion, suggestionIndex) => (
+                                                                    <li key={suggestionIndex} onClick={() => handleSuggestionClick(index, suggestion)}>
+                                                                        {suggestion}
+                                                                    </li>
+                                                                ))}
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 )}
 
@@ -551,7 +604,52 @@ const AddRecipe = () => {
                         <div className='tags-section'>
                             <label className='black-title'>Tags</label>
 
+                            <div className='tags-container'>
+                                {Object.entries(categories).map(([category, entries]) => (
+                                    // Skip rendering select container for "time_categories"
+                                    category !== 'time_categories' && (
+                                        <div key={category} className="select-container">
+                                            <label>{formatCategoryName(category) + ":"}</label>
+                                            <select
+                                                value={selectedOptions[category] || ''}
+                                                onChange={(e) => handleSelectChange(category, e.target.value)}
+                                            >
+                                                <option value="" disabled>Select an option</option>
+                                                {entries.map(([id, tagName]) => (
+                                                    <option key={id} value={id}>
+                                                        {tagName}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )
+                                ))}
+                            </div>
+
+                            <div>
+                                <p>Total Time: {timeTag}</p>
+                            </div>
+                            <div className='selected-tags'>
+                                <label className='black-title'>Selected Tags</label>
+                                <ul>
+                                    {Object.entries(checkedItems).map(([category, tags]) => (
+                                        category !== 'time_categories' && (
+                                            Object.entries(tags).map(([id, checked]) => (
+                                                checked && (
+                                                    <li key={id}>
+                                                        <strong>{formatCategoryName(category)}:</strong> {categories[category].find(([tagId]) => tagId === parseInt(id, 10))[1]}
+                                                    </li>
+                                                )
+                                            ))
+                                        )
+                                    ))}
+
+                                </ul>
+                            </div>
+
                         </div>
+
+
 
                         <div className='submit-section'>
                             <button className='publish-btn' type="submit">Publish</button>
