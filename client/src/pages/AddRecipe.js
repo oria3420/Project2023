@@ -4,6 +4,7 @@ import './AddRecipe.css'
 import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
+import Select from 'react-select';
 
 const AddRecipe = () => {
     const navigate = useNavigate()
@@ -311,23 +312,6 @@ const AddRecipe = () => {
 
 
 
-    const handleSelectChange = (category, selectedValue) => {
-        setSelectedOptions((prevSelectedOptions) => ({
-            ...prevSelectedOptions,
-            [category]: selectedValue,
-        }));
-
-        // Update checkedItems based on the selected option
-        const categoryId = parseInt(selectedValue, 10);
-        setCheckedItems((prevCheckedItems) => ({
-            ...prevCheckedItems,
-            [category]: {
-                [categoryId]: true,
-            },
-        }));
-    };
-
-
     const formatCategoryName = (category) => {
         // Replace underscores with spaces, remove the word "categories," and capitalize the first letter of each word
         return category
@@ -351,7 +335,7 @@ const AddRecipe = () => {
     useEffect(() => {
         const computeTimeCategoryTag = (prep, cook) => {
             const totalMinutes = calculateTotalMinutes(prep) + calculateTotalMinutes(cook);
-    
+
             if (totalMinutes >= 60) {
                 return 'more than 1 hour';
             } else if (totalMinutes >= 30) {
@@ -361,10 +345,10 @@ const AddRecipe = () => {
             } else {
                 return '0-15 min';
             }
-        };  
-    
+        };
+
         const timeTag = computeTimeCategoryTag(prepTime, cookTime);
-    
+
         // Update the time category in checkedItems
         setCheckedItems((prevCheckedItems) => ({
             ...prevCheckedItems,
@@ -373,6 +357,30 @@ const AddRecipe = () => {
             },
         }));
     }, [prepTime, cookTime]);
+
+
+    const handleSelectChange = (category, selectedValues) => {
+        console.log('category: ' + category);
+        console.log('selectedValues: ' + selectedValues);
+
+        setSelectedOptions((prevSelectedOptions) => ({
+            ...prevSelectedOptions,
+            [category]: selectedValues,
+        }));
+
+        // Update checkedItems based on the selected options
+        const categoryIds = selectedValues.map(value => parseInt(value, 10));
+        setCheckedItems((prevCheckedItems) => ({
+            ...prevCheckedItems,
+            [category]: {
+                ...prevCheckedItems[category], // Preserve existing selections
+                ...categoryIds.reduce((acc, categoryId) => {
+                    acc[categoryId] = true;
+                    return acc;
+                }, {}),
+            },
+        }));
+    };
 
     return (
         <div>
@@ -614,27 +622,31 @@ const AddRecipe = () => {
                             <label className='black-title'>Tags</label>
 
                             <div className='tags-container'>
-                                {Object.entries(categories).map(([category, entries]) => (
-                                    // Skip rendering select container for "time_categories"
-                                    category !== 'time_categories' && (
-                                        <div key={category} className="select-container">
-                                            <label>{formatCategoryName(category) + ":"}</label>
-                                            <select
+                            {Object.entries(categories).map(([category, entries]) => (
+                                // Skip rendering select container for "time_categories"
+                                category !== 'time_categories' && (
+                                    <div key={category} className="select-container">
+                                        <label>{formatCategoryName(category) + ":"}</label>
+                                        <select
                                             className='input-field'
-                                                value={selectedOptions[category] || ''}
-                                                onChange={(e) => handleSelectChange(category, e.target.value)}
-                                            >
-                                                <option value="" disabled>Select an option</option>
-                                                {entries.map(([id, tagName]) => (
-                                                    <option key={id} value={id}>
-                                                        {tagName}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )
-                                ))}
-                            </div>
+                                            value={selectedOptions[category] || []}
+                                            onChange={(e) => {
+                                                const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
+                                                handleSelectChange(category, selectedValues);
+                                            }}
+                                            multiple  // Add this attribute to enable multiple selections
+                                        >
+                                            <option value="" disabled>Select an option</option>
+                                            {entries.map(([id, tagName]) => (
+                                                <option key={id} value={id}>
+                                                    {tagName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                )
+                            ))}
+                        </div>
 
                             <div className='selected-tags'>
                                 <label className='black-title'>Selected Tags</label>
