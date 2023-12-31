@@ -207,33 +207,33 @@ const AddRecipe = () => {
         setSelectedImage(file);
     };
 
-    const handleCheckboxChange = (category, id, checked) => {
-        setCheckedItems((prevCheckedItems) => {
-            const newCheckedItems = {
-                ...prevCheckedItems,
-                [category]: {
-                    ...(prevCheckedItems[category] || {}),
-                    [id]: checked,
-                },
-            };
+    // const handleCheckboxChange = (category, id, checked) => {
+    //     setCheckedItems((prevCheckedItems) => {
+    //         const newCheckedItems = {
+    //             ...prevCheckedItems,
+    //             [category]: {
+    //                 ...(prevCheckedItems[category] || {}),
+    //                 [id]: checked,
+    //             },
+    //         };
 
-            // If the category is kosher_categories, enforce exactly one checkbox
-            if (category === 'kosher_categories') {
-                const kosherCategoryIds = Object.keys(newCheckedItems[category]);
-                const numChecked = kosherCategoryIds.reduce(
-                    (count, checkboxId) => (newCheckedItems[category][checkboxId] ? count + 1 : count),
-                    0
-                );
+    //         // If the category is kosher_categories, enforce exactly one checkbox
+    //         if (category === 'kosher_categories') {
+    //             const kosherCategoryIds = Object.keys(newCheckedItems[category]);
+    //             const numChecked = kosherCategoryIds.reduce(
+    //                 (count, checkboxId) => (newCheckedItems[category][checkboxId] ? count + 1 : count),
+    //                 0
+    //             );
 
-                // If more than one checkbox is checked, uncheck the current one
-                if (numChecked > 1) {
-                    newCheckedItems[category][id] = false;
-                }
-            }
+    //             // If more than one checkbox is checked, uncheck the current one
+    //             if (numChecked > 1) {
+    //                 newCheckedItems[category][id] = false;
+    //             }
+    //         }
 
-            return newCheckedItems;
-        });
-    };
+    //         return newCheckedItems;
+    //     });
+    // };
 
     console.log(checkedItems)
 
@@ -345,25 +345,26 @@ const AddRecipe = () => {
         return hours * 60 + minutes;
     };
 
-    const computeTimeCategoryTag = (prep, cook) => {
-        const totalMinutes = calculateTotalMinutes(prep) + calculateTotalMinutes(cook);
-
-        if (totalMinutes >= 60) {
-            return 'more than 1 hour';
-        } else if (totalMinutes >= 30) {
-            return '30-60 min';
-        } else if (totalMinutes >= 15) {
-            return '15-30 min';
-        } else {
-            return '0-15 min';
-        }
-    };
 
 
 
     useEffect(() => {
+        const computeTimeCategoryTag = (prep, cook) => {
+            const totalMinutes = calculateTotalMinutes(prep) + calculateTotalMinutes(cook);
+    
+            if (totalMinutes >= 60) {
+                return 'more than 1 hour';
+            } else if (totalMinutes >= 30) {
+                return '30-60 min';
+            } else if (totalMinutes >= 15) {
+                return '15-30 min';
+            } else {
+                return '0-15 min';
+            }
+        };  
+    
         const timeTag = computeTimeCategoryTag(prepTime, cookTime);
-
+    
         // Update the time category in checkedItems
         setCheckedItems((prevCheckedItems) => ({
             ...prevCheckedItems,
