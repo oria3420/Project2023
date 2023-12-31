@@ -233,18 +233,32 @@ const getRecipeIngredients = async (req, res) => {
   try {
     const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS);
     const Ingredients = Collection.getModel(TABLE_NAMES.INGREDIENTS);
+    const Measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
 
     const recipeId = parseInt(req.params.id);
-    const ingredientIds = await RecipeIngredients.find({ recipe_ID: recipeId }).distinct('ingredient_ID');
-    const ingredients = await Ingredients.find({ id: { $in: ingredientIds } }).select('ingredient');
+    const ingredientDetails = await RecipeIngredients.find({ recipe_ID: recipeId });
 
-    const result = ingredients.map(({ ingredient }) => ({ name: ingredient }));
+    const result = await Promise.all(
+      ingredientDetails.map(async ({ ingredient_ID, measurement_ID, amount }) => {
+        const ingredient = await Ingredients.findOne({ id: ingredient_ID }).select('ingredient');
+        const measurement = measurement_ID ? (await Measurement.findOne({ id: measurement_ID }).select('measurement')).measurement : null;
+
+        return {
+          name: ingredient.ingredient,
+          measurement: measurement,
+          amount: amount
+        };
+      })
+    );
+
+    console.log(result)
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
   }
 };
+
 
 app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
 

@@ -26,7 +26,7 @@ const Carousel = ({ images }) => {
 
   return (
     <div className="carousel">
-      <button className="carousel-btn left-btn" onClick={goToPrevSlide}><i class="bi bi-arrow-left-circle"></i></button>
+      <button className="carousel-btn left-btn" onClick={goToPrevSlide}><i className="bi bi-arrow-left-circle"></i></button>
       <div className="slide-container">
         {images.map((image, index) => (
           <div
@@ -40,7 +40,7 @@ const Carousel = ({ images }) => {
           ></div>
         ))}
       </div>
-      <button className="carousel-btn right-btn" onClick={goToNextSlide}><i class="bi bi-arrow-right-circle"></i></button>
+      <button className="carousel-btn right-btn" onClick={goToNextSlide}><i className="bi bi-arrow-right-circle"></i></button>
     </div>
   );
 };

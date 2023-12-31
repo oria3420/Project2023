@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'
 
-const GuestrModal = ({ showModal, onClose,message }) => {
+const GuestModal = ({ showModal, onClose,message }) => {
     const navigate = useNavigate()
 
     const handleLogin = () => {
@@ -43,4 +43,4 @@ const GuestrModal = ({ showModal, onClose,message }) => {
       );
     };
 
-export default GuestrModal;
+export default GuestModal;

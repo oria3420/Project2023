@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 import './CommentsContainer.css';
-import GuestrModal from './GuestModal';
+import GuestModal from './GuestModal';
 import ImageModal from './ImageModal';
 import FormData from 'form-data';
 
@@ -258,7 +258,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                     <span id="no-comment-second">Be the first to comment!</span>
                 </div>
             )}
-            <GuestrModal
+            <GuestModal
                 message={'To comment or upload a image in the recipe, please login or register'}
                 showModal={showModal}
                 onClose={() => setShowModal(false)}
