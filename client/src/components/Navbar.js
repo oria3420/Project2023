@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import SearchBar from './SearchBar';
 import MyRecipesBtn from './MyRecipesBtn';
-import GuestrModal from './GuestModal';
+import GuestModal from './GuestModal';
 
 
 const Navbar = ({ name }) => {
@@ -110,7 +110,7 @@ const Navbar = ({ name }) => {
             </div>
         </nav>
         {showModal && (
-            <GuestrModal
+            <GuestModal
               message={message} // Set a default component if needed
               showModal={showModal}
               onClose={() => setShowModal(false)}

@@ -1,6 +1,6 @@
 import './Components.css';
 import React, { useState, useEffect } from 'react';
-import GuestrModal from './GuestModal';
+import GuestModal from './GuestModal';
 
 const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
   const [isHeartFilled, setIsHeartFilled] = useState(false);
@@ -78,7 +78,7 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
           )}
         </div>
       </div>
-      <GuestrModal 
+      <GuestModal 
       message={'To like the recipe, please login or register'}
       showModal={showModal}
       onClose={() => setShowModal(false)}
@@ -98,7 +98,7 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
         <i className="bi bi-heart heart-icon"></i>
       )}
     </div>
-    <GuestrModal
+    <GuestModal
     message={'To like the recipe, please login or register'}
     showModal={showModal}
     onClose={() => setShowModal(false)}
