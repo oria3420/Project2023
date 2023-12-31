@@ -541,9 +541,9 @@ const AddRecipe = () => {
                                 {categories && Object.entries(categories).map(([category, entries]) => (
                                     category !== 'time_categories' && (
                                         <div key={category} className="select-container">
-                                            <label>{formatCategoryName(category) + ":"}</label>
+                                            <label className='category-name'>{formatCategoryName(category)}</label>
                                             <select
-                                                className='input-field'
+                                                className='input-field select-category'
                                                 value={recipeCategories[category]}
                                                 onChange={(e) => handleSelectChange(category, e.target.value)}
                                             >
