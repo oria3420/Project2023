@@ -18,15 +18,14 @@ const AddRecipe = () => {
     const [description, setDescription] = useState('');
     const [recipeYield, setRecipeYield] = useState('');
     const [categories, setCategories] = useState([]);
-    const [checkedItems, setCheckedItems] = useState({});
+    const [recipeCategories, setRecipeCategories] = useState({});
     const [userId, setUserId] = useState('');
-
     const [ingredients, setIngredients] = useState([])
     const [instructions, setInstructions] = useState(['']);;
     const [measurements, setMeasurements] = useState([]);
-    const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '' }]);
+    const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '', measurementId: '' }]);
     const [suggestions, setSuggestions] = useState([]);
-    const [selectedOptions, setSelectedOptions] = useState({});
+    // const [selectedOptions, setSelectedOptions] = useState({});
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -116,37 +115,6 @@ const AddRecipe = () => {
         }
     }, [navigate])
 
-
-    useEffect(() => {
-        fetch('http://localhost:1337/api/search_recipe')
-            .then(response => response.json())
-            .then(data => {
-                // const expandedCategories = {};
-                const checkedItems = {};
-                Object.keys(data).forEach(category => {
-                    //expandedCategories[category] = false;
-                    checkedItems[category] = {};
-                });
-                setCategories(data);
-                // for (const categoryKey in data) {
-                //     if (Object.hasOwnProperty.call(data, categoryKey)) {
-                //       const categoryEntries = data[categoryKey];
-                //       console.log(`Category: ${categoryKey}`);
-
-                //       for (const entry of categoryEntries) {
-                //         const [id, name] = entry;
-                //         console.log(`  Entry ID: ${id}, Name: ${name}`);
-                //       }
-                //     }
-                //   }
-                //setExpandedCategories(expandedCategories);
-                setCheckedItems(checkedItems);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }, []);
-
     useEffect(() => {
         if (user) {
             fetch(`http://localhost:1337/api/groceries`)
@@ -169,74 +137,12 @@ const AddRecipe = () => {
         }
     }, [user]);
 
-    // useEffect(() => {
-    //     if (searchTerm.length >= 3) {
-    //         const filtered = ingredients.filter((ingred) =>
-    //             ingred && ingred.ingredient
-    //                 ? ingred.ingredient.toLowerCase().includes(searchTerm.toLowerCase())
-    //                 : false
-    //         );
-    //         setFilteredIngredients(filtered);
-    //     } else {
-    //         setFilteredIngredients([]);
-    //     }
-    // }, [searchTerm, ingredients]);
-
-
-    // const handleAddToGroceryList = () => {
-    //     if (selectedIngredient && selectedMeasurement && amount) {
-    //         const selectedIngredientObject = filteredIngredients.find(item => item.ingredient === selectedIngredient);
-    //         const selectedMeasurementObject = measurements.find(item => item.measurement === selectedMeasurement);
-    //         const newItem = {
-    //             ingredientId: selectedIngredientObject?.id,
-    //             measurementId: selectedMeasurementObject?.id,
-    //             amount: amount,
-    //             ingredientName: selectedIngredient,
-    //             measurementName: selectedMeasurement
-    //         };
-    //         setIngredientsList([...ingredientsList, newItem]);
-    //         // Clear the input fields after adding to the list
-    //         setSelectedIngredient('');
-    //         setSelectedMeasurement('');
-    //         setAmount('');
-    //         setSearchTerm('');
-    //     }
-    // };
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         setSelectedImage(file);
     };
 
-    // const handleCheckboxChange = (category, id, checked) => {
-    //     setCheckedItems((prevCheckedItems) => {
-    //         const newCheckedItems = {
-    //             ...prevCheckedItems,
-    //             [category]: {
-    //                 ...(prevCheckedItems[category] || {}),
-    //                 [id]: checked,
-    //             },
-    //         };
 
-    //         // If the category is kosher_categories, enforce exactly one checkbox
-    //         if (category === 'kosher_categories') {
-    //             const kosherCategoryIds = Object.keys(newCheckedItems[category]);
-    //             const numChecked = kosherCategoryIds.reduce(
-    //                 (count, checkboxId) => (newCheckedItems[category][checkboxId] ? count + 1 : count),
-    //                 0
-    //             );
-
-    //             // If more than one checkbox is checked, uncheck the current one
-    //             if (numChecked > 1) {
-    //                 newCheckedItems[category][id] = false;
-    //             }
-    //         }
-
-    //         return newCheckedItems;
-    //     });
-    // };
-
-    console.log(checkedItems)
 
     // const handleSubmit = async (e) => {
     //     e.preventDefault();
@@ -310,10 +216,7 @@ const AddRecipe = () => {
     //     }
     // };
 
-
-
     const formatCategoryName = (category) => {
-        // Replace underscores with spaces, remove the word "categories," and capitalize the first letter of each word
         return category
             .replace(/_/g, ' ')
             .replace(/categories/g, '')
@@ -322,15 +225,11 @@ const AddRecipe = () => {
             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
             .join(' ');
     };
-    // console.log(categories)
 
     const calculateTotalMinutes = (time) => {
         const [hours, minutes] = time.split(':').map(Number);
         return hours * 60 + minutes;
     };
-
-
-
 
     useEffect(() => {
         const computeTimeCategoryTag = (prep, cook) => {
@@ -350,7 +249,7 @@ const AddRecipe = () => {
         const timeTag = computeTimeCategoryTag(prepTime, cookTime);
 
         // Update the time category in checkedItems
-        setCheckedItems((prevCheckedItems) => ({
+        setRecipeCategories((prevCheckedItems) => ({
             ...prevCheckedItems,
             time_categories: {
                 [timeTag]: true,
@@ -359,28 +258,71 @@ const AddRecipe = () => {
     }, [prepTime, cookTime]);
 
 
-    const handleSelectChange = (category, selectedValues) => {
-        console.log('category: ' + category);
-        console.log('selectedValues: ' + selectedValues);
+    // const handleSelectChange = (category, selectedValues) => {
+    //     console.log('category: ' + category);
+    //     console.log('selectedValues: ' + selectedValues);
 
-        setSelectedOptions((prevSelectedOptions) => ({
-            ...prevSelectedOptions,
-            [category]: selectedValues,
-        }));
+    //     // setSelectedOptions((prevSelectedOptions) => ({
+    //     //     ...prevSelectedOptions,
+    //     //     [category]: selectedValues,
+    //     // }));
 
-        // Update checkedItems based on the selected options
-        const categoryIds = selectedValues.map(value => parseInt(value, 10));
-        setCheckedItems((prevCheckedItems) => ({
-            ...prevCheckedItems,
-            [category]: {
-                ...prevCheckedItems[category], // Preserve existing selections
-                ...categoryIds.reduce((acc, categoryId) => {
-                    acc[categoryId] = true;
-                    return acc;
-                }, {}),
-            },
-        }));
+    //     // Update checkedItems based on the selected options
+    //     const categoryIds = selectedValues.map(value => parseInt(value, 10));
+    //     setRecipeCategories((prevCheckedItems) => ({
+    //         ...prevCheckedItems,
+    //         [category]: {
+    //             ...prevCheckedItems[category], // Preserve existing selections
+    //             ...categoryIds.reduce((acc, categoryId) => {
+    //                 acc[categoryId] = true;
+    //                 return acc;
+    //             }, {}),
+    //         },
+    //     }));
+    // };
+
+    const handleRemoveTag = (category, id) => {
+        setRecipeCategories((prevCheckedItems) => {
+            const updatedCheckedItems = { ...prevCheckedItems };
+            updatedCheckedItems[category] = {
+                ...prevCheckedItems[category],
+                [id]: false, // Set the value to false to "unselect" the tag
+            };
+            return updatedCheckedItems;
+        });
     };
+
+    // console.log(categories)
+    console.log(recipeCategories)
+
+    useEffect(() => {
+        fetch('http://localhost:1337/api/search_recipe')
+            .then(response => response.json())
+            .then(data => {
+                const initialRecipeCategories = {};
+                Object.keys(data).forEach(category => {
+                    initialRecipeCategories[category] = {};
+                    data[category].forEach(([id, tagName]) => {
+                        initialRecipeCategories[category][id] = false;
+                    });
+                });
+                setCategories(data);
+                setRecipeCategories(initialRecipeCategories);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }, []);
+
+    const handleSelectChange = (category, id) => {
+        setRecipeCategories((prevCategories) => ({
+          ...prevCategories,
+          [category]: {
+            ...(prevCategories[category] || {}),
+            [id]: !prevCategories[category]?.[id],
+          },
+        }));
+      };
 
     return (
         <div>
@@ -523,7 +465,7 @@ const AddRecipe = () => {
 
                                                 {Array.isArray(suggestions[index]) && suggestions[index].length > 0 && (
                                                     <div className='ingredient-suggestions'>
-                                                        <div class='toggle-bar'>
+                                                        <div className='toggle-bar'>
                                                             <ul>
                                                                 {suggestions[index].map((suggestion, suggestionIndex) => (
                                                                     <li key={suggestionIndex} onClick={() => handleSuggestionClick(index, suggestion)}>
@@ -622,47 +564,44 @@ const AddRecipe = () => {
                             <label className='black-title'>Tags</label>
 
                             <div className='tags-container'>
-                            {Object.entries(categories).map(([category, entries]) => (
-                                // Skip rendering select container for "time_categories"
-                                category !== 'time_categories' && (
-                                    <div key={category} className="select-container">
-                                        <label>{formatCategoryName(category) + ":"}</label>
-                                        <select
-                                            className='input-field'
-                                            value={selectedOptions[category] || []}
-                                            onChange={(e) => {
-                                                const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
-                                                handleSelectChange(category, selectedValues);
-                                            }}
-                                            multiple  // Add this attribute to enable multiple selections
-                                        >
-                                            <option value="" disabled>Select an option</option>
-                                            {entries.map(([id, tagName]) => (
-                                                <option key={id} value={id}>
-                                                    {tagName}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </div>
-                                )
+                            {categories && Object.entries(categories).map(([category, entries]) => (
+                              category !== 'time_categories' && (
+                                <div key={category} className="select-container">
+                                  <label>{formatCategoryName(category) + ":"}</label>
+                                  <select
+                                    value={recipeCategories[category]}
+                                    onChange={(e) => handleSelectChange(category, e.target.value)}
+                                  >
+                                    <option value="">Select {formatCategoryName(category)}</option>
+                                    {entries && entries.map(([id, tagName]) => (
+                                      <option key={id} value={id}>
+                                        {tagName}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              )
                             ))}
-                        </div>
+                          </div>
 
                             <div className='selected-tags'>
                                 <label className='black-title'>Selected Tags</label>
                                 <ul>
-                                    {Object.entries(checkedItems).map(([category, tags]) => (
+                                    {Object.entries(recipeCategories).map(([category, tags]) => (
                                         category !== 'time_categories' && (
                                             Object.entries(tags).map(([id, checked]) => (
                                                 checked && (
                                                     <li key={id}>
                                                         <strong>{formatCategoryName(category)}:</strong> {categories[category].find(([tagId]) => tagId === parseInt(id, 10))[1]}
+                                                        <i
+                                                            className='bi bi-x-circle remove-icon'
+                                                            onClick={() => handleRemoveTag(category, id)}
+                                                        ></i>
                                                     </li>
                                                 )
                                             ))
                                         )
                                     ))}
-
                                 </ul>
                             </div>
 
