@@ -25,6 +25,7 @@ const AddRecipe = () => {
     const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '', measurementId: '' }]);
     const [suggestions, setSuggestions] = useState([]);
     const [formSubmitted, setFormSubmitted] = useState(false);
+    const [formValid, setFormValid] = useState(false);
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -143,20 +144,17 @@ const AddRecipe = () => {
         setSelectedImage(file);
     };
 
-    const validateForm = () => {
-        console.log("in validateForm");
-
-    };
-
-
     const handleSubmit = async (e) => {
         console.log("handleSubmit")
         e.preventDefault();
 
-        // Your form validation logic goes here
-        // const isFormValid = validateForm();
-        // console.log(isFormValid)
-        if (true) {
+        const isFormValid = validateForm();
+        setFormValid(isFormValid)
+        setFormSubmitted(true);
+        console.log('formValid: ' + formValid)
+        console.log('formSubmitted: ' + formSubmitted)
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (isFormValid) {
 
             // Iterate over recipeIngredients
             const updatedRecipeIngredients = await Promise.all(recipeIngredients.map(async (recipeIngredient) => {
@@ -248,7 +246,6 @@ const AddRecipe = () => {
 
         } else {
             // Update state to show the error message
-            setFormSubmitted(true);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
@@ -334,18 +331,50 @@ const AddRecipe = () => {
         }));
     };
 
+    const validateForm = () => {
+        console.log("in validateForm");
+
+        const missingFields = [];
+
+        if (!recipeName) {
+            missingFields.push("recipeName");
+        }
+        if (!prepTime) {
+            missingFields.push("prepTime");
+        }
+        if (!recipeYield) {
+            missingFields.push("yields");
+        }
+        if (!description) {
+            missingFields.push("description");
+        }
+
+        // Apply the red shadow class to missing input fields
+        const inputFields = document.getElementsByClassName('input-field');
+        for (const field of inputFields) {
+            if (missingFields.includes(field.id)) {
+                field.classList.add('missing-input');
+            } else {
+                field.classList.remove('missing-input');
+            }
+        }
+
+        // Return true if there are no missing fields
+        return missingFields.length === 0;
+    };
+
     return (
         <div>
             {name && <Navbar name={name} />}
             <div>
                 {user && (
                     <form className='add-recipe-form needs-validation' >
-                        {formSubmitted && /*!validateForm() &&*/  (
+                        {formSubmitted && !formValid && (
                             <div className="alert alert-danger" role="alert">
                                 Please fill in all required fields.
                             </div>
                         )}
-                        {formSubmitted && /*validateForm() &&*/ (
+                        {formSubmitted && formValid && (
                             <div className="alert alert-success" role="alert">
                                 Success! Your recipe has been added to our collection. Thank you for sharing your delicious creation with us!
                             </div>
@@ -385,6 +414,7 @@ const AddRecipe = () => {
                                         <div className='desc-field'>
                                             <label className='input-title'>Recipe Name</label>
                                             <input
+                                                id='recipeName'
                                                 className='input-field'
                                                 type="text"
                                                 value={recipeName || ''}
@@ -398,6 +428,7 @@ const AddRecipe = () => {
                                             <div className='desc-field'>
                                                 <label className='input-title'>Prep Time</label>
                                                 <input
+                                                    id='prepTime'
                                                     className='input-field time-field'
                                                     type="time"
                                                     value={prepTime}
@@ -419,6 +450,7 @@ const AddRecipe = () => {
                                             <div className='desc-field yields-field'>
                                                 <label className='input-title'>Yields /Servings</label>
                                                 <input
+                                                    id='yields'
                                                     className='input-field'
                                                     type="text"
                                                     value={recipeYield}
@@ -430,6 +462,7 @@ const AddRecipe = () => {
                                         <div className='desc-field'>
                                             <label className='input-title'>Description</label>
                                             <textarea
+                                                id='description'
                                                 className='input-field desc-textbox'
                                                 value={description}
                                                 onChange={(e) => setDescription(e.target.value)}

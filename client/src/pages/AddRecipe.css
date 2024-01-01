@@ -423,3 +423,7 @@
 .remove-tag{
     color: orange;
 }
+
+.input-field.missing-input {
+    box-shadow: 0 0 5px red; /* Add a red glow effect using box-shadow */
+}
