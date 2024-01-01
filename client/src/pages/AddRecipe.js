@@ -293,7 +293,7 @@ const AddRecipe = () => {
             ...prevCategories,
             [category]: {
                 ...(prevCategories[category] || {}),
-                [id]: !prevCategories[category]?.[id],
+                [id]: true,
             },
         }));
     };
@@ -430,7 +430,7 @@ const AddRecipe = () => {
 
                                             <div className="input-container">
                                                 <input
-                                                    className='input-field step-input'
+                                                    className='input-field ingredient-input'
                                                     placeholder={`Ingredient ${index + 1}`}
                                                     value={ingredient.ingredient}
                                                     onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
@@ -466,7 +466,7 @@ const AddRecipe = () => {
                                             />
 
                                             <select
-                                                className='input-field step-input amount-input'
+                                                className='input-field step-input measure-input'
                                                 value={ingredient.measurementId || ''}
                                                 onChange={(e) => handleMeasurementChange(index, e.target.value)}
                                                 required
@@ -559,25 +559,29 @@ const AddRecipe = () => {
                                 ))}
                             </div>
 
-                            <div className='selected-tags'>
+                            <hr className="separator" />
+
+                            <div className='selected-tags-container'>
                                 <label className='black-title'>Selected Tags</label>
-                                <ul>
+                                <div className='selected-tags'>
                                     {Object.entries(recipeCategories).map(([category, tags]) => (
                                         category !== 'time_categories' && (
                                             Object.entries(tags).map(([id, checked]) => (
                                                 checked && (
-                                                    <li key={id}>
-                                                        <strong>{formatCategoryName(category)}:</strong> {categories[category].find(([tagId]) => tagId === parseInt(id, 10))[1]}
+                                                    <span key={id} className='tag-container'>
+                                                        <label className='tag-rec'>
+                                                            {categories[category].find(([tagId]) => tagId === parseInt(id, 10))[1]}
+                                                        </label>
                                                         <i
-                                                            className='bi bi-x-circle remove-icon'
+                                                            className='bi bi-x-circle remove-icon remove-tag'
                                                             onClick={() => handleRemoveTag(category, id)}
                                                         ></i>
-                                                    </li>
+                                                    </span>
                                                 )
                                             ))
                                         )
                                     ))}
-                                </ul>
+                                </div>
                             </div>
 
                         </div>

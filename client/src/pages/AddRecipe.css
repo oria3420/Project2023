@@ -189,7 +189,6 @@
     cursor: pointer;
 }
 
-
 .add-file-title {
     color: orange;
     margin-top: 10px;
@@ -245,11 +244,11 @@
     margin-bottom: var(--section-bottom-margin);
     padding-left: var(--padding-description);
     padding-right: var(--padding-description);
-    padding-bottom: 20px;
+    padding-bottom: 30px;
     padding-top: 20px;
-    height: 400px;
+    height: fit-content;
     border: 1px solid #e6e5e5;
-
+    min-height: 450px;
 }
 
 .steps-container {
@@ -261,9 +260,9 @@
 
 .instruction-row {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
+    margin-bottom: 13px;
 }
 
 .remove-icon {
@@ -334,10 +333,14 @@
     background-color: #f0f0f0;
 }
 
-.amount-input {
-    width: 100px;
-    margin-left: 10px;
+.amount-input, .measure-input {
+    width: 200px;
 }
+
+.ingredient-input{
+    width: 200px;
+}
+
 
 .tags-container {
     display: flex;
@@ -357,7 +360,7 @@
 
 /* Optional: Adjust the width of each select menu if needed */
 .select-container select {
-    width: 150px;
+    width: 190px;
     /* Adjust as per your design */
 }
 
@@ -367,4 +370,51 @@
 }
 .select-category{
     width: 200px;
+}
+
+.separator {
+    border: 0.5px dashed black;
+    width: calc(100% + 40px); /* 20px on each side (left + right) */
+    margin-left: -20px; /* Compensate for the extra width on the left */
+    margin-right: -20px; /* Compensate for the extra width on the right */
+    border-style: dashed; /* Set the border style to dashed */
+    border-width: 1px; /* Adjust the width of the dashes as needed */
+    
+}
+
+.selected-tags-container{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.selected-tags{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 30px;
+}
+
+.tag-rec{
+    border: 1.5px solid orange;
+    border-radius: 30px;
+    padding: 8px;
+    color: orange;
+    width: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px;
+}
+
+.tag-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.remove-tag{
+    color: orange;
 }
