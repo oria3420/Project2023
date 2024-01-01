@@ -137,7 +137,7 @@ const RecipePage = () => {
     }
 
     getImageUrls();
-  }, [id, defaultImageUrl]);
+  }, [id]);
 
   function formatDate(inputDate) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };

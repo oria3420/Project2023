@@ -24,15 +24,6 @@ const Navbar = ({ name }) => {
         setShowModal(true);
       };
     
-      const handleItemClick = (component) => {
-        if (!token && name === "Guest") {
-          handleGuestClick(component.name);
-        } else {
-          navigate(component.path);
-        }
-      };
-
-
     const recipes = (event) => {
         event.preventDefault()
         navigate('/search_recipe')

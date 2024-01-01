@@ -624,25 +624,33 @@ const recipeImage = req.file ? {
   // })
 
 //   // Insert RecipeIngredients 
+for (const groceryItem of JSON.parse(groceryList)) {
+  const { ingredient, measurementId, amount, id } = groceryItem;
+
+  // Find the ingredient in the MongoDB collection
+  const foundIngredient = await Ingredients.findOne({ ingredient });
+
   for (const groceryItem of JSON.parse(groceryList)) {
     const { ingredient, measurementId, amount } = groceryItem;
-    const ingredientDoc = await Ingredients.findOne(
-      { ingredient: ingredient },
-      { _id: 0, id: 1 } // Projection: Exclude _id, include id
-    );
+
+
+    // const ingredientDoc = await Ingredients.findOne(
+    //   { ingredient: ingredient },
+    //   { _id: 0, id: 1 } // Projection: Exclude _id, include id
+    // );
   
-    // Log the entire ingredientDoc for debugging
-    console.log('Full ingredientDoc:', ingredientDoc);
+    // // Log the entire ingredientDoc for debugging
+    // console.log('Full ingredientDoc:', ingredientDoc);
   
-    // Check the type and value of 'id' in ingredientDoc
-    console.log('Type of id in ingredientDoc:', typeof ingredientDoc.id);
-    console.log('Value of id in ingredientDoc:', ingredientDoc.id);
+    // // Check the type and value of 'id' in ingredientDoc
+    // console.log('Type of id in ingredientDoc:', typeof ingredientDoc.id);
+    // console.log('Value of id in ingredientDoc:', ingredientDoc.id);
   
-    // Access the 'id' field directly
-    const ingredientId = ingredientDoc ? ingredientDoc.id : null;
+    // // Access the 'id' field directly
+    // const ingredientId = ingredientDoc ? ingredientDoc.id : null;
   
-    // Log the extracted ingredientId for debugging
-    console.log('Extracted ingredientId:', ingredientId);
+    // // Log the extracted ingredientId for debugging
+    // console.log('Extracted ingredientId:', ingredientId);
 
     //console.log(ingredientId['id']+" "+measurementId+" "+amount)
     // await RecipeIngredients.create({

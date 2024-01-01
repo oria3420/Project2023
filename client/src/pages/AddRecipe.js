@@ -4,7 +4,6 @@ import './AddRecipe.css'
 import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
-import Select from 'react-select';
 
 const AddRecipe = () => {
     const navigate = useNavigate()
@@ -69,6 +68,7 @@ const AddRecipe = () => {
 
     const handleSuggestionClick = (index, suggestion) => {
         const updatedIngredients = [...recipeIngredients];
+        console.log(ingredients)
         updatedIngredients[index].ingredient = suggestion;
         setRecipeIngredients(updatedIngredients);
         // Clear suggestions for the clicked input field
@@ -146,6 +146,24 @@ const AddRecipe = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+         // Iterate over recipeIngredients
+         const updatedRecipeIngredients = await Promise.all(recipeIngredients.map(async (recipeIngredient) => {
+            // Find the corresponding ingredient in the ingredients array
+            const matchingIngredient = ingredients.find((ingredient) => ingredient.ingredient === recipeIngredient.ingredient);
+    
+            if (matchingIngredient) {
+                // Extract the ID from the matching ingredient and update the recipeIngredient
+                recipeIngredient.id = matchingIngredient.id;
+            }
+    
+            return recipeIngredient;
+        }));
+
+    console.log(updatedRecipeIngredients)
+    // Update state with the modified recipeIngredients array
+    setRecipeIngredients(updatedRecipeIngredients);
+
         // const kosherCategoryIds = Object.keys(recipeCategories['kosher_categories'] || {});
         // const isKosherCategoryValid = kosherCategoryIds.some(
         //     (checkboxId) => recipeCategories['kosher_categories'][checkboxId]
