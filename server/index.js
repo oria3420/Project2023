@@ -624,14 +624,9 @@ const recipeImage = req.file ? {
   // })
 
 //   // Insert RecipeIngredients 
-for (const groceryItem of JSON.parse(groceryList)) {
-  const { ingredient, measurementId, amount, id } = groceryItem;
-
-  // Find the ingredient in the MongoDB collection
-  const foundIngredient = await Ingredients.findOne({ ingredient });
 
   for (const groceryItem of JSON.parse(groceryList)) {
-    const { ingredient, measurementId, amount } = groceryItem;
+    const { ingredient, measurementId, amount, id } = groceryItem;
 
 
     // const ingredientDoc = await Ingredients.findOne(
