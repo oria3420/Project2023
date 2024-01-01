@@ -328,6 +328,11 @@
     width: 200px;
 }
 
+.selectWithScrollbar {
+    max-height: 100px;
+    overflow-y: auto;
+}
+
 .tags-section {
     margin-left: var(--margin-sides);
     margin-right: var(--margin-sides);

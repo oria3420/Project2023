@@ -68,6 +68,7 @@ const AddRecipe = () => {
 
     const handleSuggestionClick = (index, suggestion) => {
         const updatedIngredients = [...recipeIngredients];
+
         updatedIngredients[index].ingredient = suggestion;
         setRecipeIngredients(updatedIngredients);
         // Clear suggestions for the clicked input field
@@ -146,21 +147,21 @@ const AddRecipe = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-         // Iterate over recipeIngredients
-         const updatedRecipeIngredients = await Promise.all(recipeIngredients.map(async (recipeIngredient) => {
+        // Iterate over recipeIngredients
+        const updatedRecipeIngredients = await Promise.all(recipeIngredients.map(async (recipeIngredient) => {
             // Find the corresponding ingredient in the ingredients array
             const matchingIngredient = ingredients.find((ingredient) => ingredient.ingredient === recipeIngredient.ingredient);
-    
+
             if (matchingIngredient) {
                 // Extract the ID from the matching ingredient and update the recipeIngredient
                 recipeIngredient.id = matchingIngredient.id;
             }
-    
+
             return recipeIngredient;
         }));
 
-    // Update state with the modified recipeIngredients array
-    setRecipeIngredients(updatedRecipeIngredients);
+        // Update state with the modified recipeIngredients array
+        setRecipeIngredients(updatedRecipeIngredients);
 
         // const kosherCategoryIds = Object.keys(recipeCategories['kosher_categories'] || {});
         // const isKosherCategoryValid = kosherCategoryIds.some(
@@ -320,7 +321,7 @@ const AddRecipe = () => {
             {name && <Navbar name={name} />}
             <div>
                 {user && (
-                    <form className='add-recipe-form'>
+                    <form className='add-recipe-form'  onSubmit={handleSubmit}>
 
                         <div className='image-details two-sections-wrapper'>
 
@@ -480,7 +481,7 @@ const AddRecipe = () => {
                                             />
 
                                             <select
-                                                className='input-field step-input measure-input'
+                                                className='input-field step-input measure-input selectWithScrollbar'
                                                 value={ingredient.measurementId || ''}
                                                 onChange={(e) => handleMeasurementChange(index, e.target.value)}
                                                 required
@@ -598,7 +599,7 @@ const AddRecipe = () => {
 
 
                         <div className='submit-section'>
-                            <button className='publish-btn' type="submit" onClick={handleSubmit}>Publish</button>
+                            <button className='publish-btn' type="submit" >Publish</button>
                         </div>
                     </form>
                 )}
