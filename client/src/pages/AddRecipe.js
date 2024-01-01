@@ -36,6 +36,7 @@ const AddRecipe = () => {
         const updatedIngredients = [...recipeIngredients];
         updatedIngredients[index][field] = value;
         setRecipeIngredients(updatedIngredients);
+        console.log(updatedIngredients)
         // Call a function to filter and update the suggestions based on the current input value
         updateIngredientSuggestions(value, index);
     };
@@ -143,77 +144,77 @@ const AddRecipe = () => {
 
 
 
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     const kosherCategoryIds = Object.keys(checkedItems['kosher_categories'] || {});
-    //     const isKosherCategoryValid = kosherCategoryIds.some(
-    //         (checkboxId) => checkedItems['kosher_categories'][checkboxId]
-    //     );
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        // const kosherCategoryIds = Object.keys(recipeCategories['kosher_categories'] || {});
+        // const isKosherCategoryValid = kosherCategoryIds.some(
+        //     (checkboxId) => recipeCategories['kosher_categories'][checkboxId]
+        // );
 
-    //     if (!isKosherCategoryValid) {
-    //         setErrorMessage('Please select at least one checkbox in kosher_categories');
-    //         return;
-    //     }
-    //     setErrorMessage('');
-    //     console.log('Form Data:', {
-    //         recipeName,
-    //         selectedImage,
-    //         cookTime,
-    //         prepTime,
-    //         selectedCategory,
-    //         groceryList: ingredientsList,
-    //         description,
-    //         recipeServings,
-    //         recipeYield,
-    //         recipeInstructions: instructions,
-    //         checkedItems,
-    //     });
-    //     // setRecipeName('');
-    //     // setSelectedImage(null);
-    //     // setCookTime('00:00');
-    //     // setPrepTime('00:00');
-    //     // setSelectedCategory('');
-    //     // setSearchTerm('');
-    //     // setSelectedMeasurement('');
-    //     // setAmount('');
-    //     // setDescription('');
-    //     // setRecipeServings(1);
-    //     // setRecipeYield('');
-    //     // setRecipeInstructions('');
-    //     // setCheckedItems({});
-    //     // setGroceryList([]);
-    //     const formData = new FormData();
-    //     formData.append('selectedImage', selectedImage);
-    //     formData.append('recipeName', recipeName);
-    //     formData.append('cookTime', cookTime);
-    //     formData.append('prepTime', prepTime);
-    //     formData.append('selectedCategory', selectedCategory);
-    //     formData.append('groceryList', JSON.stringify(ingredientsList)); // Assuming groceryList is an array
-    //     formData.append('description', description);
-    //     formData.append('recipeServings', recipeServings);
-    //     formData.append('recipeYield', recipeYield);
-    //     formData.append('recipeInstructions', instructions);
-    //     formData.append('checkedItems', JSON.stringify(checkedItems));
-    //     formData.append('name', name);
-    //     formData.append('userId', userId);
+        // if (!isKosherCategoryValid) {
+        //     setErrorMessage('Please select at least one checkbox in kosher_categories');
+        //     return;
+        // }
+        // setErrorMessage('');
+        console.log('Form Data:', {
+            recipeName,
+            selectedImage,
+            cookTime,
+            prepTime,
+            selectedCategory,
+            groceryList: recipeIngredients,
+            description,
+            //recipeServings,
+            recipeYield,
+            recipeInstructions: instructions,
+            recipeCategories,
+        });
+        // setRecipeName('');
+        // setSelectedImage(null);
+        // setCookTime('00:00');
+        // setPrepTime('00:00');
+        // setSelectedCategory('');
+        // setSearchTerm('');
+        // setSelectedMeasurement('');
+        // setAmount('');
+        // setDescription('');
+        // setRecipeServings(1);
+        // setRecipeYield('');
+        // setRecipeInstructions('');
+        // setRecipeCategories({});
+        // setGroceryList([]);
+        const formData = new FormData();
+        formData.append('selectedImage', selectedImage);
+        formData.append('recipeName', recipeName);
+        formData.append('cookTime', cookTime);
+        formData.append('prepTime', prepTime);
+        formData.append('selectedCategory', selectedCategory);
+        formData.append('groceryList', JSON.stringify(recipeIngredients)); // Assuming groceryList is an array
+        formData.append('description', description);
+        //formData.append('recipeServings', recipeServings);
+        formData.append('recipeYield', recipeYield);
+        formData.append('recipeInstructions', instructions);
+        formData.append('recipeCategories', recipeCategories);
+        formData.append('name', name);
+        formData.append('userId', userId);
 
-    //     try {
-    //         const response = await fetch('http://localhost:1337/api/addRecipe', {
-    //             method: 'POST',
-    //             body: formData,
-    //         });
-    //         if (response.ok) {
-    //             const result = await response.json();
-    //             console.log(result); // Recipe successfully added
-    //         } else {
-    //             console.error(`HTTP Error: ${response.status}`);
-    //             // Handle error response
-    //         }
-    //     } catch (error) {
-    //         console.error(error);
-    //         // Handle fetch error (e.g., network error)
-    //     }
-    // };
+        try {
+            const response = await fetch('http://localhost:1337/api/addRecipe', {
+                method: 'POST',
+                body: formData,
+            });
+            if (response.ok) {
+                const result = await response.json();
+                console.log(result); // Recipe successfully added
+            } else {
+                console.error(`HTTP Error: ${response.status}`);
+                // Handle error response
+            }
+        } catch (error) {
+            console.error(error);
+            // Handle fetch error (e.g., network error)
+        }
+    };
 
     const formatCategoryName = (category) => {
         return category
@@ -267,7 +268,7 @@ const AddRecipe = () => {
         });
     };
 
-    console.log(recipeCategories)
+    //console.log(recipeCategories)
 
     useEffect(() => {
         fetch('http://localhost:1337/api/search_recipe')
@@ -453,9 +454,6 @@ const AddRecipe = () => {
 
                                             </div>
 
-
-
-
                                             <input
                                                 type="number"
                                                 className='input-field step-input amount-input'
@@ -473,7 +471,7 @@ const AddRecipe = () => {
                                             >
                                                 <option value='' disabled>{`Measurement ${index + 1}`}</option>
                                                 {measurements.map((measurement, measurementIndex) => (
-                                                    <option key={measurementIndex} value={measurement.measurement}>
+                                                    <option key={measurementIndex} value={measurement.id}>
                                                         {measurement.measurement}
                                                     </option>
                                                 ))}
@@ -486,11 +484,6 @@ const AddRecipe = () => {
                                             ></i>
                                         </div>
                                     ))}
-
-
-
-
-
 
                                     <button onClick={addIngredient} className='add-btn'>
                                         <i className="bi bi-plus-circle add-icon"></i>
@@ -589,7 +582,7 @@ const AddRecipe = () => {
 
 
                         <div className='submit-section'>
-                            <button className='publish-btn' type="submit">Publish</button>
+                            <button className='publish-btn' type="submit" onClick={handleSubmit}>Publish</button>
                         </div>
                     </form>
                 )}
