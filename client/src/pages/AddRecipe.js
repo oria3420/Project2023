@@ -26,6 +26,7 @@ const AddRecipe = () => {
     const [suggestions, setSuggestions] = useState([]);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValid, setFormValid] = useState(false);
+    const [instructionValidations, setInstructionValidations] = useState([true]);
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -332,14 +333,16 @@ const AddRecipe = () => {
     };
 
     const validateForm = () => {
-        console.log("in validateForm");
 
         const missingFields = [];
 
+        if (!selectedImage) {
+            missingFields.push("image");
+        }
         if (!recipeName) {
             missingFields.push("recipeName");
         }
-        if (!prepTime) {
+        if (prepTime === '00:00') {
             missingFields.push("prepTime");
         }
         if (!recipeYield) {
@@ -348,6 +351,43 @@ const AddRecipe = () => {
         if (!description) {
             missingFields.push("description");
         }
+        if (!selectedCategory) {
+            missingFields.push("category");
+        }
+
+        instructions.forEach((instruction, index) => {
+            if (!instruction.trim()) {
+                missingFields.push(`instruction_${index}`);
+                // Update the validation status for this instruction
+                setInstructionValidations(prevValidations => [
+                    ...prevValidations.slice(0, index),
+                    false,
+                    ...prevValidations.slice(index + 1)
+                ]);
+            } else {
+                // Update the validation status for this instruction
+                setInstructionValidations(prevValidations => [
+                    ...prevValidations.slice(0, index),
+                    true,
+                    ...prevValidations.slice(index + 1)
+                ]);
+            }
+        });
+
+
+        // if (!selectedCategory) {
+        //     missingFields.push("category");
+        // }
+        // if (!selectedCategory) {
+        //     missingFields.push("category");
+        // }
+        // if (!selectedCategory) {
+        //     missingFields.push("category");
+        // }
+        // if (!selectedCategory) {
+        //     missingFields.push("category");
+        // }
+
 
         // Apply the red shadow class to missing input fields
         const inputFields = document.getElementsByClassName('input-field');
@@ -387,7 +427,7 @@ const AddRecipe = () => {
                                     <label className='black-title'>Add Images</label>
                                 </div>
 
-                                <div className='image-container'>
+                                <div id='image' className='input-field image-container'>
                                     {selectedImage ? (
                                         <>
                                             <img className='recipe-image' src={URL.createObjectURL(selectedImage)} alt="Selected" />
@@ -472,6 +512,7 @@ const AddRecipe = () => {
                                         <div className='desc-field'>
                                             <label className='input-title'>Category</label>
                                             <select
+                                                id='category'
                                                 className='input-field category-desc'
                                                 value={selectedCategory}
                                                 onChange={(e) => setSelectedCategory(e.target.value)}
@@ -580,6 +621,7 @@ const AddRecipe = () => {
                                     {instructions.map((instruction, index) => (
                                         <div key={index} className='instruction-row'>
                                             <input
+                                            id={`instruction_${index}`}
                                                 className='input-field step-input'
                                                 placeholder={`Instruction ${index + 1}`}
                                                 value={instruction}
