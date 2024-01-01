@@ -84,7 +84,7 @@ else{
     }
 
     getImageUrls();
-  }, [recipe.RecipeId, defaultImageUrl]);
+  }, [recipe.RecipeId]);
 
   const handleClick = (recipeId) => {
     navigate(`/recipes/${recipeId}`, { state: { name: name, user_id: user_id } });

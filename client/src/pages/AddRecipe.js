@@ -26,7 +26,6 @@ const AddRecipe = () => {
     const [suggestions, setSuggestions] = useState([]);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValid, setFormValid] = useState(false);
-    const [instructionValidations, setInstructionValidations] = useState([true]);
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -358,22 +357,43 @@ const AddRecipe = () => {
         instructions.forEach((instruction, index) => {
             if (!instruction.trim()) {
                 missingFields.push(`instruction_${index}`);
-                // Update the validation status for this instruction
-                setInstructionValidations(prevValidations => [
-                    ...prevValidations.slice(0, index),
-                    false,
-                    ...prevValidations.slice(index + 1)
-                ]);
-            } else {
-                // Update the validation status for this instruction
-                setInstructionValidations(prevValidations => [
-                    ...prevValidations.slice(0, index),
-                    true,
-                    ...prevValidations.slice(index + 1)
-                ]);
             }
         });
 
+        recipeIngredients.forEach((ingredient, index) => {
+            // Check ingredient name
+            if (!ingredient.ingredient.trim()) {
+                missingFields.push(`ingredient_${index}_name`);
+            }
+
+            // Check ingredient amount
+            if (isNaN(ingredient.amount) || ingredient.amount <= 0) {
+                missingFields.push(`ingredient_${index}_amount`);
+            }
+
+            // Check ingredient measurement
+            if (!ingredient.measurementId) {
+                missingFields.push(`ingredient_${index}_measurement`);
+            }
+        });
+
+        const categoryValidations = {
+            kosher_categories: false,
+            difficulty_categories: false,
+            // Add more categories as needed
+        };
+    
+        Object.entries(categories).forEach(([category, entries]) => {
+            if (category === 'kosher_categories' || category === 'difficulty_categories') {
+                const selectedOptions = Object.values(recipeCategories[category]);
+                if (!selectedOptions.some(option => option)) {
+                    categoryValidations[category] = true;  // Mark as missing
+                    missingFields.push(`category_${category}`);
+                } else {
+                    categoryValidations[category] = false;  // Mark as not missing
+                }
+            }
+        });
 
         // if (!selectedCategory) {
         //     missingFields.push("category");
@@ -550,6 +570,7 @@ const AddRecipe = () => {
 
                                             <div className="input-container">
                                                 <input
+                                                    id={`ingredient_${index}_name`}
                                                     className='input-field ingredient-input'
                                                     placeholder={`Ingredient ${index + 1}`}
                                                     value={ingredient.ingredient}
@@ -574,6 +595,7 @@ const AddRecipe = () => {
                                             </div>
 
                                             <input
+                                                id={`ingredient_${index}_amount`}
                                                 type="number"
                                                 className='input-field step-input amount-input'
                                                 placeholder={`Amount ${index + 1}`}
@@ -583,6 +605,7 @@ const AddRecipe = () => {
                                             />
 
                                             <select
+                                                id={`ingredient_${index}_measurement`}
                                                 className='input-field step-input measure-input selectWithScrollbar'
                                                 value={ingredient.measurementId || ''}
                                                 onChange={(e) => handleMeasurementChange(index, e.target.value)}
@@ -621,7 +644,7 @@ const AddRecipe = () => {
                                     {instructions.map((instruction, index) => (
                                         <div key={index} className='instruction-row'>
                                             <input
-                                            id={`instruction_${index}`}
+                                                id={`instruction_${index}`}
                                                 className='input-field step-input'
                                                 placeholder={`Instruction ${index + 1}`}
                                                 value={instruction}
@@ -656,6 +679,7 @@ const AddRecipe = () => {
                                         <div key={category} className="select-container">
                                             <label className='category-name'>{formatCategoryName(category)}</label>
                                             <select
+                                            id={`category_${category}`}
                                                 className='input-field select-category'
                                                 value={recipeCategories[category]}
                                                 onChange={(e) => handleSelectChange(category, e.target.value)}
