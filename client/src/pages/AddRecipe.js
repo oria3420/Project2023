@@ -68,7 +68,6 @@ const AddRecipe = () => {
 
     const handleSuggestionClick = (index, suggestion) => {
         const updatedIngredients = [...recipeIngredients];
-        console.log(ingredients)
         updatedIngredients[index].ingredient = suggestion;
         setRecipeIngredients(updatedIngredients);
         // Clear suggestions for the clicked input field
@@ -160,7 +159,6 @@ const AddRecipe = () => {
             return recipeIngredient;
         }));
 
-    console.log(updatedRecipeIngredients)
     // Update state with the modified recipeIngredients array
     setRecipeIngredients(updatedRecipeIngredients);
 
