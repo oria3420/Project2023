@@ -24,6 +24,7 @@ const AddRecipe = () => {
     const [measurements, setMeasurements] = useState([]);
     const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '', measurementId: '' }]);
     const [suggestions, setSuggestions] = useState([]);
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -142,94 +143,113 @@ const AddRecipe = () => {
         setSelectedImage(file);
     };
 
+    const validateForm = () => {
+        console.log("in validateForm");
+
+    };
 
 
     const handleSubmit = async (e) => {
+        console.log("handleSubmit")
         e.preventDefault();
 
-        // Iterate over recipeIngredients
-        const updatedRecipeIngredients = await Promise.all(recipeIngredients.map(async (recipeIngredient) => {
-            // Find the corresponding ingredient in the ingredients array
-            const matchingIngredient = ingredients.find((ingredient) => ingredient.ingredient === recipeIngredient.ingredient);
+        // Your form validation logic goes here
+        // const isFormValid = validateForm();
+        // console.log(isFormValid)
+        if (true) {
 
-            if (matchingIngredient) {
-                // Extract the ID from the matching ingredient and update the recipeIngredient
-                recipeIngredient.id = matchingIngredient.id;
-            }
+            // Iterate over recipeIngredients
+            const updatedRecipeIngredients = await Promise.all(recipeIngredients.map(async (recipeIngredient) => {
+                // Find the corresponding ingredient in the ingredients array
+                const matchingIngredient = ingredients.find((ingredient) => ingredient.ingredient === recipeIngredient.ingredient);
 
-            return recipeIngredient;
-        }));
+                if (matchingIngredient) {
+                    // Extract the ID from the matching ingredient and update the recipeIngredient
+                    recipeIngredient.id = matchingIngredient.id;
+                }
 
-        // Update state with the modified recipeIngredients array
-        setRecipeIngredients(updatedRecipeIngredients);
+                return recipeIngredient;
+            }));
 
-        // const kosherCategoryIds = Object.keys(recipeCategories['kosher_categories'] || {});
-        // const isKosherCategoryValid = kosherCategoryIds.some(
-        //     (checkboxId) => recipeCategories['kosher_categories'][checkboxId]
-        // );
+            // Update state with the modified recipeIngredients array
+            setRecipeIngredients(updatedRecipeIngredients);
 
-        // if (!isKosherCategoryValid) {
-        //     setErrorMessage('Please select at least one checkbox in kosher_categories');
-        //     return;
-        // }
-        // setErrorMessage('');
-        console.log('Form Data:', {
-            recipeName,
-            selectedImage,
-            cookTime,
-            prepTime,
-            selectedCategory,
-            groceryList: recipeIngredients,
-            description,
-            //recipeServings,
-            recipeYield,
-            recipeInstructions: instructions,
-            recipeCategories,
-        });
-        // setRecipeName('');
-        // setSelectedImage(null);
-        // setCookTime('00:00');
-        // setPrepTime('00:00');
-        // setSelectedCategory('');
-        // setSearchTerm('');
-        // setSelectedMeasurement('');
-        // setAmount('');
-        // setDescription('');
-        // setRecipeServings(1);
-        // setRecipeYield('');
-        // setRecipeInstructions('');
-        // setRecipeCategories({});
-        // setGroceryList([]);
-        const formData = new FormData();
-        formData.append('selectedImage', selectedImage);
-        formData.append('recipeName', recipeName);
-        formData.append('cookTime', cookTime);
-        formData.append('prepTime', prepTime);
-        formData.append('selectedCategory', selectedCategory);
-        formData.append('groceryList', JSON.stringify(recipeIngredients)); // Assuming groceryList is an array
-        formData.append('description', description);
-        //formData.append('recipeServings', recipeServings);
-        formData.append('recipeYield', recipeYield);
-        formData.append('recipeInstructions', instructions);
-        formData.append('recipeCategories', recipeCategories);
-        formData.append('name', name);
-        formData.append('userId', userId);
+            // const kosherCategoryIds = Object.keys(recipeCategories['kosher_categories'] || {});
+            // const isKosherCategoryValid = kosherCategoryIds.some(
+            //     (checkboxId) => recipeCategories['kosher_categories'][checkboxId]
+            // );
 
-        try {
-            const response = await fetch('http://localhost:1337/api/addRecipe', {
-                method: 'POST',
-                body: formData,
+            // if (!isKosherCategoryValid) {
+            //     setErrorMessage('Please select at least one checkbox in kosher_categories');
+            //     return;
+            // }
+            // setErrorMessage('');
+            console.log('Form Data:', {
+                recipeName,
+                selectedImage,
+                cookTime,
+                prepTime,
+                selectedCategory,
+                groceryList: recipeIngredients,
+                description,
+                //recipeServings,
+                recipeYield,
+                recipeInstructions: instructions,
+                recipeCategories,
             });
-            if (response.ok) {
-                const result = await response.json();
-                console.log(result); // Recipe successfully added
-            } else {
-                console.error(`HTTP Error: ${response.status}`);
-                // Handle error response
+            // setRecipeName('');
+            // setSelectedImage(null);
+            // setCookTime('00:00');
+            // setPrepTime('00:00');
+            // setSelectedCategory('');
+            // setSearchTerm('');
+            // setSelectedMeasurement('');
+            // setAmount('');
+            // setDescription('');
+            // setRecipeServings(1);
+            // setRecipeYield('');
+            // setRecipeInstructions('');
+            // setRecipeCategories({});
+            // setGroceryList([]);
+            const formData = new FormData();
+            formData.append('selectedImage', selectedImage);
+            formData.append('recipeName', recipeName);
+            formData.append('cookTime', cookTime);
+            formData.append('prepTime', prepTime);
+            formData.append('selectedCategory', selectedCategory);
+            formData.append('groceryList', JSON.stringify(recipeIngredients)); // Assuming groceryList is an array
+            formData.append('description', description);
+            //formData.append('recipeServings', recipeServings);
+            formData.append('recipeYield', recipeYield);
+            formData.append('recipeInstructions', instructions);
+            formData.append('recipeCategories', recipeCategories);
+            formData.append('name', name);
+            formData.append('userId', userId);
+
+            try {
+                const response = await fetch('http://localhost:1337/api/addRecipe', {
+                    method: 'POST',
+                    body: formData,
+                });
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log(result); // Recipe successfully added
+                    setFormSubmitted(true);
+                    console.log("check")
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                } else {
+                    console.error(`HTTP Error: ${response.status}`);
+                    // Handle error response
+                }
+            } catch (error) {
+                console.error(error);
+                // Handle fetch error (e.g., network error)
             }
-        } catch (error) {
-            console.error(error);
-            // Handle fetch error (e.g., network error)
+
+        } else {
+            // Update state to show the error message
+            setFormSubmitted(true);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
 
@@ -279,13 +299,11 @@ const AddRecipe = () => {
             const updatedCheckedItems = { ...prevCheckedItems };
             updatedCheckedItems[category] = {
                 ...prevCheckedItems[category],
-                [id]: false, // Set the value to false to "unselect" the tag
+                [id]: false,
             };
             return updatedCheckedItems;
         });
     };
-
-    //console.log(recipeCategories)
 
     useEffect(() => {
         fetch('http://localhost:1337/api/search_recipe')
@@ -321,7 +339,17 @@ const AddRecipe = () => {
             {name && <Navbar name={name} />}
             <div>
                 {user && (
-                    <form className='add-recipe-form'  onSubmit={handleSubmit}>
+                    <form className='add-recipe-form needs-validation' >
+                        {formSubmitted && /*!validateForm() &&*/  (
+                            <div className="alert alert-danger" role="alert">
+                                Please fill in all required fields.
+                            </div>
+                        )}
+                        {formSubmitted && /*validateForm() &&*/ (
+                            <div className="alert alert-success" role="alert">
+                                Success! Your recipe has been added to our collection. Thank you for sharing your delicious creation with us!
+                            </div>
+                        )}
 
                         <div className='image-details two-sections-wrapper'>
 
@@ -599,7 +627,7 @@ const AddRecipe = () => {
 
 
                         <div className='submit-section'>
-                            <button className='publish-btn' type="submit" >Publish</button>
+                            <button className='publish-btn' type="submit" onClick={handleSubmit} >Publish</button>
                         </div>
                     </form>
                 )}
