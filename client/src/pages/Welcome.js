@@ -15,7 +15,7 @@ function WelcomePage() {
     localStorage.setItem('guestUser', 'true');
     window.location.href = "/search_recipe";
   }
-  
+
   return (
     <div className="welcome-body">
 
@@ -45,7 +45,7 @@ function WelcomePage() {
 
         <div className='btn' id="guest-welcome" type="submit" onClick={redirectToGuest}>
           <span id="guest-label-welcome">Continue as a Guest</span>
-          <i class="guest-arrow bi bi-arrow-right"></i>
+          <i className="guest-arrow bi bi-arrow-right"></i>
         </div>
 
       </div>
