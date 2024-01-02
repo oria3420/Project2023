@@ -155,6 +155,7 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    padding: 0px;
 }
 
 .custom-file-upload {
@@ -216,7 +217,7 @@
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    
+
 }
 
 .publish-btn {
@@ -320,11 +321,12 @@
     background-color: #f0f0f0;
 }
 
-.amount-input, .measure-input {
+.amount-input,
+.measure-input {
     width: 200px;
 }
 
-.ingredient-input{
+.ingredient-input {
     width: 200px;
 }
 
@@ -368,30 +370,36 @@
     /* Adjust as per your design */
 }
 
-.category-name{
+.category-name {
     margin-left: 6px;
     margin-bottom: 5px;
 }
-.select-category{
+
+.select-category {
     width: 200px;
 }
 
 .separator {
     border: 0.5px dashed black;
-    width: calc(100% + 40px); /* 20px on each side (left + right) */
-    margin-left: -20px; /* Compensate for the extra width on the left */
-    margin-right: -20px; /* Compensate for the extra width on the right */
-    border-style: dashed; /* Set the border style to dashed */
-    border-width: 1px; /* Adjust the width of the dashes as needed */
-    
+    width: calc(100% + 40px);
+    /* 20px on each side (left + right) */
+    margin-left: -20px;
+    /* Compensate for the extra width on the left */
+    margin-right: -20px;
+    /* Compensate for the extra width on the right */
+    border-style: dashed;
+    /* Set the border style to dashed */
+    border-width: 1px;
+    /* Adjust the width of the dashes as needed */
+
 }
 
-.selected-tags-container{
+.selected-tags-container {
     width: 100%;
-  
+
 }
 
-.selected-tags{
+.selected-tags {
     width: 100%;
     display: flex;
     flex-wrap: wrap;
@@ -400,7 +408,7 @@
     margin-top: 30px;
 }
 
-.tag-rec{
+.tag-rec {
     border: 1.5px solid orange;
     border-radius: 30px;
     padding: 8px;
@@ -412,7 +420,7 @@
     height: 35px;
 }
 
-.tag-container{
+.tag-container {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -420,10 +428,11 @@
     margin-bottom: 30px;
 }
 
-.remove-tag{
+.remove-tag {
     color: orange;
 }
 
 .input-field.missing-input {
-    box-shadow: 0 0 5px red; /* Add a red glow effect using box-shadow */
+    box-shadow: 0 0 5px red;
+    /* Add a red glow effect using box-shadow */
 }
