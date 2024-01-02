@@ -215,12 +215,12 @@ const AddRecipe = () => {
             formData.append('cookTime', cookTime);
             formData.append('prepTime', prepTime);
             formData.append('selectedCategory', selectedCategory);
-            formData.append('groceryList', JSON.stringify(recipeIngredients)); // Assuming groceryList is an array
+            formData.append('groceryList', JSON.stringify(recipeIngredients));
             formData.append('description', description);
             //formData.append('recipeServings', recipeServings);
             formData.append('recipeYield', recipeYield);
             formData.append('recipeInstructions', instructions);
-            formData.append('recipeCategories', recipeCategories);
+            formData.append('recipeCategories', JSON.stringify(recipeCategories));
             formData.append('name', name);
             formData.append('userId', userId);
 

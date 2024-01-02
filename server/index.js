@@ -506,7 +506,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS)
   const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
-  const id = 1
+  const rec_id = 1
   const {              
     recipeName,
     cookTime,
@@ -533,7 +533,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
       recipeInstructions,
       recipeCategories,
   });
-    
+
   const parseTimeToDuration = (timeString) => {
     const [hours, minutes] = timeString.split(':').map(Number);
 
@@ -566,27 +566,27 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const datePublished = currentDate.toISOString();
   const totalCookTime = sumDurations(cookTime, prepTime);
   // Extract the true value from kosherCategories
-  // console.log('Received checkedItems:', JSON.parse(checkedItems));
-  // const checkedKosherCategoryIds = Object.keys(JSON.parse(checkedItems)['kosher_categories'] || {}).filter(
-  //   (checkboxId) => JSON.parse(checkedItems)['kosher_categories'][checkboxId]
-  // );
-  // // Ensure there's at least one true value
-  // if (checkedKosherCategoryIds.length === 0) {
-  //   res.status(400).json({ error: 'Please select a kosher category' });
-  //   return;
-  // }
-  // const kosherCategoryId = checkedKosherCategoryIds[0];
-  // try {
-  //   // Find the corresponding kosher word in the Kosher table
-  //   kosherWord = await KosherT.findOne({id: parseInt(kosherCategoryId)});
-  //   res.status(200).json({ success: true });
-  // } catch (error) {
-  //   console.error(error);
-  //   res.status(500).json({ error: 'Internal server error' });
-  // }
+  console.log('Received checkedItems:', JSON.parse(recipeCategories));
+  const checkedKosherCategoryIds = Object.keys(JSON.parse(recipeCategories)['kosher_categories'] || {}).filter(
+    (checkboxId) => JSON.parse(recipeCategories)['kosher_categories'][checkboxId]
+  );
+  // Ensure there's at least one true value
+  if (checkedKosherCategoryIds.length === 0) {
+    res.status(400).json({ error: 'Please select a kosher category' });
+    return;
+  }
+  const kosherCategoryId = checkedKosherCategoryIds[0];
+  try {
+    // Find the corresponding kosher word in the Kosher table
+    kosherWord = await KosherT.findOne({id: parseInt(kosherCategoryId)});
+    res.status(200).json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
   
   // Recipes.create({
-  //   RecipeId:1,
+  //   RecipeId:rec_id,
   //   Name:recipeName,
   //   AuthorId:userId,
   //   AuthorName:name,
@@ -619,44 +619,26 @@ const recipeImage = req.file ? {
 } : null;
 
   // Image.create({
-  //   recipe_ID:id,
+  //   recipe_ID:rec_id,
   //   image_link:recipeImage,
   // })
 
-//   // Insert RecipeIngredients 
+/* Insert RecipeIngredients */
 
-  for (const groceryItem of JSON.parse(groceryList)) {
-    const { ingredient, measurementId, amount, id } = groceryItem;
+  // for (const groceryItem of JSON.parse(groceryList)) {
+  //   const { ingredient, measurementId, amount, id } = groceryItem;
 
+  //   console.log(groceryItem.id+" "+measurementId+" "+amount)
+  //   await RecipeIngredients.create({
+  //     recipe_ID: rec_id,
+  //     ingredient_ID: groceryItem.id,
+  //     measurement_ID: measurementId,
+  //     amount: amount,
+  //   });
+  // }
 
-    // const ingredientDoc = await Ingredients.findOne(
-    //   { ingredient: ingredient },
-    //   { _id: 0, id: 1 } // Projection: Exclude _id, include id
-    // );
-  
-    // // Log the entire ingredientDoc for debugging
-    // console.log('Full ingredientDoc:', ingredientDoc);
-  
-    // // Check the type and value of 'id' in ingredientDoc
-    // console.log('Type of id in ingredientDoc:', typeof ingredientDoc.id);
-    // console.log('Value of id in ingredientDoc:', ingredientDoc.id);
-  
-    // // Access the 'id' field directly
-    // const ingredientId = ingredientDoc ? ingredientDoc.id : null;
-  
-    // // Log the extracted ingredientId for debugging
-    // console.log('Extracted ingredientId:', ingredientId);
-
-    //console.log(ingredientId['id']+" "+measurementId+" "+amount)
-    // await RecipeIngredients.create({
-    //   recipe_ID: id,
-    //   ingredient_ID: ingredientId,
-    //   measurement_ID: measurementId,
-    //   amount: amount,
-    // });
-  }
   /*/Insert categories*/
-  // for (const [category, selectedItems] of Object.entries(JSON.parse(checkedItems))) {
+  // for (const [category, selectedItems] of Object.entries(JSON.parse(recipeCategories))) {
   //   if (Object.keys(selectedItems).length > 0) {
   //     // Construct the table name based on the category
   //     const tableName = `recipe_${category.toLowerCase()}`;
@@ -666,7 +648,7 @@ const recipeImage = req.file ? {
   //     // Insert rows into the corresponding table
   //     for (const itemId of trueItems) {
   //       await Collection.getModel(tableName).create({
-  //         recipe_ID: id,
+  //         recipe_ID: rec_id,
   //         category_ID: parseInt(itemId),
   //       });
   //     }
