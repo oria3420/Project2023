@@ -206,7 +206,7 @@ const RecipePage = () => {
                 <p>
                 <i className="icon-recipe fa-solid fa-utensils fa-2xl"></i>
                 <span className="bold-text">Servings: </span>
-                <span>{recipe.RecipeYield || recipe.RecipeServings}</span>
+                <span>{recipe.RecipeServings || recipe.RecipeYield}</span>
                 </p>
               ) : null} 
               {recipe.Kosher ? (
