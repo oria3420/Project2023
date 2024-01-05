@@ -798,12 +798,3 @@ const AddRecipe = () => {
 }
 
 export default AddRecipe
-
-
-
-// const [searchTerm, setSearchTerm] = useState('');
-// const [filteredIngredients, setFilteredIngredients] = useState([]);
-// const [selectedIngredient, setSelectedIngredient] = useState('');
-// const [selectedMeasurement, setSelectedMeasurement] = useState('');
-// const [amount, setAmount] = useState('');
-// const [ingredientsList, setIngredientsList] = useState([]);

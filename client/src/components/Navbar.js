@@ -20,7 +20,7 @@ const Navbar = ({ name }) => {
     const handleGuestClick = (obj) => {
         //setPressButton(obj);
         // console.log(obj)
-        setMessage(`To enter the ${obj} page, please login or register`)
+        setMessage(`To access the 'Add Recipe' page, please log in or register`)
         setShowModal(true);
       };
     
