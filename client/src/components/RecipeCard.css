@@ -5,18 +5,19 @@
     flex-direction: column;
     width: 19em;
     height: 25em;
-    text-align: center;
+    /* text-align: center; */
     border: none;
 }
 
-.card.recipe-card {
+/* .card.recipe-card {
     box-shadow: 0px 1px 40px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .card-body {
     flex: 2;
     text-align: left;
     height: 50%;
+    background-color: #FCF0D6;
 }
 
 .card-text {
@@ -39,7 +40,7 @@
     text-transform: capitalize;
     color: #4D4D4C;
     cursor: pointer;
-    text-align: center;
+    /* text-align: center; */
     font-weight: bold;
     font-size: 20px;
     font-family: 'Playfair Display', serif;
@@ -54,19 +55,9 @@
 height: 70%;
 }
 
-.card-title::after {
-    content: "";
-    display: block;
-    margin: 20px auto;
-    width: 50px;
-    height: 2px;
-    background-color: rgb(166, 163, 163);
-}
-
-
 .card-like {
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     flex-direction: column;
     position: relative;
