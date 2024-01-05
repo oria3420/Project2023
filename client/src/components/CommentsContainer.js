@@ -259,7 +259,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                 </div>
             )}
             <GuestModal
-                message={'To comment or upload a image in the recipe, please login or register'}
+                message={'To comment or upload an image on the recipe, please log in or register'}
                 showModal={showModal}
                 onClose={() => setShowModal(false)}
             />

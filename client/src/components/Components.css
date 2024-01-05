@@ -1,5 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Lato&family=Poppins:wght@300&display=swap');
 
+:root{
+  --font-size: 15px;
+}
+
 .our-navbar {
   background-color: rgb(26, 26, 26);
   height: 76px;
@@ -81,6 +85,7 @@ ul {
 
 .navbar-text {
   color: white;
+  font-size: var(--font-size);
 }
 
 .search-bar {
@@ -138,6 +143,7 @@ ul {
 
 .search-input {
   border-radius: 30px;
+  font-size: var(--font-size);
   /* Adjust the value as needed for your desired radius */
 }
 
@@ -215,7 +221,7 @@ form-control:not(:focus) {
   color: orange;
 }
 
-.nevigate:hover {
+.navigate:hover {
   cursor: pointer;
 }
 
@@ -276,4 +282,16 @@ form-control:not(:focus) {
 
 .carousel-btn:last-of-type {
   right: 10px;
+}
+
+#add-recipe-btn-navbar {
+  background-color: orange;
+  border-color: orange;
+  border-radius: 40px;
+  color: black;
+  transition: background-color 0.3s;
+}
+
+#add-recipe-btn-navbar:hover {
+  background-color: darkorange; /* Adjust the color to make it slightly darker */
 }

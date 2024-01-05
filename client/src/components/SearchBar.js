@@ -20,7 +20,7 @@ const SearchBar = () => {
     <div className="input-group">
       <input
         className="search-input form-control mr-sm-2"
-        placeholder="Type to search..."
+        placeholder="Search..."
         aria-label="Search"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
