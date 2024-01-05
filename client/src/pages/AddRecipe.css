@@ -258,10 +258,11 @@
     font-size: 20px;
 }
 
-.add-btn {
+.add-btn-add-recipe {
     border: none;
     background-color: transparent;
     margin-top: 10px;
+    margin-left: 0px;
 }
 
 .add-icon {
@@ -432,7 +433,12 @@
     color: orange;
 }
 
-.input-field.missing-input {
+.missing-input {
     box-shadow: 0 0 5px red;
     /* Add a red glow effect using box-shadow */
+}
+
+.error-message-empty{
+    margin-top: 10px;
+    margin-bottom: 20px;
 }

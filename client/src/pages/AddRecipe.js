@@ -322,13 +322,25 @@ const AddRecipe = () => {
     }, []);
 
     const handleSelectChange = (category, id) => {
-        setRecipeCategories((prevCategories) => ({
-            ...prevCategories,
-            [category]: {
-                ...(prevCategories[category] || {}),
-                [id]: true,
-            },
-        }));
+        setRecipeCategories((prevCategories) => {
+            if (category === 'kosher_categories' || category === 'difficulty_categories') {
+                return {
+                    ...prevCategories,
+                    [category]: {
+                        ...({}),
+                        [id]: true,
+                    },
+                };
+            } else {
+                return {
+                    ...prevCategories,
+                    [category]: {
+                        ...(prevCategories[category] || {}),
+                        [id]: true,
+                    },
+                };
+            }
+        });
     };
 
     const validateForm = () => {
@@ -354,60 +366,74 @@ const AddRecipe = () => {
             missingFields.push("category");
         }
 
-        instructions.forEach((instruction, index) => {
-            if (!instruction.trim()) {
-                missingFields.push(`instruction_${index}`);
-            }
-        });
+        if (instructions.length === 0) {
+            missingFields.push("instructions");
+        }
+        else {
+            instructions.forEach((instruction, index) => {
+                if (!instruction.trim()) {
+                    missingFields.push(`instruction_${index}`);
+                }
+            });
+        }
 
-        recipeIngredients.forEach((ingredient, index) => {
-            // Check ingredient name
-            if (!ingredient.ingredient.trim()) {
-                missingFields.push(`ingredient_${index}_name`);
-            }
+        if (recipeIngredients.length === 0) {
+            missingFields.push("ingredients");
+            console.log('check')
+        }
+        else {
 
-            // Check ingredient amount
-            if (isNaN(ingredient.amount) || ingredient.amount <= 0) {
-                missingFields.push(`ingredient_${index}_amount`);
-            }
+            recipeIngredients.forEach((ingredient, index) => {
+                // Check ingredient name
+                if (!ingredient.ingredient.trim()) {
+                    missingFields.push(`ingredient_${index}_name`);
+                }
 
-            // Check ingredient measurement
-            if (!ingredient.measurementId) {
-                missingFields.push(`ingredient_${index}_measurement`);
+                // Check ingredient amount
+                if (isNaN(ingredient.amount) || ingredient.amount <= 0) {
+                    missingFields.push(`ingredient_${index}_amount`);
+                }
+
+                // Check ingredient measurement
+                if (!ingredient.measurementId) {
+                    missingFields.push(`ingredient_${index}_measurement`);
+                }
+            });
+
+        }
+
+
+        const ingredientsStepsSections = document.getElementsByClassName('ingredients-steps-section');
+        console.log(ingredientsStepsSections)
+        console.log(missingFields)
+        for (const section of ingredientsStepsSections) {
+            if (missingFields.includes(section.id)) {
+                console.log('adding' + section.id)
+                section.classList.add('missing-input');
+            } else {
+                section.classList.remove('missing-input');
             }
-        });
+        }
 
         const categoryValidations = {
             kosher_categories: false,
             difficulty_categories: false,
             // Add more categories as needed
         };
-    
+
         Object.entries(categories).forEach(([category, entries]) => {
             if (category === 'kosher_categories' || category === 'difficulty_categories') {
                 const selectedOptions = Object.values(recipeCategories[category]);
-                if (!selectedOptions.some(option => option)) {
+                const selectedCount = selectedOptions.filter(option => option).length;
+
+                if (selectedCount !== 1) {
                     categoryValidations[category] = true;  // Mark as missing
                     missingFields.push(`category_${category}`);
                 } else {
-                    categoryValidations[category] = false;  // Mark as not missing
+                    categoryValidations[category] = false;  // Reset validation if exactly one option is selected
                 }
             }
         });
-
-        // if (!selectedCategory) {
-        //     missingFields.push("category");
-        // }
-        // if (!selectedCategory) {
-        //     missingFields.push("category");
-        // }
-        // if (!selectedCategory) {
-        //     missingFields.push("category");
-        // }
-        // if (!selectedCategory) {
-        //     missingFields.push("category");
-        // }
-
 
         // Apply the red shadow class to missing input fields
         const inputFields = document.getElementsByClassName('input-field');
@@ -558,76 +584,83 @@ const AddRecipe = () => {
 
                         <div className='ingredients-steps two-sections-wrapper'>
 
-                            <div className='section-left ingredients-steps-section'>
+                            <div id="ingredients" className='section-left ingredients-steps-section'>
                                 <label className='black-title'>Ingredients</label>
 
 
                                 <div className='steps-container'>
 
+                                    {recipeIngredients.length === 0 ? (
+                                        // Error message when instructions array is empty
+                                        <div className='error-message-empty'>Please add at least one ingredient.</div>
+                                    ) : (
+                                        // Render instructions container with inputs
+                                        <>
+                                            {recipeIngredients.map((ingredient, index) => (
+                                                <div key={index} className='instruction-row'>
 
-                                    {recipeIngredients.map((ingredient, index) => (
-                                        <div key={index} className='instruction-row'>
+                                                    <div className="input-container">
+                                                        <input
+                                                            id={`ingredient_${index}_name`}
+                                                            className='input-field ingredient-input'
+                                                            placeholder={`Ingredient ${index + 1}`}
+                                                            value={ingredient.ingredient}
+                                                            onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
+                                                            required
+                                                        />
 
-                                            <div className="input-container">
-                                                <input
-                                                    id={`ingredient_${index}_name`}
-                                                    className='input-field ingredient-input'
-                                                    placeholder={`Ingredient ${index + 1}`}
-                                                    value={ingredient.ingredient}
-                                                    onChange={(e) => handleIngredientChange(index, 'ingredient', e.target.value)}
-                                                    required
-                                                />
+                                                        {Array.isArray(suggestions[index]) && suggestions[index].length > 0 && (
+                                                            <div className='ingredient-suggestions'>
+                                                                <div className='toggle-bar'>
+                                                                    <ul>
+                                                                        {suggestions[index].map((suggestion, suggestionIndex) => (
+                                                                            <li key={suggestionIndex} onClick={() => handleSuggestionClick(index, suggestion)}>
+                                                                                {suggestion}
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        )}
 
-                                                {Array.isArray(suggestions[index]) && suggestions[index].length > 0 && (
-                                                    <div className='ingredient-suggestions'>
-                                                        <div className='toggle-bar'>
-                                                            <ul>
-                                                                {suggestions[index].map((suggestion, suggestionIndex) => (
-                                                                    <li key={suggestionIndex} onClick={() => handleSuggestionClick(index, suggestion)}>
-                                                                        {suggestion}
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
                                                     </div>
-                                                )}
 
-                                            </div>
+                                                    <input
+                                                        id={`ingredient_${index}_amount`}
+                                                        type="number"
+                                                        className='input-field step-input amount-input'
+                                                        placeholder={`Amount ${index + 1}`}
+                                                        value={ingredient.amount}
+                                                        onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
+                                                        required
+                                                    />
 
-                                            <input
-                                                id={`ingredient_${index}_amount`}
-                                                type="number"
-                                                className='input-field step-input amount-input'
-                                                placeholder={`Amount ${index + 1}`}
-                                                value={ingredient.amount}
-                                                onChange={(e) => handleIngredientChange(index, 'amount', e.target.value)}
-                                                required
-                                            />
+                                                    <select
+                                                        id={`ingredient_${index}_measurement`}
+                                                        className='input-field step-input measure-input selectWithScrollbar'
+                                                        value={ingredient.measurementId || ''}
+                                                        onChange={(e) => handleMeasurementChange(index, e.target.value)}
+                                                        required
+                                                    >
+                                                        <option value='' disabled>{`Measurement ${index + 1}`}</option>
+                                                        {measurements.map((measurement, measurementIndex) => (
+                                                            <option key={measurementIndex} value={measurement.id}>
+                                                                {measurement.measurement}
+                                                            </option>
+                                                        ))}
+                                                    </select>
 
-                                            <select
-                                                id={`ingredient_${index}_measurement`}
-                                                className='input-field step-input measure-input selectWithScrollbar'
-                                                value={ingredient.measurementId || ''}
-                                                onChange={(e) => handleMeasurementChange(index, e.target.value)}
-                                                required
-                                            >
-                                                <option value='' disabled>{`Measurement ${index + 1}`}</option>
-                                                {measurements.map((measurement, measurementIndex) => (
-                                                    <option key={measurementIndex} value={measurement.id}>
-                                                        {measurement.measurement}
-                                                    </option>
-                                                ))}
-                                            </select>
+                                                    <i
+                                                        onClick={() => removeIngredient(index)}
+                                                        className='bi bi-x-circle remove-icon'
+                                                        title='Remove Ingredient'
+                                                    ></i>
+                                                </div>
+                                            ))}
 
-                                            <i
-                                                onClick={() => removeIngredient(index)}
-                                                className='bi bi-x-circle remove-icon'
-                                                title='Remove Ingredient'
-                                            ></i>
-                                        </div>
-                                    ))}
-
-                                    <button onClick={addIngredient} className='add-btn'>
+                                        </>
+                                    )}
+                                    <button onClick={addIngredient} className='add-btn-add-recipe'>
                                         <i className="bi bi-plus-circle add-icon"></i>
                                         <span>Add another ingredient</span>
                                     </button>
@@ -636,37 +669,44 @@ const AddRecipe = () => {
 
                             </div>
 
-                            <div className='section-right ingredients-steps-section'>
+                            <div id='instructions' className='section-right ingredients-steps-section'>
                                 <label className='black-title'>Instructions</label>
 
                                 <div className='steps-container'>
-
-                                    {instructions.map((instruction, index) => (
-                                        <div key={index} className='instruction-row'>
-                                            <input
-                                                id={`instruction_${index}`}
-                                                className='input-field step-input'
-                                                placeholder={`Instruction ${index + 1}`}
-                                                value={instruction}
-                                                onChange={(e) => handleInstructionChange(index, e.target.value)}
-                                                required
-                                            />
-                                            <i
-                                                onClick={() => removeInstruction(index)}
-                                                className='bi bi-x-circle remove-icon'
-                                                title='Remove Instruction'
-                                            ></i>
-                                        </div>
-                                    ))}
-
-                                    <button onClick={addInstruction} className='add-btn'>
+                                    {instructions.length === 0 ? (
+                                        // Error message when instructions array is empty
+                                        <div className='error-message-empty'>Please add at least one instruction.</div>
+                                    ) : (
+                                        // Render instructions container with inputs
+                                        <>
+                                            {instructions.map((instruction, index) => (
+                                                <div key={index} className='instruction-row'>
+                                                    <input
+                                                        id={`instruction_${index}`}
+                                                        className='input-field step-input'
+                                                        placeholder={`Instruction ${index + 1}`}
+                                                        value={instruction}
+                                                        onChange={(e) => handleInstructionChange(index, e.target.value)}
+                                                        required
+                                                    />
+                                                    <i
+                                                        onClick={() => removeInstruction(index)}
+                                                        className='bi bi-x-circle remove-icon'
+                                                        title='Remove Instruction'
+                                                    ></i>
+                                                </div>
+                                            ))}
+                                        </>
+                                    )}
+                                    <button onClick={addInstruction} className='add-btn-add-recipe'>
                                         <i className="bi bi-plus-circle add-icon"></i>
                                         <span>Add another instruction</span>
                                     </button>
 
                                 </div>
-
                             </div>
+                            ”
+
 
                         </div>
 
@@ -674,12 +714,33 @@ const AddRecipe = () => {
                             <label className='black-title'>Tags</label>
 
                             <div className='tags-container'>
+                                {/* Render 'difficulty_categories' and 'kosher_categories' first */}
+                                {categories && ['difficulty_categories', 'kosher_categories'].map(category => (
+                                    <div key={category} className="select-container">
+                                        <label className='category-name'>{formatCategoryName(category)} *</label>
+                                        <select
+                                            id={`category_${category}`}
+                                            className='input-field select-category'
+                                            value={recipeCategories[category]}
+                                            onChange={(e) => handleSelectChange(category, e.target.value)}
+                                        >
+                                            <option value="">Select {formatCategoryName(category)}</option>
+                                            {categories[category] && categories[category].map(([id, tagName]) => (
+                                                <option key={id} value={id}>
+                                                    {tagName}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                ))}
+
+                                {/* Render the rest of the categories */}
                                 {categories && Object.entries(categories).map(([category, entries]) => (
-                                    category !== 'time_categories' && (
+                                    category !== 'time_categories' && category !== 'difficulty_categories' && category !== 'kosher_categories' && (
                                         <div key={category} className="select-container">
                                             <label className='category-name'>{formatCategoryName(category)}</label>
                                             <select
-                                            id={`category_${category}`}
+                                                id={`category_${category}`}
                                                 className='input-field select-category'
                                                 value={recipeCategories[category]}
                                                 onChange={(e) => handleSelectChange(category, e.target.value)}
@@ -695,6 +756,7 @@ const AddRecipe = () => {
                                     )
                                 ))}
                             </div>
+
 
                             <hr className="separator" />
 
