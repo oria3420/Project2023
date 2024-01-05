@@ -170,25 +170,25 @@ const RecipePage = () => {
                 <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
 
                 <div className='times-container'>
-                {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (
-                  <React.Fragment key={timeKey}>
-                    <div className='time'>
-                      <span id="time-number">{recipe[timeKey] || "0S"}</span>
-                      <span id="time-text">{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
-                    </div>
-                    {index < 2 && <div className='time-separator'></div>}
-                  </React.Fragment>
-                ))}
-              </div>
-              
+                  {["PrepTime", "CookTime", "TotalTime"].map((timeKey, index) => (
+                    <React.Fragment key={timeKey}>
+                      <div className='time'>
+                        <span id="time-number">{recipe[timeKey] || "0S"}</span>
+                        <span id="time-text">{index === 0 ? "Prep" : index === 1 ? "Cook" : "Total"} <br /> Time</span>
+                      </div>
+                      {index < 2 && <div className='time-separator'></div>}
+                    </React.Fragment>
+                  ))}
+                </div>
+
                 <LikeButton recipeId={id} userEmail={user_id} pageType="RecipePage" />
 
               </div>
 
               <div className='recipe-image-container'>
-              {imageUrl.length > 1 ? (
-                <Carousel images={imageUrl} />
-                ):(
+                {imageUrl.length > 1 ? (
+                  <Carousel images={imageUrl} />
+                ) : (
                   <img className="recipe-image" src={imageUrl[0]} alt="Card cap"></img>
                 )}
 
@@ -202,27 +202,27 @@ const RecipePage = () => {
 
               </div>
               <div className='description-details'>
-              {recipe.RecipeServings || recipe.RecipeYield ? (
-                <p>
-                <i className="icon-recipe fa-solid fa-utensils fa-2xl"></i>
-                <span className="bold-text">Servings: </span>
-                <span>{recipe.RecipeServings || recipe.RecipeYield}</span>
-                </p>
-              ) : null} 
-              {recipe.Kosher ? (
-                <p>
-                <i className="icon-recipe fa-solid fa-bowl-food fa-2xl"></i>
-                <span className="bold-text">Kosher: </span>
-                <span> {capitalizeFirstLetter(recipe.Kosher)}</span>
-              </p>
-              ) : null}             
-              {recipe.RecipeCategory ? (
-                <p>
-                <i className="icon-recipe fa-solid fa-spoon fa-2xl"></i>
-                <span className="bold-text">Category: </span>
-                <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
-              </p>
-              ) : null}
+                {recipe.RecipeServings || recipe.RecipeYield ? (
+                  <p>
+                    <i className="icon-recipe fa-solid fa-utensils fa-2xl"></i>
+                    <span className="bold-text">Servings: </span>
+                    <span>{recipe.RecipeServings || recipe.RecipeYield}</span>
+                  </p>
+                ) : null}
+                {recipe.Kosher ? (
+                  <p>
+                    <i className="icon-recipe fa-solid fa-bowl-food fa-2xl"></i>
+                    <span className="bold-text">Kosher: </span>
+                    <span> {capitalizeFirstLetter(recipe.Kosher)}</span>
+                  </p>
+                ) : null}
+                {recipe.RecipeCategory ? (
+                  <p>
+                    <i className="icon-recipe fa-solid fa-spoon fa-2xl"></i>
+                    <span className="bold-text">Category: </span>
+                    <span> {capitalizeFirstLetter(recipe.RecipeCategory)}</span>
+                  </p>
+                ) : null}
               </div>
             </div>
 
@@ -243,7 +243,7 @@ const RecipePage = () => {
                       <br key={`br-${index}`} />
                     </div>
                   ))}
-                  
+
                 </div>
 
               </div>
@@ -267,7 +267,7 @@ const RecipePage = () => {
 
             <NutritionTable recipe={recipe} />
 
-            <div className='tags-container'>
+            <div className='tags-container-recipe'>
               <div className='title'>
                 <i className="tags-icon bi bi-bookmarks-fill"></i>
                 Recipe Tags
