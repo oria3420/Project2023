@@ -12,6 +12,7 @@ const { ObjectId } = require('mongodb');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const multer = require('multer');
 const path = require('path');
+const { constants } = require('buffer');
 
 
 // Connect to MongoDB
@@ -512,6 +513,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS)
   const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
+  const Measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
   const rec_id = 1
   const {              
     recipeName,
@@ -572,7 +574,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const datePublished = currentDate.toISOString();
   const totalCookTime = sumDurations(cookTime, prepTime);
   // Extract the true value from kosherCategories
-  console.log('Received checkedItems:', JSON.parse(recipeCategories));
+  //console.log('Received checkedItems:', JSON.parse(recipeCategories));
   const checkedKosherCategoryIds = Object.keys(JSON.parse(recipeCategories)['kosher_categories'] || {}).filter(
     (checkboxId) => JSON.parse(recipeCategories)['kosher_categories'][checkboxId]
   );
@@ -590,7 +592,96 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
+  const calculateNutritionForIngredient = async (ingredientId, amount, measurementId) => {
+    try {
+      // Fetch nutritional information for the ingredient from your API or database
+      const ingredient = await Ingredients.findOne({id:ingredientId});
+      console.log(ingredient)
+      console.log(measurementId)
+      const measurement = await Measurement.findOne({ measurement_id : measurementId });
+      console.log(measurement)
+      
   
+      // // Convert the ingredient quantity to kilograms (assuming your API provides data per 1 kg)
+      // const quantityInKg = convertToKilograms(amount, measurement);
+  
+      // // Calculate the scaling factor based on the ingredient quantity
+      // const scalingFactor = quantityInKg / ingredient.amount;
+  
+      // // Scale the nutritional values based on the ingredient quantity
+      // const nutrition = {
+      //   calories: ingredient.calories * scalingFactor,
+      //   fat: ingredient.fat * scalingFactor,
+      //   saturatedFat: ingredient.saturatedFat * scalingFactor,
+      //   cholesterol: ingredient.cholesterol * scalingFactor,
+      //   sodium: ingredient.sodium * scalingFactor,
+      //   carbohydrates: ingredient.carbohydrates * scalingFactor,
+      //   fiber: ingredient.fiber * scalingFactor,
+      //   sugar: ingredient.sugar * scalingFactor,
+      //   protein: ingredient.protein * scalingFactor,
+      // };
+  
+      // return nutrition;
+    } catch (error) {
+      // console.error(`Error fetching nutritional information for ingredient ${ingredientId}: ${error.message}`);
+      // return null;
+    }
+  };
+  const convertToKilograms = (quantity, measurement) => {
+    switch (measurement.toLowerCase()) {
+      case 'kg':
+        return quantity;
+      case 'g':
+        return quantity / 1000;
+      case 'teaspoon (tsp)':
+        // Convert teaspoons to milliliters (1 tsp ≈ 5 ml)
+        return quantity * 5 / 1000;
+      case 'tablespoon (tbsp)':
+        // Convert tablespoons to milliliters (1 tbsp ≈ 15 ml)
+        return quantity * 15 / 1000;
+      case 'fluid ounce (fl oz)':
+        // Convert fluid ounces to milliliters (1 fl oz ≈ 30 ml)
+        return quantity * 30 / 1000;
+      case 'cup':
+        // Convert cups to milliliters (1 cup ≈ 240 ml)
+        return quantity * 240 / 1000;
+      case 'pint (pt)':
+        // Convert pints to milliliters (1 pt ≈ 473 ml)
+        return quantity * 473 / 1000;
+      case 'quart (qt)':
+        // Convert quarts to milliliters (1 qt ≈ 946 ml)
+        return quantity * 946 / 1000;
+      case 'gallon (gal)':
+        // Convert gallons to milliliters (1 gal ≈ 3785 ml)
+        return quantity * 3785 / 1000;
+      case 'ounce (oz)':
+        // Convert ounces to grams (1 oz ≈ 28.35 g)
+        return quantity * 28.35 / 1000;
+      case 'pound (lb)':
+        // Convert pounds to grams (1 lb ≈ 453.592 g)
+        return quantity * 453.592 / 1000;
+      case 'milliliter (ml)':
+        return quantity;
+      case 'liter (l)':
+        // Convert liters to milliliters (1 l = 1000 ml)
+        return quantity * 1000;
+      default:
+        console.error(`Unsupported measurement unit: ${measurement}`);
+        return null;
+    }
+  };
+  
+  let totalNutrition = {
+    calories: 0,
+    fat: 0,
+    saturatedFat: 0,
+    cholesterol: 0,
+    sodium: 0,
+    carbohydrates: 0,
+    fiber: 0,
+    sugar: 0,
+    protein: 0,
+  };
   // Recipes.create({
   //   RecipeId:rec_id,
   //   Name:recipeName,
@@ -631,17 +722,30 @@ const recipeImage = req.file ? {
 
 /* Insert RecipeIngredients */
 
-  // for (const groceryItem of JSON.parse(groceryList)) {
-  //   const { ingredient, measurementId, amount, id } = groceryItem;
-
-  //   console.log(groceryItem.id+" "+measurementId+" "+amount)
-  //   await RecipeIngredients.create({
-  //     recipe_ID: rec_id,
-  //     ingredient_ID: groceryItem.id,
-  //     measurement_ID: measurementId,
-  //     amount: amount,
-  //   });
-  // }
+  for (const groceryItem of JSON.parse(groceryList)) {
+    const { ingredient, measurementId, amount, id } = groceryItem;
+    const nutrition = calculateNutritionForIngredient(groceryItem.id,amount,measurementId)
+    if (nutrition) {
+      // Add the scaled nutritional values to the total
+      totalNutrition.calories += nutrition.calories;
+      totalNutrition.fat += nutrition.fat;
+      totalNutrition.saturatedFat += nutrition.saturatedFat;
+      totalNutrition.cholesterol += nutrition.cholesterol;
+      totalNutrition.sodium += nutrition.sodium;
+      totalNutrition.carbohydrates += nutrition.carbohydrates;
+      totalNutrition.fiber += nutrition.fiber;
+      totalNutrition.sugar += nutrition.sugar;
+      totalNutrition.protein += nutrition.protein;
+    }
+    console.log('Total Nutrition:', totalNutrition);
+    //console.log(groceryItem.id+" "+measurementId+" "+amount)
+    // await RecipeIngredients.create({
+    //   recipe_ID: rec_id,
+    //   ingredient_ID: groceryItem.id,
+    //   measurement_ID: measurementId,
+    //   amount: amount,
+    // });
+  }
 
   /*/Insert categories*/
   // for (const [category, selectedItems] of Object.entries(JSON.parse(recipeCategories))) {
@@ -679,7 +783,7 @@ app.get('/api/my_recipes/:userId', async (req, res) => {
   try {
     const user_id = req.params.userId;
 
-    // Find the favorites for the given user
+    
     const my_recipes = await Recipe.find({ AuthorId: user_id });
 
     if (my_recipes.length === 0) {
@@ -691,7 +795,7 @@ app.get('/api/my_recipes/:userId', async (req, res) => {
     res.json(my_recipes);
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error fetching favorites');
+    res.status(500).send('Error fetching my recipes');
   }
 });
 
