@@ -241,7 +241,7 @@ const getRecipeIngredients = async (req, res) => {
     const result = await Promise.all(
       ingredientDetails.map(async ({ ingredient_ID, measurement_ID, amount }) => {
         const ingredient = await Ingredients.findOne({ id: ingredient_ID }).select('ingredient');
-        const measurement = measurement_ID ? (await Measurement.findOne({ id: measurement_ID }).select('measurement')).measurement : null;
+        const measurement = measurement_ID ? (await Measurement.findOne({ measurement_id: measurement_ID }).select('measurement')).measurement : null;
 
         return {
           name: ingredient.ingredient,
@@ -251,7 +251,7 @@ const getRecipeIngredients = async (req, res) => {
       })
     );
 
-    console.log(result)
+    // console.log(result)
     res.status(200).json(result);
   } catch (error) {
     console.error(error);
@@ -266,10 +266,13 @@ app.get('/api/recipes/:id/ingredients', getRecipeIngredients);
 app.get('/api/recipes/:id/tags', async (req, res) => {
   try {
     const recipeId = parseInt(req.params.id);
+    // console.log(recipeId)
     const tagCategories = Object.keys(TABLE_NAMES).filter(name => name.endsWith('_CATEGORIES') && !name.startsWith('RECIPE_'));
+    console.log("tagCategories: " , tagCategories)
     const tagPromises = tagCategories.map(async tableName => {
       const RecipeTagsCategories = Collection.getModel(TABLE_NAMES[`RECIPE_${tableName}`]);
       const recipeTags = await RecipeTagsCategories.find({ recipe_ID: recipeId });
+      console.log(tableName, recipeTags)
       if (!recipeTags || recipeTags.length === 0) {
         return [];
       }
@@ -279,13 +282,16 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
         const TagsCategories = Collection.getModel(TABLE_NAMES[tableName]);
         return await TagsCategories.findOne({ id: categoryID });
       });
+      // console.log("tagPromises", tagPromises)
       const tags = await Promise.all(tagPromises);
+      // console.log(tags);
       const modifiedTags = tags.map(tag => {
         const keys = Object.keys(tag);
         const lastKey = keys[keys.length - 1];
         const modifiedTag = { [lastKey]: tag[lastKey] };
         return modifiedTag;
       });
+      // console.log(modifiedTags)
       return modifiedTags;
     });
 
@@ -362,7 +368,7 @@ app.get('/api/recipes/images/:recipeId', async (req, res) => {
     const distinctImageLinkFields = await Image.find({ recipe_ID: id }).distinct('image_link');
     
     if (!distinctImageLinkFields || distinctImageLinkFields.length === 0) {
-      console.log("Images not found");
+      // console.log("Images not found");
       res.status(404).send('Images not found');
       return;
     }
@@ -372,11 +378,11 @@ app.get('/api/recipes/images/:recipeId', async (req, res) => {
         // console.log("if");
         return image_link;
       } else if (image_link && image_link.filename && image_link.fileId) {
-        console.log("elseif");
+        // console.log("elseif");
         const { filename, fileId } = image_link;
         return { filename, fileId };
       } else {
-        console.log("else");
+        // console.log("else");
         res.status(500).send('Invalid image_link format');
       }
     });
@@ -409,8 +415,8 @@ app.post('/api/favorites/:recipeId/:userId', (req, res) => {
   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
   const user_id = req.params.userId;
   const recipe_id = parseInt(req.params.recipeId);
-  console.log("use " + user_id)
-  console.log("rec " + recipe_id)
+  // console.log("use " + user_id)
+  // console.log("rec " + recipe_id)
   Favorites.create({
     user_id: user_id,
     recipe_id: recipe_id,
@@ -421,8 +427,8 @@ app.delete('/api/favorites/:recipeId/:userId', (req, res) => {
   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES)
   const user_id = req.params.userId;
   const recipe_id = parseInt(req.params.recipeId);
-  console.log("use " + user_id)
-  console.log("rec " + recipe_id)
+  // console.log("use " + user_id)
+  // console.log("rec " + recipe_id)
   Favorites.deleteMany({ user_id, recipe_id }, (err, result) => {
     if (err) {
       console.log(err);
@@ -447,12 +453,12 @@ app.get('/api/favorites/:userId', async (req, res) => {
       return;
     }
 
-    console.log('Favorites:', favorites);
+    // console.log('Favorites:', favorites);
     const recipeIds = favorites.map(favorite => favorite.recipe_id);
-    console.log('Recipe IDs:', recipeIds);
+    // console.log('Recipe IDs:', recipeIds);
     // Find the actual recipe documents using the recipe IDs
     const favoriteRecipes = await Recipe.find({ RecipeId: { $in: recipeIds } });
-    console.log(favoriteRecipes)
+    // console.log(favoriteRecipes)
     res.json(favoriteRecipes);
   } catch (error) {
     console.error(error);
@@ -677,11 +683,11 @@ app.get('/api/my_recipes/:userId', async (req, res) => {
     const my_recipes = await Recipe.find({ AuthorId: user_id });
 
     if (my_recipes.length === 0) {
-      console.log("empty")
+      // console.log("empty")
       res.json([]); 
       return;
     }
-    console.log(my_recipes)
+    // console.log(my_recipes)
     res.json(my_recipes);
   } catch (error) {
     console.error(error);
@@ -696,7 +702,7 @@ app.get('/api/search_recipes/:recipeId/:ingredientId', async (req, res) => {
 
   try {
     const result = await RecipeIngredients.findOne({ recipe_ID:recipeId, ingredient_ID:ingredientId });
-    console.log(result)
+    // console.log(result)
 
     if (result) {
       // Combination of recipeId and ingredientId exists in the table

@@ -21,7 +21,7 @@ module.exports.TABLE_NAMES = {
     RECIPE_HEALTH_CATEGORIES: 'recipe_health_categories',
     RECIPE_HOLYDAY_CATEGORIES: 'recipe_holyday_categories',
     RECIPE_KITCHEN_CATEGORIES: 'recipe_kitchen_categories',
-    RECIPE_MEAL_TYPES_CATEGORIES: 'recipe_meal_type_categories',
+    RECIPE_MEAL_TYPE_CATEGORIES: 'recipe_meal_type_categories',
     RECIPE_TIME_CATEGORIES: 'recipe_time_categories',
     RECIPE_FOOD_CATEGORIES: 'recipe_food_categories',
     RECIPE_KOSHER_CATEGORIES: 'recipe_kosher_categories',

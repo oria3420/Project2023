@@ -20,12 +20,9 @@ const RecipePage = () => {
   let user_name
   let user_id
   const location = useLocation();
-  //console.log(location)
   if (location.state !== null) {
     user_name = location.state.name;
     user_id = location.state.user_id;
-    // console.log(user_name)
-    // console.log(user_id)
   }
   else {
     user_name = "Guest"
@@ -43,6 +40,7 @@ const RecipePage = () => {
       try {
         const response = await fetch(`http://localhost:1337/api/recipes/${id}/tags`);
         const tags = await response.json();
+        console.log(tags)
         setRecipeTags(tags);
       } catch (error) {
         console.error(error);
@@ -67,7 +65,6 @@ const RecipePage = () => {
         const response = await fetch(`http://localhost:1337/api/recipes/${id}/ingredients`);
         const data = await response.json();
         setIngredients(data);
-        console.log(data)
       } catch (error) {
         console.error(error);
       }
