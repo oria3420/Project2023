@@ -592,13 +592,15 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
     console.error(error);
     res.status(500).json({ error: 'Internal server error' });
   }
+
   const calculateNutritionForIngredient = async (ingredientId, amount, measurementId) => {
     try {
       // Fetch nutritional information for the ingredient from your API or database
-      const ingredient = await Ingredients.findOne({id:ingredientId});
+      console.log("ingredientId",ingredientId)
+      const ingredient = await Ingredients.findOne({id: ingredientId});
       console.log(ingredient)
-      console.log(measurementId)
-      const measurement = await Measurement.findOne({ measurement_id : measurementId });
+      console.log("measurementId",measurementId)
+      const measurement = await Measurement.findOne({ measurement_id : parseInt(measurementId) });
       console.log(measurement)
       
   
@@ -723,8 +725,10 @@ const recipeImage = req.file ? {
 /* Insert RecipeIngredients */
 
   for (const groceryItem of JSON.parse(groceryList)) {
+    console.log(groceryItem)
     const { ingredient, measurementId, amount, id } = groceryItem;
-    const nutrition = calculateNutritionForIngredient(groceryItem.id,amount,measurementId)
+    console.log("in for", measurementId)
+    const nutrition = calculateNutritionForIngredient(groceryItem.id, amount, measurementId)
     if (nutrition) {
       // Add the scaled nutritional values to the total
       totalNutrition.calories += nutrition.calories;

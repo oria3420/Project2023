@@ -644,7 +644,7 @@ const AddRecipe = () => {
                                                     >
                                                         <option value='' disabled>{`Measurement ${index + 1}`}</option>
                                                         {measurements.map((measurement, measurementIndex) => (
-                                                            <option key={measurementIndex} value={measurement.id}>
+                                                            <option key={measurementIndex} value={measurement.measurement_id}>
                                                                 {measurement.measurement}
                                                             </option>
                                                         ))}
