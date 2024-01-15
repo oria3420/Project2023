@@ -643,40 +643,40 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
       return quantity * unitToGramsConversionFactor / 1000;
     }
     switch (measurement) {
-      case 'Kilogram (kg)':
+      case 'kilogram':
         return quantity;
-      case 'Gram (g)':
+      case 'gram':
         return quantity / 1000;
-      case 'Teaspoon (tsp)':
+      case 'teaspoon':
         // Convert teaspoons to milliliters (1 tsp ≈ 5 ml)
         return quantity * 5 / 1000;
-      case 'Tablespoon (tbsp)':
+      case 'tablespoon':
         // Convert tablespoons to milliliters (1 tbsp ≈ 15 ml)
         return quantity * 15 / 1000;
-      case 'Fluid Ounce (fl oz)':
+      case 'fluid ounce':
         // Convert fluid ounces to milliliters (1 fl oz ≈ 30 ml)
         return quantity * 30 / 1000;
-      case 'Cup':
+      case 'cup':
         // Convert cups to milliliters (1 cup ≈ 240 ml)
         return quantity * 240 / 1000;
-      case 'Pint (pt)':
+      case 'pint':
         // Convert pints to milliliters (1 pt ≈ 473 ml)
         return quantity * 473 / 1000;
-      case 'Quart (qt)':
+      case 'quart':
         // Convert quarts to milliliters (1 qt ≈ 946 ml)
         return quantity * 946 / 1000;
-      case 'Gallon (gal)':
+      case 'gallon':
         // Convert gallons to milliliters (1 gal ≈ 3785 ml)
         return quantity * 3785 / 1000;
-      case 'Ounce (oz)':
+      case 'ounce':
         // Convert ounces to grams (1 oz ≈ 28.35 g)
         return quantity * 28.35 / 1000;
-      case 'Pound (lb)':
+      case 'pound':
         // Convert pounds to grams (1 lb ≈ 453.592 g)
         return quantity * 453.592 / 1000;
-      case 'Milliliter (ml)':
+      case 'milliliter':
         return quantity;
-      case 'Liter (l)':
+      case 'liter':
         // Convert liters to milliliters (1 l = 1000 ml)
         return quantity * 1000;
       default:
