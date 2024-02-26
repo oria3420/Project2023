@@ -195,20 +195,21 @@ const AddRecipe = () => {
                 recipeInstructions: instructions,
                 recipeCategories,
             });
-            // setRecipeName('');
-            // setSelectedImage(null);
-            // setCookTime('00:00');
-            // setPrepTime('00:00');
-            // setSelectedCategory('');
-            // setSearchTerm('');
-            // setSelectedMeasurement('');
-            // setAmount('');
-            // setDescription('');
-            // setRecipeServings(1);
-            // setRecipeYield('');
-            // setRecipeInstructions('');
-            // setRecipeCategories({});
-            // setGroceryList([]);
+            setRecipeName('');
+            setSelectedImage(null);
+            setCookTime('00:00');
+            setPrepTime('00:00');
+            setSelectedCategory('');
+            //setSearchTerm('');
+            //setSelectedMeasurement('');
+            //setAmount('');
+            setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
+            setDescription('');
+            //setRecipeServings(1);
+            setRecipeYield('');
+            setInstructions(['']);
+            setRecipeCategories({});
+            //setGroceryList([]);
             const formData = new FormData();
             formData.append('selectedImage', selectedImage);
             formData.append('recipeName', recipeName);
