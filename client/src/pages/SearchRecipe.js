@@ -215,12 +215,11 @@ const SearchRecipe = () => {
     return (
         <div>
             {name && <Navbar name={name} />}
-            <div className='search-recipe-container'>
-
+            
                 {loading ? (
                     <Loading />
                 ) : (
-                    <>
+                    <div className='search-recipe-container'>
                         <div className='filter-menu'>
                             {Object.keys(categories)
                                 .sort((a, b) => a.localeCompare(b))
@@ -273,12 +272,9 @@ const SearchRecipe = () => {
                                     </div>
                                 ))
                             )}
-
                         </div>
-
-                    </>
+                    </div>
                 )}
-            </div>
         </div>
     )
 }

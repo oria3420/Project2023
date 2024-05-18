@@ -331,10 +331,13 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
       const tags = await Promise.all(tagPromises);
       // console.log(tags);
       const modifiedTags = tags.map(tag => {
+        if(tag){
         const keys = Object.keys(tag);
         const lastKey = keys[keys.length - 1];
         const modifiedTag = { [lastKey]: tag[lastKey] };
         return modifiedTag;
+        }
+        return null;
       });
       // console.log(modifiedTags)
       return modifiedTags;
@@ -344,7 +347,13 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     // console.log("allTags: "+allTags)
     const flattenedTags = [].concat(...allTags);
     // console.log("flattenedTags: ", flattenedTags);
-    const valuesOnly = flattenedTags.map(tag => Object.values(tag)[0]);
+    const valuesOnly = flattenedTags.map(tag => {
+      if(tag){
+        const values = Object.values(tag);
+        return values.length > 0 ? values[0] : null;
+      }
+      return null;
+    });
     // console.log("valuesOnly: ", valuesOnly);
     // console.log(valuesOnly)
     res.json(valuesOnly);
@@ -558,7 +567,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const Measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
-  const rec_id = 1
+  const rec_id = 2
   const {              
     recipeName,
     cookTime,
@@ -640,75 +649,80 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const calculateNutritionForIngredient = async (ingredientId, amount, measurementId) => {
     try {
       // Fetch nutritional information for the ingredient from your API or database
-      // console.log("ingredientId",ingredientId)
+      //console.log("ingredientId",ingredientId)
       const ingredient = await Ingredients.findOne({id: ingredientId});
-      // console.log(ingredient)
-      // console.log("measurementId",measurementId)
+      console.log(ingredient)
+      console.log("measurementId",measurementId)
       const measurement = await Measurement.findOne({ measurement_id : parseInt(measurementId) });
-      // console.log(measurement)
+      console.log(measurement)
       
   
-      // // Convert the ingredient quantity to kilograms (assuming your API provides data per 1 kg)
-      // const quantityInKg = convertToKilograms(amount, measurement);
+      // Convert the ingredient quantity to kilograms (assuming your API provides data per 1 kg)
+      const quantityInKg = convertToKilograms(amount, measurement.measurement);
   
-      // // Calculate the scaling factor based on the ingredient quantity
-      // const scalingFactor = quantityInKg / ingredient.amount;
+      // Calculate the scaling factor based on the ingredient quantity
+      const scalingFactor = quantityInKg / ingredient.amount;
   
-      // // Scale the nutritional values based on the ingredient quantity
-      // const nutrition = {
-      //   calories: ingredient.calories * scalingFactor,
-      //   fat: ingredient.fat * scalingFactor,
-      //   saturatedFat: ingredient.saturatedFat * scalingFactor,
-      //   cholesterol: ingredient.cholesterol * scalingFactor,
-      //   sodium: ingredient.sodium * scalingFactor,
-      //   carbohydrates: ingredient.carbohydrates * scalingFactor,
-      //   fiber: ingredient.fiber * scalingFactor,
-      //   sugar: ingredient.sugar * scalingFactor,
-      //   protein: ingredient.protein * scalingFactor,
-      // };
-  
-      // return nutrition;
+      // Scale the nutritional values based on the ingredient quantity
+      const nutrition = {
+        calories: ingredient.calories * scalingFactor,
+        fat: ingredient.fat * scalingFactor,
+        saturated_fat: ingredient.saturated_fat * scalingFactor,
+        cholesterol: ingredient.cholesterol * scalingFactor,
+        sodium: ingredient.sodium * scalingFactor,
+        carbohydrates: ingredient.carbohydrates * scalingFactor,
+        fiber: ingredient.fiber * scalingFactor,
+        sugar: ingredient.sugar * scalingFactor,
+        protein: ingredient.protein * scalingFactor,
+      };
+      return nutrition;
     } catch (error) {
-      // console.error(`Error fetching nutritional information for ingredient ${ingredientId}: ${error.message}`);
-      // return null;
+      console.error(`Error fetching nutritional information for ingredient ${ingredientId}: ${error.message}`);
+      return null;
     }
   };
   const convertToKilograms = (quantity, measurement) => {
-    switch (measurement.toLowerCase()) {
-      case 'kg':
+    if (measurement === 'Unit') {
+      // You need to define a conversion factor based on your specific use case
+      // For example, 1 unit might be equivalent to 200 grams
+      const unitToGramsConversionFactor = 200;
+      return quantity * unitToGramsConversionFactor / 1000;
+    }
+    switch (measurement) {
+      case 'kilogram':
         return quantity;
-      case 'g':
+      case 'gram':
         return quantity / 1000;
-      case 'teaspoon (tsp)':
+      case 'teaspoon':
         // Convert teaspoons to milliliters (1 tsp ≈ 5 ml)
         return quantity * 5 / 1000;
-      case 'tablespoon (tbsp)':
+      case 'tablespoon':
         // Convert tablespoons to milliliters (1 tbsp ≈ 15 ml)
         return quantity * 15 / 1000;
-      case 'fluid ounce (fl oz)':
+      case 'fluid ounce':
         // Convert fluid ounces to milliliters (1 fl oz ≈ 30 ml)
         return quantity * 30 / 1000;
       case 'cup':
         // Convert cups to milliliters (1 cup ≈ 240 ml)
         return quantity * 240 / 1000;
-      case 'pint (pt)':
+      case 'pint':
         // Convert pints to milliliters (1 pt ≈ 473 ml)
         return quantity * 473 / 1000;
-      case 'quart (qt)':
+      case 'quart':
         // Convert quarts to milliliters (1 qt ≈ 946 ml)
         return quantity * 946 / 1000;
-      case 'gallon (gal)':
+      case 'gallon':
         // Convert gallons to milliliters (1 gal ≈ 3785 ml)
         return quantity * 3785 / 1000;
-      case 'ounce (oz)':
+      case 'ounce':
         // Convert ounces to grams (1 oz ≈ 28.35 g)
         return quantity * 28.35 / 1000;
-      case 'pound (lb)':
+      case 'pound':
         // Convert pounds to grams (1 lb ≈ 453.592 g)
         return quantity * 453.592 / 1000;
-      case 'milliliter (ml)':
+      case 'milliliter':
         return quantity;
-      case 'liter (l)':
+      case 'liter':
         // Convert liters to milliliters (1 l = 1000 ml)
         return quantity * 1000;
       default:
@@ -720,7 +734,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   let totalNutrition = {
     calories: 0,
     fat: 0,
-    saturatedFat: 0,
+    saturated_fat: 0,
     cholesterol: 0,
     sodium: 0,
     carbohydrates: 0,
@@ -728,56 +742,18 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
     sugar: 0,
     protein: 0,
   };
-  // Recipes.create({
-  //   RecipeId:rec_id,
-  //   Name:recipeName,
-  //   AuthorId:userId,
-  //   AuthorName:name,
-  //   CookTime: parseTimeToDuration(cookTime),
-  //   PrepTime: parseTimeToDuration(prepTime),
-  //   TotalTime: parseTimeToDuration(totalCookTime),
-  //   DatePublished: datePublished,
-  //   Description:description,
-  //   RecipeCategory:selectedCategory,
-  //   AggregatedRating: 0,
-  //   ReviewCount: 0,
-  //   Calories:0,
-  //   FatContent:0,
-  //   SaturatedFatContent:0,
-  //   CholesterolContent:0,
-  //   SodiumContent:0,
-  //   CarbohydrateContent:0,
-  //   FiberContent:0,
-  //   SugarContent:0,
-  //   ProteinContent:0,
-  //   RecipeServings:recipeServings,
-  //   RecipeYield:recipeYield,
-  //   RecipeInstructions:recipeInstructions,
-  //   Kosher:kosherWord.kosher,
-  // })
 
-const recipeImage = req.file ? {
-  filename: req.file.filename,
-  fileId: req.file.id,
-} : null;
-
-  // Image.create({
-  //   recipe_ID:rec_id,
-  //   image_link:recipeImage,
-  // })
-
-/* Insert RecipeIngredients */
-
+  /* Insert RecipeIngredients and Calculate nutrition */
   for (const groceryItem of JSON.parse(groceryList)) {
     // console.log(groceryItem)
     const { ingredient, measurementId, amount, id } = groceryItem;
-    // console.log("in for", measurementId)
+    console.log("in for", measurementId)
     const nutrition = calculateNutritionForIngredient(groceryItem.id, amount, measurementId)
     if (nutrition) {
       // Add the scaled nutritional values to the total
       totalNutrition.calories += nutrition.calories;
       totalNutrition.fat += nutrition.fat;
-      totalNutrition.saturatedFat += nutrition.saturatedFat;
+      totalNutrition.saturated_fat += nutrition.saturated_fat;
       totalNutrition.cholesterol += nutrition.cholesterol;
       totalNutrition.sodium += nutrition.sodium;
       totalNutrition.carbohydrates += nutrition.carbohydrates;
@@ -785,33 +761,76 @@ const recipeImage = req.file ? {
       totalNutrition.sugar += nutrition.sugar;
       totalNutrition.protein += nutrition.protein;
     }
-    // console.log('Total Nutrition:', totalNutrition);
+    console.log('Total Nutrition:', totalNutrition);
     //console.log(groceryItem.id+" "+measurementId+" "+amount)
-    // await RecipeIngredients.create({
-    //   recipe_ID: rec_id,
-    //   ingredient_ID: groceryItem.id,
-    //   measurement_ID: measurementId,
-    //   amount: amount,
-    // });
+    await RecipeIngredients.create({
+      recipe_ID: rec_id,
+      ingredient_ID: groceryItem.id,
+      measurement_ID: parseInt(measurementId),
+      amount: parseInt(amount),
+    });
   }
+  for (const nutrient in totalNutrition) {
+    if (totalNutrition.hasOwnProperty(nutrient)) {
+      totalNutrition[nutrient] = parseFloat(totalNutrition[nutrient].toFixed(2));
+    }
+  }
+/* Create Recipe*/
+  Recipes.create({
+    RecipeId:rec_id,
+    Name:recipeName,
+    AuthorId:userId,
+    AuthorName:name,
+    CookTime: parseTimeToDuration(cookTime),
+    PrepTime: parseTimeToDuration(prepTime),
+    TotalTime: parseTimeToDuration(totalCookTime),
+    DatePublished: datePublished,
+    Description:description,
+    RecipeCategory:selectedCategory,
+    AggregatedRating: 0,
+    ReviewCount: 0,
+    Calories:totalNutrition.calories,
+    FatContent:totalNutrition.fat,
+    SaturatedFatContent:totalNutrition.saturated_fat,
+    CholesterolContent:totalNutrition.cholesterol,
+    SodiumContent:totalNutrition.sodium,
+    CarbohydrateContent:totalNutrition.carbohydrates,
+    FiberContent:totalNutrition.fiber,
+    SugarContent:totalNutrition.sugar,
+    ProteinContent:totalNutrition.protein,
+    RecipeServings:recipeServings,
+    RecipeYield:recipeYield,
+    RecipeInstructions:JSON.parse(recipeInstructions).join('.'),
+    Kosher:kosherWord.kosher,
+  })
 
-  /*/Insert categories*/
-  // for (const [category, selectedItems] of Object.entries(JSON.parse(recipeCategories))) {
-  //   if (Object.keys(selectedItems).length > 0) {
-  //     // Construct the table name based on the category
-  //     const tableName = `recipe_${category.toLowerCase()}`;
-  //     const trueItems = Object.entries(selectedItems)
-  //     .filter(([itemId, isSelected]) => isSelected)
-  //     .map(([itemId]) => itemId);
-  //     // Insert rows into the corresponding table
-  //     for (const itemId of trueItems) {
-  //       await Collection.getModel(tableName).create({
-  //         recipe_ID: rec_id,
-  //         category_ID: parseInt(itemId),
-  //       });
-  //     }
-  //   }
-  // }
+const recipeImage = req.file ? {
+  filename: req.file.filename,
+  fileId: req.file.id,
+} : null;
+
+  Image.create({
+    recipe_ID:rec_id,
+    image_link:recipeImage,
+  })
+
+  /*Insert categories*/
+  for (const [category, selectedItems] of Object.entries(JSON.parse(recipeCategories))) {
+    if (Object.keys(selectedItems).length > 0) {
+      // Construct the table name based on the category
+      const tableName = `recipe_${category.toLowerCase()}`;
+      const trueItems = Object.entries(selectedItems)
+      .filter(([itemId, isSelected]) => isSelected)
+      .map(([itemId]) => itemId);
+      // Insert rows into the corresponding table
+      for (const itemId of trueItems) {
+        await Collection.getModel(tableName).create({
+          recipe_ID: rec_id,
+          category_ID: parseInt(itemId),
+        });
+      }
+    }
+  }
 });
 
 app.get('/api/addRecipe/images/:filename', (req, res) => {
