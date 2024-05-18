@@ -55,6 +55,8 @@ function LoginPage() {
     setErrorMessage(''); // Clear error message when typing in the password field
   }
 
+
+
   return (
     <div className="connect-body">
 

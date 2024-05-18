@@ -2,6 +2,7 @@
   display: flex;
   height: 100vh;
   position: relative;
+  overflow: hidden;
 }
 
 .connect-image {
@@ -34,9 +35,9 @@
 }
 
 .form-login {
-  width: 500px; /* Adjust as needed */
+  width: 500px;
   height: 400px;
-  max-width: 400px; /* Add max-width for better responsiveness */
+  max-width: 400px; 
   background-color: white;
   padding: 20px;
   border-radius: 60px;

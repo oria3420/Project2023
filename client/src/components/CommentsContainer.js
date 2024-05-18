@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
+import InteractiveStarRating from './InteractiveStarRating';
 import './CommentsContainer.css';
 import GuestModal from './GuestModal';
 import ImageModal from './ImageModal';
@@ -13,6 +14,13 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [imageUploadStatus, setImageUploadStatus] = useState('');
     const [modalOpenArray, setModalOpenArray] = useState([]);
+    const [userRating, setUserRating] = useState(null);
+
+    // const handleRatingSubmit = (rating) => {
+    //     setUserRating(rating);
+    //     // Here you can send the rating to the server or update the application state
+    //     console.log(`User submitted a rating of: ${rating}`);
+    // };
 
 
     const openModal = (index) => {
@@ -85,6 +93,31 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         }
         setErrorMessage('');
         handleCommentSubmit(trimmedComment);
+    };
+
+    const handleRatingSubmit = async (rating) => {
+        try {
+            const response = await fetch('http://localhost:1337/api/recipes/update_rating', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rating: rating,
+                    recipe_id: id,
+                    user_id: user_id,
+                }),
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                console.log('Rating updated successfully:', result.updatedRating);
+            } else {
+                console.error('Failed to update rating:', result.error);
+            }
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+        }
     };
 
     const handleCommentSubmit = async (trimmedComment) => {
@@ -174,6 +207,14 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
                 <div className='user-container'>
                     <i id="user-icon" className="bi bi-person-circle"></i>
                     <span id="user-name">{user_name}</span>
+                </div>
+
+
+                <div className='new-rating'>
+                    <InteractiveStarRating
+                        initialRating={userRating}
+                        onRatingSubmit={handleRatingSubmit}
+                    />
                 </div>
 
                 <div className='new-comment'>

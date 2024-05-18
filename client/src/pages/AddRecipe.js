@@ -4,6 +4,7 @@ import './AddRecipe.css'
 import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
+import AddRecipeValidation from '../components/AddRecipeValidation';
 
 const AddRecipe = () => {
     const navigate = useNavigate()
@@ -455,16 +456,7 @@ const AddRecipe = () => {
             <div>
                 {user && (
                     <form className='add-recipe-form needs-validation' >
-                        {formSubmitted && !formValid && (
-                            <div className="alert alert-danger" role="alert">
-                                Please fill in all required fields.
-                            </div>
-                        )}
-                        {formSubmitted && formValid && (
-                            <div className="alert alert-success" role="alert">
-                                Success! Your recipe has been added to our collection. Thank you for sharing your delicious creation with us!
-                            </div>
-                        )}
+                        <AddRecipeValidation formSubmitted={formSubmitted} formValid={formValid} />
 
                         <div className='image-details two-sections-wrapper'>
 
@@ -705,9 +697,7 @@ const AddRecipe = () => {
 
                                 </div>
                             </div>
-                            ”
-
-
+                            
                         </div>
 
                         <div className='tags-section'>

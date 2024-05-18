@@ -29,4 +29,5 @@ module.exports.TABLE_NAMES = {
     COMMENTS: 'comments',
     FAVORITES: 'favorites',
     MEASUREMENTS: 'measurements',
+    RATINGS: 'ratings',
   };
