@@ -95,7 +95,8 @@ app.post('/api/recipes/update_rating', async (req, res) => {
     // Calculate the new average rating for the recipe
     const allRatings = await Ratings.find({ recipe_id: parsedRecipeId });
     const totalRatings = allRatings.reduce((acc, curr) => acc + curr.rating, 0);
-    const averageRating = totalRatings / allRatings.length;
+    const reviewCount = allRatings.length;
+    const averageRating = totalRatings / reviewCount;
     console.log("allRatings: ", allRatings)
     console.log("totalRatings: ", totalRatings)
     console.log("averageRating: ", averageRating)
@@ -106,16 +107,18 @@ app.post('/api/recipes/update_rating', async (req, res) => {
       {
         $set: {
           AggregatedRating: averageRating, // Update the aggregated rating
-          ReviewCount: allRatings.length, // Update the review count
+          ReviewCount: reviewCount, // Update the review count
         }
       }
     );
-    
+
 
     res.status(200).json({
       success: true,
       message: 'Rating updated successfully',
       updatedRating: userRating,
+      aggregatedRating: averageRating, // Include the updated aggregated rating
+      reviewCount: reviewCount // Include the updated review count
     });
   } catch (error) {
     console.error('Error updating rating:', error);
