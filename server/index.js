@@ -64,11 +64,12 @@ app.get('/api/comments/images/:filename', (req, res) => {
 
 app.post('/api/recipes/update_rating', async (req, res) => {
   const Ratings = Collection.getModel(TABLE_NAMES.RATINGS);
+  const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
+  console.log(Recipes)
 
   try {
     const { rating, recipe_id, user_id } = req.body;
     const parsedRecipeId = parseInt(recipe_id, 10);
-
 
     // Check if the user has already rated this recipe
     let userRating = await Ratings.findOne({ recipe_id: parsedRecipeId, user_id: user_id });
@@ -91,6 +92,26 @@ app.post('/api/recipes/update_rating', async (req, res) => {
       });
     }
 
+    // Calculate the new average rating for the recipe
+    const allRatings = await Ratings.find({ recipe_id: parsedRecipeId });
+    const totalRatings = allRatings.reduce((acc, curr) => acc + curr.rating, 0);
+    const averageRating = totalRatings / allRatings.length;
+    console.log("allRatings: ", allRatings)
+    console.log("totalRatings: ", totalRatings)
+    console.log("averageRating: ", averageRating)
+
+    // Update the recipe's overall rating and review count
+    await Recipes.updateOne(
+      { RecipeId: parsedRecipeId },
+      {
+        $set: {
+          AggregatedRating: averageRating, // Update the aggregated rating
+          ReviewCount: allRatings.length, // Update the review count
+        }
+      }
+    );
+    
+
     res.status(200).json({
       success: true,
       message: 'Rating updated successfully',
@@ -101,6 +122,7 @@ app.post('/api/recipes/update_rating', async (req, res) => {
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
+
 
 app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req, res) => {
   const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
@@ -139,7 +161,6 @@ app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req,
 
 app.get('/api/recipes/:id/comments', async (req, res) => {
   try {
-    console.log("in comments")
     const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
     const Users = Collection.getModel(TABLE_NAMES.USERS);
     const Ratings = Collection.getModel(TABLE_NAMES.RATINGS);
@@ -162,8 +183,6 @@ app.get('/api/recipes/:id/comments', async (req, res) => {
       };
     }));
 
-    console.log(comments)
-    console.log(userRating)
     // Return the comments and the user's rating
     res.status(200).json({
       comments: commentsWithSelectedFields,
