@@ -233,3 +233,8 @@ textarea {
   width: 100%; /* Adjust as needed */
   height: auto; /* Adjust as needed */
 }
+
+.new-rating{
+  margin-bottom: 20px;
+  margin-left: 5px;
+}

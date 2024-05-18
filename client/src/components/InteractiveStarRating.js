@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 
 function InteractiveStarRating({ initialRating, onRatingSubmit }) {
     const [currentRating, setCurrentRating] = useState(initialRating);
     const maxRating = 5;
 
+    useEffect(() => {
+        setCurrentRating(initialRating);
+    }, [initialRating]);
+
     const handleRatingClick = (rating) => {
-        // Only proceed if the new rating is different from the current rating
-        if (rating !== currentRating) {
-            console.log(rating)
-            setCurrentRating(rating);
-            if (onRatingSubmit) {
-                onRatingSubmit(rating);
-            }
+        setCurrentRating(rating);
+        if (onRatingSubmit) {
+            onRatingSubmit(rating);
         }
     };
 

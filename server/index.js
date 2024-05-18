@@ -66,44 +66,39 @@ app.post('/api/recipes/update_rating', async (req, res) => {
   const Ratings = Collection.getModel(TABLE_NAMES.RATINGS);
 
   try {
-      const { rating, recipe_id, user_id } = req.body;
-      const parsedRecipeId = parseInt(recipe_id, 10);
+    const { rating, recipe_id, user_id } = req.body;
+    const parsedRecipeId = parseInt(recipe_id, 10);
 
-      console.log('Received Recipe ID:', recipe_id, typeof recipe_id);
-      console.log('Parsed Recipe ID:', parsedRecipeId, typeof parsedRecipeId);
-      console.log('User ID:', user_id, typeof user_id);
 
-      // Check if the user has already rated this recipe
-      let userRating = await Ratings.findOne({ recipe_id: parsedRecipeId, user_id: user_id });
+    // Check if the user has already rated this recipe
+    let userRating = await Ratings.findOne({ recipe_id: parsedRecipeId, user_id: user_id });
 
-      console.log('User Rating:', userRating);
+    if (userRating) {
+      // Update existing rating
+      await Ratings.updateOne(
+        { recipe_id: parsedRecipeId, user_id: user_id },
+        { $set: { rating: rating } }
+      );
 
-      if (userRating) {
-          // Update existing rating
-          await Ratings.updateOne(
-              { recipe_id: parsedRecipeId, user_id: user_id },
-              { $set: { rating: rating } }
-          );
-
-          // Fetch the updated rating
-          userRating = await Ratings.findOne({ recipe_id: parsedRecipeId, user_id: user_id });
-      } else {
-          // Create a new rating
-          userRating = await Ratings.create({
-              recipe_id: parsedRecipeId,
-              user_id: user_id,
-              rating: rating,
-          });
-      }
-
-      res.status(200).json({
-          success: true,
-          message: 'Rating updated successfully',
-          updatedRating: userRating,
+      // Fetch the updated rating
+      userRating = await Ratings.findOne({ recipe_id: parsedRecipeId, user_id: user_id });
+    } else {
+      // Create a new rating
+      userRating = await Ratings.create({
+        recipe_id: parsedRecipeId,
+        user_id: user_id,
+        rating: rating,
       });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Rating updated successfully',
+      updatedRating: userRating,
+    });
   } catch (error) {
-      console.error('Error updating rating:', error);
-      res.status(500).json({ success: false, error: 'Internal Server Error' });
+    console.error('Error updating rating:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
 
@@ -144,12 +139,16 @@ app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req,
 
 app.get('/api/recipes/:id/comments', async (req, res) => {
   try {
+    console.log("in comments")
     const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
     const Users = Collection.getModel(TABLE_NAMES.USERS);
+    const Ratings = Collection.getModel(TABLE_NAMES.RATINGS);
 
     const recipeId = parseInt(req.params.id);
+    const userId = req.query.user_id;
 
     const comments = await Comments.find({ recipe_id: recipeId });
+    const userRating = await Ratings.findOne({ recipe_id: recipeId, user_id: userId });
 
     const commentsWithSelectedFields = await Promise.all(comments.map(async (comment) => {
       const user = await Users.findOne({ email: comment.user_id });
@@ -163,7 +162,14 @@ app.get('/api/recipes/:id/comments', async (req, res) => {
       };
     }));
 
-    res.status(200).json(commentsWithSelectedFields);
+    console.log(comments)
+    console.log(userRating)
+    // Return the comments and the user's rating
+    res.status(200).json({
+      comments: commentsWithSelectedFields,
+      userRating: userRating ? userRating.rating : null,
+    });
+
   } catch (error) {
     console.error(error);
     res.status(500).send('Server error');
@@ -321,7 +327,7 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
       if (!recipeTags || recipeTags.length === 0) {
         return [];
       }
-      
+
       const categoryIDs = recipeTags.map(tag => tag.category_ID);
       const tagPromises = categoryIDs.map(async (categoryID) => {
         const TagsCategories = Collection.getModel(TABLE_NAMES[tableName]);
@@ -331,11 +337,11 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
       const tags = await Promise.all(tagPromises);
       // console.log(tags);
       const modifiedTags = tags.map(tag => {
-        if(tag){
-        const keys = Object.keys(tag);
-        const lastKey = keys[keys.length - 1];
-        const modifiedTag = { [lastKey]: tag[lastKey] };
-        return modifiedTag;
+        if (tag) {
+          const keys = Object.keys(tag);
+          const lastKey = keys[keys.length - 1];
+          const modifiedTag = { [lastKey]: tag[lastKey] };
+          return modifiedTag;
         }
         return null;
       });
@@ -348,7 +354,7 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     const flattenedTags = [].concat(...allTags);
     // console.log("flattenedTags: ", flattenedTags);
     const valuesOnly = flattenedTags.map(tag => {
-      if(tag){
+      if (tag) {
         const values = Object.values(tag);
         return values.length > 0 ? values[0] : null;
       }
@@ -357,7 +363,7 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     // console.log("valuesOnly: ", valuesOnly);
     // console.log(valuesOnly)
     res.json(valuesOnly);
-    
+
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal Server Error');
@@ -417,10 +423,10 @@ app.get('/api/recipes_categories', async (req, res) => {
 app.get('/api/recipes/images/:recipeId', async (req, res) => {
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const id = parseInt(req.params.recipeId);
-  
+
   try {
     const distinctImageLinkFields = await Image.find({ recipe_ID: id }).distinct('image_link');
-    
+
     if (!distinctImageLinkFields || distinctImageLinkFields.length === 0) {
       // console.log("Images not found");
       res.status(404).send('Images not found');
@@ -547,7 +553,7 @@ app.get('/api/groceries', async (req, res) => {
   }
 });
 
-app.get('/api/measurements', async(req,res)=>{
+app.get('/api/measurements', async (req, res) => {
   const measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
   try {
     const measurements = await measurement.find()
@@ -568,7 +574,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const Measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
   const rec_id = 2
-  const {              
+  const {
     recipeName,
     cookTime,
     prepTime,
@@ -580,7 +586,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
     recipeInstructions,
     recipeCategories,
     name,
-    userId,} = req.body;
+    userId, } = req.body;
 
   //   console.log('Form Data:', {
   //     recipeName,
@@ -602,24 +608,25 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
     if (hours > 0) {
       duration += hours.toString() + 'H';
     }
-  
+
     if (minutes > 0) {
       duration += minutes.toString() + 'M';
     }
-  
+
     return duration || '0S';
   };
-  const sumDurations = (duration1, duration2) => {;
+  const sumDurations = (duration1, duration2) => {
+    ;
     const [hours1 = 0, minutes1 = 0] = duration1.match(/\d+/g).map(Number);
     const [hours2 = 0, minutes2 = 0] = duration2.match(/\d+/g).map(Number);
-  
+
     const totalHours = hours1 + hours2;
     const totalMinutes = minutes1 + minutes2;
-  
+
     // Format the result as HH:mm
     const formattedHours = String(totalHours).padStart(2, '0');
     const formattedMinutes = String(totalMinutes).padStart(2, '0');
-  
+
     return `${formattedHours}:${formattedMinutes}`;
   };
   const currentDate = new Date();
@@ -639,7 +646,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   const kosherCategoryId = checkedKosherCategoryIds[0];
   try {
     // Find the corresponding kosher word in the Kosher table
-    kosherWord = await KosherT.findOne({id: parseInt(kosherCategoryId)});
+    kosherWord = await KosherT.findOne({ id: parseInt(kosherCategoryId) });
     res.status(200).json({ success: true });
   } catch (error) {
     console.error(error);
@@ -650,19 +657,19 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
     try {
       // Fetch nutritional information for the ingredient from your API or database
       //console.log("ingredientId",ingredientId)
-      const ingredient = await Ingredients.findOne({id: ingredientId});
+      const ingredient = await Ingredients.findOne({ id: ingredientId });
       console.log(ingredient)
-      console.log("measurementId",measurementId)
-      const measurement = await Measurement.findOne({ measurement_id : parseInt(measurementId) });
+      console.log("measurementId", measurementId)
+      const measurement = await Measurement.findOne({ measurement_id: parseInt(measurementId) });
       console.log(measurement)
-      
-  
+
+
       // Convert the ingredient quantity to kilograms (assuming your API provides data per 1 kg)
       const quantityInKg = convertToKilograms(amount, measurement.measurement);
-  
+
       // Calculate the scaling factor based on the ingredient quantity
       const scalingFactor = quantityInKg / ingredient.amount;
-  
+
       // Scale the nutritional values based on the ingredient quantity
       const nutrition = {
         calories: ingredient.calories * scalingFactor,
@@ -730,7 +737,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
         return null;
     }
   };
-  
+
   let totalNutrition = {
     calories: 0,
     fat: 0,
@@ -775,43 +782,43 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
       totalNutrition[nutrient] = parseFloat(totalNutrition[nutrient].toFixed(2));
     }
   }
-/* Create Recipe*/
+  /* Create Recipe*/
   Recipes.create({
-    RecipeId:rec_id,
-    Name:recipeName,
-    AuthorId:userId,
-    AuthorName:name,
+    RecipeId: rec_id,
+    Name: recipeName,
+    AuthorId: userId,
+    AuthorName: name,
     CookTime: parseTimeToDuration(cookTime),
     PrepTime: parseTimeToDuration(prepTime),
     TotalTime: parseTimeToDuration(totalCookTime),
     DatePublished: datePublished,
-    Description:description,
-    RecipeCategory:selectedCategory,
+    Description: description,
+    RecipeCategory: selectedCategory,
     AggregatedRating: 0,
     ReviewCount: 0,
-    Calories:totalNutrition.calories,
-    FatContent:totalNutrition.fat,
-    SaturatedFatContent:totalNutrition.saturated_fat,
-    CholesterolContent:totalNutrition.cholesterol,
-    SodiumContent:totalNutrition.sodium,
-    CarbohydrateContent:totalNutrition.carbohydrates,
-    FiberContent:totalNutrition.fiber,
-    SugarContent:totalNutrition.sugar,
-    ProteinContent:totalNutrition.protein,
-    RecipeServings:recipeServings,
-    RecipeYield:recipeYield,
-    RecipeInstructions:JSON.parse(recipeInstructions).join('.'),
-    Kosher:kosherWord.kosher,
+    Calories: totalNutrition.calories,
+    FatContent: totalNutrition.fat,
+    SaturatedFatContent: totalNutrition.saturated_fat,
+    CholesterolContent: totalNutrition.cholesterol,
+    SodiumContent: totalNutrition.sodium,
+    CarbohydrateContent: totalNutrition.carbohydrates,
+    FiberContent: totalNutrition.fiber,
+    SugarContent: totalNutrition.sugar,
+    ProteinContent: totalNutrition.protein,
+    RecipeServings: recipeServings,
+    RecipeYield: recipeYield,
+    RecipeInstructions: JSON.parse(recipeInstructions).join('.'),
+    Kosher: kosherWord.kosher,
   })
 
-const recipeImage = req.file ? {
-  filename: req.file.filename,
-  fileId: req.file.id,
-} : null;
+  const recipeImage = req.file ? {
+    filename: req.file.filename,
+    fileId: req.file.id,
+  } : null;
 
   Image.create({
-    recipe_ID:rec_id,
-    image_link:recipeImage,
+    recipe_ID: rec_id,
+    image_link: recipeImage,
   })
 
   /*Insert categories*/
@@ -820,8 +827,8 @@ const recipeImage = req.file ? {
       // Construct the table name based on the category
       const tableName = `recipe_${category.toLowerCase()}`;
       const trueItems = Object.entries(selectedItems)
-      .filter(([itemId, isSelected]) => isSelected)
-      .map(([itemId]) => itemId);
+        .filter(([itemId, isSelected]) => isSelected)
+        .map(([itemId]) => itemId);
       // Insert rows into the corresponding table
       for (const itemId of trueItems) {
         await Collection.getModel(tableName).create({
@@ -850,12 +857,12 @@ app.get('/api/my_recipes/:userId', async (req, res) => {
   try {
     const user_id = req.params.userId;
 
-    
+
     const my_recipes = await Recipe.find({ AuthorId: user_id });
 
     if (my_recipes.length === 0) {
       // console.log("empty")
-      res.json([]); 
+      res.json([]);
       return;
     }
     // console.log(my_recipes)
@@ -872,7 +879,7 @@ app.get('/api/search_recipes/:recipeId/:ingredientId', async (req, res) => {
   const ingredientId = parseInt(req.params.ingredientId);
 
   try {
-    const result = await RecipeIngredients.findOne({ recipe_ID:recipeId, ingredient_ID:ingredientId });
+    const result = await RecipeIngredients.findOne({ recipe_ID: recipeId, ingredient_ID: ingredientId });
     // console.log(result)
 
     if (result) {

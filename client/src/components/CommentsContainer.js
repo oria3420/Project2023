@@ -16,12 +16,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     const [modalOpenArray, setModalOpenArray] = useState([]);
     const [userRating, setUserRating] = useState(null);
 
-    // const handleRatingSubmit = (rating) => {
-    //     setUserRating(rating);
-    //     // Here you can send the rating to the server or update the application state
-    //     console.log(`User submitted a rating of: ${rating}`);
-    // };
-
 
     const openModal = (index) => {
         setModalOpenArray((prev) => {
@@ -149,10 +143,12 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     useEffect(() => {
         async function fetchComments() {
             try {
-                const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments`);
+                const response = await fetch(`http://localhost:1337/api/recipes/${id}/comments?user_id=${user_id}`);
                 const data = await response.json();
 
-                setComments(data);
+                setComments(data.comments);
+                setUserRating(data.userRating);
+
             } catch (error) {
                 console.error(error);
             } finally {
@@ -161,7 +157,7 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         }
 
         fetchComments();
-    }, [id]);
+    }, [id, user_id]);
 
 
     const handleGuestClick = () => {
