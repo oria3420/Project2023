@@ -303,7 +303,7 @@ const RecipePage = () => {
                     <div className='step-container' key={index}>
                       <span className='ingredient-text' key={ingredient.name}>
                         {ingredient.amount && ingredient.measurement ? (
-                          `${ingredient.amount} ${ingredient.measurement} of ${ingredient.name}`
+                          `${ingredient.amount} ${ingredient.measurement}${ingredient.amount > 1 ? 's' : ''} of ${ingredient.name}`
                         ) : (
                           ingredient.name
                         )}
