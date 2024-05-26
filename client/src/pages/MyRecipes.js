@@ -37,17 +37,25 @@ console.log(user)
 
     return (
         <div>
-            {name && <Navbar name={name} />}
-            <div className='search-recipe-container'>
-                <div className='recipes-container'>
-                    {recipes.map((recipe, index) => (
+        {name && <Navbar name={name} />}
+        <div className='search-recipe-container'>
+            <div className='recipes-container'>
+                {recipes.length > 0 ? (
+                    recipes.map((recipe, index) => (
                         <div className='recipe-card-wrapper' key={index}>
                             <RecipeCard recipe={recipe} user={user} />
                         </div>
-                    ))}
-                </div>
+                    ))
+                ) : (
+                    <div className='no-recipes-message'>
+                        <p>Oops! It looks like you haven't created any recipes yet. Are you secretly ordering takeout every night?</p>
+                        <p>Time to put on your chef hat and start whipping up something delicious!</p>
+                    </div>
+                )}
             </div>
         </div>
+    </div>
+    
     )
 }
 
