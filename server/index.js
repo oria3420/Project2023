@@ -62,6 +62,7 @@ app.get('/api/comments/images/:filename', (req, res) => {
   readstream.pipe(res);
 });
 
+
 app.post('/api/recipes/update_rating', async (req, res) => {
   const Ratings = Collection.getModel(TABLE_NAMES.RATINGS);
   const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);

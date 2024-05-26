@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import StarRating from './StarRating';
 
-function InteractiveStarRating({ initialRating, onRatingSubmit }) {
+function InteractiveStarRating({ initialRating, onRatingSubmit, user_id, handleGuestClick }) {
     const [currentRating, setCurrentRating] = useState(initialRating);
     const maxRating = 5;
 
@@ -10,6 +10,11 @@ function InteractiveStarRating({ initialRating, onRatingSubmit }) {
     }, [initialRating]);
 
     const handleRatingClick = (rating) => {
+        if (user_id === "Guest") {
+            handleGuestClick();
+            return;
+        }
+
         setCurrentRating(rating);
         if (onRatingSubmit) {
             onRatingSubmit(rating);
@@ -31,5 +36,6 @@ function InteractiveStarRating({ initialRating, onRatingSubmit }) {
         </div>
     );
 }
+
 
 export default InteractiveStarRating;

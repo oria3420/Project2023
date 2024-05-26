@@ -36,44 +36,6 @@ const RecipePage = () => {
   const [recipeTags, setRecipeTags] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // useEffect(() => {
-  //   async function fetchTags() {
-  //     try {
-  //       const response = await fetch(`http://localhost:1337/api/recipes/${id}/tags`);
-  //       const tags = await response.json();
-  //       console.log(tags)
-  //       setRecipeTags(tags);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-
-  //   fetchTags();
-  // }, [id]);
-
-  // useEffect(() => {
-  //   async function fetchRecipe() {
-  //     const response = await fetch(`http://localhost:1337/api/recipes/${id}`);
-  //     const data = await response.json();
-  //     setRecipe(data);
-  //   }
-  //   fetchRecipe();
-  // }, [id]);
-
-  // useEffect(() => {
-  //   async function fetchIngredients() {
-  //     try {
-  //       const response = await fetch(`http://localhost:1337/api/recipes/${id}/ingredients`);
-  //       const data = await response.json();
-  //       setIngredients(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-
-  //   fetchIngredients();
-  // }, [id]);
-
   
   const fetchData = useCallback(async () => {
     try {
@@ -145,69 +107,7 @@ const RecipePage = () => {
     fetchData();
   }, [fetchData]);
 
-  // useEffect(() => {
-  //   async function getImageUrls() {
-  //     try {
-  //       const response = await fetch(`http://localhost:1337/api/recipes/images/${id}`);
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         if (Array.isArray(data) && data.length > 0) {
-  //           const urls = await Promise.all(
-  //             data.map(async (imageData) => {
-  //               if (typeof imageData === 'string' && imageData.startsWith('http')) {
-  //                 // Check if the URL is valid
-  //                 const urlResponse = await fetch(imageData, { method: 'HEAD' });
-  //                 if (urlResponse.ok) {
-  //                   return imageData;
-  //                 } else {
-  //                   console.warn(`Invalid URL: ${imageData}`);
-  //                   return null;
-  //                 }
-  //               }
-  //               else if (
-  //                 imageData &&
-  //                 imageData.filename &&
-  //                 imageData.fileId
-  //               ) {
-  //                 const imageResponse = await fetch(
-  //                   `http://localhost:1337/api/addRecipe/images/${imageData.fileId}`
-  //                 );
-  //                 if (imageResponse.ok) {
-  //                   const imageUrl = URL.createObjectURL(
-  //                     await imageResponse.blob()
-  //                   );
-  //                   return imageUrl;
-  //                 }
-  //               } else {
-  //                 console.warn(`Invalid URL format: ${imageData}`);
-  //                 return null;
-  //               }
-  //             })
-  //           );
-
-  //           // Remove null values (invalid URLs) from the array
-  //           const filteredUrls = urls.filter((url) => url !== null);
-
-  //           // Set default image URL if the array becomes empty
-  //           setImageUrls(filteredUrls.length > 0 ? filteredUrls : [defaultImageUrl]);
-  //         } else {
-  //           // Handle the case when the server response is not an array or is empty
-  //           setImageUrls([defaultImageUrl]);
-  //         }
-  //       } else {
-  //         // Handle the case when the server response is not okay
-  //         setImageUrls([defaultImageUrl]);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //       // Handle the error
-  //       setImageUrls([defaultImageUrl]);
-  //     }
-  //   }
-
-  //   getImageUrls();
-  // }, [id]);
-
+ 
   function formatDate(inputDate) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(inputDate).toLocaleDateString('en-US', options);
@@ -223,7 +123,7 @@ const RecipePage = () => {
       <Navbar name={user_name} />
       {user_name && !loading ? (
           <div className='recipe-container'>
-
+          
             <div className='recipe-header'>
 
               <div className='recipe-details'>

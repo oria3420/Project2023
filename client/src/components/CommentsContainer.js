@@ -90,40 +90,45 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     };
 
     const handleRatingSubmit = async (rating) => {
-        try {
-          const response = await fetch('http://localhost:1337/api/recipes/update_rating', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              rating: rating,
-              recipe_id: id,
-              user_id: user_id,
-            }),
-          });
-    
-          const result = await response.json();
-          console.log(result)
-          if (result.success) {
-            console.log('Rating updated successfully:', result.updatedRating);
-            console.log("aggregatedRating: ", result.aggregatedRating)
-            console.log("reviewCount: ", result.reviewCount)
-            // Update the aggregated rating and review count in the recipe object
-            recipe.AggregatedRating = result.aggregatedRating;
-            recipe.ReviewCount = result.reviewCount;
-            console.log("recipe.AggregatedRating: ", recipe.AggregatedRating)
-            console.log("revirecipe.ReviewCount: ", recipe.ReviewCount)
-
-            // Set the state with the updated recipe data
-            setUserRating(result.updatedRating.rating); // Assuming you also want to update user's rating
-          } else {
-            console.error('Failed to update rating:', result.error);
-          }
-        } catch (error) {
-          console.error('Error submitting rating:', error);
+        if (user_id === "Guest") {
+            handleGuestClick();
+            return;
         }
-      };
+
+        try {
+            const response = await fetch('http://localhost:1337/api/recipes/update_rating', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rating: rating,
+                    recipe_id: id,
+                    user_id: user_id,
+                }),
+            });
+
+            const result = await response.json();
+            console.log(result)
+            if (result.success) {
+                console.log('Rating updated successfully:', result.updatedRating);
+                console.log("aggregatedRating: ", result.aggregatedRating)
+                console.log("reviewCount: ", result.reviewCount)
+                // Update the aggregated rating and review count in the recipe object
+                recipe.AggregatedRating = result.aggregatedRating;
+                recipe.ReviewCount = result.reviewCount;
+                console.log("recipe.AggregatedRating: ", recipe.AggregatedRating)
+                console.log("revirecipe.ReviewCount: ", recipe.ReviewCount)
+
+                // Set the state with the updated recipe data
+                setUserRating(result.updatedRating.rating); // Assuming you also want to update user's rating
+            } else {
+                console.error('Failed to update rating:', result.error);
+            }
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+        }
+    };
 
     const handleCommentSubmit = async (trimmedComment) => {
         try {
@@ -218,11 +223,14 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
 
                 <div className='new-rating'>
-                    <InteractiveStarRating
-                        initialRating={userRating}
-                        onRatingSubmit={handleRatingSubmit}
-                    />
-                </div>
+                <InteractiveStarRating
+                    initialRating={userRating}
+                    onRatingSubmit={handleRatingSubmit}
+                    user_id={user_id} // Pass user_id as a prop
+                    handleGuestClick={handleGuestClick} // Pass handleGuestClick as a prop
+                />
+            </div>
+            
 
                 <div className='new-comment'>
                     <div className='comment-input-container'>
