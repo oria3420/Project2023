@@ -32,7 +32,7 @@ mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.m
 // Get recommendations for a user
 app.get('/api/recommendations/:userId', async (req, res) => {
   try {
-    console.log("recommendations server");
+    // console.log("recommendations server");
     const userId = req.params.userId;
     const recommendations = await recommendRecipes(userId);
     res.status(200).json(recommendations);
@@ -87,7 +87,7 @@ app.get('/api/comments/images/:filename', (req, res) => {
 app.post('/api/recipes/update_rating', async (req, res) => {
   const Ratings = Collection.getModel(TABLE_NAMES.RATINGS);
   const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
-  console.log(Recipes);
+  // console.log(Recipes);
 
   try {
     const { rating, recipe_id, user_id } = req.body;
@@ -121,9 +121,9 @@ app.post('/api/recipes/update_rating', async (req, res) => {
     const totalRatings = allRatings.reduce((acc, curr) => acc + curr.rating, 0);
     const reviewCount = allRatings.length;
     const averageRating = totalRatings / reviewCount;
-    console.log("allRatings: ", allRatings);
-    console.log("totalRatings: ", totalRatings);
-    console.log("averageRating: ", averageRating);
+    // console.log("allRatings: ", allRatings);
+    // console.log("totalRatings: ", totalRatings);
+    // console.log("averageRating: ", averageRating);
 
     // Update the recipe's overall rating and review count
     await Recipes.updateOne(
@@ -481,14 +481,11 @@ app.get('/api/recipes/images/:recipeId', async (req, res) => {
 
     const images = distinctImageLinkFields.map(image_link => {
       if (typeof image_link === "string") {
-        // console.log("if");
         return image_link;
       } else if (image_link && image_link.filename && image_link.fileId) {
-        // console.log("elseif");
         const { filename, fileId } = image_link;
         return { filename, fileId };
       } else {
-        // console.log("else");
         res.status(500).send('Invalid image_link format');
       }
     });
@@ -612,14 +609,14 @@ app.get('/api/measurements', async (req, res) => {
 
 app.use('/api/addRecipe/images', express.static(path.join(__dirname, 'uploads')));
 
-app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
+app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
   const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
   const Ingredients = Collection.getModel(TABLE_NAMES.INGREDIENTS)
   const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS)
   const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const Measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
-  const rec_id = 2
+  const rec_id = 555
   const {
     recipeName,
     cookTime,
@@ -634,18 +631,21 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
     name,
     userId, } = req.body;
 
-  //   console.log('Form Data:', {
-  //     recipeName,
-  //     cookTime,
-  //     prepTime,
-  //     selectedCategory,
-  //     groceryList,
-  //     description,
-  //     //recipeServings,
-  //     recipeYield,
-  //     recipeInstructions,
-  //     recipeCategories,
-  // });
+  // Log the received files and body data for debugging
+  console.log('Uploaded files:', req.files);
+  console.log('Request body:', req.body);
+
+  console.log('Form Data:', {
+    recipeName,
+    cookTime,
+    prepTime,
+    selectedCategory,
+    groceryList,
+    description,
+    recipeYield,
+    recipeInstructions,
+    recipeCategories,
+  });
 
   const parseTimeToDuration = (timeString) => {
     const [hours, minutes] = timeString.split(':').map(Number);
@@ -661,6 +661,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
 
     return duration || '0S';
   };
+
   const sumDurations = (duration1, duration2) => {
     ;
     const [hours1 = 0, minutes1 = 0] = duration1.match(/\d+/g).map(Number);
@@ -675,6 +676,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
 
     return `${formattedHours}:${formattedMinutes}`;
   };
+
   const currentDate = new Date();
   let kosherWord;
   const datePublished = currentDate.toISOString();
@@ -704,10 +706,10 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
       // Fetch nutritional information for the ingredient from your API or database
       //console.log("ingredientId",ingredientId)
       const ingredient = await Ingredients.findOne({ id: ingredientId });
-      console.log(ingredient)
-      console.log("measurementId", measurementId)
+      // console.log(ingredient)
+      // console.log("measurementId", measurementId)
       const measurement = await Measurement.findOne({ measurement_id: parseInt(measurementId) });
-      console.log(measurement)
+      // console.log(measurement)
 
 
       // Convert the ingredient quantity to kilograms (assuming your API provides data per 1 kg)
@@ -734,6 +736,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
       return null;
     }
   };
+
   const convertToKilograms = (quantity, measurement) => {
     if (measurement === 'Unit') {
       // You need to define a conversion factor based on your specific use case
@@ -800,7 +803,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
   for (const groceryItem of JSON.parse(groceryList)) {
     // console.log(groceryItem)
     const { ingredient, measurementId, amount, id } = groceryItem;
-    console.log("in for", measurementId)
+    // console.log("in for", measurementId)
     const nutrition = calculateNutritionForIngredient(groceryItem.id, amount, measurementId)
     if (nutrition) {
       // Add the scaled nutritional values to the total
@@ -814,7 +817,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
       totalNutrition.sugar += nutrition.sugar;
       totalNutrition.protein += nutrition.protein;
     }
-    console.log('Total Nutrition:', totalNutrition);
+    // console.log('Total Nutrition:', totalNutrition);
     //console.log(groceryItem.id+" "+measurementId+" "+amount)
     await RecipeIngredients.create({
       recipe_ID: rec_id,
@@ -823,6 +826,7 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
       amount: parseInt(amount),
     });
   }
+
   for (const nutrient in totalNutrition) {
     if (totalNutrition.hasOwnProperty(nutrient)) {
       totalNutrition[nutrient] = parseFloat(totalNutrition[nutrient].toFixed(2));
@@ -857,15 +861,19 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
     Kosher: kosherWord.kosher,
   })
 
-  const recipeImage = req.file ? {
-    filename: req.file.filename,
-    fileId: req.file.id,
-  } : null;
+  for (const file of req.files) {
+    // Create a new Image document with the file's metadata
+    const newImage = new Image({
+      recipe_ID: rec_id, // Assuming rec_id is defined elsewhere
+      image_link:{
+      filename: file.originalname, // Store the original filename
+      fileId: file.id, // Store the ObjectId of the uploaded file
+      }
+    });
 
-  Image.create({
-    recipe_ID: rec_id,
-    image_link: recipeImage,
-  })
+    // Save the new Image document to the database
+    await newImage.save();
+  }
 
   /*Insert categories*/
   for (const [category, selectedItems] of Object.entries(JSON.parse(recipeCategories))) {
@@ -884,6 +892,8 @@ app.post('/api/addRecipe', upload.single('selectedImage'), async (req, res) => {
       }
     }
   }
+
+  console.log("finished")
 });
 
 app.get('/api/addRecipe/images/:filename', (req, res) => {

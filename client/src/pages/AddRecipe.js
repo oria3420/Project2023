@@ -22,7 +22,7 @@ const AddRecipe = () => {
     const [recipeCategories, setRecipeCategories] = useState({});
     const [userId, setUserId] = useState('');
     const [ingredients, setIngredients] = useState([])
-    const [instructions, setInstructions] = useState(['']);;
+    const [instructions, setInstructions] = useState(['']);
     const [measurements, setMeasurements] = useState([]);
     const [recipeIngredients, setRecipeIngredients] = useState([{ ingredient: '', amount: '', measurementId: '' }]);
     const [suggestions, setSuggestions] = useState([]);
@@ -148,9 +148,8 @@ const AddRecipe = () => {
     
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
-        const imageUrls = files.map(file => URL.createObjectURL(file));
-        setSelectedImages(prevImages => [...prevImages, ...imageUrls]);
-      };
+        setSelectedImages(prevImages => [...prevImages, ...files]); // Store files
+    };
 
     const handleSubmit = async (e) => {
         console.log("handleSubmit")
@@ -192,43 +191,39 @@ const AddRecipe = () => {
             // setErrorMessage('');
             console.log('Form Data:', {
                 recipeName,
-                // selectedImage,
+                selectedImages,
                 cookTime,
                 prepTime,
                 selectedCategory,
                 groceryList: recipeIngredients,
                 description,
-                //recipeServings,
                 recipeYield,
                 recipeInstructions: instructions,
                 recipeCategories,
             });
-            setRecipeName('');
-            // setSelectedImage(null);
-            setCookTime('00:00');
-            setPrepTime('00:00');
-            setSelectedCategory('');
-            //setSearchTerm('');
-            //setSelectedMeasurement('');
-            //setAmount('');
-            setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
-            setDescription('');
-            //setRecipeServings(1);
-            setRecipeYield('');
-            setInstructions(['']);
-            setRecipeCategories({});
-            //setGroceryList([]);
+            // setRecipeName('');
+            // setSelectedImages([]);
+            // setCookTime('00:00');
+            // setPrepTime('00:00');
+            // setSelectedCategory('');
+            // setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
+            // setDescription('');
+            // setRecipeYield('');
+            // setInstructions(['']);
+            // setRecipeCategories({});
             const formData = new FormData();
-            // formData.append('selectedImage', selectedImage);
+            selectedImages.forEach((file, index) => {
+                console.log(file)
+                formData.append('selectedImages', file); // Append files to FormData
+            });
             formData.append('recipeName', recipeName);
             formData.append('cookTime', cookTime);
             formData.append('prepTime', prepTime);
             formData.append('selectedCategory', selectedCategory);
             formData.append('groceryList', JSON.stringify(recipeIngredients));
             formData.append('description', description);
-            //formData.append('recipeServings', recipeServings);
             formData.append('recipeYield', recipeYield);
-            formData.append('recipeInstructions', instructions);
+            formData.append('recipeInstructions', JSON.stringify(instructions)); 
             formData.append('recipeCategories', JSON.stringify(recipeCategories));
             formData.append('name', name);
             formData.append('userId', userId);
@@ -495,7 +490,7 @@ const AddRecipe = () => {
                                     alt="Selected"
                                   />
                                 ) : (
-                                    <Carousel id='carousel' images={selectedImages} fromAddRecipe={true} />
+                                    <Carousel id='carousel' images={selectedImages.map(file => URL.createObjectURL(file))} fromAddRecipe={true} />
                                 )}
                               </div>
 
