@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Components.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-
-const Carousel = ({ images }) => {
+const Carousel = ({ images, fromAddRecipe }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToSlide = (index) => {
@@ -35,11 +34,16 @@ const Carousel = ({ images }) => {
             key={index}
             className={`slide ${index === currentIndex ? 'active' : ''}`}
             style={{
-              backgroundImage: `url(${image})`,
               display: index === currentIndex ? 'block' : 'none',
             }}
             onClick={() => goToSlide(index)}
-          ></div>
+          >
+            <img
+              className={fromAddRecipe ? 'recipe-image-upload' : 'recipe-image'}
+              src={image}
+              alt={`Slide ${index}`}
+            />
+          </div>
         ))}
       </div>
       <button className="carousel-btn right-btn" onClick={goToNextSlide}>

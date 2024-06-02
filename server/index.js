@@ -1,24 +1,45 @@
 const globals = require('../client/src/common/tablesNames');
 const TABLE_NAMES = globals.TABLE_NAMES;
-const express = require('express')
-const app = express()
-const cors = require('cors')
-const mongoose = require('mongoose')
-const User = require('./models/user.model')
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const User = require('./models/user.model');
 const Collection = require('./models/collection.model');
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 const { ObjectId } = require('mongodb');
 const { GridFsStorage } = require('multer-gridfs-storage');
 const multer = require('multer');
 const path = require('path');
 const { constants } = require('buffer');
+const { recommendRecipes } = require('./recommendations');
 
+const app = express();
+
+// Enable CORS for all routes
+app.use(cors());
+
+// Middleware to parse JSON requests
+app.use(express.json());
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
   useNewUrlParser: true,
   useUnifiedTopology: true
+});
+
+
+// Get recommendations for a user
+app.get('/api/recommendations/:userId', async (req, res) => {
+  try {
+    console.log("recommendations server");
+    const userId = req.params.userId;
+    const recommendations = await recommendRecipes(userId);
+    res.status(200).json(recommendations);
+  } catch (error) {
+    console.error('Error fetching recommendations:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
 });
 
 const connection = mongoose.connection;
@@ -66,11 +87,12 @@ app.get('/api/comments/images/:filename', (req, res) => {
 app.post('/api/recipes/update_rating', async (req, res) => {
   const Ratings = Collection.getModel(TABLE_NAMES.RATINGS);
   const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
-  console.log(Recipes)
+  console.log(Recipes);
 
   try {
     const { rating, recipe_id, user_id } = req.body;
     const parsedRecipeId = parseInt(recipe_id, 10);
+    const currentDate = new Date();
 
     // Check if the user has already rated this recipe
     let userRating = await Ratings.findOne({ recipe_id: parsedRecipeId, user_id: user_id });
@@ -79,7 +101,7 @@ app.post('/api/recipes/update_rating', async (req, res) => {
       // Update existing rating
       await Ratings.updateOne(
         { recipe_id: parsedRecipeId, user_id: user_id },
-        { $set: { rating: rating } }
+        { $set: { rating: rating, date: currentDate } }
       );
 
       // Fetch the updated rating
@@ -90,6 +112,7 @@ app.post('/api/recipes/update_rating', async (req, res) => {
         recipe_id: parsedRecipeId,
         user_id: user_id,
         rating: rating,
+        date: currentDate
       });
     }
 
@@ -98,9 +121,9 @@ app.post('/api/recipes/update_rating', async (req, res) => {
     const totalRatings = allRatings.reduce((acc, curr) => acc + curr.rating, 0);
     const reviewCount = allRatings.length;
     const averageRating = totalRatings / reviewCount;
-    console.log("allRatings: ", allRatings)
-    console.log("totalRatings: ", totalRatings)
-    console.log("averageRating: ", averageRating)
+    console.log("allRatings: ", allRatings);
+    console.log("totalRatings: ", totalRatings);
+    console.log("averageRating: ", averageRating);
 
     // Update the recipe's overall rating and review count
     await Recipes.updateOne(
@@ -112,7 +135,6 @@ app.post('/api/recipes/update_rating', async (req, res) => {
         }
       }
     );
-
 
     res.status(200).json({
       success: true,
@@ -126,6 +148,7 @@ app.post('/api/recipes/update_rating', async (req, res) => {
     res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
+
 
 
 app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req, res) => {

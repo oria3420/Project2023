@@ -5,13 +5,14 @@ import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 import AddRecipeValidation from '../components/AddRecipeValidation';
+import Carousel from '../components/Carousel';
 
 const AddRecipe = () => {
     const navigate = useNavigate()
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
     const [recipeName, setRecipeName] = useState('');
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImages, setSelectedImages] = useState([]);
     const [cookTime, setCookTime] = useState('00:00');
     const [prepTime, setPrepTime] = useState('00:00');
     const [selectedCategory, setSelectedCategory] = useState('');
@@ -140,10 +141,16 @@ const AddRecipe = () => {
         }
     }, [user]);
 
+    // const handleImageChange = (event) => {
+    //     const files = Array.from(event.target.files);
+    //     setSelectedImages(prevImages => [...prevImages, ...files]);
+    // };
+    
     const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        setSelectedImage(file);
-    };
+        const files = Array.from(event.target.files);
+        const imageUrls = files.map(file => URL.createObjectURL(file));
+        setSelectedImages(prevImages => [...prevImages, ...imageUrls]);
+      };
 
     const handleSubmit = async (e) => {
         console.log("handleSubmit")
@@ -185,7 +192,7 @@ const AddRecipe = () => {
             // setErrorMessage('');
             console.log('Form Data:', {
                 recipeName,
-                selectedImage,
+                // selectedImage,
                 cookTime,
                 prepTime,
                 selectedCategory,
@@ -197,7 +204,7 @@ const AddRecipe = () => {
                 recipeCategories,
             });
             setRecipeName('');
-            setSelectedImage(null);
+            // setSelectedImage(null);
             setCookTime('00:00');
             setPrepTime('00:00');
             setSelectedCategory('');
@@ -212,7 +219,7 @@ const AddRecipe = () => {
             setRecipeCategories({});
             //setGroceryList([]);
             const formData = new FormData();
-            formData.append('selectedImage', selectedImage);
+            // formData.append('selectedImage', selectedImage);
             formData.append('recipeName', recipeName);
             formData.append('cookTime', cookTime);
             formData.append('prepTime', prepTime);
@@ -349,7 +356,7 @@ const AddRecipe = () => {
 
         const missingFields = [];
 
-        if (!selectedImage) {
+        if (selectedImages.length === 0) {
             missingFields.push("image");
         }
         if (!recipeName) {
@@ -467,20 +474,30 @@ const AddRecipe = () => {
                                 </div>
 
                                 <div id='image' className='input-field image-container'>
-                                    {selectedImage ? (
-                                        <>
-                                            <img className='recipe-image' src={URL.createObjectURL(selectedImage)} alt="Selected" />
-                                        </>
-                                    ) : (
-                                        <>
-                                            <label className="custom-file-upload">
-                                                <i className="bi bi-images"></i>
-                                                <input className="input-file" type="file" accept="image/*" onChange={handleImageChange} />
-                                            </label>
-                                            <label className='add-file-title'>Upload images</label>
-                                        </>
-                                    )}
-                                </div>
+                                {selectedImages.length === 0 ? (
+                                  <>
+                                    <label className="custom-file-upload">
+                                      <i className="bi bi-images"></i>
+                                      <input
+                                        className="input-file"
+                                        type="file"
+                                        accept="image/*"
+                                        multiple
+                                        onChange={handleImageChange}
+                                      />
+                                    </label>
+                                    <label className='add-file-title'>Upload images</label>
+                                  </>
+                                ) : selectedImages.length === 1 ? (
+                                  <img
+                                    className='recipe-image-upload'
+                                    src={selectedImages[0]}
+                                    alt="Selected"
+                                  />
+                                ) : (
+                                    <Carousel id='carousel' images={selectedImages} fromAddRecipe={true} />
+                                )}
+                              </div>
 
                             </div>
 
@@ -698,7 +715,7 @@ const AddRecipe = () => {
 
                                 </div>
                             </div>
-                            
+
                         </div>
 
                         <div className='tags-section'>

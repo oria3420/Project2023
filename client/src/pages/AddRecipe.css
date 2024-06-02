@@ -196,7 +196,7 @@
     font-size: 16px;
 }
 
-.recipe-image {
+.recipe-image-upload {
     border-radius: var(--image-border-radius);
     width: 100%;
     height: 100%;
