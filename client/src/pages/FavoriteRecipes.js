@@ -2,6 +2,7 @@ import Navbar from '../components/Navbar';
 import RecipeCard from '../components/RecipeCard';
 import './App.css';
 import './FavoriteRecipes.css'
+import './AddRecipe.css'
 import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
@@ -67,7 +68,6 @@ const FavoriteRecipes = () => {
                     <Loading />
                 ) : (
                     <>
-
                         <div className='favorites-head'>
                             <div className='fav-head-img-container'>
                                 <img className='fav-head-img' src='../images/favorites-head.jpg' alt='favorites-head' />
@@ -83,12 +83,22 @@ const FavoriteRecipes = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className='favorites-recipes-container' >
-                            {favoritesRecipes.map((recipe, index) => (
-                                <div className='recipe-card-wrapper' key={index}>
-                                    <RecipeCard recipe={recipe} user={user} onLikeToggle={handleLikeToggle} />
+                        <div className='favorites-page-bottom'>
+                            <label id='black-title-fav' className='black-title'>Favorites</label>
+                            {favoritesRecipes.length === 0 ? (
+                                <div className='no-fav-msg'>
+                                    <p className='no-fav-msg-first'>You have no favorite recipes yet!</p>                                  
+                                    <p className='no-fav-msg-second'>Any recipe you favorite will appear here</p>
                                 </div>
-                            ))}
+                            ) : (
+                                <div className='favorites-recipes-container'>
+                                    {favoritesRecipes.map((recipe, index) => (
+                                        <div id="fav-card" className='recipe-card-wrapper' key={index}>
+                                            <RecipeCard recipe={recipe} user={user} onLikeToggle={handleLikeToggle} />
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                     </>

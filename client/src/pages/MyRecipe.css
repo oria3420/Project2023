@@ -1,0 +1,21 @@
+
+@import url('../components/Components.css');
+
+.my-recipes-main-container{
+    margin-top: var(--navbar-height);
+    display: flex;
+    flex-direction: column;
+}
+
+.my-recipes-head-img-container{
+    width: 100%;
+}
+
+.my-recipes-head-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Cover the container without distorting */
+    object-position: top left;
+    /* Start from the top left corner */
+}

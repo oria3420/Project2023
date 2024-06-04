@@ -471,7 +471,7 @@ const AddRecipe = () => {
                                 ) : selectedImages.length === 1 ? (
                                   <img
                                     className='recipe-image-upload'
-                                    src={selectedImages[0]}
+                                    src={URL.createObjectURL(selectedImages[0])}
                                     alt="Selected"
                                   />
                                 ) : (
