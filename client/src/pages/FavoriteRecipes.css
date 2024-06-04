@@ -1,0 +1,52 @@
+@import url('../components/Components.css');
+
+.favorites-main-container {
+    margin-top: var(--navbar-height);
+    display: flex;
+    flex-direction: column;
+}
+
+.favorites-head {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 500px;
+}
+
+.fav-head-img-container {
+    width: 50%;
+    /* Increase the width to 70% */
+    height: 100%;
+    overflow: hidden;
+    /* Ensure no overflow */
+}
+
+.fav-head-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the container without distorting */
+    object-position: top left; /* Start from the top left corner */
+}
+
+.fav-head-title-container {
+    background-color: #FCF0D6;
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.favorites-title {
+    color: #595959;
+    font-size: 70px;
+}
+
+.fav-title-heart {
+    margin-top: 90px;
+    font-size: 110px;
+}
+
+.favorites-recipes-container {}

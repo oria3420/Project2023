@@ -141,11 +141,6 @@ const AddRecipe = () => {
         }
     }, [user]);
 
-    // const handleImageChange = (event) => {
-    //     const files = Array.from(event.target.files);
-    //     setSelectedImages(prevImages => [...prevImages, ...files]);
-    // };
-    
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
         setSelectedImages(prevImages => [...prevImages, ...files]); // Store files
@@ -179,16 +174,6 @@ const AddRecipe = () => {
             // Update state with the modified recipeIngredients array
             setRecipeIngredients(updatedRecipeIngredients);
 
-            // const kosherCategoryIds = Object.keys(recipeCategories['kosher_categories'] || {});
-            // const isKosherCategoryValid = kosherCategoryIds.some(
-            //     (checkboxId) => recipeCategories['kosher_categories'][checkboxId]
-            // );
-
-            // if (!isKosherCategoryValid) {
-            //     setErrorMessage('Please select at least one checkbox in kosher_categories');
-            //     return;
-            // }
-            // setErrorMessage('');
             console.log('Form Data:', {
                 recipeName,
                 selectedImages,
@@ -201,16 +186,16 @@ const AddRecipe = () => {
                 recipeInstructions: instructions,
                 recipeCategories,
             });
-            // setRecipeName('');
-            // setSelectedImages([]);
-            // setCookTime('00:00');
-            // setPrepTime('00:00');
-            // setSelectedCategory('');
-            // setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
-            // setDescription('');
-            // setRecipeYield('');
-            // setInstructions(['']);
-            // setRecipeCategories({});
+            setRecipeName('');
+            setSelectedImages([]);
+            setCookTime('00:00');
+            setPrepTime('00:00');
+            setSelectedCategory('');
+            setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
+            setDescription('');
+            setRecipeYield('');
+            setInstructions(['']);
+            setRecipeCategories({});
             const formData = new FormData();
             selectedImages.forEach((file, index) => {
                 console.log(file)

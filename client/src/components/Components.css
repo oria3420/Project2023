@@ -2,11 +2,12 @@
 
 :root{
   --font-size: 15px;
+  --navbar-height: 76px;
 }
 
 .our-navbar {
   background-color: rgb(26, 26, 26);
-  height: 76px;
+  height: var(--navbar-height);
   color: white !important;
   position: fixed;
   top: 0;

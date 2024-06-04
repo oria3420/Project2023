@@ -556,12 +556,12 @@ app.get('/api/favorites/:userId', async (req, res) => {
       return;
     }
 
-    // console.log('Favorites:', favorites);
+    console.log('Favorites:', favorites);
     const recipeIds = favorites.map(favorite => favorite.recipe_id);
     // console.log('Recipe IDs:', recipeIds);
     // Find the actual recipe documents using the recipe IDs
     const favoriteRecipes = await Recipe.find({ RecipeId: { $in: recipeIds } });
-    // console.log(favoriteRecipes)
+    console.log("favoriteRecipes: ", favoriteRecipes)
     res.json(favoriteRecipes);
   } catch (error) {
     console.error(error);
