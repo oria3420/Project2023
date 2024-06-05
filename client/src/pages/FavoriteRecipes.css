@@ -31,7 +31,7 @@
 }
 
 .fav-head-title-container {
-    background-color: #FCF0D6;
+    background-color: var(--head-color);
     height: 100%;
     width: 50%;
     display: flex;
