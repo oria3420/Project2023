@@ -3,6 +3,7 @@ import RecipeCard from '../components/RecipeCard';
 import './App.css';
 import './MyRecipe.css';
 import './FavoriteRecipes.css';
+import './AddRecipe.css'
 import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
@@ -45,26 +46,32 @@ const MyRecipes = () => {
                 <div className='my-recipes-head'>
                     <div className='my-recipes-img-container'>
                         <img className='my-recipes-head-img' src='../images/my-recipes-head.jpg' alt='my-recipes-head' />
+                        <div className='hat-title'>
+                            <img className='my-recipes-hat' src='../images/chef-hat.png' alt='chef-hat' />
+                            <p className='my-recipes-title'>
+                                My Recipes
+                            </p>
+                        </div>
                     </div>
-                    <div className='my-recipes-title'>
-                        title
-                    </div>
+
                 </div>
-                <div className='search-recipe-container'>
-                    <div className='recipes-container'>
-                        {recipes.length > 0 ? (
-                            recipes.map((recipe, index) => (
+                <div className='favorites-page-bottom'>
+                    <label id='black-title-fav' className='black-title'>My Recipes</label>
+
+                    {recipes.length === 0 ? (
+                        <div className='no-fav-msg'>
+                            <p>It looks like you haven't created any recipes yet. Are you secretly ordering takeout every night?</p>
+                            <p>Time to put on your chef hat and start whipping up something delicious!</p>
+                        </div>
+                    ) : (
+                        <div className='favorites-recipes-container'>
+                            {recipes.map((recipe, index) => (
                                 <div className='recipe-card-wrapper' key={index}>
                                     <RecipeCard recipe={recipe} user={user} />
                                 </div>
-                            ))
-                        ) : (
-                            <div className='no-recipes-message'>
-                                <p>Oops! It looks like you haven't created any recipes yet. Are you secretly ordering takeout every night?</p>
-                                <p>Time to put on your chef hat and start whipping up something delicious!</p>
-                            </div>
-                        )}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
