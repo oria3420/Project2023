@@ -1,5 +1,5 @@
 
-@import url('../components/Components.css');
+@import url('./Global.css');
 
 .trending-main-container{
     margin-top: var(--navbar-height);
@@ -39,7 +39,7 @@
 }
 
 .trending-title{
-    color: #595959;
+    color: var(--gray-text-color);
     font-size: 75px;
 }
 
@@ -67,7 +67,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50px;
-    color: #595959;
+    color: var(--gray-text-color);;
     text-align: center;
     display: flex;
     justify-content: center;

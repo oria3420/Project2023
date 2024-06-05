@@ -4,6 +4,7 @@ import StarRating from '../components/StarRating';
 import './App.css';
 import './Trending.css'
 import './FavoriteRecipes.css'
+import './AddRecipe.css'
 import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'

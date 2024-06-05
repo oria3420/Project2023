@@ -1,0 +1,41 @@
+@import url('./Global.css');
+
+.ing-page-main-container{
+    margin-top: var(--navbar-height);
+}
+
+.ing-page-head{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--head-color);
+    height: 400px;
+}
+
+.ing-page-main-title{
+    margin-top: -40px;
+    color: var(--gray-text-color);
+    font-size: 60px;
+}
+
+.ing-page-sub-title{
+ color: var(--gray-text-color);
+ margin-top: 20px;
+ font-size: 20px;
+}
+
+.ing-page-search-container{
+    display: flex;
+    justify-content: space-between; /* Optional: Adjust spacing between divs */
+    align-items: center; /* Optional: Aligns items vertically */
+}
+
+.ing-page-bottom{
+    border: 1px solid var(--gray-frame);
+    height: fit-content;
+    margin: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}

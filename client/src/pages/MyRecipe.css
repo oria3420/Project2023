@@ -1,5 +1,5 @@
 
-@import url('../components/Components.css');
+@import url('./Global.css');
 
 .my-recipes-main-container{
     margin-top: var(--navbar-height);
