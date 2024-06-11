@@ -1,10 +1,10 @@
 @import url('./Global.css');
 
-.ing-page-main-container{
+.ing-page-main-container {
     margin-top: var(--navbar-height);
 }
 
-.ing-page-head{
+.ing-page-head {
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -14,32 +14,32 @@
     height: 400px;
 }
 
-.ing-page-main-title{
+.ing-page-main-title {
     margin-top: -40px;
     color: var(--gray-text-color);
     font-size: 60px;
 }
 
-.ing-page-sub-title{
- color: var(--gray-text-color);
- margin-top: 20px;
- font-size: 20px;
+.ing-page-sub-title {
+    color: var(--gray-text-color);
+    margin-top: 20px;
+    font-size: 20px;
 }
 
-.ing-page-search-container{
+.ing-page-search-container {
     display: flex;
-    justify-content: space-between; /* Optional: Adjust spacing between divs */
-    align-items: center; /* Optional: Aligns items vertically */
+    justify-content: space-between;
+    /* Optional: Adjust spacing between divs */
+    align-items: center;
+    /* Optional: Aligns items vertically */
     margin-top: 40px;
     margin-left: 60px;
 }
 
-.ing-page-bottom{
-    border: 1px solid var(--gray-frame);
-    height: fit-content;
+.ing-page-bottom {
+    display: flex;
+    flex-direction: column;
     margin: 20px;
-    padding-left: 20px;
-    padding-right: 20px;
 }
 
 .grocery-list {
@@ -75,8 +75,10 @@
     color: orange;
 }
 
-.groceries-list-container{
+.groceries-list-container {
     padding: 20px;
+    border: 1px solid var(--gray-frame);
+    height: fit-content;
 }
 
 .search-ing-input-container {
@@ -94,15 +96,48 @@
     background-color: transparent;
 }
 
-.ing-alrady-exists-msg{
+.ing-alrady-exists-msg {
     color: red;
     margin-top: 10px;
 }
 
-.empty-grocery-list-message{
+.empty-grocery-list-message {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     height: 105px;
+}
+
+.grocery-list-buttons {
+    align-self: flex-end;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.clear-all-groceies-btn,
+.find-recipes-groceies-btn {
+    border-color: orange;
+    border-radius: 40px;
+    color: orange;
+    background-color: white;
+    border: 1px solid;
+    font-weight: bold;
+    width: 150px;
+    height: 35px;
+    margin-right: 15px;
+}
+
+.clear-all-groceies-btn {
+    color: orange;
+    background-color: white;
+    margin-right: 15px;
+}
+
+.find-recipes-groceies-btn {
+    color: white;
+    background-color: orange;
 }

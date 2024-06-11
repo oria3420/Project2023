@@ -107,6 +107,9 @@ const Groceries = () => {
     setGroceryList(updatedList);
   };
 
+  const handleClearAll = () => {
+    setGroceryList([]);
+  };
 
   return (
     <div>
@@ -185,11 +188,21 @@ const Groceries = () => {
                 ))}
               </div>
             )}
-
-
           </div>
 
+          <div className='grocery-list-buttons'>
+            <button className='clear-all-groceies-btn' onClick={handleClearAll}>
+              Clear All
+            </button>
+            <button className='find-recipes-groceies-btn' onClick={handleClearAll}>
+              Find Recipes
+            </button>
+          </div>
+
+
         </div>
+
+
 
       </div>
 
