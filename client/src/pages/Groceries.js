@@ -101,41 +101,51 @@ const Groceries = () => {
 
 
           <div className='ing-page-search-container'>
-            <div className="custom-dropdown">
+
+            <div className="search-ing-input-container">
+
               <input
-                className='select-ingredients'
+                className='input-field grocery-input'
                 type="text"
                 placeholder="Add ingredient"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
+
+              {searchTerm.length >= 3 && (
+                <div className="ingredient-suggestions">
+                  <div className='toggle-bar'>
+                    {filteredIngredients.map((ingredient) => (
+                      <div
+                        key={ingredient.id}
+                        className="dropdown-item"
+                        onClick={() => {
+                          setSearchTerm(ingredient.ingredient);
+                          setSelectedIngredient({
+                            id: ingredient.id,
+                            ingredient: ingredient.ingredient,
+                          });
+                        }}
+                      >
+                        {ingredient.ingredient}
+                      </div>
+
+                    ))}
+                  </div>
+                </div>
+              )}
+
             </div>
 
-            <button onClick={handleAddToGroceryList} className='add-btn-add-recipe'>
+            <button onClick={handleAddToGroceryList} className='add-btn-grocery'>
               <i className="bi bi-plus-circle add-icon"></i>
             </button>
 
           </div>
 
-          {searchTerm.length >= 3 && (
-            <div className="dropdown-ingredient">
-              {filteredIngredients.map((ingredient) => (
-                <div
-                  key={ingredient.id}
-                  className="dropdown-item"
-                  onClick={() => {
-                    setSearchTerm(ingredient.ingredient);
-                    setSelectedIngredient({
-                      id: ingredient.id,
-                      ingredient: ingredient.ingredient,
-                    });
-                  }}
-                >
-                  {ingredient.ingredient}
-                </div>
-              ))}
-            </div>
-          )}
+
+
+
         </div>
 
         <div className='ing-page-bottom'>

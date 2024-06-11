@@ -30,6 +30,8 @@
     display: flex;
     justify-content: space-between; /* Optional: Adjust spacing between divs */
     align-items: center; /* Optional: Aligns items vertically */
+    margin-top: 40px;
+    margin-left: 60px;
 }
 
 .ing-page-bottom{
@@ -75,4 +77,18 @@
 
 .groceries-list-container{
     padding: 20px;
+}
+
+.search-ing-input-container {
+    position: relative;
+    margin-right: 10px;
+}
+
+.grocery-input {
+    width: 400px;
+}
+
+.add-btn-grocery {
+    border: none;
+    background-color: transparent;
 }
