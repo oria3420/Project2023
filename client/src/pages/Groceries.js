@@ -99,6 +99,7 @@ const Groceries = () => {
             Cook delicious meals using ingredients you already have at home
           </div>
 
+
           <div className='ing-page-search-container'>
             <div className="custom-dropdown">
               <input
@@ -139,8 +140,28 @@ const Groceries = () => {
 
         <div className='ing-page-bottom'>
 
-          <div className='groceries-list'>
+          <div className='groceries-list-container'>
             <div className='black-title'>Grocery List</div>
+
+            <div className='grocery-list'>
+              {groceryList.map((item, index) => (
+
+                <span key={index} className='ing-container'>
+                  <label className='ing-rec'>
+                    {item.ingredient}
+                  </label>
+                  <i
+                    className='bi bi-x-circle remove-icon remove-ing'
+                    onClick={() => handleDeleteFromGroceryList(item.id)}
+                  ></i>
+                </span>
+
+              )
+              )}
+
+            </div>
+
+            {/*
             <ul>
               {groceryList.map((item, index) => (
                 <li key={index}>
@@ -149,6 +170,8 @@ const Groceries = () => {
                 </li>
               ))}
             </ul>
+            */}
+
           </div>
 
         </div>
