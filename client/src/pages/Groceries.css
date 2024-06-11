@@ -93,3 +93,16 @@
     border: none;
     background-color: transparent;
 }
+
+.ing-alrady-exists-msg{
+    color: red;
+    margin-top: 10px;
+}
+
+.empty-grocery-list-message{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 105px;
+}

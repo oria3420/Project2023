@@ -15,9 +15,11 @@ const Groceries = () => {
   const [groceryList, setGroceryList] = useState([]);
   const [ingredient, setIngredient] = useState('');
   const [suggestions, setSuggestions] = useState([]);
+  const [alertMessage, setAlertMessage] = useState('');
 
   const handleIngredientChange = (value) => {
     setIngredient(value);
+    setAlertMessage('');
     updateIngredientSuggestions(value);
   };
 
@@ -69,16 +71,24 @@ const Groceries = () => {
 
   const handleAddToGroceryList = () => {
     if (ingredient) {
-      const newItem = {
-        id: new Date().getTime(), // Assuming you need a unique id
-        ingredient: ingredient,
-      };
-      setGroceryList([...groceryList, newItem]);
-      // Clear the input fields after adding to the list
-      setIngredient('');
-      setSuggestions([]);
+      const itemExists = groceryList.some(item => item.ingredient.toLowerCase() === ingredient.toLowerCase());
+
+      if (itemExists) {
+        setAlertMessage(`The ingredient "${ingredient}" is already in your grocery list.`);
+      } else {
+        const newItem = {
+          id: new Date().getTime(), // Assuming you need a unique id
+          ingredient: ingredient,
+        };
+        setGroceryList([...groceryList, newItem]);
+        // Clear the input fields after adding to the list
+        setIngredient('');
+        setSuggestions([]);
+        setAlertMessage(''); // Clear any previous alert messages
+      }
     }
   };
+
   useEffect(() => {
     // Load grocery list from local storage when the component mounts
     const storedGroceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
@@ -96,7 +106,6 @@ const Groceries = () => {
     const updatedList = groceryList.filter((item) => item.id !== id);
     setGroceryList(updatedList);
   };
-
 
 
   return (
@@ -125,7 +134,6 @@ const Groceries = () => {
                 placeholder="Add ingredient"
                 value={ingredient}
                 onChange={(e) => handleIngredientChange(e.target.value)}
-                required
               />
               {suggestions.length > 0 && (
                 <div className='ingredient-suggestions'>
@@ -140,14 +148,15 @@ const Groceries = () => {
                   </div>
                 </div>
               )}
-              
+
             </div>
 
             <button onClick={handleAddToGroceryList} className='add-btn-grocery'>
               <i className="bi bi-plus-circle add-icon"></i>
             </button>
-
           </div>
+
+          {alertMessage && <div className="ing-alrady-exists-msg">{alertMessage}</div>}
 
         </div>
 
@@ -156,34 +165,27 @@ const Groceries = () => {
           <div className='groceries-list-container'>
             <div className='black-title'>Grocery List</div>
 
-            <div className='grocery-list'>
-              {groceryList.map((item, index) => (
 
-                <span key={index} className='ing-container'>
-                  <label className='ing-rec'>
-                    {item.ingredient}
-                  </label>
-                  <i
-                    className='bi bi-x-circle remove-icon remove-ing'
-                    onClick={() => handleDeleteFromGroceryList(item.id)}
-                  ></i>
-                </span>
+            {groceryList.length === 0 ? (
+              <div className='empty-grocery-list-message'>
+                Your grocery list is empty.
+              </div>
+            ) : (
+              <div className='grocery-list'>{
+                groceryList.map((item, index) => (
+                  <span key={index} className='ing-container'>
+                    <label className='ing-rec'>
+                      {item.ingredient}
+                    </label>
+                    <i
+                      className='bi bi-x-circle remove-icon remove-ing'
+                      onClick={() => handleDeleteFromGroceryList(item.id)}
+                    ></i>
+                  </span>
+                ))}
+              </div>
+            )}
 
-              )
-              )}
-
-            </div>
-
-            {/*
-            <ul>
-              {groceryList.map((item, index) => (
-                <li key={index}>
-                  {item.ingredient}
-                  <button onClick={() => handleDeleteFromGroceryList(item.id)}>Delete</button>
-                </li>
-              ))}
-            </ul>
-            */}
 
           </div>
 
