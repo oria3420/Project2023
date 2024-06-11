@@ -12,10 +12,34 @@ const Groceries = () => {
   const [name, setName] = useState(null)
   const [user, setUser] = useState(null)
   const [ingredients, setIngredients] = useState([])
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredIngredients, setFilteredIngredients] = useState([]);
-  const [selectedIngredient, setSelectedIngredient] = useState({});
   const [groceryList, setGroceryList] = useState([]);
+  const [ingredient, setIngredient] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+
+  const handleIngredientChange = (value) => {
+    setIngredient(value);
+    updateIngredientSuggestions(value);
+  };
+
+  const updateIngredientSuggestions = (inputValue) => {
+    if (inputValue.length >= 3) {
+      const filteredIngredients = ingredients
+        .filter((ingred) =>
+          typeof ingred.ingredient === 'string' &&
+          ingred.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
+        )
+        .map((ingred) => ingred.ingredient);
+
+      setSuggestions(filteredIngredients);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setIngredient(suggestion);
+    setSuggestions([]);
+  };
 
 
   useEffect(() => {
@@ -42,19 +66,19 @@ const Groceries = () => {
     }
   }, [user]);
 
-  useEffect(() => {
-    if (searchTerm.length >= 3) {
-      const filtered = ingredients.filter((ingred) =>
-        ingred && ingred.ingredient
-          ? ingred.ingredient.toLowerCase().includes(searchTerm.toLowerCase())
-          : false
-      );
-      setFilteredIngredients(filtered);
-    } else {
-      setFilteredIngredients([]);
-    }
-  }, [searchTerm, ingredients]);
 
+  const handleAddToGroceryList = () => {
+    if (ingredient) {
+      const newItem = {
+        id: new Date().getTime(), // Assuming you need a unique id
+        ingredient: ingredient,
+      };
+      setGroceryList([...groceryList, newItem]);
+      // Clear the input fields after adding to the list
+      setIngredient('');
+      setSuggestions([]);
+    }
+  };
   useEffect(() => {
     // Load grocery list from local storage when the component mounts
     const storedGroceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
@@ -66,23 +90,14 @@ const Groceries = () => {
     localStorage.setItem('groceryList', JSON.stringify(groceryList));
   }, [groceryList]);
 
-  const handleAddToGroceryList = () => {
-    if (selectedIngredient) {
-      const newItem = {
-        id: selectedIngredient.id,
-        ingredient: selectedIngredient.ingredient,
-      };
-      setGroceryList([...groceryList, newItem]);
-      // Clear the input fields after adding to the list
-      setSelectedIngredient({});
-      setSearchTerm('');
-    }
-  };
+
 
   const handleDeleteFromGroceryList = (id) => {
     const updatedList = groceryList.filter((item) => item.id !== id);
     setGroceryList(updatedList);
   };
+
+
 
   return (
     <div>
@@ -108,33 +123,24 @@ const Groceries = () => {
                 className='input-field grocery-input'
                 type="text"
                 placeholder="Add ingredient"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={ingredient}
+                onChange={(e) => handleIngredientChange(e.target.value)}
+                required
               />
-
-              {searchTerm.length >= 3 && (
-                <div className="ingredient-suggestions">
+              {suggestions.length > 0 && (
+                <div className='ingredient-suggestions'>
                   <div className='toggle-bar'>
-                    {filteredIngredients.map((ingredient) => (
-                      <div
-                        key={ingredient.id}
-                        className="dropdown-item"
-                        onClick={() => {
-                          setSearchTerm(ingredient.ingredient);
-                          setSelectedIngredient({
-                            id: ingredient.id,
-                            ingredient: ingredient.ingredient,
-                          });
-                        }}
-                      >
-                        {ingredient.ingredient}
-                      </div>
-
-                    ))}
+                    <ul>
+                      {suggestions.map((suggestion, index) => (
+                        <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               )}
-
+              
             </div>
 
             <button onClick={handleAddToGroceryList} className='add-btn-grocery'>
@@ -142,9 +148,6 @@ const Groceries = () => {
             </button>
 
           </div>
-
-
-
 
         </div>
 
@@ -186,8 +189,9 @@ const Groceries = () => {
 
         </div>
 
-
       </div>
+
+
     </div>
   );
 };
