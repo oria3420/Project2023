@@ -2,7 +2,7 @@ import Navbar from '../components/Navbar';
 import './App.css';
 import './Groceries.css'
 import './AddRecipe.css'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 import './Connect.css';
@@ -16,6 +16,7 @@ const Groceries = () => {
   const [ingredient, setIngredient] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [alertMessage, setAlertMessage] = useState('');
+  const suggestionsRef = useRef(null);
 
   const handleIngredientChange = (value) => {
     setIngredient(value);
@@ -68,18 +69,36 @@ const Groceries = () => {
     }
   }, [user]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+        setSuggestions([]);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
 
   const handleAddToGroceryList = () => {
     if (ingredient) {
-      const itemExists = groceryList.some(item => item.ingredient.toLowerCase() === ingredient.toLowerCase());
-
+      const normalizedIngredient = ingredient.toLowerCase();
+      const itemExists = groceryList.some(item => item.ingredient.toLowerCase() === normalizedIngredient);
+      const ingredientExistsInDB = ingredients.find(ingred => ingred.ingredient.toLowerCase() === normalizedIngredient);
+  
       if (itemExists) {
         setAlertMessage(`The ingredient "${ingredient}" is already in your grocery list.`);
+      } else if (!ingredientExistsInDB) {
+        setAlertMessage(`The ingredient "${ingredient}" does not exist.`);
       } else {
         const newItem = {
-          id: new Date().getTime(), // Assuming you need a unique id
-          ingredient: ingredient,
+          id: ingredientExistsInDB.id, // Use the ID from the matched ingredient in the database
+          ingredient: ingredientExistsInDB.ingredient, // Use the normalized name from the database
         };
+        console.log(newItem)
         setGroceryList([...groceryList, newItem]);
         // Clear the input fields after adding to the list
         setIngredient('');
@@ -88,6 +107,8 @@ const Groceries = () => {
       }
     }
   };
+  
+
 
   useEffect(() => {
     // Load grocery list from local storage when the component mounts
@@ -110,6 +131,22 @@ const Groceries = () => {
   const handleClearAll = () => {
     setGroceryList([]);
   };
+
+  const handleInputFocus = (inputValue) => {
+    if (inputValue.length >= 3) {
+      const filteredIngredients = ingredients
+        .filter((ingred) =>
+          typeof ingred.ingredient === 'string' &&
+          ingred.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
+        )
+        .map((ingred) => ingred.ingredient);
+  
+      setSuggestions(filteredIngredients);
+    } else {
+      setSuggestions([]);
+    }
+  };
+  
 
   return (
     <div>
@@ -137,9 +174,10 @@ const Groceries = () => {
                 placeholder="Add ingredient"
                 value={ingredient}
                 onChange={(e) => handleIngredientChange(e.target.value)}
+                onFocus={(e) => handleInputFocus(e.target.value)}
               />
               {suggestions.length > 0 && (
-                <div className='ingredient-suggestions'>
+                <div className='ingredient-suggestions' ref={suggestionsRef}>
                   <div className='toggle-bar'>
                     <ul>
                       {suggestions.map((suggestion, index) => (
