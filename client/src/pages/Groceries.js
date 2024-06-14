@@ -1,4 +1,5 @@
 import Navbar from '../components/Navbar';
+import RecipeCard from '../components/RecipeCard';
 import './App.css';
 import './Groceries.css'
 import './AddRecipe.css'
@@ -15,12 +16,116 @@ const Groceries = () => {
   const [groceryList, setGroceryList] = useState([]);
   const [ingredient, setIngredient] = useState('');
   const [suggestions, setSuggestions] = useState([]);
-  const [alertMessage, setAlertMessage] = useState('');
+  const [inputAlertMessage, setInputAlertMessage] = useState('');
+  const [searchAlertMessage, setSearchAlertMessage] = useState(false);
+  const [recipes, setRecipes] = useState([]);
+  const [filteredRecipes, setFilteredRecipes] = useState([]);
+  const [searchClicked, setSearchClicked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [shouldScrollToResults, setShouldScrollToResults] = useState(false);
+  const [shouldScrollToAlert, setShouldScrollToAlert] = useState(false);
+
+  const searchAlertRef = useRef(null);
+  const resultsRef = useRef(null);
   const suggestionsRef = useRef(null);
+
+
+  useEffect(() => {
+    fetch(`http://localhost:1337/api/table/recipes`)
+      .then((res) => res.json())
+      .then((data) => {
+        setRecipes(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  useEffect(() => {
+    if (shouldScrollToResults && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: 'smooth' });
+      setShouldScrollToResults(false); // Reset scroll state
+    }
+  }, [shouldScrollToResults, resultsRef]);
+
+  useEffect(() => {
+    if (shouldScrollToAlert && searchAlertRef.current) {
+      searchAlertRef.current.scrollIntoView({ behavior: 'smooth' });
+      setShouldScrollToAlert(false); // Reset scroll state
+    }
+  }, [shouldScrollToAlert, searchAlertRef]);
+  
+  const filterRecipesByGroceryList = async () => {
+    console.log("in filterRecipesByGroceryList");
+
+    if (groceryList.length === 0) {
+      console.log('Grocery list is empty');
+      setSearchAlertMessage(true);
+      setFilteredRecipes([]); // Clear any previous results
+      setSearchClicked(false); // Ensure the results section does not show
+      setShouldScrollToAlert(true); // Trigger scroll to alert
+      setIsLoading(false); // Ensure loading stops
+
+      setShouldScrollToResults(false); // Reset scroll state
+
+      // Scroll to alert message
+      searchAlertRef.current.scrollIntoView({ behavior: 'smooth' });
+      return;
+    }
+
+    setSearchClicked(true); // Set the state to true when the button is clicked
+    setIsLoading(true); // Start loading
+    setSearchAlertMessage(false);
+    setShouldScrollToResults(true); // Trigger scroll to results
+
+    // Array to store filtered recipe IDs
+    const filteredRecipeIds = [];
+
+    // Use Promise.all with map to make the loops asynchronous
+    await Promise.all(
+      recipes.map(async (recipe) => {
+        console.log(`Checking recipe: ${recipe.RecipeId}`);
+        const ingredientMatches = await Promise.all(
+          groceryList.map(async (ingredient) => {
+            const ingredientId = ingredient.id;
+            try {
+              // Make a request to the server to check if the ingredient is in the recipe
+              const response = await fetch(`http://localhost:1337/api/search_recipes/${recipe.RecipeId}/${ingredientId}`);
+              console.log(`Response for ${ingredient.ingredient} in ${recipe.RecipeId}:`, response.status);
+
+              // Check if the status is 200 (ingredient is in the recipe)
+              return response.status === 200;
+            } catch (error) {
+              console.error('Error checking ingredient in recipe:', error);
+              return false;
+            }
+          })
+        );
+
+        // If all ingredients are matched, add the recipe ID to the filteredRecipeIds
+        if (ingredientMatches.every(match => match)) {
+          filteredRecipeIds.push(recipe.RecipeId);
+        }
+      })
+    );
+
+    // Log filteredRecipeIds for debugging
+    console.log('Filtered Recipe IDs:', filteredRecipeIds);
+
+    // Filter the recipes based on the IDs
+    const filteredRecipes = recipes.filter((recipe) => filteredRecipeIds.includes(recipe.RecipeId));
+    setFilteredRecipes(filteredRecipes);
+
+    // Log filteredRecipes for debugging
+    console.log('Filtered Recipes:', filteredRecipes);
+
+    setIsLoading(false); // Stop loading
+
+    // Scroll to results section
+
+  };
 
   const handleIngredientChange = (value) => {
     setIngredient(value);
-    setAlertMessage('');
+    setInputAlertMessage('');
     updateIngredientSuggestions(value);
   };
 
@@ -43,7 +148,6 @@ const Groceries = () => {
     setIngredient(suggestion);
     setSuggestions([]);
   };
-
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -82,33 +186,30 @@ const Groceries = () => {
     };
   }, []);
 
-
   const handleAddToGroceryList = () => {
     if (ingredient) {
       const normalizedIngredient = ingredient.toLowerCase();
       const itemExists = groceryList.some(item => item.ingredient.toLowerCase() === normalizedIngredient);
       const ingredientExistsInDB = ingredients.find(ingred => ingred.ingredient.toLowerCase() === normalizedIngredient);
-  
+
       if (itemExists) {
-        setAlertMessage(`The ingredient "${ingredient}" is already in your grocery list.`);
+        setInputAlertMessage(`The ingredient "${ingredient}" is already in your grocery list.`);
       } else if (!ingredientExistsInDB) {
-        setAlertMessage(`The ingredient "${ingredient}" does not exist.`);
+        setInputAlertMessage(`The ingredient "${ingredient}" does not exist.`);
       } else {
         const newItem = {
           id: ingredientExistsInDB.id, // Use the ID from the matched ingredient in the database
           ingredient: ingredientExistsInDB.ingredient, // Use the normalized name from the database
         };
-        console.log(newItem)
         setGroceryList([...groceryList, newItem]);
         // Clear the input fields after adding to the list
         setIngredient('');
         setSuggestions([]);
-        setAlertMessage(''); // Clear any previous alert messages
+        setInputAlertMessage(''); // Clear any previous alert messages
+        setSearchAlertMessage(false);
       }
     }
   };
-  
-
 
   useEffect(() => {
     // Load grocery list from local storage when the component mounts
@@ -140,13 +241,13 @@ const Groceries = () => {
           ingred.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
         )
         .map((ingred) => ingred.ingredient);
-  
+
       setSuggestions(filteredIngredients);
     } else {
       setSuggestions([]);
     }
   };
-  
+
 
   return (
     <div>
@@ -197,7 +298,7 @@ const Groceries = () => {
             </button>
           </div>
 
-          {alertMessage && <div className="ing-alrady-exists-msg">{alertMessage}</div>}
+          {inputAlertMessage && <div className="ing-alrady-exists-msg">{inputAlertMessage}</div>}
 
         </div>
 
@@ -232,16 +333,42 @@ const Groceries = () => {
             <button className='clear-all-groceies-btn' onClick={handleClearAll}>
               Clear All
             </button>
-            <button className='find-recipes-groceies-btn' onClick={handleClearAll}>
+            <button className='find-recipes-groceies-btn' onClick={filterRecipesByGroceryList}>
               Find Recipes
             </button>
+
           </div>
 
+          {searchAlertMessage && <div className="grocery-search-alert-message" ref={searchAlertRef}>
+            Please add ingredients
+            <br />
+            to your grocery list first.
+          </div>}
+
+          {searchClicked && (
+            <div className='recipes-by-grocery-container' ref={resultsRef}>
+              <div className='black-title'>Results</div>
+
+              {isLoading ? (
+                <div className="loading-message">
+                  <div className="loading-spinner"></div>
+                </div>
+              ) : filteredRecipes.length === 0 && searchClicked ? (
+                <p className="grocery-page-no-results-message">No results found.</p>
+              ) : (
+                <div className='recipes-by-grocery'>
+                  {filteredRecipes.map((recipe, index) => (
+                    <div className='recipe-card-wrapper' key={index}>
+                      <RecipeCard recipe={recipe} user={user} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+          )}
 
         </div>
-
-
-
       </div>
 
 

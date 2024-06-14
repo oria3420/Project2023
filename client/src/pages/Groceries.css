@@ -141,3 +141,58 @@
     color: white;
     background-color: orange;
 }
+
+.recipes-by-grocery-container {
+    margin-top: 40px;
+    padding: 20px;
+    border: 1px solid var(--gray-frame);
+    height: fit-content;
+}
+
+.recipes-by-grocery{
+    margin-top: 30px;
+    margin-left: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    /* Ensure items start from the left */
+    gap: 1.5%;
+}
+
+.grocery-page-no-results-message{
+    width: 100%;
+    text-align: center;
+    padding: 30px;
+}
+
+.loading-message{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: orange;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.grocery-search-alert-message{
+    margin-top: 15px;
+    margin-right: 5px;
+    color: red;
+    align-self: flex-end;
+    text-align: center;
+}

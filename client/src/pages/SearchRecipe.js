@@ -211,7 +211,6 @@ const SearchRecipe = () => {
     };
 
 
-
     return (
         <div>
             {name && <Navbar name={name} />}

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import StarRating from './StarRating';
 
 function InteractiveStarRating({ initialRating, onRatingSubmit, user_id, handleGuestClick }) {
     const [currentRating, setCurrentRating] = useState(initialRating);
