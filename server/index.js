@@ -568,15 +568,75 @@ app.get('/api/favorites/:userId', async (req, res) => {
     res.status(500).send('Error fetching favorites');
   }
 });
+    
+// app.get('/api/trending', async (req, res) => {
+//   //AggregatedRating
+//   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
+//   try {
+//     const topRecipes = await Recipe.find({})
+//       .sort({ AggregatedRating: -1 })
+//       .limit(10);
+
+//     res.json(topRecipes);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: 'An error occurred' });
+//   }
+// });
 
 app.get('/api/trending', async (req, res) => {
-  //AggregatedRating
-  const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
+  console.log("trending");
+  const Rating = Collection.getModel(TABLE_NAMES.RATINGS);
+
   try {
-    // Fetch the top 10 rated recipes in descending order of rating
-    const topRecipes = await Recipe.find({})
-      .sort({ AggregatedRating: -1 })
-      .limit(10);
+    const today = new Date();
+    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+    startOfWeek.setHours(0, 0, 0, 0);
+    const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    console.log('startOfWeek:', startOfWeek);
+    console.log('endOfWeek:', endOfWeek);
+
+    const topRecipes = await Rating.aggregate([
+      {
+        $match: {
+          date: { $gte: startOfWeek, $lt: endOfWeek }
+        }
+      },
+      {
+        $group: {
+          _id: '$recipe_id',
+          totalRating: { $sum: '$rating' },
+          ratingCount: { $sum: 1 }
+        }
+      },
+      {
+        $lookup: {
+          from: 'recipes', // Adjust this to your actual collection name
+          localField: '_id',
+          foreignField: 'RecipeId',
+          as: 'recipe'
+        }
+      },
+      {
+        $unwind: '$recipe'
+      },
+      {
+        $project: {
+          recipe: '$recipe', // Include the entire recipe object
+          averageRating: { $divide: ['$totalRating', '$ratingCount'] }
+        }
+      },
+      {
+        $sort: { averageRating: -1 }
+      },
+      {
+        $limit: 10
+      }
+    ]).exec();
+
+    console.log('topRecipes:', topRecipes);
 
     res.json(topRecipes);
   } catch (err) {
@@ -584,6 +644,8 @@ app.get('/api/trending', async (req, res) => {
     res.status(500).json({ error: 'An error occurred' });
   }
 });
+
+
 
 app.get('/api/groceries', async (req, res) => {
   const ingredient = Collection.getModel(TABLE_NAMES.INGREDIENTS);

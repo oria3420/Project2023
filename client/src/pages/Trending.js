@@ -43,10 +43,10 @@ const SearchRecipe = () => {
             .then(res => res.json())
             .then(data => {
                 setRecipes(data);
+                console.log("data: ", data)
             })
             .catch(error => console.error(error))
     }, []);
-
 
 
     return (
@@ -70,12 +70,14 @@ const SearchRecipe = () => {
                 <div className='favorites-page-bottom'>
                     <label id='black-title-fav' className='black-title'>Trennding</label>
                     <div className='trending-recipes-container'>
+
                         {recipes.map((recipe, index) => (
+    
                             <div className='trending-recipe'>
                                 <div className='recipe-card-wrapper card-trending' key={index}>
-                                    <RecipeCard recipe={recipe} user={user} />
+                                    <RecipeCard recipe={recipe.recipe} user={user} />
                                 </div>
-                                <StarRating rating={recipe.AggregatedRating} reviewCount={recipe.ReviewCount} />
+                                <StarRating rating={recipe.recipe.AggregatedRating} reviewCount={recipe.recipe.ReviewCount} />
                                 <div className='trending-index'>
                                 {console.log(recipe)}
                                     {index + 1}
