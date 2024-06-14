@@ -172,108 +172,64 @@ const SearchRecipe = () => {
     }, [checkedItems, filterRecipes]);
     console.log(name)
 
-    const filterRecipesByGroceryList = async () => {
-        // Check if there are ingredients in the groceryList
-        const groceryList = JSON.parse(localStorage.getItem('groceryList')) || [];
-        if (groceryList.length === 0) {
-            console.log('Grocery list is empty');
-            return;
-        }
-
-        // Array to store filtered recipe IDs
-        const filteredRecipeIds = [];
-
-        // Use Promise.all with map to make the loops asynchronous
-        await Promise.all(
-            filteredRecipesByName.map(async (recipe) => {
-                await Promise.all(
-                    groceryList.map(async (ingredient) => {
-                        const ingredientId = ingredient.id;
-                        try {
-                            // Make a request to the server to check if the ingredient is in the recipe
-                            const response = await fetch(`http://localhost:1337/api/search_recipes/${recipe.RecipeId}/${ingredientId}`);
-
-                            // Check if the status is 200 (ingredient is in the recipe)
-                            if (response.status === 200) {
-                                filteredRecipeIds.push(recipe.RecipeId);
-                            }
-                        } catch (error) {
-                            console.error('Error checking ingredient in recipe:', error);
-                        }
-                    })
-                );
-            })
-        );
-
-        // Filter the recipes based on the IDs
-        const filteredRecipes = filteredRecipesByName.filter((recipe) => filteredRecipeIds.includes(recipe.RecipeId));
-        setFilteredRecipes(filteredRecipes);
-    };
 
 
     return (
         <div>
             {name && <Navbar name={name} />}
-            
-                {loading ? (
-                    <Loading />
-                ) : (
-                    <div className='search-recipe-container'>
-                        <div className='filter-menu'>
-                            {Object.keys(categories)
-                                .sort((a, b) => a.localeCompare(b))
-                                .map((category) => {
-                                    const categoryName = category.slice(0, -11).replace(/_/g, ' ');
-                                    const words = categoryName.toLowerCase().split(" ");
-                                    const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
-                                    const capitalizedCategoryName = capitalizedWords.join(" ");
-                                    return (
-                                        <div className='category' key={category}>
-                                            <div className="category-header" onClick={() => toggleCategory(category)}>
-                                                <span className='category-title'>{capitalizedCategoryName}</span>
-                                                <button className="btn btn-light category-toggle-btn">
-                                                    {expandedCategories[category] ? (
-                                                        <i className="bi bi-chevron-up"></i>
-                                                    ) : (
-                                                        <i className="bi bi-chevron-down"></i>
-                                                    )}
-                                                </button>
-                                            </div>
-                                            {expandedCategories[category] && categories[category].sort((a, b) => (a[1] && b[1]) ? a[1].localeCompare(b[1]) : 0).map((value) => (
-                                                <div className="form-check" key={value}>
-                                                    <input className="form-check-input" type="checkbox" id="check-box" defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
-                                                    <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    );
-                                })}
-                                {name === 'Guest' && user === null ? ( 
-                                    <div></div>                           
-                            ):(
-                                <button className="btn btn-primary grocery-btn" onClick={filterRecipesByGroceryList}>
-                                Filter by Grocery List
-                                </button>
-                            )}
-                        </div>
 
-                        <div className='recipes-container'>
-                            {filteredRecipes.length === 0 ? (
-                                searchTerm !== "" ? (
-                                    <p className="no-results-message">No results found for: "{searchTerm}".</p>
-                                ) : (
-                                    <p className="no-results-message">No results found.</p>
-                                )
-                            ) : (
-                                filteredRecipes.map((recipe, index) => (
-                                    <div className='recipe-card-wrapper' key={index}>
-                                        <RecipeCard recipe={recipe} user={user} />
+            {loading ? (
+                <Loading />
+            ) : (
+                <div className='search-recipe-container'>
+                    <div className='filter-menu'>
+                        {Object.keys(categories)
+                            .sort((a, b) => a.localeCompare(b))
+                            .map((category) => {
+                                const categoryName = category.slice(0, -11).replace(/_/g, ' ');
+                                const words = categoryName.toLowerCase().split(" ");
+                                const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1));
+                                const capitalizedCategoryName = capitalizedWords.join(" ");
+                                return (
+                                    <div className='category' key={category}>
+                                        <div className="category-header" onClick={() => toggleCategory(category)}>
+                                            <span className='category-title'>{capitalizedCategoryName}</span>
+                                            <button className="btn btn-light category-toggle-btn">
+                                                {expandedCategories[category] ? (
+                                                    <i className="bi bi-chevron-up"></i>
+                                                ) : (
+                                                    <i className="bi bi-chevron-down"></i>
+                                                )}
+                                            </button>
+                                        </div>
+                                        {expandedCategories[category] && categories[category].sort((a, b) => (a[1] && b[1]) ? a[1].localeCompare(b[1]) : 0).map((value) => (
+                                            <div className="form-check" key={value}>
+                                                <input className="form-check-input" type="checkbox" id="check-box" defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
+                                                <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))
-                            )}
-                        </div>
+                                );
+                            })}
                     </div>
-                )}
+
+                    <div className='recipes-container'>
+                        {filteredRecipes.length === 0 ? (
+                            searchTerm !== "" ? (
+                                <p className="no-results-message">No results found for: "{searchTerm}".</p>
+                            ) : (
+                                <p className="no-results-message">No results found.</p>
+                            )
+                        ) : (
+                            filteredRecipes.map((recipe, index) => (
+                                <div className='recipe-card-wrapper' key={index}>
+                                    <RecipeCard recipe={recipe} user={user} />
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }
