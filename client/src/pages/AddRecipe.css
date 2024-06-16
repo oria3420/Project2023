@@ -296,13 +296,10 @@
 }
 
 .toggle-bar {
-    height: 200px;
-    /* Adjust the height of the toggle bar */
     border-radius: 5px;
     cursor: pointer;
     position: relative;
     margin-bottom: 5px;
-    /* Adjust spacing between suggestions and toggle bar */
 }
 
 

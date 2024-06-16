@@ -147,7 +147,7 @@ const FavoriteRecipes = () => {
 
                                 </div>
                                 {suggestions.length > 0 && (
-                                    <div className='ingredient-suggestions' ref={suggestionsRef}>
+                                    <div className='fav-suggestions' ref={suggestionsRef}>
                                         <div className='toggle-bar'>
                                             <ul>
                                                 {suggestions.map((suggestion, index) => (
