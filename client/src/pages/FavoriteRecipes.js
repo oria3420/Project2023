@@ -21,30 +21,30 @@ const FavoriteRecipes = () => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const suggestionsRef = useRef(null);
 
-    const handleSaerchChange = (value) => {
-        setSearchRecipe(value);
-        updateRecipesSuggestions(value);
-    };
 
-    const updateRecipesSuggestions = (inputValue) => {
-        if (inputValue.length >= 3) {
-            const suggestedRecipes = favoritesRecipes
+    const handleSearchChange = (value) => {
+        setSearchRecipe(value);
+        if (value.length >= 3) {
+            const suggestedRecipeNames = favoritesRecipes
                 .filter((recipe) =>
                     typeof recipe.Name === 'string' &&
-                    recipe.Name.toLowerCase().includes(inputValue.toLowerCase())
+                    recipe.Name.toLowerCase().includes(value.toLowerCase())
                 )
                 .map((recipe) => recipe.Name);
-
-            setSuggestions(suggestedRecipes);
+            setSuggestions(suggestedRecipeNames);
         } else {
             setSuggestions([]);
+
         }
     };
-
 
     const handleSuggestionClick = (suggestion) => {
         setSearchRecipe(suggestion);
         setSuggestions([]);
+        const searchResults = favoritesRecipes.filter((recipe) =>
+            recipe.Name.toLowerCase().includes(suggestion.toLowerCase())
+        );
+        setFilteredRecipes(searchResults);
     };
 
     const handleKeyPress = (e) => {
@@ -56,19 +56,27 @@ const FavoriteRecipes = () => {
     const performSearch = (query) => {
         setSuggestions([]); // Clear suggestions
         setSearchRecipe(query); // Update search input with query
+
         // Perform search logic
         if (query.trim() === '') {
             // If query is empty, reset to show all favorite recipes
             setFilteredRecipes(favoritesRecipes);
+
         } else {
             // Filter recipes based on the query
             const filtered = favoritesRecipes.filter(recipe =>
                 recipe.Name.toLowerCase().includes(query.toLowerCase())
             );
             setFilteredRecipes(filtered);
+
         }
     };
 
+    const handleClearSearch = () => {
+        setSearchRecipe('');
+        setSuggestions([]);
+        setFilteredRecipes(favoritesRecipes);
+    };
 
     const handleInputFocus = (inputValue) => {
         if (inputValue.length >= 3) {
@@ -178,25 +186,36 @@ const FavoriteRecipes = () => {
                                         type="text"
                                         placeholder="Search"
                                         value={searchRecipe}
-                                        onChange={(e) => handleSaerchChange(e.target.value)}
+                                        onChange={(e) => handleSearchChange(e.target.value)}
                                         onKeyPress={handleKeyPress} // Handle Enter key press
                                         onFocus={(e) => handleInputFocus(e.target.value)}
                                     />
 
-                                </div>
-                                {suggestions.length > 0 && (
-                                    <div className='fav-suggestions' ref={suggestionsRef}>
-                                        <div className='toggle-bar'>
-                                            <ul>
-                                                {suggestions.map((suggestion, index) => (
-                                                    <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
-                                                        {suggestion}
-                                                    </li>
-                                                ))}
-                                            </ul>
+
+
+
+                                    {suggestions.length > 0 && (
+                                        <div className='fav-suggestions' ref={suggestionsRef}>
+                                            <div className='toggle-bar'>
+                                                <ul>
+                                                    {suggestions.map((suggestion, index) => (
+                                                        <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+                                                            {suggestion}
+                                                        </li>
+                                                    ))}
+                                                </ul>
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
+                                </div>
+
+
+                                <div className='clear-fav-search-container'>
+                                    <button className="clear-fav-search-btn" onClick={handleClearSearch}>
+                                        Reset Search
+                                    </button>
+                                </div>
+
 
                             </div>
 
@@ -207,11 +226,19 @@ const FavoriteRecipes = () => {
                                 </div>
                             ) : (
                                 <div className='favorites-recipes-container'>
-                                    {filteredRecipes.map((recipe, index) => (
-                                        <div id="fav-card" className='recipe-card-wrapper' key={index}>
-                                            <RecipeCard recipe={recipe} user={user} onLikeToggle={handleLikeToggle} />
+                                    {filteredRecipes.length === 0 ? (
+                                        <div className='fav-no-results-message'>
+                                            <p>No recipes found. Please try another search.</p>
                                         </div>
-                                    ))}
+
+
+                                    ) : (
+                                        filteredRecipes.map((recipe, index) => (
+                                            <div id="fav-card" className='recipe-card-wrapper' key={index}>
+                                                <RecipeCard recipe={recipe} user={user} onLikeToggle={handleLikeToggle} />
+                                            </div>
+                                        ))
+                                    )}
                                 </div>
                             )}
                         </div>
