@@ -94,3 +94,42 @@
     font-size: 20px;
     font-weight: bold;
 }
+
+.search-fav-input-container {
+    margin-top: 30px;
+    position: relative;
+    margin-left: 30px;
+    margin-bottom: 30px;
+}
+
+
+.fav-page-input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.fav-page-saerch-icon {
+    color: var(--gray-text-color);
+    margin-left: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    /* Allows clicks to pass through to the input */
+}
+
+.fav-input-field {
+    width: 100%;
+    border: 1px solid rgb(236, 234, 234);
+    border-radius: 30px;
+    padding: 8px;
+    width: 400px;
+    padding-left: 35px;
+    background-color: rgb(236, 234, 234);
+}
+
+.fav-input-field:focus {
+    border-color: #ffa500;
+    box-shadow: 0 0 5px rgba(52, 73, 94, 0.5);
+    outline: none;
+}

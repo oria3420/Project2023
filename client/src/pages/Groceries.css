@@ -88,7 +88,22 @@
 
 .grocery-input {
     width: 400px;
-    padding-left: 15px;
+    padding-left: 35px;
+}
+
+.grocery-page-input-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.grocery-page-saerch-icon {
+    color: var(--gray-text-color);
+    margin-left: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    /* Allows clicks to pass through to the input */
 }
 
 .add-btn-grocery {
@@ -149,7 +164,7 @@
     height: fit-content;
 }
 
-.recipes-by-grocery{
+.recipes-by-grocery {
     margin-top: 30px;
     margin-left: 25px;
     display: flex;
@@ -159,13 +174,13 @@
     gap: 1.5%;
 }
 
-.grocery-page-no-results-message{
+.grocery-page-no-results-message {
     width: 100%;
     text-align: center;
     padding: 30px;
 }
 
-.loading-message{
+.loading-message {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -189,7 +204,7 @@
     }
 }
 
-.grocery-search-alert-message{
+.grocery-search-alert-message {
     margin-top: 15px;
     margin-right: 5px;
     color: red;
