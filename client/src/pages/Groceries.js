@@ -269,17 +269,17 @@ const Groceries = () => {
 
             <div className="search-ing-input-container">
 
-              <div class="grocery-page-input-wrapper">
-              <i className="bi bi-search grocery-page-saerch-icon"></i>
+              <div className="grocery-page-input-wrapper">
+                <i className="bi bi-search grocery-page-saerch-icon"></i>
                 <input
-                  class="input-field grocery-input"
+                  className="input-field grocery-input"
                   type="text"
                   placeholder="Add ingredient"
                   value={ingredient}
                   onChange={(e) => handleIngredientChange(e.target.value)}
                   onFocus={(e) => handleInputFocus(e.target.value)}
                 />
-                
+
               </div>
 
               {suggestions.length > 0 && (

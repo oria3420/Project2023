@@ -17,9 +17,9 @@ const FavoriteRecipes = () => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true);
     const [suggestions, setSuggestions] = useState([]);
-    const suggestionsRef = useRef(null);
     const [searchRecipe, setSearchRecipe] = useState('');
-
+    const [filteredRecipes, setFilteredRecipes] = useState([]);
+    const suggestionsRef = useRef(null);
 
     const handleSaerchChange = (value) => {
         setSearchRecipe(value);
@@ -28,10 +28,54 @@ const FavoriteRecipes = () => {
 
     const updateRecipesSuggestions = (inputValue) => {
         if (inputValue.length >= 3) {
+            const suggestedRecipes = favoritesRecipes
+                .filter((recipe) =>
+                    typeof recipe.Name === 'string' &&
+                    recipe.Name.toLowerCase().includes(inputValue.toLowerCase())
+                )
+                .map((recipe) => recipe.Name);
+
+            setSuggestions(suggestedRecipes);
+        } else {
+            setSuggestions([]);
+        }
+    };
+
+
+    const handleSuggestionClick = (suggestion) => {
+        setSearchRecipe(suggestion);
+        setSuggestions([]);
+    };
+
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            performSearch(searchRecipe);
+        }
+    };
+
+    const performSearch = (query) => {
+        setSuggestions([]); // Clear suggestions
+        setSearchRecipe(query); // Update search input with query
+        // Perform search logic
+        if (query.trim() === '') {
+            // If query is empty, reset to show all favorite recipes
+            setFilteredRecipes(favoritesRecipes);
+        } else {
+            // Filter recipes based on the query
+            const filtered = favoritesRecipes.filter(recipe =>
+                recipe.Name.toLowerCase().includes(query.toLowerCase())
+            );
+            setFilteredRecipes(filtered);
+        }
+    };
+
+
+    const handleInputFocus = (inputValue) => {
+        if (inputValue.length >= 3) {
             const filteredRecipes = favoritesRecipes
                 .filter((recipe) =>
                     typeof recipe.Name === 'string' &&
-                    recipe.Name.toLowerCase().startsWith(inputValue.toLowerCase())
+                    recipe.Name.toLowerCase().includes(inputValue.toLowerCase())
                 )
                 .map((recipe) => recipe.Name);
 
@@ -40,26 +84,6 @@ const FavoriteRecipes = () => {
             setSuggestions([]);
         }
     };
-
-    const handleSuggestionClick = (suggestion) => {
-        setSearchRecipe(suggestion);
-        setSuggestions([]);
-    };
-
-    // const handleInputFocus = (inputValue) => {
-    //     if (inputValue.length >= 3) {
-    //         const filteredIngredients = favoritesRecipes
-    //             .filter((ingred) =>
-    //                 typeof ingred.ingredient === 'string' &&
-    //                 ingred.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
-    //             )
-    //             .map((ingred) => ingred.ingredient);
-
-    //         setSuggestions(filteredIngredients);
-    //     } else {
-    //         setSuggestions([]);
-    //     }
-    // };
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -87,6 +111,7 @@ const FavoriteRecipes = () => {
                 .then(data => {
                     setLoading(false);
                     setFavoritesRecipes(data);
+                    setFilteredRecipes(data);
                 })
                 .catch(error => console.error('Error fetching favorite recipes:', error));
         }
@@ -104,6 +129,18 @@ const FavoriteRecipes = () => {
         }
     };
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (suggestionsRef.current && !suggestionsRef.current.contains(event.target)) {
+                setSuggestions([]);
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
 
     return (
         <div>
@@ -134,15 +171,16 @@ const FavoriteRecipes = () => {
 
                             <div className="search-fav-input-container">
 
-                                <div class="fav-page-input-wrapper">
+                                <div className="fav-page-input-wrapper">
                                     <i className="bi bi-search fav-page-saerch-icon"></i>
                                     <input
-                                        class="fav-input-field"
+                                        className="fav-input-field"
                                         type="text"
                                         placeholder="Search"
                                         value={searchRecipe}
                                         onChange={(e) => handleSaerchChange(e.target.value)}
-                                    // onFocus={(e) => handleInputFocus(e.target.value)}
+                                        onKeyPress={handleKeyPress} // Handle Enter key press
+                                        onFocus={(e) => handleInputFocus(e.target.value)}
                                     />
 
                                 </div>
@@ -169,7 +207,7 @@ const FavoriteRecipes = () => {
                                 </div>
                             ) : (
                                 <div className='favorites-recipes-container'>
-                                    {favoritesRecipes.map((recipe, index) => (
+                                    {filteredRecipes.map((recipe, index) => (
                                         <div id="fav-card" className='recipe-card-wrapper' key={index}>
                                             <RecipeCard recipe={recipe} user={user} onLikeToggle={handleLikeToggle} />
                                         </div>
