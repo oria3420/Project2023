@@ -518,9 +518,6 @@ const AddRecipe = () => {
                                                     <i className="bi bi-trash3-fill"></i>
                                                 </button>
                                             </div>
-                                            <button className="add-more-images-btn" onClick={handleAddMoreImages}>
-                                                <i className="bi bi-plus-circle"></i>
-                                            </button>
                                         </div>
                                     ) : (
                                         <div className="edit-image">
@@ -530,14 +527,16 @@ const AddRecipe = () => {
                                                 fromAddRecipe={true}
                                                 onEditImage={handleEditImage}
                                                 onDeleteImage={handleDeleteImage}
-                                                onAddMoreImages={handleAddMoreImages}
                                             />
-                                            <button className="add-more-images-btn" onClick={handleAddMoreImages}>
-                                                <i className="bi bi-plus-circle"></i>
-                                            </button>
+
                                         </div>
                                     )}
                                 </div>
+                                {selectedImages.length > 0 && (
+                                    <button className="add-more-images-btn" onClick={handleAddMoreImages}>
+                                        <i className="bi bi-plus-circle"></i>
+                                    </button>
+                                )}
                                 <input
                                     type="file"
                                     accept="image/*"

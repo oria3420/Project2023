@@ -186,6 +186,15 @@
     margin-right: 30px;
 }
 
+.add-more-images-btn{
+    background-color: white;
+    border: transparent;
+    color: orange;
+    font-size: 20px;
+    align-self: flex-end;
+    margin-right: 30px;
+    margin-bottom: 20px;
+}
 
 .image-actions button {
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */

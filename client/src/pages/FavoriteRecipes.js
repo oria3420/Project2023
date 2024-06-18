@@ -209,14 +209,6 @@ const FavoriteRecipes = () => {
                                     )}
                                 </div>
 
-
-                                <div className='clear-fav-search-container'>
-                                    <button className="clear-fav-search-btn" onClick={handleClearSearch}>
-                                        Reset Search
-                                    </button>
-                                </div>
-
-
                             </div>
 
                             {favoritesRecipes.length === 0 ? (

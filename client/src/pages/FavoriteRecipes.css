@@ -106,25 +106,6 @@
     width: 100%;
 }
 
-.clear-fav-search-container{
-    margin-right: 50px;
-}
-
-.clear-fav-search-btn {
-    align-self: flex-end;
-    margin-right: 0;
-    border-color: orange;
-    border-radius: 40px;
-    color: orange;
-    background-color: white;
-    border: 1px solid;
-    font-weight: bold;
-    width: 150px;
-    height: 35px;
-    color: white;
-    background-color: orange;
-
-}
 
 .fav-page-input-wrapper {
     position: relative;
