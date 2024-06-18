@@ -52,6 +52,7 @@
     border: 1px solid #e6e5e5;
 }
 
+
 .add-image-head {
     padding-left: 25px;
     width: 100%;
@@ -158,6 +159,47 @@
     padding: 0px;
 }
 
+.edit-image {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+}
+
+.recipe-image-upload {
+    border-radius: var(--image-border-radius);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* Ensure the image covers the entire container */
+    object-position: center;
+    /* Center the image within the container */
+    display: block;
+}
+
+.image-actions {
+    position: absolute;
+    bottom: 10px; /* Adjust as needed */
+    right: 10px; /* Adjust as needed */
+    display: flex;
+    gap: 5px; /* Space between buttons */
+    margin-right: 30px;
+}
+
+
+.image-actions button {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white;
+    border: none;
+    border-radius: 40px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.image-actions button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 .custom-file-upload {
     position: relative;
     display: inline-block;
@@ -196,15 +238,6 @@
     font-size: 16px;
 }
 
-.recipe-image-upload {
-    border-radius: var(--image-border-radius);
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* Ensure the image covers the entire container */
-    object-position: center;
-    /* Center the image within the container */
-}
 
 .ingredients-steps {
     height: fit-content;

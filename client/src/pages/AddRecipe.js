@@ -1,7 +1,7 @@
 import Navbar from '../components/Navbar';
 import './App.css';
 import './AddRecipe.css'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 import AddRecipeValidation from '../components/AddRecipeValidation';
@@ -28,6 +28,9 @@ const AddRecipe = () => {
     const [suggestions, setSuggestions] = useState([]);
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValid, setFormValid] = useState(false);
+    const [imageToEditIndex, setImageToEditIndex] = useState(null);
+    const fileInputRef = useRef(null);
+    const addMoreImagesInputRef = useRef(null);
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -143,6 +146,11 @@ const AddRecipe = () => {
 
     const handleImageChange = (event) => {
         const files = Array.from(event.target.files);
+        // Check if adding new files will exceed the limit of 5 images
+        if (selectedImages.length + files.length > 5) {
+            alert('You can upload a maximum of 5 images.');
+            return;
+        }
         setSelectedImages(prevImages => [...prevImages, ...files]); // Store files
     };
 
@@ -208,7 +216,7 @@ const AddRecipe = () => {
             formData.append('groceryList', JSON.stringify(recipeIngredients));
             formData.append('description', description);
             formData.append('recipeYield', recipeYield);
-            formData.append('recipeInstructions', JSON.stringify(instructions)); 
+            formData.append('recipeInstructions', JSON.stringify(instructions));
             formData.append('recipeCategories', JSON.stringify(recipeCategories));
             formData.append('name', name);
             formData.append('userId', userId);
@@ -438,6 +446,33 @@ const AddRecipe = () => {
         return missingFields.length === 0;
     };
 
+    const handleEditImage = (index) => {
+        setImageToEditIndex(index);
+        fileInputRef.current.click();
+    };
+
+    const handleReplaceImage = (event) => {
+        const files = Array.from(event.target.files);
+        if (files.length > 0) {
+            const newImage = files[0];
+            setSelectedImages(prevImages => {
+                const updatedImages = [...prevImages];
+                updatedImages[imageToEditIndex] = newImage;
+                return updatedImages;
+            });
+        }
+        setImageToEditIndex(null); // Reset the edit index
+    };
+
+    const handleDeleteImage = (index) => {
+        const updatedImages = selectedImages.filter((image, i) => i !== index);
+        setSelectedImages(updatedImages);
+    };
+
+    const handleAddMoreImages = () => {
+        addMoreImagesInputRef.current.click();
+    };
+
     return (
         <div>
             {name && <Navbar name={name} />}
@@ -454,31 +489,70 @@ const AddRecipe = () => {
                                 </div>
 
                                 <div id='image' className='input-field image-container'>
-                                {selectedImages.length === 0 ? (
-                                  <>
-                                    <label className="custom-file-upload">
-                                      <i className="bi bi-images"></i>
-                                      <input
-                                        className="input-file"
-                                        type="file"
-                                        accept="image/*"
-                                        multiple
-                                        onChange={handleImageChange}
-                                      />
-                                    </label>
-                                    <label className='add-file-title'>Upload images</label>
-                                  </>
-                                ) : selectedImages.length === 1 ? (
-                                  <img
-                                    className='recipe-image-upload'
-                                    src={URL.createObjectURL(selectedImages[0])}
-                                    alt="Selected"
-                                  />
-                                ) : (
-                                    <Carousel id='carousel' images={selectedImages.map(file => URL.createObjectURL(file))} fromAddRecipe={true} />
-                                )}
-                              </div>
-
+                                    {selectedImages.length === 0 ? (
+                                        <>
+                                            <label className="custom-file-upload">
+                                                <i className="bi bi-images"></i>
+                                                <input
+                                                    className="input-file"
+                                                    type="file"
+                                                    accept="image/*"
+                                                    multiple
+                                                    onChange={handleImageChange}
+                                                />
+                                            </label>
+                                            <label className='add-file-title'>Upload images</label>
+                                        </>
+                                    ) : selectedImages.length === 1 ? (
+                                        <div className="edit-image">
+                                            <img
+                                                className='recipe-image-upload'
+                                                src={URL.createObjectURL(selectedImages[0])}
+                                                alt="Selected"
+                                            />
+                                            <div className="image-actions">
+                                                <button className="image-action-btn" onClick={() => handleEditImage(0)}>
+                                                    <i className="bi bi-pencil-fill"></i>
+                                                </button>
+                                                <button className="image-action-btn" onClick={() => handleDeleteImage(0)}>
+                                                    <i className="bi bi-trash3-fill"></i>
+                                                </button>
+                                            </div>
+                                            <button className="add-more-images-btn" onClick={handleAddMoreImages}>
+                                                <i className="bi bi-plus-circle"></i>
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="edit-image">
+                                            <Carousel
+                                                id='carousel'
+                                                images={selectedImages.map(file => URL.createObjectURL(file))}
+                                                fromAddRecipe={true}
+                                                onEditImage={handleEditImage}
+                                                onDeleteImage={handleDeleteImage}
+                                                onAddMoreImages={handleAddMoreImages}
+                                            />
+                                            <button className="add-more-images-btn" onClick={handleAddMoreImages}>
+                                                <i className="bi bi-plus-circle"></i>
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    ref={fileInputRef}
+                                    style={{ display: 'none' }}
+                                    onChange={handleReplaceImage}
+                                />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    ref={addMoreImagesInputRef}
+                                    multiple
+                                    style={{ display: 'none' }}
+                                    onChange={handleImageChange}
+                                />
                             </div>
 
                             <div className='section-right image-details-right'>

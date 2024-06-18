@@ -9,10 +9,9 @@ const SearchBar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!searchTerm.trim()) {
-      return;
+      navigate(`/search_recipe`);
     }
     navigate(`/search_recipe?query=${searchTerm}`);
-    setSearchTerm('');
   };
 
   return (

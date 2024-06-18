@@ -270,9 +270,7 @@ form-control:not(:focus) {
   background-color: rgb(224, 199, 151);
   opacity: 80%;
   color: white;
-
 }
-
 
 .left-btn {
   left: 10px; /* Adjust the left position as needed */

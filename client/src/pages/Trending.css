@@ -13,11 +13,10 @@
 }
 
 .trending-img-container{
-    width: 55%;
-    /* Increase the width to 70% */
+    width: 50%;
     height: 100%;
     overflow: hidden;
-    /* Ensure no overflow */
+
 }
 
 .trending-head-img{
@@ -31,7 +30,7 @@
 
 .trending-title-container{
     background-color:var(--head-color);
-    width: 45%;
+    width: 50%;
     text-align: center;
     display: flex;
     justify-content: center;

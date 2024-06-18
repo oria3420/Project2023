@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Components.css';
+import '../pages/AddRecipe.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const Carousel = ({ images, fromAddRecipe }) => {
+const Carousel = ({ images, fromAddRecipe, onEditImage, onDeleteImage }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const goToSlide = (index) => {
@@ -43,6 +44,16 @@ const Carousel = ({ images, fromAddRecipe }) => {
               src={image}
               alt={`Slide ${index}`}
             />
+            {fromAddRecipe && (
+              <div className="image-actions">
+                <button className="image-action-btn" onClick={() => onEditImage(index)}>
+                  <i className="bi bi-pencil-fill"></i>
+                </button>
+                <button className="image-action-btn" onClick={() => onDeleteImage(index)}>
+                  <i className="bi bi-trash3-fill"></i>
+                </button>
+              </div>
+            )}
           </div>
         ))}
       </div>
