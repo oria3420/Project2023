@@ -1,6 +1,5 @@
 import Navbar from '../components/Navbar';
 import RecipeCard from '../components/RecipeCard';
-import StarRating from '../components/StarRating';
 import './App.css';
 import './Trending.css'
 import './FavoriteRecipes.css'
@@ -72,14 +71,13 @@ const SearchRecipe = () => {
                     <div className='trending-recipes-container'>
 
                         {recipes.map((recipe, index) => (
-    
+
                             <div className='trending-recipe'>
                                 <div className='recipe-card-wrapper card-trending' key={index}>
                                     <RecipeCard recipe={recipe.recipe} user={user} />
                                 </div>
-                                <StarRating rating={recipe.recipe.AggregatedRating} reviewCount={recipe.recipe.ReviewCount} />
                                 <div className='trending-index'>
-                                {console.log(recipe)}
+                                    {console.log(recipe)}
                                     {index + 1}
                                 </div>
                             </div>

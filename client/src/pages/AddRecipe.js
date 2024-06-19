@@ -145,10 +145,13 @@ const AddRecipe = () => {
     }, [user]);
 
     const handleImageChange = (event) => {
+        console.log("handleImageChange")
         const files = Array.from(event.target.files);
         // Check if adding new files will exceed the limit of 5 images
         if (selectedImages.length + files.length > 5) {
+            console.log("alert");
             alert('You can upload a maximum of 5 images.');
+            event.target.value = '';
             return;
         }
         setSelectedImages(prevImages => [...prevImages, ...files]); // Store files
@@ -485,7 +488,7 @@ const AddRecipe = () => {
 
                             <div className='section-left image-details-left'>
                                 <div className='add-image-head'>
-                                    <label className='black-title'>Add Images</label>
+                                    <label className='black-title '>Add Images</label>
                                 </div>
 
                                 <div id='image' className='input-field image-container'>
@@ -532,11 +535,14 @@ const AddRecipe = () => {
                                         </div>
                                     )}
                                 </div>
+
                                 {selectedImages.length > 0 && (
                                     <button className="add-more-images-btn" onClick={handleAddMoreImages}>
-                                        <i className="bi bi-plus-circle"></i>
+                                        <i className="bi bi-plus-circle add-icon"></i>
+                                        <span>Add more images</span>
                                     </button>
                                 )}
+
                                 <input
                                     type="file"
                                     accept="image/*"

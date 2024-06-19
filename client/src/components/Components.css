@@ -260,6 +260,7 @@ form-control:not(:focus) {
 
 .carousel-btn {
   position: absolute;
+  cursor: pointer;
   top: 50%;
   transform: translateY(-50%);
   background: none;

@@ -72,12 +72,6 @@ const FavoriteRecipes = () => {
         }
     };
 
-    const handleClearSearch = () => {
-        setSearchRecipe('');
-        setSuggestions([]);
-        setFilteredRecipes(favoritesRecipes);
-    };
-
     const handleInputFocus = (inputValue) => {
         if (inputValue.length >= 3) {
             const filteredRecipes = favoritesRecipes

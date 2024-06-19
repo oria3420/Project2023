@@ -37,26 +37,7 @@
     margin-right: var(--margin-sides);
 }
 
-.image-details-right {
-    height: var(--height-left);
 
-}
-
-
-.image-details-left {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    height: var(--height-left);
-    border: 1px solid #e6e5e5;
-}
-
-
-.add-image-head {
-    padding-left: 25px;
-    width: 100%;
-}
 
 .black-title {
     font-size: var(--title-font-size);
@@ -146,7 +127,29 @@
     width: 250px;
 }
 
+.image-details-right {
+    height: var(--height-left);
+
+}
+
+
+.image-details-left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: var(--height-left);
+    border: 1px solid #e6e5e5;
+}
+
+
+.add-image-head {
+    padding-left: 25px;
+    width: 100%;
+}
+
 .image-container {
+    position: relative;
     width: 90%;
     height: 80%;
     border: 1px solid #d3d3d3;
@@ -186,15 +189,19 @@
     margin-right: 30px;
 }
 
-.add-more-images-btn{
-    background-color: white;
+.add-more-images-btn {
+    bottom: 65px; /* Adjust the distance from the bottom as needed */
+    right: 1305px;  /* Adjust the distance from the right as needed */
+    background-color: transparent;
     border: transparent;
-    color: orange;
-    font-size: 20px;
-    align-self: flex-end;
-    margin-right: 30px;
-    margin-bottom: 20px;
+    cursor: pointer;
 }
+
+.add-more-images-icon {
+    font-size: 20px;
+    color: orange;
+}
+
 
 .image-actions button {
     background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
