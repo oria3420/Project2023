@@ -74,7 +74,7 @@ const SearchRecipe = () => {
 
                             <div className='trending-recipe'>
                                 <div className='recipe-card-wrapper card-trending' key={index}>
-                                    <RecipeCard recipe={recipe.recipe} user={user} />
+                                    <RecipeCard recipe={recipe} user={user} />
                                 </div>
                                 <div className='trending-index'>
                                     {console.log(recipe)}
@@ -82,6 +82,7 @@ const SearchRecipe = () => {
                                 </div>
                             </div>
                         ))}
+
                     </div>
                 </div>
             </div>

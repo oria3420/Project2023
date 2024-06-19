@@ -584,52 +584,105 @@ app.get('/api/favorites/:userId', async (req, res) => {
 //   }
 // });
 
+
 app.get('/api/trending', async (req, res) => {
   console.log("trending");
   const Rating = Collection.getModel(TABLE_NAMES.RATINGS);
+  const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
 
   try {
     const today = new Date();
-    const startOfWeek = new Date(today.setDate(today.getDate() - today.getDay()));
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
     startOfWeek.setHours(0, 0, 0, 0);
-    const endOfWeek = new Date(today.setDate(today.getDate() - today.getDay() + 6));
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
 
     console.log('startOfWeek:', startOfWeek);
     console.log('endOfWeek:', endOfWeek);
 
-    const topRecipes = await Rating.aggregate([
-      {
-        $match: {
-          date: { $gte: startOfWeek, $lt: endOfWeek }
-        }
-      },
-      {
-        $group: {
-          _id: '$recipe_id',
-          totalRating: { $sum: '$rating' },
-          ratingCount: { $sum: 1 }
-        }
-      },
+    const topRecipes = await Recipe.aggregate([
       {
         $lookup: {
-          from: 'recipes', // Adjust this to your actual collection name
-          localField: '_id',
-          foreignField: 'RecipeId',
-          as: 'recipe'
+          from: 'ratings',
+          let: { recipeId: '$RecipeId' },
+          pipeline: [
+            {
+              $match: {
+                $expr: { $eq: ['$recipe_id', '$$recipeId'] }
+              }
+            },
+            {
+              $group: {
+                _id: '$recipe_id',
+                totalOverallRating: { $sum: '$rating' },
+                overallRatingCount: { $sum: 1 },
+                totalWeeklyRating: {
+                  $sum: {
+                    $cond: [
+                      {
+                        $and: [
+                          { $gte: ['$date', startOfWeek] },
+                          { $lt: ['$date', endOfWeek] }
+                        ]
+                      },
+                      '$rating',
+                      0
+                    ]
+                  }
+                },
+                weeklyRatingCount: {
+                  $sum: {
+                    $cond: [
+                      {
+                        $and: [
+                          { $gte: ['$date', startOfWeek] },
+                          { $lt: ['$date', endOfWeek] }
+                        ]
+                      },
+                      1,
+                      0
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              $project: {
+                _id: 1,
+                averageWeeklyRating: { $cond: [{ $eq: ['$weeklyRatingCount', 0] }, 0, { $divide: ['$totalWeeklyRating', '$weeklyRatingCount'] }] },
+                overallRating: { $cond: [{ $eq: ['$overallRatingCount', 0] }, 0, { $divide: ['$totalOverallRating', '$overallRatingCount'] }] }
+              }
+            }
+          ],
+          as: 'ratingData'
         }
       },
       {
-        $unwind: '$recipe'
-      },
-      {
-        $project: {
-          recipe: '$recipe', // Include the entire recipe object
-          averageRating: { $divide: ['$totalRating', '$ratingCount'] }
+        $unwind: {
+          path: '$ratingData',
+          preserveNullAndEmptyArrays: true
         }
       },
       {
-        $sort: { averageRating: -1 }
+        $addFields: {
+          averageWeeklyRating: { $ifNull: ['$ratingData.averageWeeklyRating', 0] },
+          overallRating: { $ifNull: ['$ratingData.overallRating', 0] }
+        }
+      },
+      {
+        $addFields: {
+          compositeScore: {
+            $add: [
+              { $multiply: ['$averageWeeklyRating', 0.7] },
+              { $multiply: ['$overallRating', 0.3] }
+            ]
+          }
+        }
+      },
+      {
+        $sort: { compositeScore: -1 }
       },
       {
         $limit: 10
@@ -637,6 +690,7 @@ app.get('/api/trending', async (req, res) => {
     ]).exec();
 
     console.log('topRecipes:', topRecipes);
+    console.log('len:', topRecipes.length);
 
     res.json(topRecipes);
   } catch (err) {
