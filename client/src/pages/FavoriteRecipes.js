@@ -123,9 +123,11 @@ const FavoriteRecipes = () => {
     const handleLikeToggle = async (recipeId, isLiked) => {
         // Handle the like toggle, e.g., refetch the favorite recipes
         try {
+            console.log("handleLikeToggle")
             const response = await fetch(`http://localhost:1337/api/favorites/${user.email}`);
             const data = await response.json();
             setFavoritesRecipes(data);
+            console.log(favoritesRecipes)
         } catch (error) {
             console.error('Error fetching favorite recipes:', error);
         }

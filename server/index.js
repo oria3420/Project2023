@@ -29,19 +29,6 @@ mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.m
 });
 
 
-// Get recommendations for a user
-app.get('/api/recommendations/:userId', async (req, res) => {
-  try {
-    // console.log("recommendations server");
-    const userId = req.params.userId;
-    const recommendations = await recommendRecipes(userId);
-    res.status(200).json(recommendations);
-  } catch (error) {
-    console.error('Error fetching recommendations:', error);
-    res.status(500).json({ success: false, error: 'Internal Server Error' });
-  }
-});
-
 const connection = mongoose.connection;
 let gfs;
 
@@ -68,8 +55,24 @@ const upload = multer({ storage });
 app.use(cors());
 app.use(express.json());
 
+
+// Get recommendations for a user
+app.get('/api/recommendations/:userId', async (req, res) => {
+  try {
+    console.log("recommendations server");
+    const userId = req.params.userId;
+    const recommendations = await recommendRecipes(userId);
+    res.status(200).json(recommendations);
+  } catch (error) {
+    console.error('Error fetching recommendations:', error);
+    res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+
 // Serve static files
 app.use('/api/comments/images', express.static(path.join(__dirname, 'uploads')));
+
 
 app.get('/api/comments/images/:filename', (req, res) => {
   const filename = req.params.filename;
@@ -150,7 +153,6 @@ app.post('/api/recipes/update_rating', async (req, res) => {
 });
 
 
-
 app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req, res) => {
   const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
 
@@ -185,6 +187,7 @@ app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req,
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 app.get('/api/recipes/:id/comments', async (req, res) => {
   try {
@@ -262,6 +265,7 @@ app.post('/api/register', async (req, res) => {
   }
 });
 
+
 app.post('/api/login', async (req, res) => {
   const user = await User.findOne({
     email: req.body.email,
@@ -310,7 +314,6 @@ tableRoutes.forEach(route => {
 });
 
 
-// recipe
 app.get('/api/recipes/:id', (req, res) => {
   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
   const id = parseInt(req.params.id);
@@ -325,6 +328,7 @@ app.get('/api/recipes/:id', (req, res) => {
     }
   });
 });
+
 
 const getRecipeIngredients = async (req, res) => {
   try {
@@ -416,7 +420,7 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
   }
 });
 
-// filters
+
 app.get('/api/search_recipe', async (req, res) => {
   try {
     const collections = await mongoose.connection.db.listCollections().toArray();
@@ -497,6 +501,7 @@ app.get('/api/recipes/images/:recipeId', async (req, res) => {
   }
 });
 
+
 app.get('/api/favorites/:recipeId/:userId', (req, res) => {
   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
   const user_id = req.params.userId;
@@ -514,6 +519,7 @@ app.get('/api/favorites/:recipeId/:userId', (req, res) => {
   })
 });
 
+
 app.post('/api/favorites/:recipeId/:userId', (req, res) => {
   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
   const user_id = req.params.userId;
@@ -525,6 +531,7 @@ app.post('/api/favorites/:recipeId/:userId', (req, res) => {
     recipe_id: recipe_id,
   })
 });
+
 
 app.delete('/api/favorites/:recipeId/:userId', (req, res) => {
   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES)
@@ -542,6 +549,7 @@ app.delete('/api/favorites/:recipeId/:userId', (req, res) => {
   });
 });
 
+
 app.get('/api/favorites/:userId', async (req, res) => {
   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
@@ -556,12 +564,10 @@ app.get('/api/favorites/:userId', async (req, res) => {
       return;
     }
 
-    console.log('Favorites:', favorites);
     const recipeIds = favorites.map(favorite => favorite.recipe_id);
     // console.log('Recipe IDs:', recipeIds);
     // Find the actual recipe documents using the recipe IDs
     const favoriteRecipes = await Recipe.find({ RecipeId: { $in: recipeIds } });
-    console.log("favoriteRecipes: ", favoriteRecipes)
     res.json(favoriteRecipes);
   } catch (error) {
     console.error(error);
@@ -569,25 +575,10 @@ app.get('/api/favorites/:userId', async (req, res) => {
   }
 });
     
-// app.get('/api/trending', async (req, res) => {
-//   //AggregatedRating
-//   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
-//   try {
-//     const topRecipes = await Recipe.find({})
-//       .sort({ AggregatedRating: -1 })
-//       .limit(10);
-
-//     res.json(topRecipes);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: 'An error occurred' });
-//   }
-// });
 
 
 app.get('/api/trending', async (req, res) => {
   console.log("trending");
-  const Rating = Collection.getModel(TABLE_NAMES.RATINGS);
   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
 
   try {
@@ -700,7 +691,6 @@ app.get('/api/trending', async (req, res) => {
 });
 
 
-
 app.get('/api/groceries', async (req, res) => {
   const ingredient = Collection.getModel(TABLE_NAMES.INGREDIENTS);
   try {
@@ -711,6 +701,7 @@ app.get('/api/groceries', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 app.get('/api/measurements', async (req, res) => {
   const measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
@@ -723,7 +714,9 @@ app.get('/api/measurements', async (req, res) => {
   }
 });
 
+
 app.use('/api/addRecipe/images', express.static(path.join(__dirname, 'uploads')));
+
 
 app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
   const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
@@ -1012,6 +1005,7 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
   console.log("finished")
 });
 
+
 app.get('/api/addRecipe/images/:filename', (req, res) => {
   const filename = req.params.filename;
   const readstream = gfs.openDownloadStream(ObjectId(filename));
@@ -1023,6 +1017,7 @@ app.get('/api/addRecipe/images/:filename', (req, res) => {
 
   readstream.pipe(res);
 });
+
 
 app.get('/api/my_recipes/:userId', async (req, res) => {
   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
@@ -1045,6 +1040,7 @@ app.get('/api/my_recipes/:userId', async (req, res) => {
   }
 });
 
+
 app.get('/api/search_recipes/:recipeId/:ingredientId', async (req, res) => {
   const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS);
   const recipeId = parseInt(req.params.recipeId);
@@ -1066,6 +1062,7 @@ app.get('/api/search_recipes/:recipeId/:ingredientId', async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 });
+
 
 app.listen(1337, () => {
   console.log('Server saterted on 1337')
