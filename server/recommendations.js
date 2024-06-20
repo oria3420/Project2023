@@ -2,6 +2,27 @@ const globals = require('../client/src/common/tablesNames');
 const Collection = require('./models/collection.model');
 const TABLE_NAMES = globals.TABLE_NAMES;
 
+const tagCategories = Object.keys(TABLE_NAMES)
+    .filter(name => name.endsWith('CATEGORIES') && !name.startsWith('RECIPE'))
+    .map(name => TABLE_NAMES[name].toLowerCase())
+    .sort(); // Sort alphabetically
+
+// Map collection names to their respective tag field names
+const collectionToTagField = {
+    allergy_categories: 'allergy',
+    cooking_type_categories: 'cookingtype',
+    difficulty_categories: 'difficulty',
+    flavor_categories: 'flavor',
+    food_categories: 'food',
+    health_categories: 'health',
+    holiday_categories: 'holiday',
+    kitchen_style_categories: 'kitchen',
+    kosher_categories: 'kosher',
+    meal_type_categories: 'mealType',
+    time_categories: 'time'
+    // Add more mappings as needed for other collections
+};
+
 const extractFeatures = async (recipe) => {
     const categories = Array.isArray(recipe.RecipeCategory) ? recipe.RecipeCategory : [recipe.RecipeCategory];
     const tags = await aggregateTags(recipe.RecipeId);
@@ -12,37 +33,27 @@ const extractFeatures = async (recipe) => {
 };
 
 const aggregateTags = async (recipeId) => {
-    const tagCollections = [
-        'allergy_categories',
-        'cooking_type_categories',
-        'difficulty_categories',
-        'flavor_categories',
-        'food_categories',
-        'health_categories',
-        'holiday_categories',
-        'kitchen_style_categories',
-        'kosher_categories',
-        'meal_type_categories',
-        'time_categories',
-    ];
-
     const tags = [];
-    for (const collection of tagCollections) {
+
+    for (const collection of tagCategories) {
         const RecipeTagCollection = Collection.getModel(`recipe_${collection}`);
         const TagCollection = Collection.getModel(collection);
 
         const tagsForRecipe = await RecipeTagCollection.find({ recipe_ID: recipeId });
+
         for (const tag of tagsForRecipe) {
+            const tagFieldName = collectionToTagField[collection];
             const category = await TagCollection.findOne({ id: tag.category_ID });
-            if (category) {
-                tags.push(category[collection.slice(0, -11)]); // Extract tag value from collection name
+
+            if (category && category[tagFieldName]) {
+                tags.push(category[tagFieldName]);
             }
         }
     }
 
-    // console.log("tags", tags);
     return tags;
 };
+
 
 const buildCategoryVocabulary = async () => {
     const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
@@ -56,17 +67,25 @@ const buildCategoryVocabulary = async () => {
     return Array.from(categorySet);
 };
 
-const tagCategories = Object.keys(TABLE_NAMES)
-    .filter(name => name.endsWith('CATEGORIES') && !name.startsWith('RECIPE'))
-    .map(name => TABLE_NAMES[name].toLowerCase())
-    .sort(); // Sort alphabetically
+
+
 
 const buildTagVocabulary = async () => {
-
     const tagSet = new Set();
+
     for (const collection of tagCategories) {
         const TagCollection = Collection.getModel(collection);
-        const tags = await TagCollection.distinct(collection.slice(0, -11)); // Extract tag field name
+
+        // Get the corresponding tag field name for this collection
+        const tagFieldName = collectionToTagField[collection];
+
+        if (!tagFieldName) {
+            console.error(`No tag field mapping found for collection ${collection}`);
+            continue; // Skip to the next collection
+        }
+
+        // Fetch distinct tags from the identified field
+        const tags = await TagCollection.distinct(tagFieldName);
 
         tags.forEach(tag => {
             tagSet.add(tag);
@@ -75,6 +94,8 @@ const buildTagVocabulary = async () => {
 
     return Array.from(tagSet);
 };
+
+
 
 const vectorize = (categories, tags, categoryVocabulary, tagVocabulary) => {
 
@@ -130,26 +151,40 @@ const recommendRecipes = async (userId) => {
     console.log("categoryVocabulary: ", categoryVocabulary.length, categoryVocabulary);
 
     const tagVocabulary = await buildTagVocabulary();
-    console.log("tagVocabulary: ", tagVocabulary.length , tagVocabulary);
+    console.log("tagVocabulary: ", tagVocabulary.length, tagVocabulary);
+    for (let i = 0; i < tagVocabulary.length; i++) {
+        console.log(`${tagVocabulary[i]}`);
+    }
+
 
     const userProfile = await buildUserProfile(userId);
     console.log("userProfile:", userProfile);
     const userVector = vectorize(userProfile.categories, userProfile.tags, categoryVocabulary, tagVocabulary);
-    console.log("userVector: ", userVector)
-    
+
+    for (let i = 0; i < userVector.length; i++) {
+        console.log(`${userVector[i]}`);
+    }
+
     const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
     const allRecipes = await Recipes.find();
 
     const recommendations = [];
 
-    for (let i=0; i<2; i++) {
+    for (let i = 0; i < 5; i++) {
+
         const recipe = allRecipes[i];
+
+        console.log("*****************************")
+        console.log("recipe name: ", recipe.Name)
+
         const { categories, tags } = await extractFeatures(recipe);
         const recipeVector = vectorize(categories, tags, categoryVocabulary, tagVocabulary);
-        console.log("recipeVector: ", recipeVector)
+        for (let i = 0; i < recipeVector.length; i++) {
+            console.log(`${recipeVector[i]}`);
+        }
         const similarityScore = cosineSimilarity(userVector, recipeVector);
         console.log("similarityScore:", similarityScore);
-        recommendations.push({recipe , similarityScore });
+        recommendations.push({ recipe, similarityScore });
     }
 
     // console.log(recommendations)
