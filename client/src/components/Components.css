@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Lato&family=Poppins:wght@300&display=swap');
 @import url('../pages/Global.css');
 
-:root{
+:root {
   --font-size: 15px;
 }
 
@@ -69,14 +69,22 @@
   /* Adjust the z-index as needed to ensure it appears above other elements */
 }
 
-.dropdown-menu-button{
+.dropdown-menu-button {
   display: flex;
   align-items: center;
 }
 
-.icon{
-  width: 1em; /* Set the width of the icon to 1em */
-    height: 1em; /* Set the height of the icon to 1em */
+.dropdown-menu .dropdown-item:active {
+  background-color: transparent; /* Set background to transparent on click */
+  color: #000; /* Optionally change text color on click */
+}
+
+
+.icon {
+  width: 1em;
+  /* Set the width of the icon to 1em */
+  height: 1em;
+  /* Set the height of the icon to 1em */
   margin-right: 10px;
 }
 
@@ -269,24 +277,26 @@ form-control:not(:focus) {
   cursor: pointer;
   border-radius: 50%;
   /* background-color: rgb(0, 0, 0,0.5); */
-  background-color: rgba(206, 172, 109, 0.7); /* 0.5 represents 50% opacity */
+  background-color: rgba(206, 172, 109, 0.7);
+  /* 0.5 represents 50% opacity */
   opacity: 100%;
   color: white;
 }
 
 .carousel-btn:hover {
   background-color: rgba(206, 172, 109, 0.8)
-
 }
 
 .left-btn {
-  left: 10px; /* Adjust the left position as needed */
-  z-index: 1; 
+  left: 10px;
+  /* Adjust the left position as needed */
+  z-index: 1;
 }
 
 .right-btn {
-  right: 10px; /* Adjust the right position as needed */
-  z-index: 1; 
+  right: 10px;
+  /* Adjust the right position as needed */
+  z-index: 1;
 }
 
 
@@ -307,5 +317,6 @@ form-control:not(:focus) {
 }
 
 #add-recipe-btn-navbar:hover {
-  background-color: darkorange; /* Adjust the color to make it slightly darker */
+  background-color: darkorange;
+  /* Adjust the color to make it slightly darker */
 }

@@ -8,6 +8,7 @@ const LogoutBtn = ({ userName }) => {
     const token = localStorage.getItem('token');
 
     const handleClick = (event) => {
+        console.log("LogoutBtn")
         event.preventDefault();
         localStorage.clear();
         navigate('/');

@@ -89,7 +89,9 @@ const Navbar = ({ name }) => {
                                 </ul>
                             ) : (
                                 <ul className="dropdown-menu dropdown-position">
-                                    <li><button type="button" className="dropdown-item"><MyRecipesBtn /></button></li>
+                                    <li className="dropdown-item">
+                                        <MyRecipesBtn />
+                                    </li>
                                     <li><button type="button" className="dropdown-item"><FavoriesBtn /></button></li>
                                     <li><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
                                     <li><button type="button" className="dropdown-item"><SettingBtn /></button></li>
