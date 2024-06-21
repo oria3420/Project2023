@@ -468,6 +468,7 @@ const AddRecipe = () => {
     };
 
     const handleDeleteImage = (index) => {
+        console.log("delete")
         const updatedImages = selectedImages.filter((image, i) => i !== index);
         setSelectedImages(updatedImages);
     };

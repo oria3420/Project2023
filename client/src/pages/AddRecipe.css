@@ -152,12 +152,13 @@
 .image-container {
     position: relative;
     width: 90%;
-    height: 80%;
+    min-height: 425px;
+    max-height: 425px;
     border: 1px solid #d3d3d3;
     border-radius: var(--image-border-radius);
     margin-left: 20px;
     margin-right: 20px;
-    margin-top: 15px;
+    margin-top: 20px;
     margin-bottom: 15px;
     display: flex;
     justify-content: center;
@@ -196,13 +197,15 @@
 
 .add-more-images-wrapper{
     padding-left: 25px;
-    padding-bottom: 10px;
+    /* padding-top: 10px; */
+    padding-bottom: 20px;
 }
 
 .add-more-images-btn {
     background-color: transparent;
     border: transparent;
     cursor: pointer;
+
 }
 
 .add-more-images-icon {

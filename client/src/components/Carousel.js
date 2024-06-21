@@ -21,8 +21,12 @@ const Carousel = ({ images, fromAddRecipe, onEditImage, onDeleteImage }) => {
   };
 
   useEffect(() => {
+    if (currentIndex >= images.length) {
+      setCurrentIndex(images.length - 1);
+    }
     console.log('Current Index:', currentIndex);
-  }, [currentIndex]);
+    console.log('len:', images.length);
+  }, [images.length, currentIndex]);
 
   return (
     <div className="carousel">

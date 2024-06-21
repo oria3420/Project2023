@@ -267,10 +267,16 @@ form-control:not(:focus) {
   border: none;
   font-size: 24px;
   cursor: pointer;
-  border-radius: 40%;
-  background-color: rgb(224, 199, 151);
-  opacity: 80%;
+  border-radius: 50%;
+  /* background-color: rgb(0, 0, 0,0.5); */
+  background-color: rgba(206, 172, 109, 0.7); /* 0.5 represents 50% opacity */
+  opacity: 100%;
   color: white;
+}
+
+.carousel-btn:hover {
+  background-color: rgba(206, 172, 109, 0.8)
+
 }
 
 .left-btn {
