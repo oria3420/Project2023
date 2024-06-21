@@ -73,10 +73,10 @@
 .filter-menu {
     width: 20%;
     position: sticky;
-    top: 90px;
-    height: calc(100vh - 80px);
-    overflow-y: scroll;
-    /* margin-right: 10px; */
+    top:80px;
+    height: calc(100vh - 80px); /* Adjust based on navbar height and other elements */
+    padding-top: 10px;
+    overflow-y: auto; /* Use auto or scroll based on your content needs */
     margin-left: 20px;
     padding-left: 3px;
 }

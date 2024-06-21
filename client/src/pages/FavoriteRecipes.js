@@ -121,13 +121,20 @@ const FavoriteRecipes = () => {
 
 
     const handleLikeToggle = async (recipeId, isLiked) => {
-        // Handle the like toggle, e.g., refetch the favorite recipes
         try {
-            console.log("handleLikeToggle")
             const response = await fetch(`http://localhost:1337/api/favorites/${user.email}`);
             const data = await response.json();
             setFavoritesRecipes(data);
-            console.log(favoritesRecipes)
+
+            // Update filtered recipes based on current search criteria
+            if (searchRecipe.trim() === '') {
+                setFilteredRecipes(data); // If no search, update filtered recipes with all favorites
+            } else {
+                const filtered = data.filter(recipe =>
+                    recipe.Name.toLowerCase().includes(searchRecipe.toLowerCase())
+                );
+                setFilteredRecipes(filtered); // Update filtered recipes based on search query
+            }
         } catch (error) {
             console.error('Error fetching favorite recipes:', error);
         }
