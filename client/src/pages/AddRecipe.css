@@ -203,6 +203,8 @@
     background-color: transparent;
     border: transparent;
     cursor: pointer;
+    padding-bottom: 5px;
+    align-self: center;
 }
 
 .add-more-images-icon {
