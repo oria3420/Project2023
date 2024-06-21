@@ -135,8 +135,8 @@
 
 .image-details-left {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    /* align-items: center; */
+    /* justify-content: center; */
     flex-direction: column;
     height: var(--height-left);
     border: 1px solid #e6e5e5;
@@ -144,6 +144,7 @@
 
 
 .add-image-head {
+    padding-top:10px;
     padding-left: 25px;
     width: 100%;
 }
@@ -160,6 +161,7 @@
     align-items: center;
     flex-direction: column;
     padding: 0px;
+    align-self: center;
 }
 
 .edit-image {
@@ -189,9 +191,12 @@
     margin-right: 30px;
 }
 
+.add-more-images-wrapper{
+    padding-left: 25px;
+    padding-bottom: 10px;
+}
+
 .add-more-images-btn {
-    bottom: 65px; /* Adjust the distance from the bottom as needed */
-    right: 1305px;  /* Adjust the distance from the right as needed */
     background-color: transparent;
     border: transparent;
     cursor: pointer;

@@ -537,10 +537,12 @@ const AddRecipe = () => {
                                 </div>
 
                                 {selectedImages.length > 0 && (
-                                    <button className="add-more-images-btn" onClick={handleAddMoreImages}>
-                                        <i className="bi bi-plus-circle add-icon"></i>
-                                        <span>Add more images</span>
-                                    </button>
+                                    <div className="add-more-images-wrapper">
+                                        <button className="add-more-images-btn" onClick={handleAddMoreImages}>
+                                            <i className="bi bi-plus-circle add-icon"></i>
+                                            <span>Add more images</span>
+                                        </button>
+                                    </div>
                                 )}
 
                                 <input
