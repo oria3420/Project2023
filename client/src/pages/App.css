@@ -137,14 +137,37 @@
     background-color: white;
 }
 
-/* Add this CSS to style the "No results found" message */
-.no-results-message {
+
+.search-recipe-no-results-message-wrapper{
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.search-recipe-no-results-message {
     font-size: 30px;
     color: #555;
-    /* Change the color to your preference */
-    margin-top: 20%;
-    margin-left: 35%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    margin: 20px 0;
+    height: 200px;
+    width: 400px;
+    margin-bottom: 50px;
 }
+
+.search-recipe-search-term-no-results {
+    font-weight: bold;
+    font-size: 18px;
+    color: #dc3545; /* Example color for emphasis */
+    margin: 10px 0;
+}
+
 
 .select-ingredients {
     display: flex;
