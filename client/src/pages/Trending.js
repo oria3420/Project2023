@@ -13,6 +13,8 @@ const SearchRecipe = () => {
     const [recipes, setRecipes] = useState([]);
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
+    const [isLoading, setIsLoading] = useState(true);
+
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -43,6 +45,7 @@ const SearchRecipe = () => {
             .then(data => {
                 setRecipes(data);
                 console.log("data: ", data)
+                setIsLoading(false);
             })
             .catch(error => console.error(error))
     }, []);
@@ -70,7 +73,13 @@ const SearchRecipe = () => {
                     <label id='black-title-fav' className='black-title'>Trennding</label>
                     <div className='trending-recipes-container'>
 
-                        {recipes.map((recipe, index) => (
+                    {isLoading ? (
+                        <div className="loading-message">
+                          <div className="loading-spinner"></div>
+                        </div>
+                      ) : (
+
+                        recipes.map((recipe, index) => (
 
                             <div className='trending-recipe'>
                                 <div className='recipe-card-wrapper card-trending' key={index}>
@@ -81,7 +90,9 @@ const SearchRecipe = () => {
                                     {index + 1}
                                 </div>
                             </div>
-                        ))}
+                        ))
+
+                      )}
 
                     </div>
                 </div>

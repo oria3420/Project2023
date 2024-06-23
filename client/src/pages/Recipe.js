@@ -39,24 +39,26 @@ const RecipePage = () => {
   
   const fetchData = useCallback(async () => {
     try {
-      const [tagsResponse, recipeResponse, ingredientsResponse, imagesResponse] = await Promise.all([
-        fetch(`http://localhost:1337/api/recipes/${id}/tags`),
-        fetch(`http://localhost:1337/api/recipes/${id}`),
-        fetch(`http://localhost:1337/api/recipes/${id}/ingredients`),
-        fetch(`http://localhost:1337/api/recipes/images/${id}`),
-      ]);
-
-      const [tags, recipeData, ingredients, imageData] = await Promise.all([
-        tagsResponse.json(),
-        recipeResponse.json(),
-        ingredientsResponse.json(),
-        imagesResponse.ok ? imagesResponse.json() : [],
-      ]);
-
-      setRecipeTags(tags);
+      const recipeResponse = await fetch(`http://localhost:1337/api/recipes/${id}`);
+      const recipeData = await recipeResponse.json();
       setRecipe(recipeData);
+      setLoading(false); // Set loading to false once the recipe data is loaded
+  
+      // Fetch tags, ingredients, and images in parallel
+      const [tagsResponse, ingredientsResponse, imagesResponse] = await Promise.all([
+        fetch(`http://localhost:1337/api/recipes/${id}/tags`),
+        fetch(`http://localhost:1337/api/recipes/${id}/ingredients`),
+        fetch(`http://localhost:1337/api/recipes/images/${id}`)
+      ]);
+  
+      const [tags, ingredients, imageData] = await Promise.all([
+        tagsResponse.json(),
+        ingredientsResponse.json(),
+        imagesResponse.ok ? imagesResponse.json() : []
+      ]);
+  
+      setRecipeTags(tags);
       setIngredients(ingredients);
-
       if (Array.isArray(imageData) && imageData.length > 0) {
         const urls = await Promise.all(
           imageData.map(async (imageData) => {
@@ -96,7 +98,7 @@ const RecipePage = () => {
         setImageUrls([defaultImageUrl]);
       }
 
-      setLoading(false);
+
     } catch (error) {
       console.error(error);
       setLoading(false);
