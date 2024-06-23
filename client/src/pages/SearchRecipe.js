@@ -22,6 +22,7 @@ const SearchRecipe = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
 
+
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
@@ -44,48 +45,54 @@ const SearchRecipe = () => {
         }
     }, [navigate])
 
-
     useEffect(() => {
-        fetch(`http://localhost:1337/api/table/recipes`)
-            .then((res) => res.json())
-            .then((data) => {
-                setRecipes(data);
-                setFilteredRecipes(data);
-            })
-            .catch((error) => console.error(error));
-    }, []);
+        const fetchRecipes = async () => {
+            try {
+                const recipesResponse = await fetch('http://localhost:1337/api/table/recipes');
+                const recipesData = await recipesResponse.json();
+                setRecipes(recipesData);
+                setFilteredRecipes(recipesData);
+            } catch (error) {
+                console.error('Error fetching recipes:', error);
+            }
+        };
 
-    useEffect(() => {
-        fetch(`http://localhost:1337/api/recipes_categories`)
-            .then((res) => res.json())
-            .then((data) => {
-                setRecipesCategories(data);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
+        const fetchCategories = async () => {
+            try {
+                const categoriesResponse = await fetch('http://localhost:1337/api/recipes_categories');
+                const categoriesData = await categoriesResponse.json();
+                setRecipesCategories(categoriesData);
+            } catch (error) {
+                console.error('Error fetching categories:', error);
+            }
+        };
 
-    useEffect(() => {
-        fetch('http://localhost:1337/api/search_recipe')
-            .then(response => response.json())
-            .then(data => {
-                setCategories(data);
+        const fetchSearchCategories = async () => {
+            try {
+                const searchCategoriesResponse = await fetch('http://localhost:1337/api/search_recipe');
+                const searchCategoriesData = await searchCategoriesResponse.json();
+                setCategories(searchCategoriesData);
                 const expandedCategories = {};
                 const checkedItems = {};
-                Object.keys(data).forEach(category => {
+                Object.keys(searchCategoriesData).forEach(category => {
                     expandedCategories[category] = false;
                     checkedItems[category] = {};
                 });
                 setExpandedCategories(expandedCategories);
                 setCheckedItems(checkedItems);
-                setLoading(false); // Set loading to false when search categories have loaded
-            })
-            .catch(error => {
-                console.error(error);
-                setLoading(false); // Ensure loading is set to false even on error
-            });
+            } catch (error) {
+                console.error('Error fetching search categories:', error);
+            }
+        };
+
+        const initializeData = async () => {
+            await Promise.all([fetchRecipes(), fetchCategories(), fetchSearchCategories()]);
+            setLoading(false); // Set loading to false only after all fetch operations are complete
+        };
+
+        initializeData();
     }, []);
+
 
     const toggleCategory = (category) => {
         setExpandedCategories({
@@ -187,7 +194,6 @@ const SearchRecipe = () => {
     useEffect(() => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
-
 
 
 

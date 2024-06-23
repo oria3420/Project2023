@@ -35,22 +35,17 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
     };
 
 
-    useEffect(() => {
-        setSelectedImage(null);
-    }, []);
-
-
     const handleImageUploadReset = () => {
         setImageUploadStatus('');
     };
 
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            handleImageUploadReset();
-        }, 3000);
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         handleImageUploadReset();
+    //     }, 3000);
 
-        return () => clearTimeout(timer);
-    }, [imageUploadStatus]);
+    //     return () => clearTimeout(timer);
+    // }, [imageUploadStatus]);
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
