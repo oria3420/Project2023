@@ -57,13 +57,13 @@ const Navbar = ({ name }) => {
                         <img className='logo-navbar' src="/images/logo_white_english.png" alt="Logo" />
                     </a>
                     <SearchBar />
-                    <div className='navbar-text navigate' onClick={recipes}>
+                    <div className='navbar-text navigate navbar-hover' onClick={recipes}>
                         Recipes
                     </div>
-                    <div className='navbar-text navigate' onClick={trending}>
+                    <div className='navbar-text navigate navbar-hover' onClick={trending}>
                         Popular this Week
                     </div>
-                    <div className='navbar-text navigate' onClick={groceries}>
+                    <div className='navbar-text navigate navbar-hover' onClick={groceries}>
                         Cook with What You Have
                     </div>
 

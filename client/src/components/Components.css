@@ -97,6 +97,30 @@ ul {
   font-size: var(--font-size);
 }
 
+
+.navbar-hover {
+  position: relative;
+}
+
+.navbar-hover::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  display: block;
+  margin-top: 5px;
+  right: 0;
+  background: orange; /* Gold color for the underline */
+  transition: width 0.4s ease;
+}
+
+.navbar-hover:hover::after {
+  width: 100%;
+  left: 0;
+  background: orange; /* Gold color for the underline */
+}
+
+
 .search-bar {
   width: 20%;
   position: sticky
