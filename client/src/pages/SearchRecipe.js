@@ -95,9 +95,12 @@ const SearchRecipe = () => {
     };
 
     const handleCheckboxChange = (category, value) => {
+        // console.log("value: ", value)
+        // console.log("value[1]]: ", value[1])
         const checkedItemsCopy = { ...checkedItems };
         checkedItemsCopy[category][value] = !checkedItemsCopy[category][value];
         setCheckedItems(checkedItemsCopy);
+        // console.log(checkedItems)
         filterRecipes(); // apply filters when checkbox changes
     };
 
@@ -127,14 +130,28 @@ const SearchRecipe = () => {
         Object.keys(checkedItems).forEach((category) => {
             Object.keys(checkedItems[category]).forEach((value) => {
                 if (checkedItems[category][value]) {
+                    // console.log("in if");
                     anyChecked = true;
                     const recipeCategory = "recipe_" + category;
                     let category_ID;
+
+                    // Split the value to get the actual name
+                    const valueParts = value.split(',');
+                    const actualValue = valueParts.length > 1 ? valueParts[1] : value;
+
+
                     for (let i = 0; i < categories[category].length; i++) {
-                        if (categories[category][i][1] === value.substring(2)) {
+                        // console.log("categories[category][i][1]: ", categories[category][i][1]);
+                        // console.log("actualValue: ", actualValue);
+                        if (categories[category][i][1] === actualValue) {
                             category_ID = categories[category][i][0];
+                            break; // Exit loop once the match is found
                         }
                     }
+
+
+                    console.log("category_ID: ", category_ID)
+                    // console.log("recipesCategories: ", recipesCategories)
                     const tempFilteredIds = {};
                     for (let i = 0; i < recipesCategories[recipeCategory].length; i++) {
                         const recipe = recipesCategories[recipeCategory][i];
@@ -170,7 +187,7 @@ const SearchRecipe = () => {
     useEffect(() => {
         filterRecipes();
     }, [checkedItems, filterRecipes]);
-    console.log(name)
+
 
 
 
@@ -204,7 +221,11 @@ const SearchRecipe = () => {
                                         </div>
                                         {expandedCategories[category] && categories[category].sort((a, b) => (a[1] && b[1]) ? a[1].localeCompare(b[1]) : 0).map((value) => (
                                             <div className="form-check" key={value}>
-                                                <input className="form-check-input" type="checkbox" id="check-box" defaultChecked={checkedItems[category][value]} onChange={() => handleCheckboxChange(category, value)} />
+                                                <input className="form-check-input"
+                                                    type="checkbox"
+                                                    id="check-box"
+                                                    defaultChecked={checkedItems[category][value]}
+                                                    onChange={() => handleCheckboxChange(category, value)} />
                                                 <label className="form-check-label" htmlFor={`checkbox_${value}`}>{value[1]}</label>
                                             </div>
                                         ))}

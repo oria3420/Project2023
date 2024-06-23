@@ -64,7 +64,7 @@ const Navbar = ({ name }) => {
                         Popular this Week
                     </div>
                     <div className='navbar-text navigate' onClick={groceries}>
-                        Meal Prep Basket
+                        Cook with What You Have
                     </div>
 
 
