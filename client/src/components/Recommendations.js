@@ -5,14 +5,22 @@ import RecipeCard from '../components/RecipeCard';
 const Recommendations = () => {
   const [recommendations, setRecommendations] = useState([]);
   const [favoritesRecipes, setFavoritesRecipes] = useState([]);
+  const [fetchTime, setFetchTime] = useState(null);
   const userId = "perki@gmail.com"
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
         console.log("trying to fetch in client");
+
+        const startTime = Date.now();
         const response = await fetch(`http://localhost:1337/api/recommendations/${userId}`);
         const data = await response.json();
+        const endTime = Date.now();
+
+        const duration = endTime - startTime;
+        setFetchTime(duration); // Set the fetch time
+        console.log("duration: ", duration);
         setRecommendations(data);
       } catch (error) {
         console.error('Error fetching recommendations:', error);
@@ -40,6 +48,11 @@ const Recommendations = () => {
 
   return (
     <div>
+      {fetchTime !== null && (
+        <div>
+          Time taken to fetch recommendations: {fetchTime} ms
+        </div>
+      )}
       <h2>Recommended Recipes</h2>
       <div className='favorites-recipes-container'>
         {recommendations.map(recipe => (
@@ -47,6 +60,7 @@ const Recommendations = () => {
           <div className='recipe-card-wrapper'>
             {console.log(recipe)}
             <RecipeCard recipe={recipe.recipe} user={userId} />
+            Similarity: {recipe.similarityScore}
           </div>
         ))}
       </div>
