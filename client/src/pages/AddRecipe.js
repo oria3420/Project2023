@@ -1,4 +1,5 @@
 import Navbar from '../components/Navbar';
+import ImagesLimitModal from '../components/ImagesLimitModal';
 import './App.css';
 import './AddRecipe.css'
 import React, { useState, useEffect, useRef } from 'react';
@@ -29,6 +30,7 @@ const AddRecipe = () => {
     const [formSubmitted, setFormSubmitted] = useState(false);
     const [formValid, setFormValid] = useState(false);
     const [imageToEditIndex, setImageToEditIndex] = useState(null);
+    const [showModal, setShowModal] = useState(false);
     const fileInputRef = useRef(null);
     const addMoreImagesInputRef = useRef(null);
 
@@ -150,7 +152,8 @@ const AddRecipe = () => {
         // Check if adding new files will exceed the limit of 5 images
         if (selectedImages.length + files.length > 5) {
             console.log("alert");
-            alert('You can upload a maximum of 5 images.');
+            setShowModal(true);
+            // alert('You can upload a maximum of 5 images.');
             event.target.value = '';
             return;
         }
@@ -490,6 +493,7 @@ const AddRecipe = () => {
                             <div className='section-left image-details-left'>
                                 <div className='add-image-head'>
                                     <label className='black-title '>Add Images</label>
+                                    <span className='image-upload-description'>(Max 5 images)</span>
                                 </div>
 
                                 <div id='image' className='input-field image-container'>
@@ -561,6 +565,14 @@ const AddRecipe = () => {
                                     style={{ display: 'none' }}
                                     onChange={handleImageChange}
                                 />
+
+                                {showModal && (
+                                    <ImagesLimitModal
+                                        showModal={showModal}
+                                        onClose={() => setShowModal(false)}
+                                    />
+                                )}
+
                             </div>
 
                             <div className='section-right image-details-right'>

@@ -144,7 +144,7 @@
 
 
 .add-image-head {
-    padding-top:15px;
+    padding-top: 15px;
     padding-left: 25px;
     width: 100%;
 }
@@ -188,14 +188,17 @@
 
 .image-actions {
     position: absolute;
-    bottom: 10px; /* Adjust as needed */
-    right: 10px; /* Adjust as needed */
+    bottom: 10px;
+    /* Adjust as needed */
+    right: 10px;
+    /* Adjust as needed */
     display: flex;
-    gap: 5px; /* Space between buttons */
+    gap: 5px;
+    /* Space between buttons */
     margin-right: 30px;
 }
 
-.add-more-images-wrapper{
+.add-more-images-wrapper {
     padding-left: 25px;
     /* padding-top: 10px; */
     padding-bottom: 20px;
@@ -215,7 +218,8 @@
 
 
 .image-actions button {
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent background */
     color: white;
     border: none;
     border-radius: 40px;
@@ -265,6 +269,12 @@
     font-size: 16px;
 }
 
+.image-upload-description {
+    margin-left: 8px;
+    font-size: 0.9em;
+    color: #666;
+    /* Gray color for description */
+}
 
 .ingredients-steps {
     height: fit-content;
@@ -494,7 +504,7 @@
     /* Add a red glow effect using box-shadow */
 }
 
-.error-message-empty{
+.error-message-empty {
     margin-top: 10px;
     margin-bottom: 20px;
 }

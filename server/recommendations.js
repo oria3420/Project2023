@@ -24,70 +24,41 @@ const collectionToTagField = {
 };
 
 const extractFeatures = async (recipe) => {
-    const categories = Array.isArray(recipe.RecipeCategory) ? recipe.RecipeCategory : [recipe.RecipeCategory];
-    const tags = await aggregateTags(recipe.RecipeId);
-    return { categories, tags };
-};
+    const categories = [recipe.RecipeCategory];
 
-const aggregateTags = async (recipeId) => {
-    const tags = [];
+    // Aggregate tags directly within extractFeatures
+    const tags = new Set();
+
 
     // Fetch tags concurrently for all collections
     const tagPromises = tagCategories.map(async (collection) => {
         const RecipeTagCollection = Collection.getModel(`recipe_${collection}`);
         const TagCollection = Collection.getModel(collection);
-        const tagsForRecipe = await RecipeTagCollection.find({ recipe_ID: recipeId });
+        
+        // Fetch tags for the recipe from RecipeTagCollection
+        const tagsForRecipe = await RecipeTagCollection.find({ recipe_ID: recipe.RecipeId });
 
         // Fetch category details concurrently
-        const categoryPromises = tagsForRecipe.map(async (tag) => {
-            const tagFieldName = collectionToTagField[collection];
-            const category = await TagCollection.findOne({ id: tag.category_ID });
+        const categoryIds = tagsForRecipe.map(tag => tag.category_ID);
+        const categories = await TagCollection.find({ id: { $in: categoryIds } });
 
-            if (category && category[tagFieldName]) {
-                return category[tagFieldName];
-            }
-        });
-
-        const resolvedCategories = await Promise.all(categoryPromises);
-        return resolvedCategories.filter(Boolean);  // Remove undefined values
+        // Extract tags and filter out empty values
+        return categories.map(category => category[collectionToTagField[collection]]).filter(Boolean);
     });
 
-    const allTags = await Promise.all(tagPromises);
-    allTags.flat().forEach(tag => tags.push(tag));  // Flatten the array and add tags
+    try {
+        const allTags = await Promise.all(tagPromises);
+        allTags.flat().forEach(tag => tags.add(tag));
+    } catch (error) {
+        console.error('Error aggregating tags:', error);
+        // Handle error as needed
+    }
+    console.log(tags)
 
-    return tags;
+    return { categories, tags: Array.from(new Set(['easy', 'vegetable', 'parve', '30-60 min'])) };
 };
 
-// const extractFeatures = async (recipe) => {
-//     const categories = Array.isArray(recipe.RecipeCategory) ? recipe.RecipeCategory : [recipe.RecipeCategory];
-//     const tags = await aggregateTags(recipe.RecipeId);
-//     return {
-//         categories,
-//         tags,
-//     };
-// };
 
-// const aggregateTags = async (recipeId) => {
-//     const tags = [];
-
-//     for (const collection of tagCategories) {
-//         const RecipeTagCollection = Collection.getModel(`recipe_${collection}`);
-//         const TagCollection = Collection.getModel(collection);
-
-//         const tagsForRecipe = await RecipeTagCollection.find({ recipe_ID: recipeId });
-
-//         for (const tag of tagsForRecipe) {
-//             const tagFieldName = collectionToTagField[collection];
-//             const category = await TagCollection.findOne({ id: tag.category_ID });
-
-//             if (category && category[tagFieldName]) {
-//                 tags.push(category[tagFieldName]);
-//             }
-//         }
-//     }
-
-//     return tags;
-// };
 
 const buildUserProfile = async (userId) => {
     console.log("start of buildUserProfile");
@@ -95,14 +66,11 @@ const buildUserProfile = async (userId) => {
     const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
     const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
 
-    // Fetch favorites first
     const favorites = await Favorites.find({ user_id: userId });
     const recipeIds = favorites.map(favorite => favorite.recipe_id);
 
-    // Fetch favorited recipes using the recipe IDs from favorites
     const favoritedRecipes = await Recipes.find({ RecipeId: { $in: recipeIds } });
 
-    // Extract features concurrently
     const featurePromises = favoritedRecipes.map(recipe => extractFeatures(recipe));
     const featuresArray = await Promise.all(featurePromises);
 
@@ -120,51 +88,44 @@ const buildUserProfile = async (userId) => {
     return userProfile;
 };
 
-
 const buildCategoryVocabulary = async () => {
-    console.log("start of buildCategoryVocabulary")
+    console.log("start of buildCategoryVocabulary");
     const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
-    // Use distinct to get unique RecipeCategory values
     const uniqueCategories = await Recipes.distinct("RecipeCategory");
-
-    console.log("end of buildCategoryVocabulary")
+    console.log("end of buildCategoryVocabulary");
     return uniqueCategories;
 };
 
-
-
-
 const buildTagVocabulary = async () => {
-    console.log("start of buildTagVocabulary")
+    console.log("start of buildTagVocabulary");
+
     const tagSet = new Set();
 
-    for (const collection of tagCategories) {
+    // Using Promise.allSettled for parallel execution
+    await Promise.allSettled(tagCategories.map(async (collection) => {
         const TagCollection = Collection.getModel(collection);
-
-        // Get the corresponding tag field name for this collection
         const tagFieldName = collectionToTagField[collection];
 
         if (!tagFieldName) {
             console.error(`No tag field mapping found for collection ${collection}`);
-            continue; // Skip to the next collection
+            return [];
         }
 
-        // Fetch distinct tags from the identified field
         const tags = await TagCollection.distinct(tagFieldName);
+        
+        // Add tags to set directly
+        tags.forEach(tag => tagSet.add(tag));
+    }));
 
-        tags.forEach(tag => {
-            tagSet.add(tag);
-        });
-    }
-
-    console.log("end of buildTagVocabulary")
+    console.log("end of buildTagVocabulary");
+    
+    // Convert Set to Array and return
     return Array.from(tagSet);
 };
 
 
-
 const vectorize = (categories, tags, categoryVocabulary, tagVocabulary) => {
-    console.log("start of vectorize")
+    console.log("start of vectorize");
     const vector = new Array(categoryVocabulary.length + tagVocabulary.length).fill(0);
 
     categories.forEach(category => {
@@ -177,47 +138,22 @@ const vectorize = (categories, tags, categoryVocabulary, tagVocabulary) => {
     tags.forEach(tag => {
         const index = tagVocabulary.indexOf(tag);
         if (index !== -1) {
-            vector[categoryVocabulary.length + index] = 1; // Offset by the length of category vocabulary
+            vector[categoryVocabulary.length + index] = 1;
         }
     });
 
-    console.log("end of vectorize")
+    console.log("end of vectorize");
     return vector;
 };
 
-// const buildUserProfile = async (userId) => {
-//     console.log("start of buildUserProfile")
-//     const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
-//     const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
-
-//     const favorites = await Favorites.find({ user_id: userId });
-//     const favoritedRecipes = await Recipes.find({ RecipeId: { $in: favorites.map(favorite => favorite.recipe_id) } });
-
-//     const userProfile = {
-//         categories: [],
-//         tags: [],
-//     };
-
-//     for (const recipe of favoritedRecipes) {
-//         const features = await extractFeatures(recipe);
-//         userProfile.categories.push(...features.categories);
-//         userProfile.tags.push(...features.tags);
-//     }
-
-    
-//     console.log("end of buildUserProfile")
-//     return userProfile;
-// };
-
 const cosineSimilarity = (vec1, vec2) => {
-    console.log("start of cosineSimilarity")
+    console.log("start of cosineSimilarity");
     const dotProduct = vec1.reduce((sum, val, i) => sum + val * vec2[i], 0);
     const magnitude1 = Math.sqrt(vec1.reduce((sum, val) => sum + val * val, 0));
     const magnitude2 = Math.sqrt(vec2.reduce((sum, val) => sum + val * val, 0));
-    console.log("end of cosineSimilarity")
+    console.log("end of cosineSimilarity");
     return dotProduct / (magnitude1 * magnitude2);
 };
-
 
 const recommendRecipes = async (userId) => {
     const [categoryVocabulary, tagVocabulary, userProfile, Recipes] = await Promise.all([
@@ -227,39 +163,30 @@ const recommendRecipes = async (userId) => {
         Collection.getModel(TABLE_NAMES.RECIPES)
     ]);
 
-    console.log("categoryVocabulary: ", categoryVocabulary.length, categoryVocabulary);
-    console.log("tagVocabulary: ", tagVocabulary.length, tagVocabulary);
-    tagVocabulary.forEach(tag => console.log(tag));
-    console.log("userProfile:", userProfile);
+    // console.log("categoryVocabulary: ", categoryVocabulary.length);
+    // console.log("tagVocabulary: ", tagVocabulary.length);
+    // console.log("userProfile: ", userProfile);
+
 
     const userVector = vectorize(userProfile.categories, userProfile.tags, categoryVocabulary, tagVocabulary);
-    userVector.forEach(value => console.log(value));
 
     const allRecipes = await Recipes.find();
     const recommendations = [];
 
-    // Use Promise.all to process the recipes in parallel
-    const processRecipes = allRecipes.slice(0, 5).map(async (recipe) => {
-        console.log("*****************************")
-        console.log("recipe name: ", recipe.Name);
-
+    const processRecipes = allRecipes.slice(0,1).map(async (recipe) => {
         const { categories, tags } = await extractFeatures(recipe);
         const recipeVector = vectorize(categories, tags, categoryVocabulary, tagVocabulary);
-        recipeVector.forEach(value => console.log(value));
 
         const similarityScore = cosineSimilarity(userVector, recipeVector);
-        console.log("similarityScore:", similarityScore);
 
         return { recipe, similarityScore };
     });
 
-    // Wait for all recipe processing to complete
     const results = await Promise.all(processRecipes);
+    console.log("*****************************");
 
-    // Sort the results by similarity score and return the top 10 recommendations
     return results.sort((a, b) => b.similarityScore - a.similarityScore).slice(0, 10);
 };
-
 
 module.exports = {
     recommendRecipes,
