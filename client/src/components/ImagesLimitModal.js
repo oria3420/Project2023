@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'
 import './GuestModal.css'
 
 const ImagesLimitModal = ({ showModal, onClose }) => {

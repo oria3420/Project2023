@@ -37,6 +37,15 @@ connection.once('open', () => {
     bucketName: 'uploads'
   });
   console.log('GridFS initialized');
+
+  try {
+    // console.log('Attempting to initialize recipe vectors...');
+    // require('./recommendtion/initUsersProfile.js');
+    // require('./recommendtion/initRecipeVectors.js');
+  } catch (error) {
+    console.error('Error executing initRecipeVectors.js:', error);
+  }
+
 });
 
 const storage = new GridFsStorage({
@@ -51,7 +60,6 @@ const storage = new GridFsStorage({
 });
 
 const upload = multer({ storage });
-
 app.use(cors());
 app.use(express.json());
 
@@ -59,7 +67,6 @@ app.use(express.json());
 // Get recommendations for a user
 app.get('/api/recommendations/:userId', async (req, res) => {
   try {
-    console.log("recommendations server");
     const userId = req.params.userId;
     const recommendations = await recommendRecipes(userId);
     res.status(200).json(recommendations);
