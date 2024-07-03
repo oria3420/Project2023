@@ -42,10 +42,8 @@ const buildUserProfile = async (userId) => {
 
 const initUserProfile = async (userId, categoryVocabulary, tagVocabulary) => {
     const userProfile = await buildUserProfile(userId);
-    console.log("userProfile: ", userId, userProfile);
 
     const userVector = vectorize(userProfile.categories, userProfile.tags, categoryVocabulary, tagVocabulary);
-    // console.log("userVector:", userVector);
 
     await UsersProfile.updateOne(
         { user_id: userId },
@@ -53,12 +51,12 @@ const initUserProfile = async (userId, categoryVocabulary, tagVocabulary) => {
         { upsert: true } // Insert if not exists, update if exists
     );
 
-    // console.log(`User profile updated for user ID ${userId}`);
 };
 
 
 const updateAllUserProfiles = async () => {
     try {
+        console.log('Attempting to initialize users profiless...');
         const [categoryVocabulary, tagVocabulary] = await Promise.all([
             GlobalVocabularies.findOne({ type: 'category' }).select('vocabulary').exec().then(res => res.vocabulary).catch(err => {
                 console.error('Error fetching category vocabulary:', err);
@@ -70,17 +68,13 @@ const updateAllUserProfiles = async () => {
             })
         ]);
 
-        console.log("Category Vocabulary Length:", categoryVocabulary.length);
-        console.log("Tag Vocabulary Length:", tagVocabulary.length);
 
         const Users = Collection.getModel(TABLE_NAMES.USERS);
         const allUsers = await Users.find({}, { _id: 0, email: 1 }); // Fetch all user IDs
-        // console.log("allUsers :", allUsers)
-        // console.log("len :", allUsers.length)
+
 
         await Promise.all(allUsers.map(async (user) => {
             await initUserProfile(user.email, categoryVocabulary, tagVocabulary);
-            // console.log(`User profile updated successfully for user ID ${user.email}`);
         }));
 
         console.log("All user profiles updated successfully");
@@ -90,6 +84,4 @@ const updateAllUserProfiles = async () => {
 };
 
 
-updateAllUserProfiles().catch(err => {
-    console.error("Error updating user profiles:", err);
-});
+module.exports = updateAllUserProfiles;

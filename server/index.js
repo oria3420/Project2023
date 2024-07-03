@@ -13,6 +13,10 @@ const multer = require('multer');
 const path = require('path');
 const { constants } = require('buffer');
 const { recommendRecipes } = require('./recommendations');
+require('./recommendtion/scheduler');
+
+mongoose.set('strictQuery', true); // Ensures strict query behavior
+
 
 const app = express();
 
@@ -38,14 +42,14 @@ connection.once('open', () => {
   });
   console.log('GridFS initialized');
 
-  try {
-    // console.log('Attempting to initialize recipe vectors...');
-    // require('./recommendtion/initUsersProfile.js');
-    // require('./recommendtion/initRecipeVectors.js');
-    require('./recommendtion/initGlobalVocabularies.js');
-  } catch (error) {
-    console.error('Error executing initRecipeVectors.js:', error);
-  }
+  // try {
+  //   console.log('Attempting to initialize recipe vectors...');
+  //   require('./recommendtion/initUsersProfile.js');
+  //   require('./recommendtion/initRecipeVectors.js');
+  //   require('./recommendtion/initGlobalVocabularies.js');
+  // } catch (error) {
+  //   console.error('Error executing initRecipeVectors.js:', error);
+  // }
 
 });
 

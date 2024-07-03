@@ -6,15 +6,15 @@ const { tagCategories, collectionToTagField } = require('./utils');
 
 
 const buildCategoryVocabulary = async () => {
-    console.log("Start building category vocabulary");
+    // console.log("Start building category vocabulary");
     const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
     const uniqueCategories = await Recipes.distinct("RecipeCategory");
-    console.log("End building category vocabulary");
+    // console.log("End building category vocabulary");
     return uniqueCategories;
 };
 
 const buildTagVocabulary = async () => {
-    console.log("Start building tag vocabulary");
+    // console.log("Start building tag vocabulary");
     const tagSet = new Set();
 
     await Promise.allSettled(tagCategories.map(async (collection) => {
@@ -30,14 +30,13 @@ const buildTagVocabulary = async () => {
         tags.forEach(tag => tagSet.add(tag));
     }));
 
-    console.log("End building tag vocabulary");
-
     return Array.from(tagSet);
 };
 
 const initGlobalVocabularies = async () => {
 
     try {
+        console.log('Attempting to initialize global vocabularies...');
         // Build category vocabulary
         const categoryVocabulary = await buildCategoryVocabulary();
 
@@ -64,5 +63,4 @@ const initGlobalVocabularies = async () => {
     }
 };
 
-// Run initialization
-initGlobalVocabularies();
+module.exports = initGlobalVocabularies;

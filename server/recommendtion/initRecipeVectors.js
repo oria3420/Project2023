@@ -13,7 +13,7 @@ const {
 
 const initRecipeVectors = async () => {
     try {
-
+        console.log('Attempting to initialize recipe vectors...');
         const [categoryVocabulary, tagVocabulary] = await Promise.all([
             GlobalVocabularies.findOne({ type: 'category' }).select('vocabulary'),
             GlobalVocabularies.findOne({ type: 'tag' }).select('vocabulary')
@@ -49,5 +49,4 @@ const initRecipeVectors = async () => {
     }
 };
 
-// Run the initialization function
-initRecipeVectors();
+module.exports = initRecipeVectors;
