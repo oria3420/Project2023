@@ -42,6 +42,7 @@ connection.once('open', () => {
     // console.log('Attempting to initialize recipe vectors...');
     // require('./recommendtion/initUsersProfile.js');
     // require('./recommendtion/initRecipeVectors.js');
+    require('./recommendtion/initGlobalVocabularies.js');
   } catch (error) {
     console.error('Error executing initRecipeVectors.js:', error);
   }

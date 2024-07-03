@@ -6,11 +6,23 @@ const UsersProfile = require('./models/usersProfile.model');
 const RecipesVectors = require('./models/recipesVectors.model');
 
 const cosineSimilarity = (vec1, vec2) => { 
+    // console.log("vec1: ", vec1);
+    // console.log("vec2: ", vec2);
     const dotProduct = vec1.reduce((sum, val, i) => sum + val * vec2[i].value, 0); // Adjusted to access 'value' property in vec2
+    // console.log("dotProduct: ", dotProduct);
+    if(dotProduct === 0){
+        return 0;
+    }
     const magnitude1 = Math.sqrt(vec1.reduce((sum, val) => sum + val * val, 0));
     const magnitude2 = Math.sqrt(vec2.reduce((sum, val) => sum + val.value * val.value, 0)); // Adjusted to access 'value' property in vec2
+    // console.log("magnitude1: ", magnitude1);
+    // console.log("magnitude2: ", magnitude2);
+    if (magnitude1 === 0 || magnitude2 === 0) {
+        return 0; // Avoid division by zero
+    }
     return dotProduct / (magnitude1 * magnitude2);
 };
+
 
 const recommendRecipes = async (userId) => {
     try {
@@ -23,12 +35,13 @@ const recommendRecipes = async (userId) => {
         if (!userProfile) {
             throw new Error(`User profile not found for user ID ${userId}`);
         }
-
+        // console.log("userProfile: ", userProfile);
         const userVector = userProfile.vector.map(entry => entry.value);
 
         // Compute similarity scores in parallel
         const similarityPromises = allRecipes.map(async (recipe) => {
             const similarityScore = cosineSimilarity(userVector, recipe.vector);
+            // console.log("similarityScore: ", similarityScore);
             return { recipeId: recipe.recipeId, similarityScore };
         });
 

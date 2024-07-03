@@ -2,26 +2,8 @@ const GlobalVocabularies = require('../models/globalVocabularies.model');
 const Collection = require('../models/collection.model');
 const globals = require('../../client/src/common/tablesNames');
 const TABLE_NAMES = globals.TABLE_NAMES;
+const { tagCategories, collectionToTagField } = require('./utils');
 
-const tagCategories = Object.keys(TABLE_NAMES)
-    .filter(name => name.endsWith('CATEGORIES') && !name.startsWith('RECIPE'))
-    .map(name => TABLE_NAMES[name].toLowerCase())
-    .sort(); // Sort alphabetically
-
-const collectionToTagField = {
-    allergy_categories: 'allergy',
-    cooking_type_categories: 'cookingtype',
-    difficulty_categories: 'difficulty',
-    flavor_categories: 'flavor',
-    food_categories: 'food',
-    health_categories: 'health',
-    holiday_categories: 'holiday',
-    kitchen_style_categories: 'kitchen',
-    kosher_categories: 'kosher',
-    meal_type_categories: 'mealType',
-    time_categories: 'time'
-    // Add more mappings as needed for other collections
-};
 
 const buildCategoryVocabulary = async () => {
     console.log("Start building category vocabulary");
