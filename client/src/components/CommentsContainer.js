@@ -39,14 +39,6 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
         setImageUploadStatus('');
     };
 
-    // useEffect(() => {
-    //     const timer = setTimeout(() => {
-    //         handleImageUploadReset();
-    //     }, 3000);
-
-    //     return () => clearTimeout(timer);
-    // }, [imageUploadStatus]);
-
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -218,14 +210,14 @@ const CommentsContainer = ({ id, user_id, user_name, recipe }) => {
 
 
                 <div className='new-rating'>
-                <InteractiveStarRating
-                    initialRating={userRating}
-                    onRatingSubmit={handleRatingSubmit}
-                    user_id={user_id} // Pass user_id as a prop
-                    handleGuestClick={handleGuestClick} // Pass handleGuestClick as a prop
-                />
-            </div>
-            
+                    <InteractiveStarRating
+                        initialRating={userRating}
+                        onRatingSubmit={handleRatingSubmit}
+                        user_id={user_id} // Pass user_id as a prop
+                        handleGuestClick={handleGuestClick} // Pass handleGuestClick as a prop
+                    />
+                </div>
+
 
                 <div className='new-comment'>
                     <div className='comment-input-container'>

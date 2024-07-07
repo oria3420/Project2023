@@ -1,3 +1,7 @@
+:root {
+  --color-gray: #797979;
+}
+
 #recipe-name {
   margin-right: 15px;
   font-weight: bold;
@@ -32,7 +36,7 @@
   margin-top: 30px;
   margin-bottom: 45px;
   display: flex;
-  color: #797979;
+  color:  var(--color-gray);
 }
 
 .recipe-image-container{
@@ -72,7 +76,7 @@
   display: flex;
   align-items: center;
   margin-top: 70px;
-  color: #797979;
+  color:  var(--color-gray);
 }
 
 .description-text{
@@ -172,3 +176,28 @@
   margin-right: 15px;
 }
 
+.add-to-shopping{
+  color: var(--color-gray);
+}
+
+.add-to-shopping{
+  margin-top: 20px;
+}
+
+.add-to-shopping-list {
+  border: none;
+  background-color: transparent;
+  margin-top: 10px;
+  margin-left: -10px;
+}
+
+.add-to-shopping-list-icon {
+  color: orange;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.add-to-shopping-list span {
+  color: var(--color-gray);
+  font-size: 17px;
+}

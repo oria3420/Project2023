@@ -1,0 +1,78 @@
+#modal-check-box{
+  cursor: pointer;
+  border-color: #aeacac;
+}
+
+.add-to-list-check-input:checked{
+  background-color: orange;
+  border-color: orange  !important;
+  box-shadow: 0 0 5px rgba(255, 165, 0, 0.5);
+}
+
+.add-to-list-check-input:focus {
+  border-color: orange;
+  outline: 0;
+  box-shadow:none;
+}
+
+/* Unfocus styles */
+.add-to-list-check-input:not(:focus) {
+  box-shadow: none;
+}
+
+.add-to-list-modal-dialog {
+  margin-top: -80px;
+  width: 650px;
+}
+
+#shopping-list-modal-close,
+#shopping-list-modal-add {
+  border-color: orange;
+  border-radius: 40px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#shopping-list-modal-close {
+  background-color: white;
+  color: orange;
+  width: 100px;
+}
+
+#shopping-list-modal-add {
+  background-color: orange;
+  color: white;
+  width: 120px;
+}
+
+#shopping-list-modal-add:hover {
+  background-color: darkorange;
+  /* Adjust the color to make it slightly darker on hover */
+}
+
+#shopping-list-modal-close:hover {
+  background-color: whitesmoke;
+}
+
+.orange-title {
+  color: orange;
+}
+
+.btn-close:focus, .btn-close:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.ing-check-label{
+  color: gray;
+}
+
+.add-list-modal-ingredients{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 20px;
+  max-height: 200px; /* Adjust this value as needed */
+  overflow-y: auto;
+  padding: 10px; /* Optional: Add padding for better spacing */
+}
+
