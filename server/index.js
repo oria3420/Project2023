@@ -13,10 +13,10 @@ const multer = require('multer');
 const path = require('path');
 const { constants } = require('buffer');
 const { recommendRecipes } = require('./recommendations');
-require('./recommendtion/scheduler');
+const cron = require('./recommendtion/scheduler'); // Import your scheduler script
+// require('./recommendtion/scheduler');
 
-mongoose.set('strictQuery', true); // Ensures strict query behavior
-
+mongoose.set('strictQuery', false);
 
 const app = express();
 
@@ -27,9 +27,20 @@ app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB
+// mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// });
+
 mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
   useNewUrlParser: true,
   useUnifiedTopology: true
+}).then(() => {
+  console.log('MongoDB connected successfully');
+  cron.setMongooseConnection(mongoose.connection);
+  // Start scheduling tasks here
+}).catch((err) => {
+  console.error('MongoDB connection error:', err);
 });
 
 
@@ -41,16 +52,6 @@ connection.once('open', () => {
     bucketName: 'uploads'
   });
   console.log('GridFS initialized');
-
-  // try {
-  //   console.log('Attempting to initialize recipe vectors...');
-  //   require('./recommendtion/initUsersProfile.js');
-  //   require('./recommendtion/initRecipeVectors.js');
-  //   require('./recommendtion/initGlobalVocabularies.js');
-  // } catch (error) {
-  //   console.error('Error executing initRecipeVectors.js:', error);
-  // }
-
 });
 
 const storage = new GridFsStorage({

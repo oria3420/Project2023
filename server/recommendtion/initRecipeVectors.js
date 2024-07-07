@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const Collection = require('../models/collection.model'); // Assuming you have a collection model
 const GlobalVocabularies = require('../models/globalVocabularies.model');
 const RecipesVectors = require('../models/recipesVectors.model');
@@ -44,8 +43,6 @@ const initRecipeVectors = async () => {
         console.log('Recipe vectors initialized successfully!');
     } catch (error) {
         console.error('Error initializing recipe vectors:', error);
-    } finally {
-        mongoose.disconnect(); // Disconnect mongoose connection when done
     }
 };
 
