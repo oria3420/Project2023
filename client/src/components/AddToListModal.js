@@ -6,8 +6,6 @@ const AddToListModal = ({ showModal, onClose, ingredients, userId }) => {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [reqValid, setReqValid] = useState(false);
 
-  // console.log(userId)
-  // Function to handle checkbox change
   const handleCheckboxChange = (ingredient) => {
     setSelectedIngredients((prevSelected) =>
       prevSelected.includes(ingredient)

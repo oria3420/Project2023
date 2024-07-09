@@ -178,7 +178,7 @@ const FavoriteRecipes = () => {
                         </div>
 
                         <div className='favorites-page-bottom'>
-                            <label id='black-title-fav' className='black-title'>Favorites</label>
+                            <label id='black-title-shopping' className='black-title'>Favorites</label>
 
                             <div className="search-fav-input-container">
 

@@ -200,14 +200,16 @@ app.post('/api/add_item_to_shopping_list/:userId', async (req, res) => {
   const ShoppingList = Collection.getModel(TABLE_NAMES.SHOPPING_LIST);
   const { userId } = req.params;
   const { items } = req.body;
-
+  console.log("items: ", items)
   try {
     // Retrieve the current shopping list for the user
     let existingList = await ShoppingList.findOne({ userId });
 
     // If the user does not have a shopping list yet, initialize it with all items
     if (!existingList) {
+      console.log("userId: ", userId)
       existingList = await ShoppingList.create({ userId, items });
+      console.log("existingList: ", existingList)
     } else {
       // Filter out items that already exist in the shopping list based on name
       const newItems = items.filter(newItem => {
