@@ -83,3 +83,12 @@ body {
   margin-left: 10px;
   color: gray;
 }
+
+#shopping-list-delete-all {
+  border-color: orange;
+  border-radius: 40px;
+  transition: background-color 0.3s, color 0.3s;
+  background-color: orange;
+  color: white;
+  width: 120px;
+}

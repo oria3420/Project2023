@@ -57,6 +57,22 @@ const Shopping = () => {
             .catch(error => console.error('Error removing item:', error));
     };
 
+    const deleteAllItems = () => {
+        fetch(`http://localhost:1337/api/delete_all_shopping_list/${user.email}`, {
+            method: 'DELETE',
+        })
+        .then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            // Update the local shopping list state to reflect the empty list
+            setShoppingList([]);
+        })
+        .catch(error => console.error('Error deleting all items:', error));
+    };
+    
+    
+
     return (
         <div>
             {name && <Navbar name={name} />}
@@ -70,19 +86,24 @@ const Shopping = () => {
                         <label id="black-title-shopping-list" className='black-title'>Shopping List</label>
                         <span className='num-of-items'>({shoppingList.length} items)</span>
                         <div className='shopping-list-sub-container'>
-
                             {shoppingList.length > 0 ? (
-                                shoppingList.map((item, index) => (
-                                    <div className="shopping-list-item">
-                                        <div key={index} className="shopping-list-item-content">
-                                            {item.name}
+                                <>
+                                    {shoppingList.map((item, index) => (
+                                        <div key={index} className="shopping-list-item">
+                                            <div className="shopping-list-item-content">
+                                                {item.name}
+                                            </div>
+                                            <i
+                                                onClick={() => removeItem(item.name)}
+                                                className='bi bi-x-circle remove-item-shopping'
+                                            ></i>
                                         </div>
-                                        <i
-                                            onClick={() => removeItem(item.name)}
-                                            className='bi bi-x-circle remove-item-shopping'
-                                        ></i>
-                                    </div>
-                                ))
+                                    ))}
+                                    <button id="shopping-list-delete-all" type="button" className="btn btn-primary" onClick={deleteAllItems}>
+                                        delete-all
+                                    </button>
+                                </>
+                                
                             ) : (
                                 <li className="shopping-list-item">Your shopping list is empty.</li>
                             )}
@@ -90,8 +111,8 @@ const Shopping = () => {
 
                     </div>
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

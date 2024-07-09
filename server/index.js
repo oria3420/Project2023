@@ -279,6 +279,26 @@ app.delete('/api/shopping_list/:userId/:itemName', async (req, res) => {
   }
 });
 
+app.delete('/api/delete_all_shopping_list/:userId', async (req, res) => {
+  const ShoppingList = Collection.getModel(TABLE_NAMES.SHOPPING_LIST);
+  const { userId } = req.params;
+
+  try {
+    const result = await ShoppingList.findOneAndDelete({ userId });
+
+    if (result) {
+      console.log(`User ${userId}'s shopping list and document deleted.`);
+      res.status(200).json({ message: 'User document deleted successfully' });
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    console.error('Error deleting user document:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 app.get('/api/recipes/:id/comments', async (req, res) => {
   try {
     const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
