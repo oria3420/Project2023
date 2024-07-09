@@ -26,11 +26,6 @@ app.use(cors());
 // Middleware to parse JSON requests
 app.use(express.json());
 
-// Connect to MongoDB
-// mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true
-// });
 
 mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
   useNewUrlParser: true,
@@ -200,6 +195,64 @@ app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req,
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+app.post('/api/add_item_to_shopping_list/:userId', async (req, res) => {
+  const ShoppingList = Collection.getModel(TABLE_NAMES.SHOPPING_LIST);
+  const { userId } = req.params;
+  const { items } = req.body;
+
+  try {
+    // Retrieve the current shopping list for the user
+    let existingList = await ShoppingList.findOne({ userId });
+
+    // If the user does not have a shopping list yet, initialize it with all items
+    if (!existingList) {
+      existingList = await ShoppingList.create({ userId, items });
+    } else {
+      // Filter out items that already exist in the shopping list based on name
+      const newItems = items.filter(newItem => {
+        return !existingList.items.some(existingItem =>
+          existingItem.name === newItem.name
+        );
+      });
+
+      // If there are new items to add, update the shopping list
+      if (newItems.length > 0) {
+        const result = await ShoppingList.findOneAndUpdate(
+          { userId },
+          { $addToSet: { items: { $each: newItems } } }, // Use $addToSet to avoid duplicates
+          { new: true, upsert: true }
+        );
+
+        console.log("Updated shopping list:", result);
+      }
+    }
+
+    res.status(200).json({ message: 'Shopping list updated successfully' });
+  } catch (error) {
+    console.error('Error saving shopping list:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.get('/api/shopping_list/:userId', async (req, res) => {
+  const ShoppingList = Collection.getModel(TABLE_NAMES.SHOPPING_LIST);
+  const userId = req.params.userId;
+
+  try {
+    const shoppingList = await ShoppingList.findOne({ userId });
+
+    if (!shoppingList) {
+      return res.status(404).json({ status: 'false', message: 'Shopping list not found' });
+    }
+
+    return res.status(200).json(shoppingList.items);
+  } catch (err) {
+    console.error('Error fetching shopping list:', err);
+    return res.status(500).json({ status: 'false', message: 'Internal server error' });
+  }
+});
+
 
 
 app.get('/api/recipes/:id/comments', async (req, res) => {
@@ -587,7 +640,7 @@ app.get('/api/favorites/:userId', async (req, res) => {
     res.status(500).send('Error fetching favorites');
   }
 });
-    
+
 
 
 app.get('/api/trending', async (req, res) => {
@@ -987,9 +1040,9 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
     // Create a new Image document with the file's metadata
     const newImage = new Image({
       recipe_ID: rec_id, // Assuming rec_id is defined elsewhere
-      image_link:{
-      filename: file.originalname, // Store the original filename
-      fileId: file.id, // Store the ObjectId of the uploaded file
+      image_link: {
+        filename: file.originalname, // Store the original filename
+        fileId: file.id, // Store the ObjectId of the uploaded file
       }
     });
 

@@ -30,4 +30,5 @@ module.exports.TABLE_NAMES = {
     FAVORITES: 'favorites',
     MEASUREMENTS: 'measurements',
     RATINGS: 'ratings',
+    SHOPPING_LIST: 'shopping_list',
   };

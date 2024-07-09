@@ -219,7 +219,8 @@ const RecipePage = () => {
             <AddToListModal
               showModal={showShoppingModal}
               onClose={() => setShowShoppingModal(false)}
-              ingredients={ingredients} // Set a default component if needed
+              ingredients={ingredients}
+              userId={user_id}
             />
           )}
           {showGuestModal && (

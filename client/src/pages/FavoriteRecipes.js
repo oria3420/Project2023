@@ -13,8 +13,8 @@ import Loading from '../components/Loading';
 const FavoriteRecipes = () => {
     const navigate = useNavigate()
     const [favoritesRecipes, setFavoritesRecipes] = useState([]);
-    const [name, setName] = useState(null)
-    const [user, setUser] = useState(null)
+    const [name, setName] = useState(null);
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [suggestions, setSuggestions] = useState([]);
     const [searchRecipe, setSearchRecipe] = useState('');
