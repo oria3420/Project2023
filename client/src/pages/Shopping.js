@@ -41,6 +41,21 @@ const Shopping = () => {
         }
     }, [user]);
 
+    const removeItem = (itemName) => {
+        console.log("in removeItem:", itemName)
+        // Update the server to remove the item
+        fetch(`http://localhost:1337/api/shopping_list/${user.email}/${itemName}`, {
+            method: 'DELETE',
+        })
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                // Remove the item from the local shopping list state
+                setShoppingList(prevList => prevList.filter(item => item.name !== itemName));
+            })
+            .catch(error => console.error('Error removing item:', error));
+    };
 
     return (
         <div>
@@ -58,13 +73,13 @@ const Shopping = () => {
 
                             {shoppingList.length > 0 ? (
                                 shoppingList.map((item, index) => (
-                                    <div>
-                                        <div key={index} className="shopping-list-item">
+                                    <div className="shopping-list-item">
+                                        <div key={index} className="shopping-list-item-content">
                                             {item.name}
                                         </div>
                                         <i
-                                        
-                                            className='bi bi-x-circle remove-icon'
+                                            onClick={() => removeItem(item.name)}
+                                            className='bi bi-x-circle remove-item-shopping'
                                         ></i>
                                     </div>
                                 ))

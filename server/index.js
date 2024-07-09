@@ -255,7 +255,29 @@ app.get('/api/shopping_list/:userId', async (req, res) => {
   }
 });
 
+app.delete('/api/shopping_list/:userId/:itemName', async (req, res) => {
+  const ShoppingList = Collection.getModel(TABLE_NAMES.SHOPPING_LIST);
+  const { userId, itemName } = req.params;
 
+  try {
+    // Find the user's shopping list
+    const result = await ShoppingList.findOneAndUpdate(
+      { userId },
+      { $pull: { items: { name: itemName } } }, // Use $pull to remove the item by name
+      { new: true }
+    );
+
+    if (result) {
+      console.log(`Item ${itemName} removed from user ${userId}'s shopping list.`);
+      res.status(200).json({ message: 'Item removed successfully', shoppingList: result });
+    } else {
+      res.status(404).json({ error: 'Shopping list not found' });
+    }
+  } catch (error) {
+    console.error('Error removing item from shopping list:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
 app.get('/api/recipes/:id/comments', async (req, res) => {
   try {

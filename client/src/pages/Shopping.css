@@ -1,7 +1,8 @@
 @import url('./Global.css');
 @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&family=Lato&family=Poppins:wght@300&display=swap');
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
 }
@@ -18,13 +19,13 @@ html, body {
   background-attachment: fixed;
 }
 
-.shopping-list{
+.shopping-list {
   margin-top: 50px;
   margin-left: 100px;
   width: 850px;
 }
 
-.shopping-list-title{
+.shopping-list-title {
   font-size: 30px;
   color: orange;
   margin-bottom: 20px;
@@ -33,7 +34,7 @@ html, body {
   font-weight: bold;
 }
 
-.shopping-list-bottom{
+.shopping-list-bottom {
   border: 1px solid transparent;
   padding: 20px;
   border-radius: 40px;
@@ -42,29 +43,43 @@ html, body {
   overflow-y: auto;
 }
 
-.shopping-list-sub-container{
+.shopping-list-sub-container {
   margin-top: 25px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-#black-title-shopping-list{
+#black-title-shopping-list {
   margin-left: 15px;
   font-size: 20px;
 }
 
-.num-of-items{
+.num-of-items {
   margin-left: 10px;
 }
 
-.shopping-list-item{
+.shopping-list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.shopping-list-item-content {
   border: 1px solid var(--gray-frame);
   border-radius: 40px;
   width: 500px;
-  margin-bottom: 20px;
+  padding-left: 20px;
   height: 40px;
   display: flex;
   align-items: center;
-  padding-left: 20px;
+
+}
+
+.remove-item-shopping {
+  font-size: 20px;
+  margin-left: 10px;
+  color: gray;
 }
