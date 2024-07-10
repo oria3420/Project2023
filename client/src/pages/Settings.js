@@ -59,18 +59,18 @@ const Settings = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         if (passwordError) {
             return;
         }
-
+    
         const userData = {
             newEmail: newEmail,
             newName: newName,
             newPassword: newPassword,
             newDistrict: district,
         };
-
+    
         try {
             const response = await fetch(`http://localhost:1337/api/update_user_details/${currentUserId}`, {
                 method: 'POST',
@@ -79,29 +79,34 @@ const Settings = () => {
                 },
                 body: JSON.stringify(userData),
             });
-
+    
             const result = await response.json();
+    
             if (response.ok) {
                 // Handle success (e.g., show a success message or update the UI)
                 console.log('User details updated successfully:', result);
                 setFormValid(true);
                 setShowAlert(true);
-
+    
                 // Reset form fields
                 setNewEmail('');
                 setNewName('');
                 setNewPassword('');
                 setDistrict('');
-
+    
             } else {
                 // Handle error (e.g., show an error message)
-                console.error('Failed to update user details:', result.message);
+                if (result.error === 'Duplicate email') {
+                    setEmailError('Email is already in use');
+                } else {
+                    console.error('Failed to update user details:', result.message);
+                }
             }
         } catch (error) {
             console.error('Error updating user details:', error);
         }
     };
-
+    
     useEffect(() => {
         const token = localStorage.getItem('token')
         if (token) {
@@ -165,7 +170,7 @@ const Settings = () => {
                                     value={newEmail || ''}
                                     onChange={handleEmailChange}
                                     onFocus={handleFieldFocus} // Dismiss alert on focus
-                                    required
+                                    
                                 />
                             </div>
 
@@ -179,8 +184,7 @@ const Settings = () => {
                                     type="text"
                                     value={newName || ''}
                                     onChange={(e) => setNewName(e.target.value)}
-                                    onFocus={handleFieldFocus} // Dismiss alert on focus
-                                    required
+                                    onFocus={handleFieldFocus} // Dismiss alert on focus                                   
                                 />
                             </div>
 
@@ -193,7 +197,7 @@ const Settings = () => {
                                     value={newPassword || ''}
                                     onChange={handlePasswordChange}
                                     onFocus={handleFieldFocus} // Dismiss alert on focus
-                                    required
+                                    autoComplete="new-password"
                                 />
                                 {passwordError &&
                                     <div className="error-msg-settings">

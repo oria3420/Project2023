@@ -17,6 +17,30 @@ const Navbar = ({ name }) => {
     const [message, setMessage] = useState("");
     const token = localStorage.getItem('token');
 
+    const handleMyRecipesClick = () => {
+        navigate('/my_recipes');
+    };
+
+    const handleFavoritesClick = () => {
+        navigate('/favorites');
+    };
+
+    const handleShoppingClick = () => {
+        navigate('/shopping');
+    };
+
+    const handleSettingsClick = () => {
+        navigate('/settings');
+    };
+
+    const handleLogOutClick = (event) => {
+        console.log("LogoutBtn")
+        event.preventDefault();
+        localStorage.clear();
+        navigate('/');
+    };
+
+
     const handleGuestClick = (obj) => {
         //setPressButton(obj);
         // console.log(obj)
@@ -89,14 +113,22 @@ const Navbar = ({ name }) => {
                                 </ul>
                             ) : (
                                 <ul className="dropdown-menu dropdown-position">
-                                    <li className="dropdown-item">
+                                    <li onClick={handleMyRecipesClick} className="dropdown-item">
                                         <MyRecipesBtn />
                                     </li>
-                                    <li><button type="button" className="dropdown-item"><FavoriesBtn /></button></li>
-                                    <li><button type="button" className="dropdown-item"><ShoppingBtn /></button></li>
-                                    <li><button type="button" className="dropdown-item"><SettingBtn /></button></li>
+                                    <li onClick={handleFavoritesClick} className="dropdown-item">
+                                        <FavoriesBtn />
+                                    </li>
+                                    <li onClick={handleShoppingClick} className="dropdown-item">
+                                        <ShoppingBtn />
+                                    </li>
+                                    <li onClick={handleSettingsClick} className='dropdown-item'>
+                                        <SettingBtn />
+                                    </li>
                                     <li><hr className="dropdown-divider" /></li>
-                                    <li><button type="button" className="dropdown-item"><LogoutBtn userName={name} /></button></li>
+                                    <li onClick={handleLogOutClick} className="dropdown-item">
+                                        <LogoutBtn userName={name} />
+                                    </li>
                                 </ul>
                             )}
                         </div>

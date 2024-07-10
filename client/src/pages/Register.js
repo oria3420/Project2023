@@ -182,6 +182,7 @@ function RegisterPage() {
                   type="password"
                   placeholder='Password'
                   required
+                  autoComplete="new-password"
                 />
                 {passwordError ? (
                   <div className="error-msg-reg visible-reg">
