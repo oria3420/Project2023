@@ -306,6 +306,7 @@
     display: flex;
     justify-content: flex-end;
     margin-bottom: 20px;
+    height: 45px;
 }
 
 .steps-container {

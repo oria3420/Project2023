@@ -54,8 +54,12 @@
 
 .settings-page-bottom {
     margin: 40px;
+    margin-left: 60px;
+    margin-right: 60px;
     border: 1px solid var(--gray-frame);
     padding: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
     border-radius: 40px;
 }
 
@@ -64,21 +68,18 @@
     margin-top: 10px;
 }
 
-.settings-recipes-container {
-    margin-top: 20px;
-    margin-left: 25px;
+.settings-inputs-line {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    /* Ensure items start from the left */
-    gap: 1.5%;
-    /* Adjust the gap for spacing between cards */
+    align-items: center;
+    gap: 40px;
+    margin-bottom: 25px;
 }
 
 .settings-desc-field {
     display: flex;
     flex-direction: column;
     margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .settings-input-title {
@@ -88,7 +89,7 @@
 }
 
 .settings-input-field {
-    width: 100%;
+    width: 300px;
     border: 1px solid #d3d3d3;
     border-radius: 30px;
     padding: 8px;
@@ -100,6 +101,47 @@
     outline: none;
 }
 
-.email-settings{
-    width: 300px;
+.email-settings {
+    width: 400px;
+}
+
+.settings-district-container{
+    margin-bottom: 20px;
+}
+
+#settings-input-district {
+    height: 32px;
+    margin-bottom: 10px;
+    background-color: white;
+    border-color: white;
+    border-radius: 30px;
+}
+
+.settings-form-select {
+    font-size: 14px;
+    /* Adjust the font size as needed */
+}
+
+
+.settings-form-select:focus {
+    box-shadow: none;
+}
+
+
+.settings-save-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    height: 45px;
+}
+
+.settings-save-btn {
+    background-color: orange;
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 40px;
+    width: 150px;
+    height: 35px;
+    font-size: 17px;
+    font-weight: 600;
 }
