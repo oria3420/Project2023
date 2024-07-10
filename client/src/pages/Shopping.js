@@ -153,7 +153,7 @@ const Shopping = () => {
                             <label id="black-title-shopping-list" className='black-title'>Shopping List</label>
                             <span className='num-of-items'>({shoppingList.length} items)</span>
                         </div>
-                        <div className="search-fav-input-container">
+                        <div className="search-shopping-input-container">
 
                             <div className="fav-page-input-wrapper">
                                 <i className="bi bi-search fav-page-saerch-icon shopping-search-icon"></i>
@@ -171,7 +171,7 @@ const Shopping = () => {
 
                         <div className='shopping-list-items-container'>
                             {isLoading ? (
-                                <div className="loading-message">
+                                <div className="loading-message loading-shopping">
                                     <div className="loading-spinner"></div>
                                 </div>
                             ) : (
@@ -181,8 +181,13 @@ const Shopping = () => {
                                             Your shopping list is empty.
                                         </div>
                                     ) : (
-                                        <div>
-                                            {filteredItems.map((item, index) => (
+                                        <>
+                                        {filteredItems.length === 0 ? (
+                                            <div className='shopping-list-no-results'>
+                                                <p>No items found. Please try another search.</p>
+                                            </div>
+                                        ) : (
+                                            filteredItems.map((item, index) => (
                                                 <div key={index} className="shopping-list-item">
                                                     <input
                                                         id="shopping-check-box"
@@ -199,19 +204,22 @@ const Shopping = () => {
                                                         className='bi bi-x-circle remove-item-shopping'
                                                     ></i>
                                                 </div>
-                                            ))}
-                                            <button id="shopping-list-delete-all" type="button" className="btn btn-primary" onClick={deleteAllItems}>
-                                                delete-all
-                                            </button>
-                                        </div>
+                                            ))
+                                        )}
+                                    </>
                                     )}
                                 </>
                             )}
+
                         </div>
 
-
+                        <div className="shopping-list-btns">
+                            <button id="shopping-list-delete-all" type="button" className="btn btn-primary" onClick={deleteAllItems}>
+                                delete-all
+                            </button>
+                        </div>
                     </div>
-                    
+
                 </div>
             </div >
         </div >

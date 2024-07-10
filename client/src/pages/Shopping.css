@@ -46,16 +46,47 @@ body {
   align-self: center;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.search-shopping-input-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  position: relative;
+  margin-left: 30px;
+  margin-bottom: 20px;
+  width: 100%;
 }
 
 .shopping-list-items-container {
-  margin-top: 25px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
+  overflow-y: auto;
+  max-height: 340px;
+
+  scrollbar-width: thin; /* For Firefox */
+  scrollbar-color: #888 transparent; /* For Firefox */
+}
+
+.shopping-list-items-container::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.shopping-list-items-container::-webkit-scrollbar-track {
+  background: transparent; /* Track color */
+}
+
+.shopping-list-items-container::-webkit-scrollbar-thumb {
+  background-color: #888; /* Thumb color */
+  border-radius: 4px; /* Rounded corners */
+}
+
+.shopping-list-items-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Hover color */
 }
 
 #black-title-shopping-list {
@@ -71,7 +102,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .shopping-list-item-content {
@@ -79,8 +110,9 @@ body {
   border-radius: 40px;
   width: 500px;
   padding-left: 20px;
-  height: 40px;
+  height: 35px;
   display: flex;
+  font-size: 15px;
   align-items: center;
 
 }
@@ -91,6 +123,23 @@ body {
   color: gray;
 }
 
+.shopping-list-btns{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0px;
+}
+
+.shopping-list-btns {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+  margin-right: 20px;
+}
+
 #shopping-list-delete-all {
   border-color: orange;
   border-radius: 40px;
@@ -98,15 +147,24 @@ body {
   background-color: orange;
   color: white;
   width: 120px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.shopping-list-empty-msg{
+.shopping-list-empty-msg, .loading-shopping,
+.shopping-list-no-results{
   height: 100%;
   display: flex;
   text-align: center;
   align-items: center;
-  margin-top: -110px;
   font-size: 17px;
+  margin-top: -40px;
+}
+
+.shopping-list-no-results{
+  font-size: 15px;
 }
 
 #shopping-check-box{
@@ -142,3 +200,4 @@ body {
 .shopping-search-icon{
   font-size: 10px;
 }
+
