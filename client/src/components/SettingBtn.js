@@ -7,7 +7,7 @@ const SettingBtn = () => {
     const handleClick = (event) => {
         if (event.target.closest('svg, input')) {
             event.preventDefault();
-            navigate('/setting');
+            navigate('/settings');
         }
     };
 

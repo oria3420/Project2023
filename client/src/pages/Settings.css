@@ -1,5 +1,9 @@
 @import url('./Global.css');
 
+:root{
+    --name-password-width: 300px;
+    --email-width: 400px;
+}
 .settings-main-container {
     margin-top: var(--navbar-height);
     display: flex;
@@ -56,6 +60,7 @@
     margin: 40px;
     margin-left: 60px;
     margin-right: 60px;
+    margin-bottom: 50px;
     border: 1px solid var(--gray-frame);
     padding: 20px;
     padding-left: 40px;
@@ -64,8 +69,8 @@
 }
 
 #black-title-settings {
-    padding-left: 10px;
     margin-top: 10px;
+    margin-bottom: 20px;
 }
 
 .settings-inputs-line {
@@ -89,7 +94,7 @@
 }
 
 .settings-input-field {
-    width: 300px;
+    width: var(--name-password-width);
     border: 1px solid #d3d3d3;
     border-radius: 30px;
     padding: 8px;
@@ -102,31 +107,24 @@
 }
 
 .email-settings {
-    width: 400px;
+    width: var(--email-width);
+    margin-right: 30px;
 }
 
-.settings-district-container{
+.settings-district-container {
     margin-bottom: 20px;
+    font-size: 14px;
 }
 
 #settings-input-district {
-    height: 32px;
-    margin-bottom: 10px;
-    background-color: white;
-    border-color: white;
-    border-radius: 30px;
+    width: var(--email-width);
+    padding-left: 10px;
+    padding-right: 10px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg fill="%23333" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 10px center;
 }
-
-.settings-form-select {
-    font-size: 14px;
-    /* Adjust the font size as needed */
-}
-
-
-.settings-form-select:focus {
-    box-shadow: none;
-}
-
 
 .settings-save-btn-container {
     width: 100%;
@@ -144,4 +142,25 @@
     height: 35px;
     font-size: 17px;
     font-weight: 600;
+}
+
+.pass-settings-error,
+.pass-settings-error:focus {
+    width: var(--name-password-width);
+    border: 1px solid red;
+    /* Set a solid red border */
+    box-shadow: 0 0 5px red;
+    /* Add a red glow effect using box-shadow */
+}
+
+.error-msg-settings {
+    text-align: center;
+    display: none;
+    margin-bottom: 0px;
+    margin-top: 10px;
+    font-size: 14px;
+    display: block;
+    color: red;
+    max-width: 100%; /* Maximum width equal to the parent's width */
+  overflow: hidden; /* Prevent text overflow */
 }

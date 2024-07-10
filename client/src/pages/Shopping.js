@@ -228,34 +228,3 @@ const Shopping = () => {
 
 export default Shopping;
 
-
-// {shoppingList.length > 0 ? (
-//     <>
-//         {shoppingList.map((item, index) => (
-//             <div key={index} className="shopping-list-item">
-//                 <input
-//                     id="shopping-check-box"
-//                     type="checkbox"
-//                     checked={!!checkedItems[item.name]}
-//                     onChange={() => handleCheckboxChange(item.name)}
-//                     className='form-check-input shopping-check-input'
-//                 />
-//                 <div className="shopping-list-item-content">
-//                     {item.name}
-//                 </div>
-//                 <i
-//                     onClick={() => removeItem(item.name)}
-//                     className='bi bi-x-circle remove-item-shopping'
-//                 ></i>
-//             </div>
-//         ))}
-//         <button id="shopping-list-delete-all" type="button" className="btn btn-primary" onClick={deleteAllItems}>
-//             delete-all
-//         </button>
-//     </>
-
-// ) : (
-//     <div className="shopping-list-empty-msg">
-//         Your shopping list is empty.
-//     </div>
-// )}

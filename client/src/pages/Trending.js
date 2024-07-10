@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 
-const SearchRecipe = () => {
+const Trending = () => {
     const navigate = useNavigate()
     const [recipes, setRecipes] = useState([]);
     const [name, setName] = useState(null)
@@ -101,5 +101,5 @@ const SearchRecipe = () => {
     )
 }
 
-export default SearchRecipe
+export default Trending
 

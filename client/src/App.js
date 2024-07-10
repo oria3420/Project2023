@@ -9,8 +9,7 @@ import TablesRouter from './tables/TablesRouter';
 import RecipePage from './pages/Recipe';
 import SearchRecipe from './pages/SearchRecipe';
 import WelcomePage from './pages/Welcome'
-import Setting from './pages/Setting';
-import SettingsNew from './pages/SettingsNew';
+import Settings from './pages/Settings';
 import FavoriteRecipes from './pages/FavoriteRecipes'
 import Shopping from './pages/Shopping';
 import Trending from './pages/Trending';
@@ -31,8 +30,7 @@ const App = () => {
                 <Route path="/table/:type" element={<TablesRouter />} />
                 <Route path="/recipes/:id" element={<RecipePage />} />
                 <Route path="/search_recipe" element={<SearchRecipe />} />
-                <Route path="/setting" element={<Setting />} />
-                <Route path="/settings_new" element={<SettingsNew />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/favorites" element={<FavoriteRecipes />} />
                 <Route path="/shopping" element={<Shopping />} />
                 <Route path="/trending" element={<Trending />} />

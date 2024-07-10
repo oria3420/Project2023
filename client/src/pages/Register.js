@@ -18,43 +18,47 @@ function RegisterPage() {
   const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
   async function registerUser(event) {
-    event.preventDefault()
-    const response = await fetch('http://localhost:1337/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        gender,
-        birthDate,
-        district,
-        password,
-        confirmPassword
-      }),
-    })
 
-    const data = await response.json()
-
-    if (data.error === 'Duplicate email') {
-      setEmailError("This email already exists");
-    } else {
-      setEmailError("");
-    }
+    event.preventDefault();
 
     if (password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
-      return;
+        console.log("Passwords do not match");
+        setConfirmPasswordError("Passwords do not match");
+        return;
     } else {
-      setConfirmPasswordError("");
-
+        setConfirmPasswordError("");
     }
+
+    console.log("trying to register");
+
+    const response = await fetch('http://localhost:1337/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name,
+            email,
+            gender,
+            birthDate,
+            district,
+            password
+        }),
+    });
+
+    const data = await response.json();
+
+    if (data.error === 'Duplicate email') {
+        setEmailError("This email already exists");
+    } else {
+        setEmailError("");
+    }
+
     if (data.status === 'ok') {
-      navigate('/login')
+        navigate('/login');
     }
+}
 
-  }
 
 
 

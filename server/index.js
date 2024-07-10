@@ -385,12 +385,10 @@ app.get('/api/admin', (req, res) => {
 
 app.post('/api/register', async (req, res) => {
   try {
+    console.log("in register")
     const existingUser = await User.findOne({ email: req.body.email });
     if (existingUser) {
       return res.status(409).json({ error: 'Duplicate email' });
-    }
-    if (req.body.confirmPassword !== req.body.password) {
-      return res.status(409).json({ error: 'Passwords dont match' });
     }
     const newPassword = await bcrypt.hash(req.body.password, 10);
     await User.create({
@@ -1204,6 +1202,60 @@ app.get('/api/search_recipes/:recipeId/:ingredientId', async (req, res) => {
   } catch (error) {
     console.error('Error checking combination in the table:', error);
     res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+app.post('/api/update_user_details/:currentUserId', async (req, res) => {
+  const { currentUserId } = req.params;
+  const { newEmail, newName, newPassword, newDistrict } = req.body;
+
+  const Users = Collection.getModel(TABLE_NAMES.USERS);
+
+  try {
+    // Check if the new email is already in use
+    if (newEmail && newEmail !== currentUserId) {
+      const existingUser = await Users.findOne({ email: newEmail });
+      if (existingUser) {
+        return res.status(409).json({ error: 'Duplicate email' });
+      }
+    }
+
+    // Prepare update fields based on provided data
+    const updateFields = {};
+
+    if (newEmail) {
+      updateFields.email = newEmail;
+    }
+
+    if (newName) {
+      updateFields.name = newName;
+    }
+
+    if (newDistrict) {
+      updateFields.district = newDistrict;
+    }
+
+    if (newPassword) {
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      updateFields.password = hashedPassword;
+    }
+
+    // Perform findOneAndUpdate
+    const updatedUser = await Users.findOneAndUpdate(
+      { email: currentUserId }, // Find user by current email
+      { $set: updateFields }, // Set the fields to update
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'User details updated successfully', updatedUser });
+  } catch (error) {
+    console.error('Error updating user details:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

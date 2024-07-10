@@ -1,6 +1,6 @@
 import Navbar from '../components/Navbar';
 import './App.css';
-import './SettingsNew.css'
+import './Settings.css'
 import './AddRecipe.css'
 import './Groceries.css'
 import React, { useState, useEffect } from 'react';
@@ -8,8 +8,9 @@ import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 
 
-const SettingsNew = () => {
+const Settings = () => {
     const navigate = useNavigate()
+    const [currentUserId, setCurrentUserId] = useState(null);
     const [name, setName] = useState(null);
     // eslint-disable-next-line
     const [user, setUser] = useState(null);
@@ -18,6 +19,33 @@ const SettingsNew = () => {
     const [newPassword, setNewPassword] = useState('');
     const [district, setDistrict] = useState('');
 
+    const [passwordError, setPasswordError] = useState('');
+    const [emailError, setEmailError] = useState('');
+
+    function validatePassword(password) {
+        const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$/;
+        return passwordRegex.test(password);
+    }
+
+
+    function handleEmailChange(e) {
+        setNewEmail(e.target.value);
+
+        setEmailError(''); // Clear error message when typing in the email field
+    }
+
+
+    const handlePasswordChange = (e) => {
+        const newPassword = e.target.value;
+        setNewPassword(newPassword);
+
+        // Check password validity and set error message accordingly
+        if (!validatePassword(newPassword)) {
+            setPasswordError('Password must be 6-20 characters long and contain at least one letter and one digit.');
+        } else {
+            setPasswordError('');
+        }
+    };
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -31,15 +59,36 @@ const SettingsNew = () => {
         }
     }, [navigate]);
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-        // Here, you would typically send the updated settings to the server
-        // using an API call or any other method.
+        const userData = {
+            newEmail: newEmail,
+            newName: newName,
+            newPassword: newPassword,
+            newDistrict: district,
+        };
 
-        // Reset the form fields after submission
-        setNewName('');
-        setNewPassword('');
+        try {
+            const response = await fetch(`http://localhost:1337/api/update_user_details/${currentUserId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                // Handle success (e.g., show a success message or update the UI)
+                console.log('User details updated successfully:', result);
+            } else {
+                // Handle error (e.g., show an error message)
+                console.error('Failed to update user details:', result.message);
+            }
+        } catch (error) {
+            console.error('Error updating user details:', error);
+        }
     };
 
     useEffect(() => {
@@ -48,31 +97,13 @@ const SettingsNew = () => {
             const _user = jwt_decode(token)
             setName(_user.name)
             setUser(_user)
+            setCurrentUserId(_user.email)
             if (!_user) {
                 localStorage.removeItem('token')
                 navigate.replace('/login')
             }
         }
     }, [navigate])
-
-
-    // useEffect(() => {
-    //     if (user && user.email) {
-    //         fetch(`http://localhost:1337/api/favorites/${user.email}`)
-    //             .then(res => {
-    //                 if (!res.ok) {
-    //                     throw new Error('Network response was not ok');
-    //                 }
-    //                 return res.json();
-    //             })
-    //             .then(data => {
-    //                 setFavoritesRecipes(data);
-    //                 setFilteredRecipes(data);
-    //                 setIsLoading(false);
-    //             })
-    //             .catch(error => console.error('Error fetching favorite recipes:', error));
-    //     }
-    // }, [user]);
 
 
 
@@ -99,7 +130,7 @@ const SettingsNew = () => {
                 </div>
 
                 <div className='settings-page-bottom'>
-                    <label className='black-title'>Settings</label>
+                    <label id='black-title-settings' className='black-title'>Settings</label>
 
                     <form onSubmit={handleSubmit}>
 
@@ -135,18 +166,26 @@ const SettingsNew = () => {
                                 <label className='settings-input-title'>Password</label>
                                 <input
                                     id='new-password'
-                                    className='settings-input-field'
-                                    type="text"
+                                    className={`settings-input-field ${passwordError ? 'pass-settings-error' : ''}`}
+                                    type="password"
                                     value={newPassword || ''}
-                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    onChange={handlePasswordChange}
                                     required
                                 />
+                                {passwordError &&
+                                    <div className="error-msg-settings">
+                                        {passwordError}
+                                    </div>
+                                }
                             </div>
+
+
+
                         </div>
 
                         <div className='settings-desc-field settings-district-container'>
                             <label className='settings-input-title'>District</label>
-                            <select id="settings-input-district" className="settings-form-select input-select" value={district} onChange={(e) => setDistrict(e.target.value)}>
+                            <select id="settings-input-district" className="settings-input-field input-select" value={district} onChange={(e) => setDistrict(e.target.value)}>
                                 <option value="">Select district</option>
                                 <option value="northern">Northern District (HaTzafon)</option>
                                 <option value="haifa">Haifa District (Hefa)</option>
@@ -158,7 +197,7 @@ const SettingsNew = () => {
                         </div>
 
                         <div className='settings-save-btn-container'>
-                            <button className='settings-save-btn' type="submit">Save Changes</button>
+                            <button className='settings-save-btn' type="submit">Update Details</button>
                         </div>
 
 
@@ -173,4 +212,4 @@ const SettingsNew = () => {
     )
 }
 
-export default SettingsNew
+export default Settings;
