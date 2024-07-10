@@ -1,9 +1,10 @@
 @import url('./Global.css');
 
-:root{
+:root {
     --name-password-width: 300px;
     --email-width: 400px;
 }
+
 .settings-main-container {
     margin-top: var(--navbar-height);
     display: flex;
@@ -75,7 +76,6 @@
 
 .settings-inputs-line {
     display: flex;
-    align-items: center;
     gap: 40px;
     margin-bottom: 25px;
 }
@@ -85,6 +85,7 @@
     flex-direction: column;
     margin-top: 10px;
     margin-bottom: 10px;
+    position: relative;
 }
 
 .settings-input-title {
@@ -157,10 +158,10 @@
     text-align: center;
     display: none;
     margin-bottom: 0px;
-    margin-top: 10px;
+    margin-top: 80px;
     font-size: 14px;
     display: block;
     color: red;
-    max-width: 100%; /* Maximum width equal to the parent's width */
-  overflow: hidden; /* Prevent text overflow */
+    width: var(--name-password-width);
+    position: absolute;
 }

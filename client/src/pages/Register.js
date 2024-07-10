@@ -20,6 +20,9 @@ function RegisterPage() {
   async function registerUser(event) {
 
     event.preventDefault();
+    if(passwordError){
+      return;
+    }
 
     if (password !== confirmPassword) {
         console.log("Passwords do not match");
@@ -58,8 +61,6 @@ function RegisterPage() {
         navigate('/login');
     }
 }
-
-
 
 
   function validatePassword(password) {

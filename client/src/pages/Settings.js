@@ -18,7 +18,8 @@ const Settings = () => {
     const [newName, setNewName] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [district, setDistrict] = useState('');
-
+    const [formValid, setFormValid] = useState(false);
+    const [showAlert, setShowAlert] = useState(true);
     const [passwordError, setPasswordError] = useState('');
     const [emailError, setEmailError] = useState('');
 
@@ -27,13 +28,10 @@ const Settings = () => {
         return passwordRegex.test(password);
     }
 
-
     function handleEmailChange(e) {
         setNewEmail(e.target.value);
-
         setEmailError(''); // Clear error message when typing in the email field
     }
-
 
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value;
@@ -62,6 +60,10 @@ const Settings = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (passwordError) {
+            return;
+        }
+
         const userData = {
             newEmail: newEmail,
             newName: newName,
@@ -82,6 +84,15 @@ const Settings = () => {
             if (response.ok) {
                 // Handle success (e.g., show a success message or update the UI)
                 console.log('User details updated successfully:', result);
+                setFormValid(true);
+                setShowAlert(true);
+
+                // Reset form fields
+                setNewEmail('');
+                setNewName('');
+                setNewPassword('');
+                setDistrict('');
+
             } else {
                 // Handle error (e.g., show an error message)
                 console.error('Failed to update user details:', result.message);
@@ -105,7 +116,9 @@ const Settings = () => {
         }
     }, [navigate])
 
-
+    const handleFieldFocus = () => {
+        setShowAlert(false); // Hide the success alert when any field gains focus
+    };
 
     return (
         <div>
@@ -132,6 +145,13 @@ const Settings = () => {
                 <div className='settings-page-bottom'>
                     <label id='black-title-settings' className='black-title'>Settings</label>
 
+
+                    {formValid && showAlert && (
+                        <div className="alert alert-success" role="alert">
+                            Success! Your details have been updated.
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit}>
 
                         <div className='settings-inputs-line'>
@@ -140,10 +160,11 @@ const Settings = () => {
                                 <label className='settings-input-title'>Email</label>
                                 <input
                                     id='new-email'
-                                    className='settings-input-field email-settings'
-                                    type="text"
+                                    className={`settings-input-field email-settings ${emailError ? 'pass-settings-error' : ''}`}
+                                    type="email"
                                     value={newEmail || ''}
-                                    onChange={(e) => setNewEmail(e.target.value)}
+                                    onChange={handleEmailChange}
+                                    onFocus={handleFieldFocus} // Dismiss alert on focus
                                     required
                                 />
                             </div>
@@ -158,6 +179,7 @@ const Settings = () => {
                                     type="text"
                                     value={newName || ''}
                                     onChange={(e) => setNewName(e.target.value)}
+                                    onFocus={handleFieldFocus} // Dismiss alert on focus
                                     required
                                 />
                             </div>
@@ -170,6 +192,7 @@ const Settings = () => {
                                     type="password"
                                     value={newPassword || ''}
                                     onChange={handlePasswordChange}
+                                    onFocus={handleFieldFocus} // Dismiss alert on focus
                                     required
                                 />
                                 {passwordError &&
@@ -185,7 +208,11 @@ const Settings = () => {
 
                         <div className='settings-desc-field settings-district-container'>
                             <label className='settings-input-title'>District</label>
-                            <select id="settings-input-district" className="settings-input-field input-select" value={district} onChange={(e) => setDistrict(e.target.value)}>
+                            <select id="settings-input-district"
+                                className="settings-input-field input-select"
+                                value={district}
+                                onChange={(e) => setDistrict(e.target.value)}
+                                onFocus={handleFieldFocus}>
                                 <option value="">Select district</option>
                                 <option value="northern">Northern District (HaTzafon)</option>
                                 <option value="haifa">Haifa District (Hefa)</option>
