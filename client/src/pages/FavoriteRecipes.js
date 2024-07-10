@@ -7,7 +7,6 @@ import './Groceries.css'
 import React, { useState, useEffect, useRef } from 'react';
 import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
-import Loading from '../components/Loading';
 
 
 const FavoriteRecipes = () => {
@@ -15,7 +14,7 @@ const FavoriteRecipes = () => {
     const [favoritesRecipes, setFavoritesRecipes] = useState([]);
     const [name, setName] = useState(null);
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
     const [suggestions, setSuggestions] = useState([]);
     const [searchRecipe, setSearchRecipe] = useState('');
     const [filteredRecipes, setFilteredRecipes] = useState([]);
@@ -111,9 +110,9 @@ const FavoriteRecipes = () => {
                     return res.json();
                 })
                 .then(data => {
-                    setLoading(false);
                     setFavoritesRecipes(data);
                     setFilteredRecipes(data);
+                    setIsLoading(false);
                 })
                 .catch(error => console.error('Error fetching favorite recipes:', error));
         }
@@ -157,10 +156,7 @@ const FavoriteRecipes = () => {
         <div>
             {name && <Navbar name={name} />}
             <div className='favorites-main-container'>
-                {loading ? (
-                    <Loading />
-                ) : (
-                    <>
+            
                         <div className='favorites-head'>
                             <div className='fav-head-img-container'>
                                 <img className='fav-head-img' src='../images/favorites-head.jpg' alt='favorites-head' />
@@ -214,32 +210,39 @@ const FavoriteRecipes = () => {
 
                             </div>
 
-                            {favoritesRecipes.length === 0 ? (
-                                <div className='no-fav-msg'>
-                                    <p className='no-fav-msg-first'>You have no favorite recipes yet!</p>
-                                    <p className='no-fav-msg-second'>Any recipe you favorite will appear here</p>
+
+
+                            {isLoading ? (
+                                <div className="loading-message">
+                                    <div className="loading-spinner"></div>
                                 </div>
                             ) : (
-                                <div className='favorites-recipes-container'>
-                                    {filteredRecipes.length === 0 ? (
-                                        <div className='fav-no-results-message'>
-                                            <p>No recipes found. Please try another search.</p>
-                                        </div>
-
-
-                                    ) : (
-                                        filteredRecipes.map((recipe, index) => (
-                                            <div id="fav-card" className='recipe-card-wrapper' key={index}>
-                                                <RecipeCard recipe={recipe} user={user} onLikeToggle={handleLikeToggle} />
+                                (favoritesRecipes.length === 0) ? (
+                                    <div className='no-fav-msg'>
+                                        <p className='no-fav-msg-first'>You have no favorite recipes yet!</p>
+                                        <p className='no-fav-msg-second'>Any recipe you favorite will appear here</p>
+                                    </div>
+                                ) : (
+                                    <div className='favorites-recipes-container'>
+                                        {filteredRecipes.length === 0 ? (
+                                            <div className='fav-no-results-message'>
+                                                <p>No recipes found. Please try another search.</p>
                                             </div>
-                                        ))
-                                    )}
-                                </div>
+                                        ) : (
+                                            filteredRecipes.map((recipe, index) => (
+                                                <div id="fav-card" className='recipe-card-wrapper' key={index}>
+                                                    <RecipeCard recipe={recipe} user={user} onLikeToggle={handleLikeToggle} />
+                                                </div>
+                                            ))
+                                        )}
+                                    </div>
+                                )
                             )}
+                            
+
                         </div>
 
-                    </>
-                )}
+                
             </div>
         </div>
     )

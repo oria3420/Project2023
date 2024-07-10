@@ -13,7 +13,7 @@ const MyRecipes = () => {
     const [name, setName] = useState(null)
     const [user, setUser] = useState(null)
     const [recipes, setRecipes] = useState([]);
-    // const [loading, setLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(true);
 
 
     console.log(user)
@@ -36,6 +36,7 @@ const MyRecipes = () => {
                 .then(res => res.json())
                 .then(data => {
                     setRecipes(data);
+                    setIsLoading(false);
                 })
                 .catch(error => console.error(error))
         }
@@ -61,20 +62,31 @@ const MyRecipes = () => {
                     <label id='black-title-fav' className='black-title'>My Recipes</label>
 
                     
-                    {recipes.length === 0 ? (
-                        <div className='no-fav-msg'>
-                            <p>It looks like you haven't created any recipes yet. Are you secretly ordering takeout every night?</p>
-                            <p>Time to put on your chef hat and start whipping up something delicious!</p>
+                    {isLoading ? (
+                        <div className="loading-message">
+                            <div className="loading-spinner"></div>
                         </div>
                     ) : (
-                        <div className='favorites-recipes-container'>
-                            {recipes.map((recipe, index) => (
-                                <div className='recipe-card-wrapper' key={index}>
-                                    <RecipeCard recipe={recipe} user={user} />
-                                </div>
-                            ))}
-                        </div>
+                        (recipes.length === 0 ? (
+                            <div className='no-fav-msg'>
+                                <p>It looks like you haven't created any recipes yet. Are you secretly ordering takeout every night?</p>
+                                <p>Time to put on your chef hat and start whipping up something delicious!</p>
+                            </div>
+                        ) : (
+                            <div className='favorites-recipes-container'>
+                                {recipes.map((recipe, index) => (
+                                    <div className='recipe-card-wrapper' key={index}>
+                                        <RecipeCard recipe={recipe} user={user} />
+                                    </div>
+                                ))}
+                            </div>
+                        ))
                     )}
+
+                    
+
+
+
                 </div>
             </div>
         </div>
