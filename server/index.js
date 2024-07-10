@@ -200,23 +200,31 @@ app.post('/api/add_item_to_shopping_list/:userId', async (req, res) => {
   const ShoppingList = Collection.getModel(TABLE_NAMES.SHOPPING_LIST);
   const { userId } = req.params;
   const { items } = req.body;
-  console.log("items: ", items)
+  console.log("items: ", items);
+
   try {
     // Retrieve the current shopping list for the user
     let existingList = await ShoppingList.findOne({ userId });
 
     // If the user does not have a shopping list yet, initialize it with all items
     if (!existingList) {
-      console.log("userId: ", userId)
-      existingList = await ShoppingList.create({ userId, items });
-      console.log("existingList: ", existingList)
+      console.log("userId: ", userId);
+      const itemsWithChecked = items.map(item => ({
+        ...item,
+        checked: false // Set checked field to false by default
+      }));
+      existingList = await ShoppingList.create({ userId, items: itemsWithChecked });
+      console.log("existingList: ", existingList);
     } else {
       // Filter out items that already exist in the shopping list based on name
       const newItems = items.filter(newItem => {
         return !existingList.items.some(existingItem =>
           existingItem.name === newItem.name
         );
-      });
+      }).map(item => ({
+        ...item,
+        checked: false // Set checked field to false by default
+      }));
 
       // If there are new items to add, update the shopping list
       if (newItems.length > 0) {
@@ -237,6 +245,7 @@ app.post('/api/add_item_to_shopping_list/:userId', async (req, res) => {
   }
 });
 
+
 app.get('/api/shopping_list/:userId', async (req, res) => {
   const ShoppingList = Collection.getModel(TABLE_NAMES.SHOPPING_LIST);
   const userId = req.params.userId;
@@ -245,7 +254,7 @@ app.get('/api/shopping_list/:userId', async (req, res) => {
     const shoppingList = await ShoppingList.findOne({ userId });
 
     if (!shoppingList) {
-      return res.status(404).json({ status: 'false', message: 'Shopping list not found' });
+      return res.status(200).json([]); 
     }
 
     return res.status(200).json(shoppingList.items);
@@ -295,6 +304,31 @@ app.delete('/api/delete_all_shopping_list/:userId', async (req, res) => {
   } catch (error) {
     console.error('Error deleting user document:', error);
     res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+app.put('/api/shopping_list_check/:userId/:itemName', async (req, res) => {
+  const { userId, itemName } = req.params;
+  const { checked } = req.body; // Expecting { checked: true/false }
+  console.log("itemName: ", itemName, ". checked: ", checked);
+  const ShoppingList = Collection.getModel(TABLE_NAMES.SHOPPING_LIST);
+
+  try {
+    // Use findOneAndUpdate to update the checked status of the specific item
+    const result = await ShoppingList.findOneAndUpdate(
+      { userId, "items.name": itemName },
+      { $set: { "items.$.checked": checked } },
+      { new: true }
+    );
+
+    if (result) {
+      res.status(200).send('Item updated successfully');
+    } else {
+      res.status(404).send('Shopping list or item not found');
+    }
+  } catch (error) {
+    console.error('Error updating item:', error);
+    res.status(500).send('Server error');
   }
 });
 
