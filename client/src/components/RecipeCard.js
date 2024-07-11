@@ -10,16 +10,17 @@ const RecipeCard = (props) => {
   const [imageUrl, setImageUrls] = useState([]);
   const recipe = props.recipe;
   const user = props.user;
+  const isRecommended = props.isRecommended || false;
   let name;
   let user_id
-if(user !== null){
-  name = user.name
-  user_id = user.email
-}
-else{
-  name = "Guest"
-  user_id = "Guest"
-}
+  if (user !== null) {
+    name = user.name
+    user_id = user.email
+  }
+  else {
+    name = "Guest"
+    user_id = "Guest"
+  }
 
   const navigate = useNavigate();
 
@@ -42,7 +43,7 @@ else{
                     console.warn(`Invalid URL: ${imageData}`);
                     return null;
                   }
-                }else if (
+                } else if (
                   imageData &&
                   imageData.filename &&
                   imageData.fileId
@@ -91,25 +92,29 @@ else{
   };
 
   return (
-    <div className="card recipe-card">
+    <div className={`card recipe-card ${isRecommended ? 'recommended-card' : ''}`}>
 
       {imageUrl && (
         <div className="image-wrapper">
           <img className="card-img-top" src={imageUrl[0]} alt="Card cap" />
         </div>
       )}
-      <div className="card-body">
+      <div className={`card-body ${isRecommended ? 'recommended-card-body' : ''}`}>
         <div className='title-container'>
           <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
-            <h6 className="card-title">{recipe.Name}</h6>
+            <h6 className={`card-title ${isRecommended ? 'card-title-recommended' : ''}`}>{recipe.Name}</h6>
           </div>
         </div>
-        <div className='body-bottom-container'>
-          <p className="card-text">{recipe.Description}</p>
-          <div className="card-like">
-            <LikeButton recipeId={recipe.RecipeId} userEmail={user_id} pageType="RecipeCard" onLikeToggle={props.onLikeToggle} />
-          </div>
-        </div>
+        {!isRecommended &&
+          <div className='body-bottom-container'>
+            <p className="card-text">{recipe.Description}</p>
+
+            <div className="card-like">
+              <LikeButton recipeId={recipe.RecipeId} userEmail={user_id} pageType="RecipeCard" onLikeToggle={props.onLikeToggle} />
+
+
+            </div>
+          </div>}
       </div>
     </div>
   );

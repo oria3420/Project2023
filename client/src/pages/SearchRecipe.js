@@ -21,7 +21,23 @@ const SearchRecipe = () => {
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
+    const [recommendations, setRecommendations] = useState([]);
 
+    useEffect(() => {
+        const fetchRecommendations = async () => {
+            try {
+                console.log("trying to fetch recommendations in client");
+                const response = await fetch(`http://localhost:1337/api/recommendations/${user.email}`);
+                const data = await response.json();
+
+                setRecommendations(data);
+                console.log("recommendations: ", data);
+            } catch (error) {
+                console.error('Error fetching recommendations:', error);
+            }
+        };
+        fetchRecommendations();
+    }, [user]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -261,11 +277,23 @@ const SearchRecipe = () => {
                         ) : (
                             filteredRecipes.map((recipe, index) => (
                                 <div className='recipe-card-wrapper' key={index}>
-                                    <RecipeCard recipe={recipe} user={user} />
+                                    <RecipeCard recipe={recipe} user={user} isRecommended={false} />
                                 </div>
                             ))
                         )}
                     </div>
+
+                    <div className='recommended-navbar'>
+                        <div className='recommended-navbar-title'>
+                            Recommended Recipes
+                        </div>
+                        {recommendations.slice(0, 3).map(recipe => (
+                            <div className='recipe-card-wrapper'>
+                                <RecipeCard recipe={recipe.recipe} user={user.email} isRecommended={true} />
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             )}
         </div>
