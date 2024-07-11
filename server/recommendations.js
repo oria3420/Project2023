@@ -35,13 +35,12 @@ const recommendRecipes = async (userId) => {
         if (!userProfile) {
             throw new Error(`User profile not found for user ID ${userId}`);
         }
-        // console.log("userProfile: ", userProfile);
+
         const userVector = userProfile.vector.map(entry => entry.value);
 
         // Compute similarity scores in parallel
         const similarityPromises = allRecipes.map(async (recipe) => {
             const similarityScore = cosineSimilarity(userVector, recipe.vector);
-            // console.log("similarityScore: ", similarityScore);
             return { recipeId: recipe.recipeId, similarityScore };
         });
 
@@ -53,18 +52,26 @@ const recommendRecipes = async (userId) => {
 
         // Fetch top 10 recommended recipes and map with similarity scores
         const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
-        const topRecommendations = await Recipes.find({ RecipeId: { $in: recommendations.slice(0, 10).map(rec => rec.recipeId) } }).exec();
+        const topRecommendations = await Recipes.find({
+            RecipeId: { $in: recommendations.slice(0, 10).map(rec => rec.recipeId) }
+        }).exec();
 
         // Map recommendations with recipe details and similarity scores
-        return topRecommendations.map(recipe => {
+        const sortedRecommendations = topRecommendations.map(recipe => {
             const rec = recommendations.find(r => r.recipeId === recipe.RecipeId);
             return { recipe, similarityScore: rec.similarityScore };
         });
+
+        // Sort the final recommendations by similarity score
+        sortedRecommendations.sort((a, b) => b.similarityScore - a.similarityScore);
+
+        return sortedRecommendations;
     } catch (error) {
         console.error('Error fetching recommendations:', error);
         throw error;
     }
 };
+
 
 
 module.exports = {

@@ -172,6 +172,11 @@ const Settings = () => {
                                     onFocus={handleFieldFocus} // Dismiss alert on focus
                                     
                                 />
+                                {emailError &&
+                                    <div className="error-msg-settings">
+                                        {emailError}
+                                    </div>
+                                }
                             </div>
 
 
