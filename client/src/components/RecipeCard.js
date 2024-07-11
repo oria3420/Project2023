@@ -95,7 +95,7 @@ const RecipeCard = (props) => {
     <div className={`card recipe-card ${isRecommended ? 'recommended-card' : ''}`}>
 
       {imageUrl && (
-        <div className="image-wrapper">
+        <div className={`image-wrapper ${isRecommended ? 'image-wrapper-recommnded' : ''}`}>
           <img className="card-img-top" src={imageUrl[0]} alt="Card cap" />
         </div>
       )}

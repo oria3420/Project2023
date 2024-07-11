@@ -283,7 +283,7 @@ const SearchRecipe = () => {
                         )}
                     </div>
 
-                    <div className='recommended-navbar'>
+                    <div className='recommended-navbar hidden-scrollbar'>
                         <div className='recommended-navbar-title'>
                             Recommended Recipes
                         </div>

@@ -3,27 +3,26 @@
 .recipe-card {
     display: flex;
     flex-direction: column;
-    width: 19em;
-    height: 25em;
+    width: 17em;
+    height: 23em;
     /* text-align: center; */
     border: none;
 }
 
-.recommended-card{
-    width: 10em;
-    height: 15em;
+.recommended-card {
+    width: 12em;
+    height: 10em;
 }
 
 
 .card-body {
     flex: 2;
     text-align: left;
-    height: 50%;
     background-color: #FCF0D6;
 }
 
-.recommended-card-body{
-    height: 1px;
+.recommended-card-body {
+    height: 40%;
 }
 
 .card-text {
@@ -53,16 +52,16 @@
     letter-spacing: 0.1px;
 }
 
-.card-title-recommended{
+.card-title-recommended {
     font-size: 15px;
 }
 
-.title-container{
+.title-container {
     height: 30%;
 }
 
-.body-bottom-container{
-height: 70%;
+.body-bottom-container {
+    height: 70%;
 }
 
 .card-like {
@@ -75,6 +74,10 @@ height: 70%;
 
 .image-wrapper {
     height: 50%;
+}
+
+.image-wrapper-recommnded{
+    height: 70%;
 }
 
 .card-img-top {

@@ -73,10 +73,12 @@
 .filter-menu {
     width: 18%;
     position: sticky;
-    top:80px;
-    height: calc(100vh - 80px); /* Adjust based on navbar height and other elements */
+    top: 80px;
+    height: calc(100vh - 80px);
+    /* Adjust based on navbar height and other elements */
     padding-top: 10px;
-    overflow-y: auto; /* Use auto or scroll based on your content needs */
+    overflow-y: auto;
+    /* Use auto or scroll based on your content needs */
     margin-left: 20px;
     padding-left: 3px;
 }
@@ -84,12 +86,13 @@
 
 .recipes-container {
     padding-top: 10px;
-    width: 80%;
+    width: 65%;
     display: flex;
     flex-wrap: wrap;
     border-left: 1px solid #dad9d9;
     padding-left: 20px;
-    gap: 1%
+    gap: 1%;
+    padding-left: 40px;
 }
 
 .filter-menu::-webkit-scrollbar {
@@ -132,7 +135,7 @@
 }
 
 
-.search-recipe-no-results-message-wrapper{
+.search-recipe-no-results-message-wrapper {
     display: flex;
     align-self: center;
     justify-content: center;
@@ -158,7 +161,8 @@
 .search-recipe-search-term-no-results {
     font-weight: bold;
     font-size: 18px;
-    color: #dc3545; /* Example color for emphasis */
+    color: #dc3545;
+    /* Example color for emphasis */
     margin: 10px 0;
 }
 
@@ -210,54 +214,82 @@
 .checkbox-container {
     display: flex;
     flex-wrap: wrap;
-    align-items: center; /* Align items vertically in the flex container */
+    align-items: center;
+    /* Align items vertically in the flex container */
     margin-bottom: 10px;
 }
 
 .checkbox-label {
-    margin-right: 10px; /* Adjust the margin as needed */
+    margin-right: 10px;
+    /* Adjust the margin as needed */
 }
 
-.groceries-list{
+.groceries-list {
     margin-top: 30px;
     margin-right: 30px;
 }
 
-.grocery-btn{
+.grocery-btn {
     height: 60px;
 }
 
-.form-check-input-add-recipe:checked{
+.form-check-input-add-recipe:checked {
     background-color: orange;
-    border-color: orange  !important;
+    border-color: orange !important;
     /* box-shadow: 0 0 5px rgba(255, 165, 0, 0.5); */
 }
 
 .form-check-input-add-recipe:focus {
     border-color: orange;
     outline: 0;
-    box-shadow:none;
+    box-shadow: none;
 }
 
 /* Unfocus styles */
 .form-check-input-add-recipe:not(:focus) {
-    box-shadow: none; /* Remove the box-shadow */
+    box-shadow: none;
+    /* Remove the box-shadow */
 }
 
-#check-box{
+#check-box {
     cursor: pointer;
     border-color: #aeacac;
 }
 
-.no-recipes-message{
+.no-recipes-message {
     font-size: 30px;
 
 }
 
-.recommended-navbar{
-    width: 200px;
+.recommended-navbar {
+    margin-right: 10px;
+    width: 250px;
+    position: sticky;
+    top: 90px;
+    height: calc(100vh - 100px); /* Adjusted height */
+    padding-top: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
-.recommended-navbar-title{
+.recommended-navbar-title {
     font-weight: 600;
+    text-align: center;
 }
+
+/* .hidden-scrollbar {
+    overflow: auto;
+}
+
+.hidden-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
+}
+
+.hidden-scrollbar::-webkit-scrollbar-thumb {
+    background: transparent;
+} */
