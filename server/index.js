@@ -487,6 +487,9 @@ const getRecipeIngredients = async (req, res) => {
         const ingredient = await Ingredients.findOne({ id: ingredient_ID }).select('ingredient');
         const measurement = measurement_ID ? (await Measurement.findOne({ measurement_id: measurement_ID }).select('measurement')).measurement : null;
 
+        // console.log("ingredient_ID: ", ingredient_ID);
+        //         console.log("ingredient: ", ingredient.ingredient);
+        // console.log("measurement: ", measurement);
         return {
           name: ingredient.ingredient,
           measurement: measurement,
@@ -514,9 +517,17 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     const tagCategories = Object.keys(TABLE_NAMES).filter(name => name.endsWith('_CATEGORIES') && !name.startsWith('RECIPE_'));
     // console.log("tagCategories: " , tagCategories)
     const tagPromises = tagCategories.map(async tableName => {
+       const name = TABLE_NAMES[`RECIPE_${tableName}`];
+      console.log(name)
       const RecipeTagsCategories = Collection.getModel(TABLE_NAMES[`RECIPE_${tableName}`]);
+      if(name === "recipe_kitchen_style_categories"){
+        console.log(true)
+      }
       const recipeTags = await RecipeTagsCategories.find({ recipe_ID: recipeId });
       // console.log(tableName, recipeTags)
+      if(name === "recipe_kitchen_style_categories"){
+        console.log(true)
+      }
       if (!recipeTags || recipeTags.length === 0) {
         return [];
       }
@@ -553,8 +564,8 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
       }
       return null;
     });
-    // console.log("valuesOnly: ", valuesOnly);
-    // console.log(valuesOnly)
+    console.log("valuesOnly: ", valuesOnly);
+
     res.json(valuesOnly);
 
   } catch (err) {

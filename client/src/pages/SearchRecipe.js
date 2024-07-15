@@ -289,7 +289,7 @@ const SearchRecipe = () => {
                         </div>
                         {recommendations.slice(0, 3).map(recipe => (
                             <div className='recipe-card-wrapper'>
-                                <RecipeCard recipe={recipe.recipe} user={user.email} isRecommended={true} />
+                                <RecipeCard recipe={recipe.recipe} user={user} isRecommended={true} />
                             </div>
                         ))}
                     </div>

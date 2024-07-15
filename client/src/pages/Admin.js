@@ -8,14 +8,13 @@ import './App.css';
 const Admin = () => {
     const navigate = useNavigate()
     const [name, setName] = useState(null)
-    const [collections, setCollections] = useState([]);
 
-    useEffect(() => {
-        fetch('http://localhost:1337/api/admin')
-            .then(res => res.json())
-            .then(data => setCollections(data))
-            .catch(error => console.error(error));
-    }, []);
+    // useEffect(() => {
+    //     fetch('http://localhost:1337/api/admin')
+    //         .then(res => res.json())
+    //         .then(data => setCollections(data))
+    //         .catch(error => console.error(error));
+    // }, []);
 
     useEffect(() => {
         const token = localStorage.getItem('token')
@@ -37,13 +36,6 @@ const Admin = () => {
           {name && <Navbar name={name + " (Admin)"} />}
           <div className='collections-container'>
             <h2>Collections:</h2>
-            <ul>
-              {collections.sort().map((collection, index) => (
-                <li key={index}>
-                  <a href={`/table/${collection}`}>{collection}</a>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       );
