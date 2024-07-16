@@ -38,7 +38,6 @@ function LoginPage() {
         window.location.href = '/search_recipe'
 
       }
-
     }
     else {
       setErrorMessage('Please check your username and password');

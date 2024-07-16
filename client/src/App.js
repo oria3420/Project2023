@@ -16,7 +16,6 @@ import Trending from './pages/Trending';
 import Groceries from './pages/Groceries';
 import AddRecipe from './pages/AddRecipe';
 import MyRecipes from './pages/MyRecipes'
-import Recommendations from './components/Recommendations'
 
 
 const App = () => {
@@ -37,7 +36,6 @@ const App = () => {
                 <Route path="/groceries" element={<Groceries />} />
                 <Route path="/add_recipe" element={<AddRecipe />} />
                 <Route path="/my_recipes" element={<MyRecipes />} />
-                <Route path="/recommended" element={<Recommendations />} />
             </Routes>
         </BrowserRouter>
     );

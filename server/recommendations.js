@@ -33,7 +33,7 @@ const recommendRecipes = async (userId) => {
         ]);
 
         if (!userProfile) {
-            throw new Error(`User profile not found for user ID ${userId}`);
+            return [];
         }
 
         const userVector = userProfile.vector.map(entry => entry.value);

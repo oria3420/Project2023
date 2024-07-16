@@ -24,6 +24,7 @@ const Admin = () => {
                 console.log("admin")
             }
             setName(user.name)
+            console.log(user.name)
             if (!user) {
                 localStorage.removeItem('token')
                 navigate.replace('/login')
@@ -33,7 +34,7 @@ const Admin = () => {
 
     return (
         <div className='admin-container'>
-          {name && <Navbar name={name + " (Admin)"} />}
+          {name && <Navbar name={name} />}
           <div className='collections-container'>
             <h2>Collections:</h2>
           </div>

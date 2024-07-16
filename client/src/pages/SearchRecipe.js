@@ -23,21 +23,6 @@ const SearchRecipe = () => {
     const [loading, setLoading] = useState(true);
     const [recommendations, setRecommendations] = useState([]);
 
-    useEffect(() => {
-        const fetchRecommendations = async () => {
-            try {
-                console.log("trying to fetch recommendations in client");
-                const response = await fetch(`http://localhost:1337/api/recommendations/${user.email}`);
-                const data = await response.json();
-
-                setRecommendations(data);
-                console.log("recommendations: ", data);
-            } catch (error) {
-                console.error('Error fetching recommendations:', error);
-            }
-        };
-        fetchRecommendations();
-    }, [user]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -60,6 +45,33 @@ const SearchRecipe = () => {
             setUser(null); // Set user to null or handle guest user data
         }
     }, [navigate])
+
+    
+    useEffect(() => {
+        const fetchRecommendations = async () => {
+            if (!user) return;
+
+            try {
+                if (!user.email) {
+                    console.error('User email is not defined');
+                    return;
+                }
+
+                console.log(user.email);
+                console.log("trying to fetch recommendations in client");
+
+                const response = await fetch(`http://localhost:1337/api/recommendations/${user.email}`);
+                const data = await response.json();
+
+                setRecommendations(data);
+                console.log("recommendations: ", data);
+            } catch (error) {
+                console.error('Error fetching recommendations:', error);
+            }
+        };
+
+        fetchRecommendations();
+    }, [user]);
 
     useEffect(() => {
         const fetchRecipes = async () => {
@@ -287,11 +299,18 @@ const SearchRecipe = () => {
                         <div className='recommended-navbar-title'>
                             Recommended Recipes
                         </div>
-                        {recommendations.slice(0, 3).map(recipe => (
-                            <div className='recipe-card-wrapper'>
-                                <RecipeCard recipe={recipe.recipe} user={user} isRecommended={true} />
-                            </div>
-                        ))}
+
+
+                        {recommendations.length === 0 ? (
+                            <p>No recommendations available.</p>
+                        ) : (
+                            recommendations.slice(0, 3).map((recipe, index) => (
+                                <div className='recipe-card-wrapper' key={recipe.recipe.id || index}>
+                                    <RecipeCard recipe={recipe.recipe} user={user} isRecommended={true} />
+                                </div>
+                            ))
+                        )}
+
                     </div>
 
                 </div>

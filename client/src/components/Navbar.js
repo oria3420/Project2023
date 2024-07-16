@@ -2,20 +2,36 @@ import './Components.css';
 import LogoutBtn from './LogoutBtn';
 import SettingBtn from './SettingBtn';
 import FavoriesBtn from './FavoritesBtn';
-import ShoppingBtn from './ShoppingBtn'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react';
-import SearchBar from './SearchBar';
+import ShoppingBtn from './ShoppingBtn';
 import MyRecipesBtn from './MyRecipesBtn';
+import AnalysisBtn from './AnalysisBtn';
+import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react';
+import SearchBar from './SearchBar';
+
 import GuestModal from './GuestModal';
 
 
 const Navbar = ({ name }) => {
     const navigate = useNavigate()
     const [showModal, setShowModal] = useState(false);
-    //const [_pressButton, setPressButton] = useState(""); // eslint-disable-line no-unused-vars
     const [message, setMessage] = useState("");
+    const [isAdmin, setIsAdmin] = useState(false);
     const token = localStorage.getItem('token');
+
+    useEffect(() => {
+        if (name.endsWith('(Admin)')) {
+            setIsAdmin(true);
+            console.log("admin")
+        } else {
+            setIsAdmin(false);
+        }
+    }, [name]);
+
+
+    const handleAnalysisClick = () => {
+        navigate('/admin');
+    };
 
     const handleMyRecipesClick = () => {
         navigate('/my_recipes');
@@ -52,10 +68,12 @@ const Navbar = ({ name }) => {
         event.preventDefault()
         navigate('/search_recipe')
     }
+
     const trending = (event) => {
         event.preventDefault()
         navigate('/trending')
     }
+
     const groceries = (event) => {
         event.preventDefault()
         if (!token && name === "Guest") {
@@ -72,7 +90,7 @@ const Navbar = ({ name }) => {
         }
         navigate('/add_recipe')
     }
-    // console.log("message "+pressButton)
+
     return (
         <>
             <nav className="navbar bg-body-tertiary our-navbar">
@@ -113,6 +131,10 @@ const Navbar = ({ name }) => {
                                 </ul>
                             ) : (
                                 <ul className="dropdown-menu dropdown-position">
+                                    {isAdmin &&
+                                        <li onClick={handleAnalysisClick} className="dropdown-item">
+                                            <AnalysisBtn />
+                                        </li>}
                                     <li onClick={handleMyRecipesClick} className="dropdown-item">
                                         <MyRecipesBtn />
                                     </li>
