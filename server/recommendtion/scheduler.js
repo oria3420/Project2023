@@ -22,9 +22,10 @@ function setMongooseConnection(connection) {
 // Function to get cron expression based on frequency
 function getCronExpression(frequency) {
   switch (frequency) {
-    case 'once-a-week':
+    case 'every-min':
       return '* * * * *'; // Every min
-      // return '0 1 * * 1'; // Every Monday at 1 AM
+    case 'once-a-week':
+      return '0 1 * * 1'; // Every Monday at 1 AM
     case 'twice-a-week':
       return '0 1 * * 1,4'; // Every Monday and Thursday at 1 AM
     case 'everyday':

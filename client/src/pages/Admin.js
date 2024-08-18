@@ -154,6 +154,7 @@ const Admin = () => {
   };
 
   const frequencyMapping = {
+    'every-min': 'Every Minute (For Debug)',
     'once-a-week': 'Once a Week',
     'twice-a-week': 'Twice a Week',
     'everyday': 'Everyday',
@@ -244,6 +245,7 @@ const Admin = () => {
                       onChange={handleFrequencyChange}
                       required
                     >
+                      <option value='every-min'>Every Minute (For Debug)</option>
                       <option value='once-a-week'>Once a Week</option>
                       <option value='twice-a-week'>Twice a Week</option>
                       <option value='everyday'>Everyday</option>

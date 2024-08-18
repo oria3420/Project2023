@@ -174,7 +174,7 @@ router.post('/update_frequency', async (req, res) => {
   const { frequency } = req.body;
 
   // Validate frequency
-  const validFrequencies = ['once-a-week', 'twice-a-week', 'everyday'];
+  const validFrequencies = ['every-min', 'once-a-week', 'twice-a-week', 'everyday'];
   if (!validFrequencies.includes(frequency)) {
     return res.status(400).json({ error: 'Invalid frequency' });
   }
