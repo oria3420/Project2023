@@ -76,7 +76,7 @@ const RecommendationstModal = ({ showModal, onClose }) => {
   const uniqueNames = new Set(userProfile ? userProfile.map(item => item.name) : []);
   const uniqueNamesArray = Array.from(uniqueNames); // Convert the Set to an Array
   const tagsToShow = showMoreTags ? uniqueNamesArray : uniqueNamesArray.slice(0, numOfTags); // Show either all tags or just the first 20
-  
+
 
   return (
     <div className={`center-modal modal ${showModal ? 'show' : ''}`} tabIndex="-1">
@@ -157,8 +157,10 @@ const RecommendationstModal = ({ showModal, onClose }) => {
                         </div>
 
                         {recommendations.map((rec, index) => (
+
                           <div className="modal-recipe" key={index}>
                             <span className="recipe-name-modal">
+                              {console.log(recommendations)}
                               {index + 1}. {rec.recipe.Name} (Similarity: {rec.similarityScore.toFixed(2)})
                             </span>
                             <div className="user-profile-row">

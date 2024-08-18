@@ -23,18 +23,19 @@ router.get('/user-recommendations/:userId', async (req, res) => {
     if (!userExists) {
       return res.status(404).json({ error: 'User with this email does not exist' });
     }
-
+    const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
     // Fetch the user's profile and check for existence in one step
     const userProfile = await UsersProfile.findOne({ user_id: userId }).select('vector');
+    const userFavorites = await Favorites.find({ user_id: userId }).select('recipe_id');
 
-    if (!userProfile) {
+    if (!userProfile || userFavorites.length === 0) {
       return res.status(404).json({ error: 'User does not have a profile yet' });
     }
 
     const activeProfile = getActiveTagsAndCategories(userProfile.vector);
 
     const recommendations = await recommendRecipes(userId);
-
+    console.log("recommendations: ", recommendations)
     // Fetch vectors for the top 3 recommended recipes
     const recipeIds = recommendations.slice(0, 3).map(rec => rec.recipe.RecipeId);
     const recipeVectors = await RecipesVectors.find({ recipeId: { $in: recipeIds } });
@@ -51,7 +52,7 @@ router.get('/user-recommendations/:userId', async (req, res) => {
         }
       };
     });
-
+    console.log(recommendationsWithTags)
     res.json({ activeProfile, recommendations: recommendationsWithTags });
   } catch (error) {
     console.error('Error fetching user recommendations:', error);
