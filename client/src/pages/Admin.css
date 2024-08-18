@@ -1,0 +1,226 @@
+@import url('./Global.css');
+
+.admin-page-main-container {
+    margin-top: var(--navbar-height);
+}
+
+.admin-page-head {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--head-color);
+    height: 400px;
+}
+
+.admin-page-main-title {
+    margin-top: 70px;
+    color: var(--gray-text-color);
+    font-size: 65px;
+}
+
+.admin-page-image {
+    max-width: 100%;
+    /* Ensure the image is responsive */
+    width: 200px;
+    height: auto;
+}
+
+.admin-page-bottom {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+}
+
+.admin-main-section {
+    padding: 20px;
+    border: 1px solid var(--gray-frame);
+    margin-bottom: 20px;
+    height: fit-content;
+}
+
+
+.admin-orange-title {
+    font-size: var(--title-font-size);
+    font-weight: bold;
+    color: #FF8C00;
+}
+
+.admin-data-section {
+    margin-top: 20px;
+}
+
+.ages-section {
+    width: 700px;
+}
+
+.admin-bold-title {
+    font-weight: bold;
+}
+
+.ages-grpah {
+    margin-top: 20px;
+}
+
+.graphs-line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
+    gap: 15px;
+}
+
+.freq-most-active-line {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+
+.admin-select-menu {
+    margin-top: 20px;
+}
+
+.curr-freq-container {
+    margin-top: 30px;
+}
+
+.curr-freq-title {
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.admin-update-btn {
+    border-color: orange;
+    border-radius: 40px;
+    border: 1px solid;
+    font-weight: 600;
+    font-size: 15px;
+    width: 150px;
+    height: 35px;
+    color: white;
+    background-color: orange;
+}
+
+.admin-update-btn:disabled {
+    background-color: #ccc;
+    /* Lighter background for disabled state */
+    border-color: #ccc;
+    /* Lighter border for disabled state */
+    cursor: not-allowed;
+    /* Change cursor to indicate it's not clickable */
+    color: #666;
+    /* Grey text for disabled state */
+    opacity: 0.6;
+    /* Lower opacity for disabled state */
+}
+
+.admin-update-btn-wrapper {
+    margin-top: 40px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.freq-section {
+    width: 30%;
+}
+
+#admin-select-window {
+    margin-left: -5px;
+    height: 30px;
+    font-size: 15px;
+    padding: 0px;
+    padding-left: 5px;
+}
+
+.graph-title {
+    margin-left: 50px;
+}
+
+.leaders-section {
+    width: 70%;
+    min-height: 100%;
+}
+
+.top-users-index{
+    margin-top: 20px;
+    background-color: orange;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    color: var(--gray-text-color);;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+
+
+/* Table styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1em;
+    text-align: left;
+  }
+  
+  /* Header styling */
+  th, td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  th {
+    border-top: 1px solid #dddddd;
+    background-color: #f9f6f3;
+    color: #333333;
+    font-weight: bold;
+  }
+  
+  
+  tr:hover {
+    background-color: whitesmoke;
+  }
+  
+  .no-active-users{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    height: 200px;
+  }
+
+  .freq-section, .leaders-section{
+    min-height: 315px;
+  }
+
+  .admin-leaders-table{
+    margin-top: 20px;
+  }
+
+  .freq-sub-title{
+    font-size: 17px;
+    margin-top: 20px;
+  }
+
+  .admin-select-form{
+    margin-top: 30px;
+  }
+
+  .admin-freq-data{
+    margin-top: 25px;
+    margin-left: 15px;
+  }
+
+#verify-rec-link{
+    margin-bottom: 20px;
+    color: orange;
+}
+
+#verify-rec-link:hover {
+    color:  #cc5500; /* Change to your desired hover color */
+    text-decoration: underline; /* Optional: add an underline on hover */
+}

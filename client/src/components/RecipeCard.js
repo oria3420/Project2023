@@ -11,14 +11,11 @@ const RecipeCard = (props) => {
   const recipe = props.recipe;
   const user = props.user;
   const isRecommended = props.isRecommended || false;
-  let name;
   let user_id
   if (user !== null) {
-    name = user.name
     user_id = user.email
   }
   else {
-    name = "Guest"
     user_id = "Guest"
   }
 
@@ -87,8 +84,16 @@ const RecipeCard = (props) => {
     getImageUrls();
   }, [recipe.RecipeId]);
 
-  const handleClick = (recipeId) => {
-    navigate(`/recipes/${recipeId}`, { state: { name: name, user_id: user_id } });
+  // const handleClick = (recipeId) => {
+  //   navigate(`/recipes/${recipeId}`, { state: { name: name, user_id: user_id } });
+  // };
+
+  const handleClick = (e, recipeId) => {
+    // Check if the click was a left-click (button === 0) or a middle-click (button === 1)
+    if (e.button === 0 || e.button === 1) {
+      e.preventDefault(); // Prevent the default link behavior if it's a left-click
+      navigate(`/recipes/${recipeId}`);
+    }
   };
 
   return (
@@ -101,9 +106,21 @@ const RecipeCard = (props) => {
       )}
       <div className={`card-body ${isRecommended ? 'recommended-card-body' : ''}`}>
         <div className='title-container'>
-          <div key={recipe.RecipeId} onClick={() => handleClick(recipe.RecipeId)}>
-            <h6 className={`card-title ${isRecommended ? 'card-title-recommended' : ''}`}>{recipe.Name}</h6>
+
+          <div key={recipe.RecipeId}>
+            <a
+              href={`/recipes/${recipe.RecipeId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => handleClick(e, recipe.RecipeId)}
+              className="recipe-link"
+            >
+              <h6 className={`card-title ${isRecommended ? 'card-title-recommended' : ''}`}>
+                {recipe.Name}
+              </h6>
+            </a>
           </div>
+
         </div>
         {!isRecommended &&
           <div className='body-bottom-container'>

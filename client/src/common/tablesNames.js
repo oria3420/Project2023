@@ -31,4 +31,6 @@ module.exports.TABLE_NAMES = {
     MEASUREMENTS: 'measurements',
     RATINGS: 'ratings',
     SHOPPING_LIST: 'shopping_list',
+    SETTINGS: 'settings',
+    ACTIVITIES: 'activities',
   };

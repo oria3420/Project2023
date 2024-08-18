@@ -369,6 +369,7 @@ const Groceries = () => {
                   ))}
                 </div>
               )}
+              
             </div>
 
           )}

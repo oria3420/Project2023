@@ -4,13 +4,14 @@ const TABLE_NAMES = globals.TABLE_NAMES;
 
 const UsersProfile = require('./models/usersProfile.model');
 const RecipesVectors = require('./models/recipesVectors.model');
+const { collection } = require('./models/user.model');
 
-const cosineSimilarity = (vec1, vec2) => { 
+const cosineSimilarity = (vec1, vec2) => {
     // console.log("vec1: ", vec1);
     // console.log("vec2: ", vec2);
     const dotProduct = vec1.reduce((sum, val, i) => sum + val * vec2[i].value, 0); // Adjusted to access 'value' property in vec2
     // console.log("dotProduct: ", dotProduct);
-    if(dotProduct === 0){
+    if (dotProduct === 0) {
         return 0;
     }
     const magnitude1 = Math.sqrt(vec1.reduce((sum, val) => sum + val * val, 0));
@@ -26,23 +27,36 @@ const cosineSimilarity = (vec1, vec2) => {
 
 const recommendRecipes = async (userId) => {
     try {
-        // Fetch user profile vector and all recipe vectors in parallel
-        const [userProfile, allRecipes] = await Promise.all([
-            UsersProfile.findOne({ user_id: userId }).select('vector'),
-            RecipesVectors.find({}, { recipeId: 1, vector: 1 })
-        ]);
+        const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
 
-        if (!userProfile) {
-            return [];
+        // Fetch user profile vector, all recipe vectors, and user's favorite recipes in parallel
+        const [userProfile, allRecipes, userFavorites] = await Promise.all([
+            UsersProfile.findOne({ user_id: userId }).select('vector'),
+            RecipesVectors.find({}, { recipeId: 1, vector: 1 }),
+            Favorites.find({ user_id: userId }).select('recipe_id')
+        ]);
+    
+        // If the user doesn't have a profile, return top 3 recipes by overall rating
+        if (!userProfile || userFavorites.length === 0 || userId === "Guest") {
+            console.log("!userProfile || Favorites.length === 0")
+            const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
+            const topRatedRecipes = await Recipes.find({})
+                .sort({ AggregatedRating: -1 })
+                .limit(6)
+                .exec();
+            return topRatedRecipes.map(recipe => ({ recipe, similarityScore: null }));
         }
 
         const userVector = userProfile.vector.map(entry => entry.value);
+        const favoriteRecipeIds = new Set(userFavorites.map(fav => fav.recipe_id));
 
-        // Compute similarity scores in parallel
-        const similarityPromises = allRecipes.map(async (recipe) => {
-            const similarityScore = cosineSimilarity(userVector, recipe.vector);
-            return { recipeId: recipe.recipeId, similarityScore };
-        });
+        // Compute similarity scores for recipes that are not in the user's favorites
+        const similarityPromises = allRecipes
+            .filter(recipe => !favoriteRecipeIds.has(recipe.recipeId))
+            .map(async (recipe) => {
+                const similarityScore = cosineSimilarity(userVector, recipe.vector);
+                return { recipeId: recipe.recipeId, similarityScore };
+            });
 
         // Wait for all similarity calculations to complete
         const recommendations = await Promise.all(similarityPromises);
@@ -53,7 +67,7 @@ const recommendRecipes = async (userId) => {
         // Fetch top 10 recommended recipes and map with similarity scores
         const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
         const topRecommendations = await Recipes.find({
-            RecipeId: { $in: recommendations.slice(0, 10).map(rec => rec.recipeId) }
+            RecipeId: { $in: recommendations.slice(0,6).map(rec => rec.recipeId) }
         }).exec();
 
         // Map recommendations with recipe details and similarity scores
@@ -71,6 +85,7 @@ const recommendRecipes = async (userId) => {
         throw error;
     }
 };
+
 
 
 

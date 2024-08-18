@@ -86,6 +86,7 @@
     margin-top: 10px;
     margin-bottom: 10px;
     position: relative;
+    margin-right: 30px;
 }
 
 .settings-input-title {
@@ -101,6 +102,24 @@
     padding: 8px;
 }
 
+.settings-disable {
+    width: var(--name-password-width);
+    border: 1px solid #d3d3d3;
+    border-radius: 30px;
+    padding: 8px;
+    cursor: default;
+    /* Change cursor to default */
+    background-color: #f0f0f0;
+    /* Optional: change background color to indicate it's read-only */
+    color: black;
+    padding-left: 10px;
+}
+
+.settings-disable:focus {
+    outline: none;
+}
+
+
 .settings-input-field:focus {
     border-color: #ffa500;
     box-shadow: 0 0 5px rgba(52, 73, 94, 0.5);
@@ -109,8 +128,8 @@
 
 .email-settings {
     width: var(--email-width);
-    margin-right: 30px;
 }
+
 
 .settings-district-container {
     margin-bottom: 20px;

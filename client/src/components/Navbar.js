@@ -50,12 +50,16 @@ const Navbar = ({ name }) => {
     };
 
     const handleLogOutClick = (event) => {
-        console.log("LogoutBtn")
+        console.log("LogoutBtn");
         event.preventDefault();
-        localStorage.clear();
-        navigate('/');
+        if (name === 'Guest') {
+            // Handle sign-in logic, e.g., redirect to login page
+            navigate('/login');
+        } else {
+            localStorage.clear();
+            navigate('/');
+        }
     };
-
 
     const handleGuestClick = (obj) => {
         //setPressButton(obj);
@@ -127,7 +131,9 @@ const Navbar = ({ name }) => {
                             </span>
                             {!token && name === "Guest" ? (
                                 <ul className="dropdown-menu dropdown-position">
-                                    <li><button type="button" className="dropdown-item"><LogoutBtn userName={name} /></button></li>
+                                    <li onClick={handleLogOutClick} className="dropdown-item">
+                                        <LogoutBtn userName={name} />
+                                    </li>
                                 </ul>
                             ) : (
                                 <ul className="dropdown-menu dropdown-position">

@@ -266,7 +266,8 @@
     width: 250px;
     position: sticky;
     top: 90px;
-    height: calc(100vh - 100px); /* Adjusted height */
+    height: calc(100vh - 100px);
+    /* Adjusted height */
     padding-top: 10px;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -279,6 +280,12 @@
 .recommended-navbar-title {
     font-weight: 600;
     text-align: center;
+}
+
+.recommended-icon {
+    margin-top: -2px;
+    font-size: 22px;
+    cursor: pointer;
 }
 
 /* .hidden-scrollbar {

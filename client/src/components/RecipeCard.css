@@ -10,8 +10,8 @@
 }
 
 .recommended-card {
-    width: 12em;
-    height: 10em;
+    width: 187px;
+    height: 155px;
 }
 
 
@@ -50,11 +50,26 @@
     font-size: 20px;
     font-family: 'Playfair Display', serif;
     letter-spacing: 0.1px;
+
+    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Number of lines to display before truncating */
+    -webkit-box-orient: vertical;
 }
 
 .card-title-recommended {
     font-size: 15px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Number of lines to display before truncating */
+    -webkit-box-orient: vertical;
+
 }
+
 
 .title-container {
     height: 30%;
@@ -93,3 +108,14 @@
 .recipe-card:hover .card-img-top {
     opacity: 50%;
 }
+
+.recipe-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Inherit color from the parent element */
+    display: block; /* Make the link behave like a block element */
+  }
+  
+  .recipe-link:hover {
+    text-decoration: none; /* Ensure no underline on hover */
+  }
+  

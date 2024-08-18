@@ -29,6 +29,7 @@ function LoginPage() {
     const data = await response.json()
 
     if (data.user) {
+      console.log(data.user)
       localStorage.setItem('token', data.user)
       const user = jwt_decode(data.user)
       if (user.email === ADMIN_EMAIL) {

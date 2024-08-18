@@ -15,6 +15,8 @@ const { constants } = require('buffer');
 const { recommendRecipes } = require('./recommendations');
 const cron = require('./recommendtion/scheduler'); // Import your scheduler script
 // require('./recommendtion/scheduler');
+const adminRoutes = require('./routes/adminRoutes'); // Adjust the path as needed
+const { logActivity } = require('./utils/activityLogger');
 
 mongoose.set('strictQuery', false);
 
@@ -33,7 +35,7 @@ mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.m
 }).then(() => {
   console.log('MongoDB connected successfully');
   cron.setMongooseConnection(mongoose.connection);
-  // Start scheduling tasks here
+  
 }).catch((err) => {
   console.error('MongoDB connection error:', err);
 });
@@ -64,17 +66,40 @@ const upload = multer({ storage });
 app.use(cors());
 app.use(express.json());
 
+app.use('/api/admin', adminRoutes);
 
 // Get recommendations for a user
 app.get('/api/recommendations/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const recommendations = await recommendRecipes(userId);
-    console.log(recommendations)
+    // console.log(recommendations)
     res.status(200).json(recommendations);
   } catch (error) {
     console.error('Error fetching recommendations:', error);
     res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+
+
+app.get('/api/user_settings/:email', async (req, res) => {
+  try {
+    const email = req.params.email;
+    const user = await User.findOne({ email: email }).select('birthDate district password');
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({
+      birthDate: user.birthDate,
+      district: user.district,
+      password: user.password
+    });
+  } catch (error) {
+    console.error('Error fetching user settings:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
@@ -148,6 +173,8 @@ app.post('/api/recipes/update_rating', async (req, res) => {
       }
     );
 
+    await logActivity(user_id, 'rating', { recipeId: parsedRecipeId, rating: rating });
+
     res.status(200).json({
       success: true,
       message: 'Rating updated successfully',
@@ -181,6 +208,8 @@ app.post('/api/recipes/new_comment', upload.single('comment_image'), async (req,
       comment_date: new Date().toISOString(),
       comment_image: commentImageDetails,
     });
+
+    await logActivity(user_id, 'comment', { recipeId: recipe_id, comment: comment_text });
 
     res.status(201).json({
       message: 'Comment added successfully',
@@ -255,7 +284,7 @@ app.get('/api/shopping_list/:userId', async (req, res) => {
     const shoppingList = await ShoppingList.findOne({ userId });
 
     if (!shoppingList) {
-      return res.status(200).json([]); 
+      return res.status(200).json([]);
     }
 
     return res.status(200).json(shoppingList.items);
@@ -426,6 +455,10 @@ app.post('/api/login', async (req, res) => {
         name: user.name,
         email: user.email,
       }, 'secret123')
+
+
+    await logActivity(user.email, 'sign-in');
+
     return res.json({ status: 'ok', user: token })
   }
   else {
@@ -517,17 +550,12 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     const tagCategories = Object.keys(TABLE_NAMES).filter(name => name.endsWith('_CATEGORIES') && !name.startsWith('RECIPE_'));
     // console.log("tagCategories: " , tagCategories)
     const tagPromises = tagCategories.map(async tableName => {
-       const name = TABLE_NAMES[`RECIPE_${tableName}`];
-      console.log(name)
+      const name = TABLE_NAMES[`RECIPE_${tableName}`];
+ 
       const RecipeTagsCategories = Collection.getModel(TABLE_NAMES[`RECIPE_${tableName}`]);
-      if(name === "recipe_kitchen_style_categories"){
-        console.log(true)
-      }
+
       const recipeTags = await RecipeTagsCategories.find({ recipe_ID: recipeId });
-      // console.log(tableName, recipeTags)
-      if(name === "recipe_kitchen_style_categories"){
-        console.log(true)
-      }
+
       if (!recipeTags || recipeTags.length === 0) {
         return [];
       }
@@ -564,7 +592,6 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
       }
       return null;
     });
-    console.log("valuesOnly: ", valuesOnly);
 
     res.json(valuesOnly);
 
@@ -674,16 +701,26 @@ app.get('/api/favorites/:recipeId/:userId', (req, res) => {
 });
 
 
-app.post('/api/favorites/:recipeId/:userId', (req, res) => {
+app.post('/api/favorites/:recipeId/:userId', async (req, res) => {
   const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
   const user_id = req.params.userId;
   const recipe_id = parseInt(req.params.recipeId);
-  // console.log("use " + user_id)
-  // console.log("rec " + recipe_id)
-  Favorites.create({
-    user_id: user_id,
-    recipe_id: recipe_id,
-  })
+
+  try {
+    // Create a new favorite
+    await Favorites.create({
+      user_id: user_id,
+      recipe_id: recipe_id,
+    });
+
+    // Log the "like" activity
+    await logActivity(user_id, 'like', { recipeId: recipe_id });
+
+    res.json({ status: 'ok', message: 'Recipe favorited successfully' });
+  } catch (error) {
+    console.error('Error creating favorite:', error);
+    res.json({ status: 'error', message: 'Could not favorite recipe' });
+  }
 });
 
 
@@ -730,22 +767,18 @@ app.get('/api/favorites/:userId', async (req, res) => {
 });
 
 
-
 app.get('/api/trending', async (req, res) => {
   console.log("trending");
   const Recipe = Collection.getModel(TABLE_NAMES.RECIPES);
 
   try {
     const today = new Date();
-    const startOfWeek = new Date(today);
-    startOfWeek.setDate(today.getDate() - today.getDay());
-    startOfWeek.setHours(0, 0, 0, 0);
-    const endOfWeek = new Date(startOfWeek);
-    endOfWeek.setDate(startOfWeek.getDate() + 6);
-    endOfWeek.setHours(23, 59, 59, 999);
+    const oneWeekAgo = new Date(today);
+    oneWeekAgo.setDate(today.getDate() - 7);
+    oneWeekAgo.setHours(0, 0, 0, 0);
 
-    console.log('startOfWeek:', startOfWeek);
-    console.log('endOfWeek:', endOfWeek);
+    console.log('oneWeekAgo:', oneWeekAgo);
+    console.log('today:', today);
 
     const topRecipes = await Recipe.aggregate([
       {
@@ -768,8 +801,8 @@ app.get('/api/trending', async (req, res) => {
                     $cond: [
                       {
                         $and: [
-                          { $gte: ['$date', startOfWeek] },
-                          { $lt: ['$date', endOfWeek] }
+                          { $gte: ['$date', oneWeekAgo] },
+                          { $lt: ['$date', today] }
                         ]
                       },
                       '$rating',
@@ -782,8 +815,8 @@ app.get('/api/trending', async (req, res) => {
                     $cond: [
                       {
                         $and: [
-                          { $gte: ['$date', startOfWeek] },
-                          { $lt: ['$date', endOfWeek] }
+                          { $gte: ['$date', oneWeekAgo] },
+                          { $lt: ['$date', today] }
                         ]
                       },
                       1,
@@ -1096,7 +1129,7 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
     }
   }
   /* Create Recipe*/
-  Recipes.create({
+  const newRecipe = await Recipes.create({
     RecipeId: rec_id,
     Name: recipeName,
     AuthorId: userId,
@@ -1155,7 +1188,7 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
       }
     }
   }
-
+  await logActivity(userId, 'upload-recipe', { recipeId: newRecipe._id });
   console.log("finished")
 });
 
@@ -1218,31 +1251,15 @@ app.get('/api/search_recipes/:recipeId/:ingredientId', async (req, res) => {
 });
 
 
-app.post('/api/update_user_details/:currentUserId', async (req, res) => {
-  const { currentUserId } = req.params;
-  const { newEmail, newName, newPassword, newDistrict } = req.body;
+app.post('/api/update_user_details/:userId', async (req, res) => {
+  const { userId } = req.params;
+  const { newPassword, newDistrict } = req.body;
 
   const Users = Collection.getModel(TABLE_NAMES.USERS);
 
   try {
-    // Check if the new email is already in use
-    if (newEmail && newEmail !== currentUserId) {
-      const existingUser = await Users.findOne({ email: newEmail });
-      if (existingUser) {
-        return res.status(409).json({ error: 'Duplicate email' });
-      }
-    }
-
     // Prepare update fields based on provided data
     const updateFields = {};
-
-    if (newEmail) {
-      updateFields.email = newEmail;
-    }
-
-    if (newName) {
-      updateFields.name = newName;
-    }
 
     if (newDistrict) {
       updateFields.district = newDistrict;
@@ -1255,7 +1272,7 @@ app.post('/api/update_user_details/:currentUserId', async (req, res) => {
 
     // Perform findOneAndUpdate
     const updatedUser = await Users.findOneAndUpdate(
-      { email: currentUserId }, // Find user by current email
+      { email: userId }, // Find user by current email
       { $set: updateFields }, // Set the fields to update
       { new: true } // Return the updated document
     );

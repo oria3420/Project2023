@@ -93,7 +93,7 @@ const Shopping = () => {
                 .then(data => {
                     setShoppingList(data); // Adjust if your API response structure is different
                     setFilteredItems(data);
-
+                    console.log(data)
                     setCheckedItems(data.reduce((acc, item) => {
                         acc[item.name] = item.checked;
                         return acc;
@@ -139,6 +139,7 @@ const Shopping = () => {
     };
 
 
+
     return (
         <div>
             {name && <Navbar name={name} />}
@@ -160,7 +161,7 @@ const Shopping = () => {
                                 <input
                                     className="fav-input-field search-shopping"
                                     type="text"
-                                    placeholder="Search"
+                                    placeholder="Search in List"
                                     value={searchItem}
                                     onChange={(e) => handleSearchChange(e.target.value)}
                                     onKeyPress={handleKeyPress} // Handle Enter key press
@@ -175,40 +176,44 @@ const Shopping = () => {
                                     <div className="loading-spinner"></div>
                                 </div>
                             ) : (
+
                                 <>
                                     {shoppingList.length === 0 ? (
                                         <div className="shopping-list-empty-msg">
                                             Your shopping list is empty.
                                         </div>
                                     ) : (
+
                                         <>
-                                        {filteredItems.length === 0 ? (
-                                            <div className='shopping-list-no-results'>
-                                                <p>No items found. Please try another search.</p>
-                                            </div>
-                                        ) : (
-                                            filteredItems.map((item, index) => (
-                                                <div key={index} className="shopping-list-item">
-                                                    <input
-                                                        id="shopping-check-box"
-                                                        type="checkbox"
-                                                        checked={!!checkedItems[item.name]}
-                                                        onChange={(e) => handleCheckboxChange(item.name, e.target.checked)}
-                                                        className='form-check-input shopping-check-input'
-                                                    />
-                                                    <div className="shopping-list-item-content">
-                                                        {item.name}
-                                                    </div>
-                                                    <i
-                                                        onClick={() => removeItem(item.name)}
-                                                        className='bi bi-x-circle remove-item-shopping'
-                                                    ></i>
+                                            {filteredItems.length === 0 ? (
+                                                <div className='shopping-list-no-results'>
+                                                    <p>No items found. Please try another search.</p>
                                                 </div>
-                                            ))
-                                        )}
-                                    </>
+                                            ) : (
+                                                filteredItems.map((item, index) => (
+                                                    <div key={index} className="shopping-list-item">
+                                                        <input
+                                                            id="shopping-check-box"
+                                                            type="checkbox"
+                                                            checked={!!checkedItems[item.name]}
+                                                            onChange={(e) => handleCheckboxChange(item.name, e.target.checked)}
+                                                            className='form-check-input shopping-check-input'
+                                                        />
+                                                        <div className="shopping-list-item-content">
+                                                            {item.name}
+                                                        </div>
+                                                        <i
+                                                            onClick={() => removeItem(item.name)}
+                                                            className='bi bi-x-circle remove-item-shopping'
+                                                        ></i>
+                                                    </div>
+                                                ))
+                                            )}
+                                        </>
+
                                     )}
                                 </>
+
                             )}
 
                         </div>

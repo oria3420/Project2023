@@ -1,15 +1,17 @@
+// scheduler.js
 const cron = require('node-cron');
 const initGlobalVocabularies = require('./initGlobalVocabularies');
 const initUsersProfile = require('./initUsersProfile');
 const initRecipeVectors = require('./initRecipeVectors');
+const Setting = require('../models/Settings');
 
-let mongooseConnection; // Variable to hold Mongoose connection object
+let mongooseConnection;
+let currentTask;
 
 // Function to set Mongoose connection
 function setMongooseConnection(connection) {
   mongooseConnection = connection;
 
-  // Start scheduling tasks if Mongoose is connected
   if (mongooseConnection.readyState === 1) {
     startScheduledTasks();
   } else {
@@ -17,9 +19,36 @@ function setMongooseConnection(connection) {
   }
 }
 
+// Function to get cron expression based on frequency
+function getCronExpression(frequency) {
+  switch (frequency) {
+    case 'once-a-week':
+      return '* * * * *'; // Every min
+      // return '0 1 * * 1'; // Every Monday at 1 AM
+    case 'twice-a-week':
+      return '0 1 * * 1,4'; // Every Monday and Thursday at 1 AM
+    case 'everyday':
+      return '0 1 * * *'; // Everyday at 1 AM
+    default:
+      return '0 1 * * 1'; // Default to once a week
+  }
+}
+
 // Function to start scheduled tasks
-function startScheduledTasks() {
-  cron.schedule('0 1 * * 1', async () => {
+async function startScheduledTasks() {
+  if (currentTask) {
+    currentTask.stop(); // Stop the current task
+  }
+
+  const frequencySetting = await Setting.findOne({ key: 'calculation_frequency' });
+
+  let cronExpression = '0 1 * * 1'; // Default cron expression
+
+  if (frequencySetting) {
+    cronExpression = getCronExpression(frequencySetting.value);
+  }
+
+  currentTask = cron.schedule(cronExpression, async () => {
     if (mongooseConnection && mongooseConnection.readyState !== 1) {
       console.error('Mongoose is not connected. Task skipped.');
       return;
@@ -28,10 +57,8 @@ function startScheduledTasks() {
     console.log('Running scheduled task...');
 
     try {
-      // Execute initGlobalVocabularies first and wait for it to complete
       await initGlobalVocabularies();
 
-      // Run initUsersProfile and initRecipeVectors concurrently
       const userProfilePromise = initUsersProfile();
       const recipeVectorsPromise = initRecipeVectors();
 
@@ -43,9 +70,10 @@ function startScheduledTasks() {
     }
   });
 
-  console.log('Task scheduling setup complete');
+  console.log(`Task scheduled with cron expression: ${cronExpression}`);
 }
 
 module.exports = {
-  setMongooseConnection
+  setMongooseConnection,
+  startScheduledTasks,
 };

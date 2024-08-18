@@ -4,7 +4,7 @@ import Navbar from '../components/Navbar';
 import StarRating from '../components/StarRating';
 import Loading from '../components/Loading';
 import NutritionTable from '../components/NutritionTable';
-import { useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Recipe.css';
 import LikeButton from '../components/LikeBtn';
 import CommentsContainer from '../components/CommentsContainer';
@@ -12,22 +12,14 @@ import Carousel from '../components/Carousel';
 import '@fortawesome/fontawesome-free/css/all.css';
 import AddToListModal from '../components/AddToListModal';
 import GuestModal from '../components/GuestModal';
-
+import jwt_decode from "jwt-decode";
 
 const defaultImageUrl = '/images/logo-image.png'
 
 const RecipePage = () => {
-  let user_name;
-  let user_id;
-  const location = useLocation();
-  if (location.state !== null) {
-    user_name = location.state.name;
-    user_id = location.state.user_id;
-  }
-  else {
-    user_name = "Guest"
-    user_id = "Guest"
-  }
+  const navigate = useNavigate()
+  const [name, setName] = useState(null);
+  const [user, setUser] = useState(null);
 
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
@@ -38,10 +30,33 @@ const RecipePage = () => {
   const [showShoppingModal, setShowShoppingModal] = useState(false);
   const [showGuestModal, setShowGuestModal] = useState(false);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      try {
+        const _user = jwt_decode(token);
+        // Handle user or guest based on your logic
+        setName(_user.name);
+        setUser(_user);
+        console.log(_user)
+      } catch (error) {
+        // Handle token decoding error
+        setName('Guest');
+        setUser(null);
+        console.error('Error decoding token:', error);
+        // You might want to redirect to login or handle the error in some way
+      }
+    } else {
+      // Handle the case where there's no token (e.g., guest user)
+      setName('Guest');
+      setUser(null); // Set user to null or handle guest user data
+    }
+  }, [navigate])
+
   const handleAddToList = () => {
     console.log("handleAddToList")
-    console.log(user_id)
-    if (user_id === "Guest") {
+    console.log(user)
+    if (user === "Guest") {
       setShowGuestModal(true);
       console.log("in if")
       return;
@@ -135,8 +150,8 @@ const RecipePage = () => {
 
   return (
     <div>
-      <Navbar name={user_name} />
-      {user_name && !loading ? (
+      {name && <Navbar name={name} />}
+      {name && !loading ? (
         <div className='recipe-container'>
 
           <div className='recipe-header'>
@@ -164,7 +179,7 @@ const RecipePage = () => {
                 ))}
               </div>
 
-              <LikeButton recipeId={id} userEmail={user_id} pageType="RecipePage" />
+              <LikeButton recipeId={id} userEmail={user.email} pageType="RecipePage" />
 
             </div>
 
@@ -220,7 +235,7 @@ const RecipePage = () => {
               showModal={showShoppingModal}
               onClose={() => setShowShoppingModal(false)}
               ingredients={ingredients}
-              userId={user_id}
+              userId={user}
             />
           )}
           {showGuestModal && (
@@ -287,7 +302,7 @@ const RecipePage = () => {
 
           </div>
 
-          <CommentsContainer id={id} user_id={user_id} user_name={user_name} recipe={recipe} />
+          <CommentsContainer id={id} user_id={user} user_name={name} recipe={recipe} />
 
           <br></br>
           <br></br>

@@ -8,7 +8,7 @@ import Loading from '../components/Loading';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const SearchRecipe = () => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [categories, setCategories] = useState([]);
     const [expandedCategories, setExpandedCategories] = useState({});
     const [recipes, setRecipes] = useState([]);
@@ -16,12 +16,14 @@ const SearchRecipe = () => {
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [filteredRecipesByName, setFilteredRecipeByNames] = useState([]);
     const [recipesCategories, setRecipesCategories] = useState([]);
-    const [name, setName] = useState(null)
-    const [user, setUser] = useState(null)
+    const [name, setName] = useState(null);
+    const [user, setUser] = useState(null);
+    const [email, setEmail] = useState('');
     const location = useLocation();
     const [searchTerm, setSearchTerm] = useState('');
     const [loading, setLoading] = useState(true);
     const [recommendations, setRecommendations] = useState([]);
+    const [isFirstPart, setIsFirstPart] = useState(true);
 
 
     useEffect(() => {
@@ -31,10 +33,12 @@ const SearchRecipe = () => {
                 const _user = jwt_decode(token);
                 // Handle user or guest based on your logic
                 setName(_user.name);
+                setEmail(_user.email);
                 setUser(_user);
             } catch (error) {
                 // Handle token decoding error
                 setName('Guest');
+                setEmail('Guest')
                 setUser(null);
                 console.error('Error decoding token:', error);
                 // You might want to redirect to login or handle the error in some way
@@ -42,25 +46,19 @@ const SearchRecipe = () => {
         } else {
             // Handle the case where there's no token (e.g., guest user)
             setName('Guest');
+            setEmail('Guest')
             setUser(null); // Set user to null or handle guest user data
         }
     }, [navigate])
 
-    
+
     useEffect(() => {
         const fetchRecommendations = async () => {
-            if (!user) return;
-
+            if (!email) return;
             try {
-                if (!user.email) {
-                    console.error('User email is not defined');
-                    return;
-                }
-
-                console.log(user.email);
                 console.log("trying to fetch recommendations in client");
 
-                const response = await fetch(`http://localhost:1337/api/recommendations/${user.email}`);
+                const response = await fetch(`http://localhost:1337/api/recommendations/${email}`);
                 const data = await response.json();
 
                 setRecommendations(data);
@@ -71,7 +69,15 @@ const SearchRecipe = () => {
         };
 
         fetchRecommendations();
-    }, [user]);
+    }, [user, email]);
+
+    const toggleRecommendations = () => {
+        setIsFirstPart(!isFirstPart);
+    };
+
+    const displayedRecommendations = isFirstPart
+        ? recommendations.slice(0, 3)
+        : recommendations.slice(3, 6);
 
     useEffect(() => {
         const fetchRecipes = async () => {
@@ -301,15 +307,17 @@ const SearchRecipe = () => {
                         </div>
 
 
-                        {recommendations.length === 0 ? (
-                            <p>No recommendations available.</p>
-                        ) : (
-                            recommendations.slice(0, 3).map((recipe, index) => (
-                                <div className='recipe-card-wrapper' key={recipe.recipe.id || index}>
-                                    <RecipeCard recipe={recipe.recipe} user={user} isRecommended={true} />
-                                </div>
-                            ))
-                        )}
+                        {displayedRecommendations.map((recipe, index) => (
+                            <div className='recipe-card-wrapper' key={recipe.recipe.id || index}>
+                                <RecipeCard recipe={recipe.recipe} user={user} isRecommended={true} />
+                            </div>
+                        ))}
+
+                        <i
+                            className={`bi ${isFirstPart ? 'bi-chevron-compact-down' : 'bi-chevron-compact-up'} recommended-icon`}
+                            onClick={toggleRecommendations}
+                        ></i>
+
 
                     </div>
 
