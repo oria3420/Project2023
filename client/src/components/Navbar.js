@@ -97,7 +97,7 @@ const Navbar = ({ name }) => {
 
     return (
         <>
-            <nav className="navbar bg-body-tertiary our-navbar">
+            <nav className="navbar our-navbar">
                 <div className="container-fluid d-flex justify-content-between align-items-center">
                     <a href='/search_recipe'>
                         <img className='logo-navbar' src="/images/logo_white_english.png" alt="Logo" />

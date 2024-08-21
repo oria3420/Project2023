@@ -6,27 +6,11 @@ mongoose.set('strictQuery', false);
 
 const districts = ['northern', 'haifa', 'central', 'tel_aviv', 'southern', 'jerusalem'];
 
-const generatePassword = () => {
-  const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  const digits = '0123456789';
-  const allChars = letters + digits;
-
-  let password = '';
-  for (let i = 0; i < 6; i++) {
-    password += allChars.charAt(Math.floor(Math.random() * allChars.length));
-  }
-
-  // Ensure password contains at least one letter and one digit
-  if (!/[a-zA-Z]/.test(password) || !/\d/.test(password)) {
-    return generatePassword();
-  }
-
-  return password;
-};
-
 const generateUsers = async (numUsers) => {
 
   const users = [];
+  const plainPassword = "aaa123";  // Define the password to be the same for all users
+  const hashedPassword = await bcrypt.hash(plainPassword, 10);  // Hash the password once
 
   for (let i = 0; i < numUsers; i++) {
     console.log('user ', i);
@@ -37,9 +21,6 @@ const generateUsers = async (numUsers) => {
     const gender = faker.helpers.arrayElement(['male', 'female']);  // Updated API
     const birthDate = faker.date.between({ from: '1954-01-01', to: '2009-01-01' }).toISOString().slice(0, 10);  // Updated API and format
     const district = faker.helpers.arrayElement(districts);  // Updated API
-    // Generate a password with at least one letter and one digit
-    let password = generatePassword();
-    const hashedPassword = await bcrypt.hash(password, 10);
 
     users.push({
       name,
@@ -47,7 +28,7 @@ const generateUsers = async (numUsers) => {
       gender,
       birthDate,
       district,
-      password: hashedPassword,
+      password: hashedPassword,  // Use the pre-hashed password
     });
   }
 
@@ -71,7 +52,7 @@ const main = async () => {
 
   console.log('MongoDB connected successfully');
 
-  const numUsers = 250;  // Generate only 1 user
+  const numUsers = 250;  // Generate 250 users
   const users = await generateUsers(numUsers);
   await saveUsers(users);
 

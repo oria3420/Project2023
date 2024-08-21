@@ -18,7 +18,6 @@ const Settings = () => {
     const [initialDistrict, setInitialDistrict] = useState('');
     const [district, setDistrict] = useState('');
     const [newPassword, setNewPassword] = useState('');
-
     const [formValid, setFormValid] = useState(false);
     const [showAlert, setShowAlert] = useState(true);
     const [passwordError, setPasswordError] = useState('');
@@ -108,6 +107,7 @@ const Settings = () => {
                 console.log('User details updated successfully:', result);
                 setFormValid(true);
                 setShowAlert(true);
+                setNewPassword('');
             } else {
                 // Handle error (e.g., show an error message)
                 console.error('Failed to update user details:', result.message);
