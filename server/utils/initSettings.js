@@ -1,5 +1,5 @@
 // initSettings.js
-const Setting = require('./models/Settings');
+const Setting = require('../models/Settings');
 
 // Function to initialize settings
 const initializeSettings = async () => {

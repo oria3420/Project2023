@@ -4,7 +4,7 @@ const Collection = require('../models/collection.model');
 const globals = require('../../client/src/common/tablesNames');
 const TABLE_NAMES = globals.TABLE_NAMES;
 const { startScheduledTasks } = require('../recommendtion/scheduler')
-const { recommendRecipes } = require('../recommendations');
+const { recommendRecipes } = require('../recommendtion/recommendations');
 const UsersProfile = require('../models/usersProfile.model');
 const RecipesVectors = require('../models/recipesVectors.model');
 

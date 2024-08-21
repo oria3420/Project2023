@@ -1,10 +1,10 @@
-const globals = require('../client/src/common/tablesNames');
-const Collection = require('./models/collection.model');
+const globals = require('../../client/src/common/tablesNames');
+const Collection = require('../models/collection.model');
 const TABLE_NAMES = globals.TABLE_NAMES;
 
-const UsersProfile = require('./models/usersProfile.model');
-const RecipesVectors = require('./models/recipesVectors.model');
-const { collection } = require('./models/user.model');
+const UsersProfile = require('../models/usersProfile.model');
+const RecipesVectors = require('../models/recipesVectors.model');
+const { collection } = require('../models/user.model');
 
 const cosineSimilarity = (vec1, vec2) => {
     // console.log("vec1: ", vec1);

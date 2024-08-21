@@ -177,77 +177,114 @@ const AddRecipe = () => {
         setSelectedImages(prevImages => [...prevImages, ...files]); // Store files
     };
 
+    // const handleSubmit = async (e) => {
+    //     console.log("handleSubmit")
+    //     e.preventDefault();
+
+    //     const isFormValid = validateForm();
+    //     setFormValid(isFormValid)
+    //     setFormSubmitted(true);
+    //     console.log('formValid: ' + formValid)
+    //     console.log('formSubmitted: ' + formSubmitted)
+    //     window.scrollTo({ top: 0, behavior: 'smooth' });
+    //     if (isFormValid) {
+
+    //         // Iterate over recipeIngredients
+    //         const updatedRecipeIngredients = await Promise.all(recipeIngredients.map(async (recipeIngredient) => {
+    //             // Find the corresponding ingredient in the ingredients array
+    //             const matchingIngredient = ingredients.find((ingredient) => ingredient.ingredient === recipeIngredient.ingredient);
+
+    //             if (matchingIngredient) {
+    //                 // Extract the ID from the matching ingredient and update the recipeIngredient
+    //                 recipeIngredient.id = matchingIngredient.id;
+    //             }
+
+    //             return recipeIngredient;
+    //         }));
+
+    //         // Update state with the modified recipeIngredients array
+    //         setRecipeIngredients(updatedRecipeIngredients);
+
+    //         console.log('Form Data:', {
+    //             recipeName,
+    //             selectedImages,
+    //             cookTime,
+    //             prepTime,
+    //             selectedCategory,
+    //             groceryList: recipeIngredients,
+    //             description,
+    //             recipeYield,
+    //             recipeInstructions: instructions,
+    //             recipeCategories,
+    //         });
+    //         setRecipeName('');
+    //         setSelectedImages([]);
+    //         setCookTime('00:00');
+    //         setPrepTime('00:00');
+    //         setSelectedCategory('');
+    //         setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
+    //         setDescription('');
+    //         setRecipeYield('');
+    //         setInstructions(['']);
+    //         setRecipeCategories({});
+    //         const formData = new FormData();
+    //         selectedImages.forEach((file, index) => {
+    //             console.log(file)
+    //             formData.append('selectedImages', file); // Append files to FormData
+    //         });
+    //         formData.append('recipeName', recipeName);
+    //         formData.append('cookTime', cookTime);
+    //         formData.append('prepTime', prepTime);
+    //         formData.append('selectedCategory', selectedCategory);
+    //         formData.append('groceryList', JSON.stringify(recipeIngredients));
+    //         formData.append('description', description);
+    //         formData.append('recipeYield', recipeYield);
+    //         formData.append('recipeInstructions', JSON.stringify(instructions));
+    //         formData.append('recipeCategories', JSON.stringify(recipeCategories));
+    //         formData.append('name', name);
+    //         formData.append('userId', userId);
+
+    //         try {
+    //             const response = await fetch('http://localhost:1337/api/addRecipe', {
+    //                 method: 'POST',
+    //                 body: formData,
+    //             });
+    //             if (response.ok) {
+    //                 const result = await response.json();
+    //                 console.log(result); // Recipe successfully added
+    //                 setFormSubmitted(true);
+    //                 console.log("check")
+    //                 window.scrollTo({ top: 0, behavior: 'smooth' });
+    //             } else {
+    //                 console.error(`HTTP Error: ${response.status}`);
+    //                 // Handle error response
+    //             }
+    //         } catch (error) {
+    //             console.error(error);
+    //             // Handle fetch error (e.g., network error)
+    //         }
+
+    //     } else {
+    //         // Update state to show the error message
+    //         window.scrollTo({ top: 0, behavior: 'smooth' });
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         console.log("handleSubmit")
         e.preventDefault();
 
-        const isFormValid = validateForm();
+        const isFormValid = true;
         setFormValid(isFormValid)
         setFormSubmitted(true);
-        console.log('formValid: ' + formValid)
-        console.log('formSubmitted: ' + formSubmitted)
+     
         window.scrollTo({ top: 0, behavior: 'smooth' });
         if (isFormValid) {
-
-            // Iterate over recipeIngredients
-            const updatedRecipeIngredients = await Promise.all(recipeIngredients.map(async (recipeIngredient) => {
-                // Find the corresponding ingredient in the ingredients array
-                const matchingIngredient = ingredients.find((ingredient) => ingredient.ingredient === recipeIngredient.ingredient);
-
-                if (matchingIngredient) {
-                    // Extract the ID from the matching ingredient and update the recipeIngredient
-                    recipeIngredient.id = matchingIngredient.id;
-                }
-
-                return recipeIngredient;
-            }));
-
-            // Update state with the modified recipeIngredients array
-            setRecipeIngredients(updatedRecipeIngredients);
-
-            console.log('Form Data:', {
-                recipeName,
-                selectedImages,
-                cookTime,
-                prepTime,
-                selectedCategory,
-                groceryList: recipeIngredients,
-                description,
-                recipeYield,
-                recipeInstructions: instructions,
-                recipeCategories,
-            });
-            setRecipeName('');
-            setSelectedImages([]);
-            setCookTime('00:00');
-            setPrepTime('00:00');
-            setSelectedCategory('');
-            setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
-            setDescription('');
-            setRecipeYield('');
-            setInstructions(['']);
-            setRecipeCategories({});
-            const formData = new FormData();
-            selectedImages.forEach((file, index) => {
-                console.log(file)
-                formData.append('selectedImages', file); // Append files to FormData
-            });
-            formData.append('recipeName', recipeName);
-            formData.append('cookTime', cookTime);
-            formData.append('prepTime', prepTime);
-            formData.append('selectedCategory', selectedCategory);
-            formData.append('groceryList', JSON.stringify(recipeIngredients));
-            formData.append('description', description);
-            formData.append('recipeYield', recipeYield);
-            formData.append('recipeInstructions', JSON.stringify(instructions));
-            formData.append('recipeCategories', JSON.stringify(recipeCategories));
-            formData.append('name', name);
-            formData.append('userId', userId);
 
             try {
                 const response = await fetch('http://localhost:1337/api/addRecipe', {
                     method: 'POST',
-                    body: formData,
+                    body: {},
                 });
                 if (response.ok) {
                     const result = await response.json();

@@ -12,11 +12,11 @@ const { GridFsStorage } = require('multer-gridfs-storage');
 const multer = require('multer');
 const path = require('path');
 const { constants } = require('buffer');
-const { recommendRecipes } = require('./recommendations');
+const { recommendRecipes } = require('./recommendtion/recommendations');
 const cron = require('./recommendtion/scheduler'); // Import your scheduler script
-// require('./recommendtion/scheduler');
 const adminRoutes = require('./routes/adminRoutes'); // Adjust the path as needed
 const { logActivity } = require('./utils/activityLogger');
+
 
 mongoose.set('strictQuery', false);
 
@@ -27,6 +27,8 @@ app.use(cors());
 
 // Middleware to parse JSON requests
 app.use(express.json());
+
+
 
 
 mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.mongodb.net/project2023', {
@@ -65,6 +67,11 @@ const storage = new GridFsStorage({
 const upload = multer({ storage });
 app.use(cors());
 app.use(express.json());
+
+
+const addRecipeRoutes = require('./routes/addRecipeRoutes')(upload, gfs);
+app.use('/api/addRecipe', addRecipeRoutes);
+
 
 app.use('/api/admin', adminRoutes);
 
@@ -158,9 +165,6 @@ app.post('/api/recipes/update_rating', async (req, res) => {
     const totalRatings = allRatings.reduce((acc, curr) => acc + curr.rating, 0);
     const reviewCount = allRatings.length;
     const averageRating = totalRatings / reviewCount;
-    // console.log("allRatings: ", allRatings);
-    // console.log("totalRatings: ", totalRatings);
-    // console.log("averageRating: ", averageRating);
 
     // Update the recipe's overall rating and review count
     await Recipes.updateOne(
@@ -902,292 +906,292 @@ app.get('/api/measurements', async (req, res) => {
 });
 
 
-app.use('/api/addRecipe/images', express.static(path.join(__dirname, 'uploads')));
+// app.use('/api/addRecipe/images', express.static(path.join(__dirname, 'uploads')));
 
 
-app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
-  const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
-  const Ingredients = Collection.getModel(TABLE_NAMES.INGREDIENTS)
-  const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS)
-  const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
-  const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
-  const Measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
-  const Setting = Collection.getModel(TABLE_NAMES.SETTINGS);
-  var rec_id;
-  Setting.findOneAndUpdate(
-    { key: "recipe_id" },
-    { $inc: { value: 1 } }, // Increment the value by 1
-    { new: true }, // Return the updated document
-    (err, result) => {
-      if (err) {
-        console.error('Error updating setting:', err);
-      } else {
-          // Extract the updated value
-          rec_id = result.value;
-          console.log('Updated value of key:', rec_id);
-      }})
-  console.log(rec_id)
-  const {
-    recipeName,
-    cookTime,
-    prepTime,
-    selectedCategory,
-    groceryList,
-    description,
-    recipeServings,
-    recipeYield,
-    recipeInstructions,
-    recipeCategories,
-    name,
-    userId, } = req.body;
+// app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
+//   const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
+//   const Ingredients = Collection.getModel(TABLE_NAMES.INGREDIENTS)
+//   const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS)
+//   const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
+//   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
+//   const Measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
+//   const Setting = Collection.getModel(TABLE_NAMES.SETTINGS);
+//   var rec_id;
+//   Setting.findOneAndUpdate(
+//     { key: "recipe_id" },
+//     { $inc: { value: 1 } }, // Increment the value by 1
+//     { new: true }, // Return the updated document
+//     (err, result) => {
+//       if (err) {
+//         console.error('Error updating setting:', err);
+//       } else {
+//           // Extract the updated value
+//           rec_id = result.value;
+//           console.log('Updated value of key:', rec_id);
+//       }})
+//   console.log(rec_id)
+//   const {
+//     recipeName,
+//     cookTime,
+//     prepTime,
+//     selectedCategory,
+//     groceryList,
+//     description,
+//     recipeServings,
+//     recipeYield,
+//     recipeInstructions,
+//     recipeCategories,
+//     name,
+//     userId, } = req.body;
 
-  // Log the received files and body data for debugging
-  console.log('Uploaded files:', req.files);
-  console.log('Request body:', req.body);
+//   // Log the received files and body data for debugging
+//   console.log('Uploaded files:', req.files);
+//   console.log('Request body:', req.body);
 
-  console.log('Form Data:', {
-    recipeName,
-    cookTime,
-    prepTime,
-    selectedCategory,
-    groceryList,
-    description,
-    recipeYield,
-    recipeInstructions,
-    recipeCategories,
-  });
+//   console.log('Form Data:', {
+//     recipeName,
+//     cookTime,
+//     prepTime,
+//     selectedCategory,
+//     groceryList,
+//     description,
+//     recipeYield,
+//     recipeInstructions,
+//     recipeCategories,
+//   });
 
-  const parseTimeToDuration = (timeString) => {
-    const [hours, minutes] = timeString.split(':').map(Number);
+//   const parseTimeToDuration = (timeString) => {
+//     const [hours, minutes] = timeString.split(':').map(Number);
 
-    let duration = '';
-    if (hours > 0) {
-      duration += hours.toString() + 'H';
-    }
+//     let duration = '';
+//     if (hours > 0) {
+//       duration += hours.toString() + 'H';
+//     }
 
-    if (minutes > 0) {
-      duration += minutes.toString() + 'M';
-    }
+//     if (minutes > 0) {
+//       duration += minutes.toString() + 'M';
+//     }
 
-    return duration || '0S';
-  };
+//     return duration || '0S';
+//   };
 
-  const sumDurations = (duration1, duration2) => {
-    ;
-    const [hours1 = 0, minutes1 = 0] = duration1.match(/\d+/g).map(Number);
-    const [hours2 = 0, minutes2 = 0] = duration2.match(/\d+/g).map(Number);
+//   const sumDurations = (duration1, duration2) => {
+//     ;
+//     const [hours1 = 0, minutes1 = 0] = duration1.match(/\d+/g).map(Number);
+//     const [hours2 = 0, minutes2 = 0] = duration2.match(/\d+/g).map(Number);
 
-    const totalHours = hours1 + hours2;
-    const totalMinutes = minutes1 + minutes2;
+//     const totalHours = hours1 + hours2;
+//     const totalMinutes = minutes1 + minutes2;
 
-    // Format the result as HH:mm
-    const formattedHours = String(totalHours).padStart(2, '0');
-    const formattedMinutes = String(totalMinutes).padStart(2, '0');
+//     // Format the result as HH:mm
+//     const formattedHours = String(totalHours).padStart(2, '0');
+//     const formattedMinutes = String(totalMinutes).padStart(2, '0');
 
-    return `${formattedHours}:${formattedMinutes}`;
-  };
+//     return `${formattedHours}:${formattedMinutes}`;
+//   };
 
-  const currentDate = new Date();
-  let kosherWord;
-  const datePublished = currentDate.toISOString();
-  const totalCookTime = sumDurations(cookTime, prepTime);
-  // Extract the true value from kosherCategories
-  //console.log('Received checkedItems:', JSON.parse(recipeCategories));
-  const checkedKosherCategoryIds = Object.keys(JSON.parse(recipeCategories)['kosher_categories'] || {}).filter(
-    (checkboxId) => JSON.parse(recipeCategories)['kosher_categories'][checkboxId]
-  );
-  // Ensure there's at least one true value
-  if (checkedKosherCategoryIds.length === 0) {
-    res.status(400).json({ error: 'Please select a kosher category' });
-    return;
-  }
-  const kosherCategoryId = checkedKosherCategoryIds[0];
-  try {
-    // Find the corresponding kosher word in the Kosher table
-    kosherWord = await KosherT.findOne({ id: parseInt(kosherCategoryId) });
-    res.status(200).json({ success: true });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+//   const currentDate = new Date();
+//   let kosherWord;
+//   const datePublished = currentDate.toISOString();
+//   const totalCookTime = sumDurations(cookTime, prepTime);
+//   // Extract the true value from kosherCategories
+//   //console.log('Received checkedItems:', JSON.parse(recipeCategories));
+//   const checkedKosherCategoryIds = Object.keys(JSON.parse(recipeCategories)['kosher_categories'] || {}).filter(
+//     (checkboxId) => JSON.parse(recipeCategories)['kosher_categories'][checkboxId]
+//   );
+//   // Ensure there's at least one true value
+//   if (checkedKosherCategoryIds.length === 0) {
+//     res.status(400).json({ error: 'Please select a kosher category' });
+//     return;
+//   }
+//   const kosherCategoryId = checkedKosherCategoryIds[0];
+//   try {
+//     // Find the corresponding kosher word in the Kosher table
+//     kosherWord = await KosherT.findOne({ id: parseInt(kosherCategoryId) });
+//     res.status(200).json({ success: true });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
 
-  const calculateNutritionForIngredient = async (ingredientId, amount, measurementId) => {
-    try {
-      // Fetch nutritional information for the ingredient from your API or database
-      //console.log("ingredientId",ingredientId)
-      const ingredient = await Ingredients.findOne({ id: ingredientId });
-      // console.log(ingredient)
-      console.log("measurementId", measurementId)
-      const measurement = await Measurement.findOne({ measurement_id: parseInt(measurementId) });
-      // console.log(measurement)
+//   const calculateNutritionForIngredient = async (ingredientId, amount, measurementId) => {
+//     try {
+//       // Fetch nutritional information for the ingredient from your API or database
+//       //console.log("ingredientId",ingredientId)
+//       const ingredient = await Ingredients.findOne({ id: ingredientId });
+//       // console.log(ingredient)
+//       console.log("measurementId", measurementId)
+//       const measurement = await Measurement.findOne({ measurement_id: parseInt(measurementId) });
+//       // console.log(measurement)
 
 
-      // Convert the ingredient quantity to kilograms
-      const quantityInKg = convertToKilograms(amount, measurement.measurement);
+//       // Convert the ingredient quantity to kilograms
+//       const quantityInKg = convertToKilograms(amount, measurement.measurement);
 
-      // Scale the nutritional values based on the ingredient quantity
-      const nutrition = {
-        calories: ingredient.calories * quantityInKg,
-        fat: ingredient.fat * quantityInKg,
-        saturated_fat: ingredient.saturated_fat * quantityInKg,
-        cholesterol: ingredient.cholesterol * quantityInKg,
-        sodium: ingredient.sodium * quantityInKg,
-        carbohydrates: ingredient.carbohydrates * quantityInKg,
-        fiber: ingredient.fiber * quantityInKg,
-        sugar: ingredient.sugar * quantityInKg,
-        protein: ingredient.protein * quantityInKg,
-      };
+//       // Scale the nutritional values based on the ingredient quantity
+//       const nutrition = {
+//         calories: ingredient.calories * quantityInKg,
+//         fat: ingredient.fat * quantityInKg,
+//         saturated_fat: ingredient.saturated_fat * quantityInKg,
+//         cholesterol: ingredient.cholesterol * quantityInKg,
+//         sodium: ingredient.sodium * quantityInKg,
+//         carbohydrates: ingredient.carbohydrates * quantityInKg,
+//         fiber: ingredient.fiber * quantityInKg,
+//         sugar: ingredient.sugar * quantityInKg,
+//         protein: ingredient.protein * quantityInKg,
+//       };
 
-      return nutrition;
-    } catch (error) {
-      console.error(`Error fetching nutritional information for ingredient ${ingredientId}: ${error.message}`);
-      return null;
-    }
-  };
+//       return nutrition;
+//     } catch (error) {
+//       console.error(`Error fetching nutritional information for ingredient ${ingredientId}: ${error.message}`);
+//       return null;
+//     }
+//   };
 
-  const convertToKilograms = (amount, measurement) => {
-    // Conversion factors to kg
-    conversion_factors = {
-        'kilogram': 1,                  
-        'gram': 0.001,                  
-        'teaspoon': 0.00492892,        
-        'tablespoon': 0.0147868,        
-        'fluid ounce': 0.0295735,       
-        'cup': 0.236588,                
-        'pint': 0.473176,               
-        'quart': 0.946353,              
-        'gallon': 3.78541,              
-        'ounce': 0.0283495,             
-        'pound': 0.453592,              
-        'milliliter': 0.001,            
-        'liter': 1                      
-    }
+//   const convertToKilograms = (amount, measurement) => {
+//     // Conversion factors to kg
+//     conversion_factors = {
+//         'kilogram': 1,                  
+//         'gram': 0.001,                  
+//         'teaspoon': 0.00492892,        
+//         'tablespoon': 0.0147868,        
+//         'fluid ounce': 0.0295735,       
+//         'cup': 0.236588,                
+//         'pint': 0.473176,               
+//         'quart': 0.946353,              
+//         'gallon': 3.78541,              
+//         'ounce': 0.0283495,             
+//         'pound': 0.453592,              
+//         'milliliter': 0.001,            
+//         'liter': 1                      
+//     }
     
-    // Convert the amount to kg
-    return amount * conversion_factors[measurement]
-  };
+//     // Convert the amount to kg
+//     return amount * conversion_factors[measurement]
+//   };
 
-  let totalNutrition = {
-    calories: 0,
-    fat: 0,
-    saturated_fat: 0,
-    cholesterol: 0,
-    sodium: 0,
-    carbohydrates: 0,
-    fiber: 0,
-    sugar: 0,
-    protein: 0,
-  };
+//   let totalNutrition = {
+//     calories: 0,
+//     fat: 0,
+//     saturated_fat: 0,
+//     cholesterol: 0,
+//     sodium: 0,
+//     carbohydrates: 0,
+//     fiber: 0,
+//     sugar: 0,
+//     protein: 0,
+//   };
 
-  /* Insert RecipeIngredients and Calculate nutrition */
-  for (const groceryItem of JSON.parse(groceryList)) {
-    // console.log(groceryItem)
-    const { ingredient, measurementId, amount, id } = groceryItem;
-    // console.log("in for", measurementId)
-    const nutrition = await calculateNutritionForIngredient(groceryItem.id, amount, measurementId)
-    if (nutrition) {
-      // Add the scaled nutritional values to the total
-      totalNutrition.calories += nutrition.calories;
-      totalNutrition.fat += nutrition.fat;
-      totalNutrition.saturated_fat += nutrition.saturated_fat;
-      totalNutrition.cholesterol += nutrition.cholesterol;
-      totalNutrition.sodium += nutrition.sodium;
-      totalNutrition.carbohydrates += nutrition.carbohydrates;
-      totalNutrition.fiber += nutrition.fiber;
-      totalNutrition.sugar += nutrition.sugar;
-      totalNutrition.protein += nutrition.protein;
-    }
-    // console.log('Total Nutrition:', totalNutrition);
-    //console.log(groceryItem.id+" "+measurementId+" "+amount)
-    await RecipeIngredients.create({
-      recipe_ID: rec_id,
-      ingredient_ID: groceryItem.id,
-      measurement_ID: parseInt(measurementId),
-      amount: parseInt(amount),
-    });
-  }
+//   /* Insert RecipeIngredients and Calculate nutrition */
+//   for (const groceryItem of JSON.parse(groceryList)) {
+//     // console.log(groceryItem)
+//     const { ingredient, measurementId, amount, id } = groceryItem;
+//     // console.log("in for", measurementId)
+//     const nutrition = await calculateNutritionForIngredient(groceryItem.id, amount, measurementId)
+//     if (nutrition) {
+//       // Add the scaled nutritional values to the total
+//       totalNutrition.calories += nutrition.calories;
+//       totalNutrition.fat += nutrition.fat;
+//       totalNutrition.saturated_fat += nutrition.saturated_fat;
+//       totalNutrition.cholesterol += nutrition.cholesterol;
+//       totalNutrition.sodium += nutrition.sodium;
+//       totalNutrition.carbohydrates += nutrition.carbohydrates;
+//       totalNutrition.fiber += nutrition.fiber;
+//       totalNutrition.sugar += nutrition.sugar;
+//       totalNutrition.protein += nutrition.protein;
+//     }
+//     // console.log('Total Nutrition:', totalNutrition);
+//     //console.log(groceryItem.id+" "+measurementId+" "+amount)
+//     await RecipeIngredients.create({
+//       recipe_ID: rec_id,
+//       ingredient_ID: groceryItem.id,
+//       measurement_ID: parseInt(measurementId),
+//       amount: parseInt(amount),
+//     });
+//   }
 
-  for (const nutrient in totalNutrition) {
-    if (totalNutrition.hasOwnProperty(nutrient)) {
-      totalNutrition[nutrient] = parseFloat(totalNutrition[nutrient].toFixed(2));
-    }
-  }
-  /* Create Recipe*/
-  const newRecipe = await Recipes.create({
-    RecipeId: rec_id,
-    Name: recipeName,
-    AuthorId: userId,
-    AuthorName: name,
-    CookTime: parseTimeToDuration(cookTime),
-    PrepTime: parseTimeToDuration(prepTime),
-    TotalTime: parseTimeToDuration(totalCookTime),
-    DatePublished: datePublished,
-    Description: description,
-    RecipeCategory: selectedCategory,
-    AggregatedRating: null,
-    ReviewCount: 0,
-    Calories: totalNutrition.calories,
-    FatContent: totalNutrition.fat,
-    SaturatedFatContent: totalNutrition.saturated_fat,
-    CholesterolContent: totalNutrition.cholesterol,
-    SodiumContent: totalNutrition.sodium,
-    CarbohydrateContent: totalNutrition.carbohydrates,
-    FiberContent: totalNutrition.fiber,
-    SugarContent: totalNutrition.sugar,
-    ProteinContent: totalNutrition.protein,
-    RecipeServings: recipeServings,
-    RecipeYield: recipeYield,
-    RecipeInstructions: JSON.parse(recipeInstructions).join('.'),
-    Kosher: kosherWord.kosher,
-  })
+//   for (const nutrient in totalNutrition) {
+//     if (totalNutrition.hasOwnProperty(nutrient)) {
+//       totalNutrition[nutrient] = parseFloat(totalNutrition[nutrient].toFixed(2));
+//     }
+//   }
+//   /* Create Recipe*/
+//   const newRecipe = await Recipes.create({
+//     RecipeId: rec_id,
+//     Name: recipeName,
+//     AuthorId: userId,
+//     AuthorName: name,
+//     CookTime: parseTimeToDuration(cookTime),
+//     PrepTime: parseTimeToDuration(prepTime),
+//     TotalTime: parseTimeToDuration(totalCookTime),
+//     DatePublished: datePublished,
+//     Description: description,
+//     RecipeCategory: selectedCategory,
+//     AggregatedRating: null,
+//     ReviewCount: 0,
+//     Calories: totalNutrition.calories,
+//     FatContent: totalNutrition.fat,
+//     SaturatedFatContent: totalNutrition.saturated_fat,
+//     CholesterolContent: totalNutrition.cholesterol,
+//     SodiumContent: totalNutrition.sodium,
+//     CarbohydrateContent: totalNutrition.carbohydrates,
+//     FiberContent: totalNutrition.fiber,
+//     SugarContent: totalNutrition.sugar,
+//     ProteinContent: totalNutrition.protein,
+//     RecipeServings: recipeServings,
+//     RecipeYield: recipeYield,
+//     RecipeInstructions: JSON.parse(recipeInstructions).join('.'),
+//     Kosher: kosherWord.kosher,
+//   })
 
-  for (const file of req.files) {
-    // Create a new Image document with the file's metadata
-    const newImage = new Image({
-      recipe_ID: rec_id, // Assuming rec_id is defined elsewhere
-      image_link: {
-        filename: file.originalname, // Store the original filename
-        fileId: file.id, // Store the ObjectId of the uploaded file
-      }
-    });
+//   for (const file of req.files) {
+//     // Create a new Image document with the file's metadata
+//     const newImage = new Image({
+//       recipe_ID: rec_id, // Assuming rec_id is defined elsewhere
+//       image_link: {
+//         filename: file.originalname, // Store the original filename
+//         fileId: file.id, // Store the ObjectId of the uploaded file
+//       }
+//     });
 
-    // Save the new Image document to the database
-    await newImage.save();
-  }
+//     // Save the new Image document to the database
+//     await newImage.save();
+//   }
 
-  /*Insert categories*/
-  for (const [category, selectedItems] of Object.entries(JSON.parse(recipeCategories))) {
-    if (Object.keys(selectedItems).length > 0) {
-      // Construct the table name based on the category
-      const tableName = `recipe_${category.toLowerCase()}`;
-      const trueItems = Object.entries(selectedItems)
-        .filter(([itemId, isSelected]) => isSelected)
-        .map(([itemId]) => itemId);
-      // Insert rows into the corresponding table
-      for (const itemId of trueItems) {
-        await Collection.getModel(tableName).create({
-          recipe_ID: rec_id,
-          category_ID: parseInt(itemId),
-        });
-      }
-    }
-  }
-  await logActivity(userId, 'upload-recipe', { recipeId: newRecipe._id });
-  console.log("finished")
-});
+//   /*Insert categories*/
+//   for (const [category, selectedItems] of Object.entries(JSON.parse(recipeCategories))) {
+//     if (Object.keys(selectedItems).length > 0) {
+//       // Construct the table name based on the category
+//       const tableName = `recipe_${category.toLowerCase()}`;
+//       const trueItems = Object.entries(selectedItems)
+//         .filter(([itemId, isSelected]) => isSelected)
+//         .map(([itemId]) => itemId);
+//       // Insert rows into the corresponding table
+//       for (const itemId of trueItems) {
+//         await Collection.getModel(tableName).create({
+//           recipe_ID: rec_id,
+//           category_ID: parseInt(itemId),
+//         });
+//       }
+//     }
+//   }
+//   await logActivity(userId, 'upload-recipe', { recipeId: newRecipe._id });
+//   console.log("finished")
+// });
 
 
-app.get('/api/addRecipe/images/:filename', (req, res) => {
-  const filename = req.params.filename;
-  const readstream = gfs.openDownloadStream(ObjectId(filename));
+// app.get('/api/addRecipe/images/:filename', (req, res) => {
+//   const filename = req.params.filename;
+//   const readstream = gfs.openDownloadStream(ObjectId(filename));
 
-  readstream.on('error', (error) => {
-    console.error('Error retrieving image:', error);
-    res.status(404).send('Image not found');
-  });
+//   readstream.on('error', (error) => {
+//     console.error('Error retrieving image:', error);
+//     res.status(404).send('Image not found');
+//   });
 
-  readstream.pipe(res);
-});
+//   readstream.pipe(res);
+// });
 
 
 // Define the route to get time category tags
