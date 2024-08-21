@@ -912,7 +912,21 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
   const KosherT = Collection.getModel(TABLE_NAMES.KOSHER_CATEGORIES)
   const Image = Collection.getModel(TABLE_NAMES.RECIPES_IMAGES);
   const Measurement = Collection.getModel(TABLE_NAMES.MEASUREMENTS);
-  const rec_id = 555
+  const Setting = Collection.getModel(TABLE_NAMES.SETTINGS);
+  var rec_id;
+  Setting.findOneAndUpdate(
+    { key: "recipe_id" },
+    { $inc: { value: 1 } }, // Increment the value by 1
+    { new: true }, // Return the updated document
+    (err, result) => {
+      if (err) {
+        console.error('Error updating setting:', err);
+      } else {
+          // Extract the updated value
+          rec_id = result.value;
+          console.log('Updated value of key:', rec_id);
+      }})
+  console.log(rec_id)
   const {
     recipeName,
     cookTime,
@@ -1003,29 +1017,27 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
       //console.log("ingredientId",ingredientId)
       const ingredient = await Ingredients.findOne({ id: ingredientId });
       // console.log(ingredient)
-      // console.log("measurementId", measurementId)
+      console.log("measurementId", measurementId)
       const measurement = await Measurement.findOne({ measurement_id: parseInt(measurementId) });
       // console.log(measurement)
 
 
-      // Convert the ingredient quantity to kilograms (assuming your API provides data per 1 kg)
+      // Convert the ingredient quantity to kilograms
       const quantityInKg = convertToKilograms(amount, measurement.measurement);
-
-      // Calculate the scaling factor based on the ingredient quantity
-      const scalingFactor = quantityInKg / ingredient.amount;
 
       // Scale the nutritional values based on the ingredient quantity
       const nutrition = {
-        calories: ingredient.calories * scalingFactor,
-        fat: ingredient.fat * scalingFactor,
-        saturated_fat: ingredient.saturated_fat * scalingFactor,
-        cholesterol: ingredient.cholesterol * scalingFactor,
-        sodium: ingredient.sodium * scalingFactor,
-        carbohydrates: ingredient.carbohydrates * scalingFactor,
-        fiber: ingredient.fiber * scalingFactor,
-        sugar: ingredient.sugar * scalingFactor,
-        protein: ingredient.protein * scalingFactor,
+        calories: ingredient.calories * quantityInKg,
+        fat: ingredient.fat * quantityInKg,
+        saturated_fat: ingredient.saturated_fat * quantityInKg,
+        cholesterol: ingredient.cholesterol * quantityInKg,
+        sodium: ingredient.sodium * quantityInKg,
+        carbohydrates: ingredient.carbohydrates * quantityInKg,
+        fiber: ingredient.fiber * quantityInKg,
+        sugar: ingredient.sugar * quantityInKg,
+        protein: ingredient.protein * quantityInKg,
       };
+
       return nutrition;
     } catch (error) {
       console.error(`Error fetching nutritional information for ingredient ${ingredientId}: ${error.message}`);
@@ -1033,54 +1045,26 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
     }
   };
 
-  const convertToKilograms = (quantity, measurement) => {
-    if (measurement === 'Unit') {
-      // You need to define a conversion factor based on your specific use case
-      // For example, 1 unit might be equivalent to 200 grams
-      const unitToGramsConversionFactor = 200;
-      return quantity * unitToGramsConversionFactor / 1000;
+  const convertToKilograms = (amount, measurement) => {
+    // Conversion factors to kg
+    conversion_factors = {
+        'kilogram': 1,                  
+        'gram': 0.001,                  
+        'teaspoon': 0.00492892,        
+        'tablespoon': 0.0147868,        
+        'fluid ounce': 0.0295735,       
+        'cup': 0.236588,                
+        'pint': 0.473176,               
+        'quart': 0.946353,              
+        'gallon': 3.78541,              
+        'ounce': 0.0283495,             
+        'pound': 0.453592,              
+        'milliliter': 0.001,            
+        'liter': 1                      
     }
-    switch (measurement) {
-      case 'kilogram':
-        return quantity;
-      case 'gram':
-        return quantity / 1000;
-      case 'teaspoon':
-        // Convert teaspoons to milliliters (1 tsp ≈ 5 ml)
-        return quantity * 5 / 1000;
-      case 'tablespoon':
-        // Convert tablespoons to milliliters (1 tbsp ≈ 15 ml)
-        return quantity * 15 / 1000;
-      case 'fluid ounce':
-        // Convert fluid ounces to milliliters (1 fl oz ≈ 30 ml)
-        return quantity * 30 / 1000;
-      case 'cup':
-        // Convert cups to milliliters (1 cup ≈ 240 ml)
-        return quantity * 240 / 1000;
-      case 'pint':
-        // Convert pints to milliliters (1 pt ≈ 473 ml)
-        return quantity * 473 / 1000;
-      case 'quart':
-        // Convert quarts to milliliters (1 qt ≈ 946 ml)
-        return quantity * 946 / 1000;
-      case 'gallon':
-        // Convert gallons to milliliters (1 gal ≈ 3785 ml)
-        return quantity * 3785 / 1000;
-      case 'ounce':
-        // Convert ounces to grams (1 oz ≈ 28.35 g)
-        return quantity * 28.35 / 1000;
-      case 'pound':
-        // Convert pounds to grams (1 lb ≈ 453.592 g)
-        return quantity * 453.592 / 1000;
-      case 'milliliter':
-        return quantity;
-      case 'liter':
-        // Convert liters to milliliters (1 l = 1000 ml)
-        return quantity * 1000;
-      default:
-        console.error(`Unsupported measurement unit: ${measurement}`);
-        return null;
-    }
+    
+    // Convert the amount to kg
+    return amount * conversion_factors[measurement]
   };
 
   let totalNutrition = {
@@ -1100,7 +1084,7 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
     // console.log(groceryItem)
     const { ingredient, measurementId, amount, id } = groceryItem;
     // console.log("in for", measurementId)
-    const nutrition = calculateNutritionForIngredient(groceryItem.id, amount, measurementId)
+    const nutrition = await calculateNutritionForIngredient(groceryItem.id, amount, measurementId)
     if (nutrition) {
       // Add the scaled nutritional values to the total
       totalNutrition.calories += nutrition.calories;
