@@ -35,7 +35,7 @@ mongoose.connect('mongodb+srv://shirataitel:shirataitel123@project2023.wtpkihw.m
 }).then(() => {
   console.log('MongoDB connected successfully');
   cron.setMongooseConnection(mongoose.connection);
-  
+
 }).catch((err) => {
   console.error('MongoDB connection error:', err);
 });
@@ -551,7 +551,7 @@ app.get('/api/recipes/:id/tags', async (req, res) => {
     // console.log("tagCategories: " , tagCategories)
     const tagPromises = tagCategories.map(async tableName => {
       const name = TABLE_NAMES[`RECIPE_${tableName}`];
- 
+
       const RecipeTagsCategories = Collection.getModel(TABLE_NAMES[`RECIPE_${tableName}`]);
 
       const recipeTags = await RecipeTagsCategories.find({ recipe_ID: recipeId });
@@ -1140,7 +1140,7 @@ app.post('/api/addRecipe', upload.array('selectedImages'), async (req, res) => {
     DatePublished: datePublished,
     Description: description,
     RecipeCategory: selectedCategory,
-    AggregatedRating: 0,
+    AggregatedRating: null,
     ReviewCount: 0,
     Calories: totalNutrition.calories,
     FatContent: totalNutrition.fat,
@@ -1204,6 +1204,24 @@ app.get('/api/addRecipe/images/:filename', (req, res) => {
 
   readstream.pipe(res);
 });
+
+
+// Define the route to get time category tags
+app.get('/api/time-category-tags', async (req, res) => {
+  try {
+    const timeCategoryScheme = Collection.getModel(TABLE_NAMES.TIME_CATEGORIES);
+
+    // Fetch all time category tags from the database
+    const timeCategoryTags = await timeCategoryScheme.find({}, { id: 1, time: 1 }).exec();
+
+    // Send the fetched tags as the response
+    res.json(timeCategoryTags);
+  } catch (error) {
+    console.error('Error fetching time category tags:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 
 app.get('/api/my_recipes/:userId', async (req, res) => {

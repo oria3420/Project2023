@@ -162,6 +162,7 @@
 
 .recipes-by-grocery-container {
     margin-top: 40px;
+    margin-bottom: 40px;
     padding: 20px;
     border: 1px solid var(--gray-frame);
     height: fit-content;

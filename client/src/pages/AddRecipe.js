@@ -7,6 +7,7 @@ import jwt_decode from "jwt-decode";
 import { useNavigate } from 'react-router-dom'
 import AddRecipeValidation from '../components/AddRecipeValidation';
 import Carousel from '../components/Carousel';
+import axios from 'axios';
 
 const AddRecipe = () => {
     const navigate = useNavigate()
@@ -31,8 +32,24 @@ const AddRecipe = () => {
     const [formValid, setFormValid] = useState(false);
     const [imageToEditIndex, setImageToEditIndex] = useState(null);
     const [showModal, setShowModal] = useState(false);
+    const [timeCategoryTags, setTimeCategoryTags] = useState([]);
+
     const fileInputRef = useRef(null);
     const addMoreImagesInputRef = useRef(null);
+
+    useEffect(() => {
+        const fetchTimeCategoryTags = async () => {
+            try {
+                const response = await axios.get('http://localhost:1337/api/time-category-tags'); // Adjust the endpoint as needed
+                setTimeCategoryTags(response.data);
+                console.log(response.data)
+            } catch (error) {
+                console.error('Error fetching time category tags:', error);
+            }
+        };
+
+        fetchTimeCategoryTags();
+    }, []); // Empty dependency array to run this effect only once on mount
 
     const handleMeasurementChange = (index, value) => {
         const updatedIngredients = [...recipeIngredients];
@@ -269,30 +286,40 @@ const AddRecipe = () => {
     };
 
     useEffect(() => {
-        const computeTimeCategoryTag = (prep, cook) => {
+        const computeTimeCategoryTag = (prep, cook, timeCategoryTags) => {
             const totalMinutes = calculateTotalMinutes(prep) + calculateTotalMinutes(cook);
 
+            // Find the correct time category tag ID based on totalMinutes
+            let timeTagId = null;
             if (totalMinutes >= 60) {
-                return 'more than 1 hour';
+                timeTagId = timeCategoryTags.find(tag => tag.time === 'more than 1 hour')?.id;
             } else if (totalMinutes >= 30) {
-                return '30-60 min';
+                timeTagId = timeCategoryTags.find(tag => tag.time === '30-60 min')?.id;
             } else if (totalMinutes >= 15) {
-                return '15-30 min';
+                timeTagId = timeCategoryTags.find(tag => tag.time === '15-30 min')?.id;
             } else {
-                return '0-15 min';
+                timeTagId = timeCategoryTags.find(tag => tag.time === '0-15 min')?.id;
             }
+
+            return timeTagId; // Return only the tag ID
         };
 
-        const timeTag = computeTimeCategoryTag(prepTime, cookTime);
+        // Assume you have already fetched the timeCategoryTags and stored them in state
+        const timeTagId = computeTimeCategoryTag(prepTime, cookTime, timeCategoryTags);
 
-        // Update the time category in checkedItems
-        setRecipeCategories((prevCheckedItems) => ({
-            ...prevCheckedItems,
-            time_categories: {
-                [timeTag]: true,
-            },
-        }));
-    }, [prepTime, cookTime]);
+        if (timeTagId) {
+            // Update the time category in recipeCategories using the tag ID
+            setRecipeCategories((prevCheckedItems) => ({
+                ...prevCheckedItems,
+                time_categories: {
+                    [timeTagId]: true,
+                },
+            }));
+        }
+
+        console.log("recipeCategories: ", recipeCategories);
+    }, [prepTime, cookTime, timeCategoryTags]); // Add timeCategoryTags as a dependency
+
 
     const handleRemoveTag = (category, id) => {
         setRecipeCategories((prevCheckedItems) => {
@@ -356,8 +383,9 @@ const AddRecipe = () => {
         if (!recipeName) {
             missingFields.push("recipeName");
         }
-        if (prepTime === '00:00') {
+        if (prepTime === '00:00' && cookTime === '00:00') {
             missingFields.push("prepTime");
+            missingFields.push("cookTime");
         }
         if (!recipeYield) {
             missingFields.push("yields");
@@ -610,6 +638,7 @@ const AddRecipe = () => {
                                             <div className='desc-field'>
                                                 <label className='input-title'>Cook Time</label>
                                                 <input
+                                                    id='prepTime'
                                                     className='input-field time-field'
                                                     type="time"
                                                     value={cookTime}
