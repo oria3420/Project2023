@@ -1,13 +1,15 @@
 const globals = require('../../client/src/common/tablesNames');
 const TABLE_NAMES = globals.TABLE_NAMES;
-const axios = require('axios'); // Import Axios for making HTTP requests
 const Collection = require('../models/collection.model');
+const Activity = require('../models/Activity');
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 
 const Users = Collection.getModel(TABLE_NAMES.USERS);
 const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
 const Favorites = Collection.getModel(TABLE_NAMES.FAVORITES);
+const Ratings = Collection.getModel(TABLE_NAMES.RATINGS);
+const Comments = Collection.getModel(TABLE_NAMES.COMMENTS);
 
 const goodComments = [
     "This recipe was amazing!",
@@ -36,6 +38,20 @@ const notGoodComments = [
     "Unfortunately, this didn't work for me."
 ];
 
+async function logActivity(userId, type, details = {}, timestamp = new Date()) {
+    try {
+        const newActivity = new Activity({
+            userId,
+            type,
+            details,
+            timestamp, // Use the provided timestamp instead of the default Date.now()
+        });
+        await newActivity.save();
+    } catch (error) {
+        console.error('Error logging activity:', error);
+    }
+}
+
 function generateComment(rating) {
     let comment;
     if (rating >= 4) {
@@ -49,31 +65,69 @@ function generateComment(rating) {
     return comment;
 }
 
-async function addRatingAndCommentViaAPI(user, recipe, rating, comment) {
+function getRandomDateWithinLastYear() {
+    const now = new Date();
+    const oneYearAgo = new Date();
+    oneYearAgo.setFullYear(now.getFullYear() - 1);
+
+    return new Date(oneYearAgo.getTime() + Math.random() * (now.getTime() - oneYearAgo.getTime()));
+}
+
+async function addRatingAndComment(user, recipe, rating, comment, randomDate) {
     try {
-        // Add or update rating via API
-        console.log("******* recipe id:", recipe.RecipeId, "******")
-        await axios.post('http://localhost:1337/api/recipes/update_rating', {
-            user_id: user.email,
-            recipe_id: recipe.RecipeId,
-            rating,
-        });
+        // Add or update rating
+        let userRating = await Ratings.findOne({ recipe_id: recipe.RecipeId, user_id: user.email });
 
-        console.log(`rating`);
-
-        // Optionally add comment via API
-        if (comment) {
-            await axios.post('http://localhost:1337/api/recipes/new_comment', {
-                user_id: user.email,
+        if (userRating) {
+            await Ratings.updateOne(
+                { recipe_id: recipe.RecipeId, user_id: user.email },
+                { $set: { rating: rating, date: randomDate } }
+            );
+        } else {
+            userRating = await Ratings.create({
                 recipe_id: recipe.RecipeId,
+                user_id: user.email,
+                rating: rating,
+                date: randomDate
+            });
+        }
+
+        // Calculate the new average rating for the recipe
+        const allRatings = await Ratings.find({ recipe_id: recipe.RecipeId });
+        const totalRatings = allRatings.reduce((acc, curr) => acc + curr.rating, 0);
+        const reviewCount = allRatings.length;
+        const averageRating = totalRatings / reviewCount;
+
+        // Update the recipe's overall rating and review count
+        await Recipes.updateOne(
+            { RecipeId: recipe.RecipeId },
+            {
+                $set: {
+                    AggregatedRating: averageRating,
+                    ReviewCount: reviewCount,
+                }
+            }
+        );
+
+        await logActivity(user.email, 'rating', { recipeId: recipe.RecipeId, rating: rating }, randomDate);
+
+        // Optionally add comment
+        if (comment) {
+            const commentImageDetails = null;  // Assuming no image in this scenario
+
+            const newComment = await Comments.create({
+                recipe_id: recipe.RecipeId,
+                user_id: user.email,
                 comment_text: comment,
-                user_name: user.name, // Assuming user.name is available
+                comment_date: randomDate,
+                comment_image: commentImageDetails,
             });
 
-            console.log(`comment`);
+            await logActivity(user.email, 'comment', { recipeId: recipe.RecipeId, comment: comment }, randomDate);
         }
+
     } catch (error) {
-        console.error('Error adding rating or comment via API:', error);
+        console.error('Error adding rating or comment:', error);
     }
 }
 
@@ -96,57 +150,50 @@ async function generateRatingsAndComments() {
         }
 
         for (const user of users) {
-            // Get user's favorites
             const userFavorites = await Favorites.find({ user_id: user.email }).exec();
             const favoritedRecipeIds = userFavorites.map(fav => fav.recipe_id);
 
             const numberOfRatings = Math.floor(Math.random() * 10) + 1; // 1 to 10 ratings
             const selectedRecipeIds = new Set();
 
-            // Rate and comment on favorited recipes with positive feedback
             let ratingsGenerated = 0;
             for (const recipeId of favoritedRecipeIds) {
                 if (ratingsGenerated >= numberOfRatings) break;
 
                 const recipe = recipes.find(r => r.RecipeId === recipeId);
-                if (!recipe) {
-                    console.error(`Recipe with ID ${recipeId} not found.`);
-                    continue;
-                }
+                if (!recipe) continue;
 
                 selectedRecipeIds.add(recipeId);
 
                 const rating = Math.floor(Math.random() * 2) + 4; // High rating (4-5 stars)
                 const comment = generateComment(rating);
+                const randomDate = getRandomDateWithinLastYear();
 
-                await addRatingAndCommentViaAPI(user, recipe, rating, comment);
+                await addRatingAndComment(user, recipe, rating, comment, randomDate);
 
                 ratingsGenerated++;
             }
 
-            // Continue with non-favorited recipes if more ratings/comments are needed
             for (let i = ratingsGenerated; i < numberOfRatings; i++) {
                 let randomRecipe;
                 do {
                     randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
                 } while (selectedRecipeIds.has(randomRecipe?.RecipeId) || !randomRecipe);
 
-                if (!randomRecipe) {
-                    console.error('Random recipe selection failed.');
-                    continue;
-                }
+                if (!randomRecipe) continue;
 
                 selectedRecipeIds.add(randomRecipe.RecipeId);
 
                 const rating = Math.floor(Math.random() * 5) + 1; // Random rating (1-5 stars)
                 const comment = generateComment(rating);
+                const randomDate = getRandomDateWithinLastYear();
 
-                await addRatingAndCommentViaAPI(user, randomRecipe, rating, comment);
+                await addRatingAndComment(user, randomRecipe, rating, comment, randomDate);
             }
-            console.log('Ratings and comments generated for ', user.email );
+            console.log('Ratings and comments generated for ', user.email);
         }
 
-        console.log('Ratings and comments generated for the last 250 users.'); // Ensure this is only logged once
+        console.log('Ratings and comments generated for the last 250 users.');
     } catch (error) {
         console.error('Error generating ratings and comments:', error);
     }
@@ -162,7 +209,7 @@ const main = async () => {
 
         console.log('MongoDB connected successfully');
 
-        await generateRatingsAndComments(); // Ensure this is awaited
+        await generateRatingsAndComments();
 
     } catch (error) {
         console.error('Error during script execution:', error);
@@ -172,5 +219,5 @@ const main = async () => {
     }
 };
 
-// Execute the main function once
+// Execute the main function
 main().catch(err => console.error('Error in main function:', err));
