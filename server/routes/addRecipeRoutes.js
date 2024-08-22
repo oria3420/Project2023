@@ -183,21 +183,6 @@ module.exports = (upload, gfs) => {
   // Route to serve uploaded images
   router.use('/images', express.static(path.join(__dirname, 'uploads')));
 
-
-  // Route to serve images
-  router.get('/images/:filename', (req, res) => {
-    const filename = req.params.filename;
-    const readstream = gfs.openDownloadStream(ObjectId(filename));
-
-    readstream.on('error', (error) => {
-      console.error('Error retrieving image:', error);
-      res.status(404).send('Image not found');
-    });
-
-    readstream.pipe(res);
-  });
-
-
   // Route to add a new recipe
   router.post('/', upload.array('selectedImages'), async (req, res) => {
 

@@ -1181,17 +1181,17 @@ app.get('/api/measurements', async (req, res) => {
 // });
 
 
-// app.get('/api/addRecipe/images/:filename', (req, res) => {
-//   const filename = req.params.filename;
-//   const readstream = gfs.openDownloadStream(ObjectId(filename));
+app.get('/api/addRecipe/images/:filename', (req, res) => {
+  const filename = req.params.filename;
+  const readstream = gfs.openDownloadStream(ObjectId(filename));
 
-//   readstream.on('error', (error) => {
-//     console.error('Error retrieving image:', error);
-//     res.status(404).send('Image not found');
-//   });
+  readstream.on('error', (error) => {
+    console.error('Error retrieving image:', error);
+    res.status(404).send('Image not found');
+  });
 
-//   readstream.pipe(res);
-// });
+  readstream.pipe(res);
+});
 
 
 // Define the route to get time category tags
