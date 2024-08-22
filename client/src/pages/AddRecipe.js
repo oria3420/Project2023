@@ -72,7 +72,7 @@ const AddRecipe = () => {
             const filteredIngredients = ingredients
                 .filter((ingredient) =>
                     typeof ingredient.ingredient === 'string' &&
-                    ingredient.ingredient.toLowerCase().startsWith(inputValue.toLowerCase())
+                    ingredient.ingredient.toLowerCase().includes(inputValue.toLowerCase())
                 )
                 .map((ingredient) => ingredient.ingredient);
 
