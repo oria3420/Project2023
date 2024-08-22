@@ -270,6 +270,44 @@ const AddRecipe = () => {
         }
     };
 
+    //for debug
+    // const handleSubmit = async (e) => {
+    //     console.log("handleSubmit")
+    //     e.preventDefault();
+
+    //     const isFormValid = true;
+    //     setFormValid(isFormValid)
+    //     setFormSubmitted(true);
+     
+    //     window.scrollTo({ top: 0, behavior: 'smooth' });
+    //     if (isFormValid) {
+
+    //         try {
+    //             const response = await fetch('http://localhost:1337/api/addRecipe', {
+    //                 method: 'POST',
+    //                 body: {},
+    //             });
+    //             if (response.ok) {
+    //                 const result = await response.json();
+    //                 console.log(result); // Recipe successfully added
+    //                 setFormSubmitted(true);
+    //                 console.log("check")
+    //                 window.scrollTo({ top: 0, behavior: 'smooth' });
+    //             } else {
+    //                 console.error(`HTTP Error: ${response.status}`);
+    //                 // Handle error response
+    //             }
+    //         } catch (error) {
+    //             console.error(error);
+    //             // Handle fetch error (e.g., network error)
+    //         }
+
+    //     } else {
+    //         // Update state to show the error message
+    //         window.scrollTo({ top: 0, behavior: 'smooth' });
+    //     }
+    // };
+
     const formatCategoryName = (category) => {
         return category
             .replace(/_/g, ' ')
@@ -317,7 +355,7 @@ const AddRecipe = () => {
             }));
         }
 
-        console.log("recipeCategories: ", recipeCategories);
+        //console.log("recipeCategories: ", recipeCategories);
     }, [prepTime, cookTime, timeCategoryTags]); // Add timeCategoryTags as a dependency
 
 
