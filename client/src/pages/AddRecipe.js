@@ -355,7 +355,7 @@ const AddRecipe = () => {
             }));
         }
 
-        console.log("recipeCategories: ", recipeCategories);
+        //console.log("recipeCategories: ", recipeCategories);
     }, [prepTime, cookTime, timeCategoryTags]); // Add timeCategoryTags as a dependency
 
 
