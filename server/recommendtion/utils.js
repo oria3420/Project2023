@@ -16,7 +16,6 @@ const collectionToTagField = {
     flavor_categories: 'flavor',
     food_categories: 'food',
     health_categories: 'health',
-    holiday_categories: 'holiday',
     kitchen_style_categories: 'kitchen',
     kosher_categories: 'kosher',
     meal_type_categories: 'mealType',
