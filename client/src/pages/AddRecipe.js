@@ -33,6 +33,7 @@ const AddRecipe = () => {
     const [imageToEditIndex, setImageToEditIndex] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [timeCategoryTags, setTimeCategoryTags] = useState([]);
+    const [serverError, setServerError] = useState(false);
 
     const fileInputRef = useRef(null);
     const addMoreImagesInputRef = useRef(null);
@@ -186,7 +187,6 @@ const AddRecipe = () => {
         setFormSubmitted(true);
         console.log('formValid: ' + formValid)
         console.log('formSubmitted: ' + formSubmitted)
-        window.scrollTo({ top: 0, behavior: 'smooth' });
         if (isFormValid) {
 
             // Iterate over recipeIngredients
@@ -217,16 +217,7 @@ const AddRecipe = () => {
                 recipeInstructions: instructions,
                 recipeCategories,
             });
-            setRecipeName('');
-            setSelectedImages([]);
-            setCookTime('00:00');
-            setPrepTime('00:00');
-            setSelectedCategory('');
-            setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
-            setDescription('');
-            setRecipeYield('');
-            setInstructions(['']);
-            setRecipeCategories({});
+
             const formData = new FormData();
             selectedImages.forEach((file, index) => {
                 console.log(file)
@@ -253,60 +244,33 @@ const AddRecipe = () => {
                     const result = await response.json();
                     console.log(result); // Recipe successfully added
                     setFormSubmitted(true);
-                    console.log("check")
+                    setServerError(false); // No server error
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                    setRecipeName('');
+                    setSelectedImages([]);
+                    setCookTime('00:00');
+                    setPrepTime('00:00');
+                    setSelectedCategory('');
+                    setRecipeIngredients([{ ingredient: '', amount: '', measurementId: '' }]);
+                    setDescription('');
+                    setRecipeYield('');
+                    setInstructions(['']);
+                    setRecipeCategories({});
                 } else {
                     console.error(`HTTP Error: ${response.status}`);
-                    // Handle error response
+                    setServerError(true); // Network or other fetch error
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             } catch (error) {
                 console.error(error);
-                // Handle fetch error (e.g., network error)
+                setServerError(true); // Network or other fetch error
+                window.scrollTo({ top: 0, behavior: 'smooth' })
             }
-
         } else {
             // Update state to show the error message
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
-
-    //for debug
-    // const handleSubmit = async (e) => {
-    //     console.log("handleSubmit")
-    //     e.preventDefault();
-
-    //     const isFormValid = true;
-    //     setFormValid(isFormValid)
-    //     setFormSubmitted(true);
-     
-    //     window.scrollTo({ top: 0, behavior: 'smooth' });
-    //     if (isFormValid) {
-
-    //         try {
-    //             const response = await fetch('http://localhost:1337/api/addRecipe', {
-    //                 method: 'POST',
-    //                 body: {},
-    //             });
-    //             if (response.ok) {
-    //                 const result = await response.json();
-    //                 console.log(result); // Recipe successfully added
-    //                 setFormSubmitted(true);
-    //                 console.log("check")
-    //                 window.scrollTo({ top: 0, behavior: 'smooth' });
-    //             } else {
-    //                 console.error(`HTTP Error: ${response.status}`);
-    //                 // Handle error response
-    //             }
-    //         } catch (error) {
-    //             console.error(error);
-    //             // Handle fetch error (e.g., network error)
-    //         }
-
-    //     } else {
-    //         // Update state to show the error message
-    //         window.scrollTo({ top: 0, behavior: 'smooth' });
-    //     }
-    // };
 
     const formatCategoryName = (category) => {
         return category
@@ -552,7 +516,7 @@ const AddRecipe = () => {
             <div>
                 {user && (
                     <form className='add-recipe-form needs-validation' >
-                        <AddRecipeValidation formSubmitted={formSubmitted} formValid={formValid} />
+                        <AddRecipeValidation formSubmitted={formSubmitted} formValid={formValid} serverError={serverError} />
 
                         <div className='image-details two-sections-wrapper'>
 
@@ -718,13 +682,19 @@ const AddRecipe = () => {
                                                 <option value="" disabled>
                                                     Select Category
                                                 </option>
-                                                {Object.entries(categories).map(([category, entries]) => (
-                                                    entries.map(([id, tagName]) => (
-                                                        <option key={id} value={tagName}>
-                                                            {tagName}
-                                                        </option>
-                                                    ))
-                                                ))}
+                                                {
+                                                    Object.entries(categories)
+                                                        .flatMap(([category, entries]) =>
+                                                            entries.map(([id, tagName]) => ({ id, tagName }))
+                                                        )
+                                                        .sort((a, b) => a.tagName.localeCompare(b.tagName))
+                                                        .map(({ id, tagName }) => (
+                                                            <option key={id} value={tagName}>
+                                                                {tagName}
+                                                            </option>
+                                                        ))
+                                                }
+
                                             </select>
                                         </div>
 
