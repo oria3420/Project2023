@@ -23,6 +23,8 @@ const sumDurations = (duration1, duration2) => {
 };
 
 const convertToKilograms = (amount, measurement) => {
+  console.log("amount: ", amount);
+  console.log("measurement: ", measurement);
   const conversion_factors = {
     'kilogram': 1,
     'gram': 0.001,
@@ -52,7 +54,7 @@ const calculateNutritionForIngredient = async (ingredientId, amount, measurement
     }
 
     const quantityInKg = convertToKilograms(amount, measurement.measurement);
-
+    console.log("quantityInKg: ", quantityInKg)
     const nutrition = {
       calories: ingredient.calories * quantityInKg || 0,
       fat: ingredient.fat * quantityInKg || 0,
@@ -89,6 +91,7 @@ const calculateTotalNutrition = async (groceryList, RecipeIngredients, Ingredien
     const { measurementId, amount, id } = groceryItem;
     console.log(groceryItem)
     const nutrition = await calculateNutritionForIngredient(id, amount, measurementId, Ingredients, Measurement);
+    console.log("nutrition: ", nutrition)
     if (nutrition) {
       totalNutrition.calories += nutrition.calories;
       totalNutrition.fat += nutrition.fat;
@@ -104,7 +107,7 @@ const calculateTotalNutrition = async (groceryList, RecipeIngredients, Ingredien
       recipe_ID: rec_id,
       ingredient_ID: id,
       measurement_ID: parseInt(measurementId),
-      amount: parseInt(amount),
+      amount: parseFloat(amount),
     });
   }
   for (const nutrient in totalNutrition) {
@@ -196,8 +199,8 @@ module.exports = (upload, gfs) => {
   router.post('/', upload.array('selectedImages'), async (req, res) => {
 
     try {
-      console.log("in add recipe router")
-
+      console.log("in add recipe router");
+      
       const Recipes = Collection.getModel(TABLE_NAMES.RECIPES);
       const Ingredients = Collection.getModel(TABLE_NAMES.INGREDIENTS);
       const RecipeIngredients = Collection.getModel(TABLE_NAMES.RECIPE_INGREDIENTS);
@@ -270,7 +273,7 @@ module.exports = (upload, gfs) => {
       // // Insert categories
       await insertRecipeCategories(recipeCategories, rec_id, Collection);
 
-      // await logActivity(userId, 'upload-recipe', { recipeId: newRecipe._id });
+      await logActivity(userId, 'upload-recipe', { recipeId: newRecipe._id });
       console.log("finished");
       res.status(200).json({ success: true });
     } catch (error) {
