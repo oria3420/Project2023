@@ -28,6 +28,7 @@ const convertToKilograms = (amount, measurement) => {
   const conversion_factors = {
     'kilogram': 1,
     'gram': 0.001,
+    'unit': 0.01,
     'teaspoon': 0.00492892,
     'tablespoon': 0.0147868,
     'fluid ounce': 0.0295735,
