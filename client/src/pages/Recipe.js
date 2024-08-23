@@ -56,7 +56,7 @@ const RecipePage = () => {
   const handleAddToList = () => {
     console.log("handleAddToList")
     console.log(user)
-    if (user === "Guest") {
+    if (name === "Guest") {
       setShowGuestModal(true);
       console.log("in if")
       return;
@@ -235,7 +235,7 @@ const RecipePage = () => {
               showModal={showShoppingModal}
               onClose={() => setShowShoppingModal(false)}
               ingredients={ingredients}
-              userId={user}
+              userId={user.email}
             />
           )}
           {showGuestModal && (
@@ -302,7 +302,7 @@ const RecipePage = () => {
 
           </div>
 
-          <CommentsContainer id={id} user_id={user} user_name={name} recipe={recipe} />
+          <CommentsContainer id={id} user_id={user.email} user_name={name} recipe={recipe} />
 
           <br></br>
           <br></br>

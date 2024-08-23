@@ -22,7 +22,7 @@ const AddToListModal = ({ showModal, onClose, ingredients, userId }) => {
       name: ingredient.name,
       addedDate: new Date().toISOString()
     }));
-
+    console.log(userId)
     try {
       const response = await fetch(`http://localhost:1337/api/add_item_to_shopping_list/${userId}`, {
         method: 'POST',

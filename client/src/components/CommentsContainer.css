@@ -197,7 +197,6 @@ textarea {
   align-items: center;
 }
 
-/* Add this to your CSS file */
 .image-modal {
   position: fixed;
   z-index: 2; /* Adjust as needed */
@@ -206,7 +205,6 @@ textarea {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.6);
 }
 
@@ -215,8 +213,20 @@ textarea {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-width: 80%;
-  max-height: 80%;
+  max-width: 50%;
+  max-height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.modal-content {
+  margin: auto;
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 500px;
 }
 
 .close {
@@ -225,14 +235,13 @@ textarea {
   font-size: 30px;
   color: #fff;
   cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effects */
 }
 
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 100%; /* Adjust as needed */
-  height: auto; /* Adjust as needed */
+.close:hover {
+  color: #bdb9b9; /* Change color on hover, you can pick any color */
 }
+
 
 .new-rating{
   margin-bottom: 20px;
