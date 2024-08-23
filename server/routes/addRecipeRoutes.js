@@ -45,18 +45,27 @@ const calculateNutritionForIngredient = async (ingredientId, amount, measurement
   try {
     const ingredient = await Ingredients.findOne({ id: ingredientId });
     const measurement = await Measurement.findOne({ measurement_id: parseInt(measurementId) });
+
+    if (!ingredient || !measurement) {
+      console.error(`Ingredient or measurement not found for id: ${ingredientId} or measurementId: ${measurementId}`);
+      return null;
+    }
+
     const quantityInKg = convertToKilograms(amount, measurement.measurement);
-    return {
-      calories: ingredient.calories * quantityInKg,
-      fat: ingredient.fat * quantityInKg,
-      saturated_fat: ingredient.saturated_fat * quantityInKg,
-      cholesterol: ingredient.cholesterol * quantityInKg,
-      sodium: ingredient.sodium * quantityInKg,
-      carbohydrates: ingredient.carbohydrates * quantityInKg,
-      fiber: ingredient.fiber * quantityInKg,
-      sugar: ingredient.sugar * quantityInKg,
-      protein: ingredient.protein * quantityInKg,
+
+    const nutrition = {
+      calories: ingredient.calories * quantityInKg || 0,
+      fat: ingredient.fat * quantityInKg || 0,
+      saturated_fat: ingredient.saturated_fat * quantityInKg || 0,
+      cholesterol: ingredient.cholesterol * quantityInKg || 0,
+      sodium: ingredient.sodium * quantityInKg || 0,
+      carbohydrates: ingredient.carbohydrates * quantityInKg || 0,
+      fiber: ingredient.fiber * quantityInKg || 0,
+      sugar: ingredient.sugar * quantityInKg || 0,
+      protein: ingredient.protein * quantityInKg || 0,
     };
+
+    return nutrition;
   } catch (error) {
     console.error(`Error fetching nutritional information for ingredient ${ingredientId}: ${error.message}`);
     return null;
@@ -78,6 +87,7 @@ const calculateTotalNutrition = async (groceryList, RecipeIngredients, Ingredien
 
   for (const groceryItem of JSON.parse(groceryList)) {
     const { measurementId, amount, id } = groceryItem;
+    console.log(groceryItem)
     const nutrition = await calculateNutritionForIngredient(id, amount, measurementId, Ingredients, Measurement);
     if (nutrition) {
       totalNutrition.calories += nutrition.calories;
@@ -97,7 +107,6 @@ const calculateTotalNutrition = async (groceryList, RecipeIngredients, Ingredien
       amount: parseInt(amount),
     });
   }
-
   for (const nutrient in totalNutrition) {
     if (totalNutrition.hasOwnProperty(nutrient)) {
       totalNutrition[nutrient] = parseFloat(totalNutrition[nutrient].toFixed(2));
@@ -210,19 +219,23 @@ module.exports = (upload, gfs) => {
         name,
         userId,
       } = req.body;
+      console.log(req.body);
+      console.log("**********************************************")
 
       // Use the extracted function to get the next recipe ID
       const rec_id = await getNextRecipeId(Setting);
       console.log('Updated value of key:', rec_id);
 
       const totalCookTime = sumDurations(cookTime, prepTime);
+      console.log("totalCookTime: ", totalCookTime);
 
       // Use the extracted function to get the kosher category
       const kosher = await getKosherCategory(recipeCategories, KosherT);
+      console.log("kosher: ", kosher);
 
       // Calculate total nutrition
       const totalNutrition = await calculateTotalNutrition(groceryList, RecipeIngredients, Ingredients, Measurement, rec_id);
-
+      console.log("totalNutrition: ", totalNutrition);
       const newRecipe = await Recipes.create({
         RecipeId: rec_id,
         Name: recipeName,
@@ -248,16 +261,16 @@ module.exports = (upload, gfs) => {
         RecipeServings: recipeServings,
         RecipeYield: recipeYield,
         RecipeInstructions: JSON.parse(recipeInstructions).join('.'),
-        Kosher: kosherWord.kosher,
+        Kosher: kosher,
       });
 
-      // Save uploaded images
+      // // Save uploaded images
       await saveUploadedImages(req.files, rec_id, Image);
 
-      // Insert categories
+      // // Insert categories
       await insertRecipeCategories(recipeCategories, rec_id, Collection);
 
-      await logActivity(userId, 'upload-recipe', { recipeId: newRecipe._id });
+      // await logActivity(userId, 'upload-recipe', { recipeId: newRecipe._id });
       console.log("finished");
       res.status(200).json({ success: true });
     } catch (error) {
