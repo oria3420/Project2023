@@ -20,6 +20,7 @@ const RecipePage = () => {
   const navigate = useNavigate()
   const [name, setName] = useState(null);
   const [user, setUser] = useState(null);
+  const [email, setEmail] = useState('');
 
   const { id } = useParams();
   const [recipe, setRecipe] = useState(null);
@@ -38,11 +39,13 @@ const RecipePage = () => {
         // Handle user or guest based on your logic
         setName(_user.name);
         setUser(_user);
+        setEmail(_user.email);
         console.log(_user)
       } catch (error) {
         // Handle token decoding error
         setName('Guest');
         setUser(null);
+        setEmail('Guest')
         console.error('Error decoding token:', error);
         // You might want to redirect to login or handle the error in some way
       }
@@ -50,6 +53,7 @@ const RecipePage = () => {
       // Handle the case where there's no token (e.g., guest user)
       setName('Guest');
       setUser(null); // Set user to null or handle guest user data
+      setEmail('Guest')
     }
   }, [navigate])
 
@@ -179,7 +183,7 @@ const RecipePage = () => {
                 ))}
               </div>
 
-              <LikeButton recipeId={id} userEmail={user.email} pageType="RecipePage" />
+              <LikeButton recipeId={id} userEmail={email} pageType="RecipePage" />
 
             </div>
 
