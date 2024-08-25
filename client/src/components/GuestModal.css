@@ -12,7 +12,6 @@
   /* Adjust the height if necessary */
   overflow-y: hidden;
   /* Hide vertical overflow when modal is open */
-  background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.6);
 }
 

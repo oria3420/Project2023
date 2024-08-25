@@ -10,7 +10,7 @@ const ImageModal = ({ imageUrl, closeModal }) => {
         <div className="image-modal">
             <div className="image-modal-content">
                 <span className="close" onClick={handleClick}>&times;</span>
-                <img className="modal-content" src={imageUrl} alt="Modal" />
+                <img className="modal-content-img" src={imageUrl} alt="Modal" />
             </div>
         </div>
     );
