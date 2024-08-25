@@ -767,8 +767,6 @@ app.get('/api/trending', async (req, res) => {
     oneWeekAgo.setDate(today.getDate() - 7);
     oneWeekAgo.setHours(0, 0, 0, 0);
 
-    console.log('oneWeekAgo:', oneWeekAgo);
-    console.log('today:', today);
 
     const topRecipes = await Recipe.aggregate([
       {
@@ -856,9 +854,6 @@ app.get('/api/trending', async (req, res) => {
         $limit: 10
       }
     ]).exec();
-
-    console.log('topRecipes:', topRecipes);
-    console.log('len:', topRecipes.length);
 
     res.json(topRecipes);
   } catch (err) {
