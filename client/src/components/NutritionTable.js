@@ -40,7 +40,11 @@ const NutritionTable = ({ recipe }) => {
                 {nutritionFields.map((field, index) => (
                     <React.Fragment key={field.key}>
                         <div className='nutrition-field'>
-                            <span className='field-value'>{recipe[field.key]} {field.unit}</span>
+                            <span className='field-value'>
+                                <span className='nutrition-key'>{recipe[field.key]}</span>
+                                <span>{field.unit}</span>
+                            </span>
+
                             <br />
                             <span className='field-label'>{field.label}</span>
                         </div>

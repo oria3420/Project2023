@@ -153,6 +153,13 @@ ul {
 .field-value {
   font-weight: bold;
   font-size: 25px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: -20px;
+}
+
+.nutrition-key{
+  margin-bottom: -10px;
 }
 
 .field-label {
