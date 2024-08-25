@@ -41,7 +41,6 @@ const LikeButton = ({ recipeId, userEmail, pageType, onLikeToggle }) => {
   }, [recipeId, userEmail]);
 
   const handleHeartClick = async () => {
-    // Check if userEmail is "0" and show a message to the user
     if (userEmail === "Guest") {
       handleGuestClick();
       return;

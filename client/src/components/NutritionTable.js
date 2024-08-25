@@ -3,15 +3,15 @@ import './Components.css';
 
 const NutritionTable = ({ recipe }) => {
     const nutritionFields = [
-        { key: 'Calories', label: 'Calories' },
-        { key: 'FatContent', label: 'Fat' },
-        { key: 'SaturatedFatContent', label: 'Saturated Fat' },
-        { key: 'CholesterolContent', label: 'Cholesterol' },
-        { key: 'SodiumContent', label: 'Sodium' },
-        { key: 'CarbohydrateContent', label: 'Carbohydrates' },
-        { key: 'FiberContent', label: 'Fiber' },
-        { key: 'SugarContent', label: 'Sugar' },
-        { key: 'ProteinContent', label: 'Protein' },
+        { key: 'Calories', label: 'Calories', unit: 'kcal' },
+        { key: 'FatContent', label: 'Fat', unit: 'g' },
+        { key: 'SaturatedFatContent', label: 'Saturated Fat', unit: 'g' },
+        { key: 'CholesterolContent', label: 'Cholesterol', unit: 'mg' },
+        { key: 'SodiumContent', label: 'Sodium', unit: 'mg' },
+        { key: 'CarbohydrateContent', label: 'Carbohydrates', unit: 'g' },
+        { key: 'FiberContent', label: 'Fiber', unit: 'g' },
+        { key: 'SugarContent', label: 'Sugar', unit: 'g' },
+        { key: 'ProteinContent', label: 'Protein', unit: 'g' },
     ];
 
     useEffect(() => {
@@ -40,7 +40,7 @@ const NutritionTable = ({ recipe }) => {
                 {nutritionFields.map((field, index) => (
                     <React.Fragment key={field.key}>
                         <div className='nutrition-field'>
-                            <span className='field-value'>{recipe[field.key]}</span>
+                            <span className='field-value'>{recipe[field.key]} {field.unit}</span>
                             <br />
                             <span className='field-label'>{field.label}</span>
                         </div>
