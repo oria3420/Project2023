@@ -306,7 +306,7 @@ const RecipePage = () => {
 
           </div>
 
-          <CommentsContainer id={id} user_id={user.email} user_name={name} recipe={recipe} />
+          <CommentsContainer id={id} user_id={email} user_name={name} recipe={recipe} />
 
           <br></br>
           <br></br>
