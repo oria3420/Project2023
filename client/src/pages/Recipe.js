@@ -52,7 +52,7 @@ const RecipePage = () => {
     } else {
       // Handle the case where there's no token (e.g., guest user)
       setName('Guest');
-      setUser(null); // Set user to null or handle guest user data
+      setUser(null);
       setEmail('Guest')
     }
   }, [navigate])
