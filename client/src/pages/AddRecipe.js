@@ -356,6 +356,7 @@ const AddRecipe = () => {
     const handleSelectChange = (category, id) => {
         setRecipeCategories((prevCategories) => {
             if (category === 'kosher_categories' || category === 'difficulty_categories') {
+                console.log("kosher/diff")
                 return {
                     ...prevCategories,
                     [category]: {
@@ -374,6 +375,10 @@ const AddRecipe = () => {
             }
         });
     };
+
+    useEffect(() => {
+        console.log('recipeCategories changed:', recipeCategories);
+    }, [recipeCategories]); // Dependency array with recipeCategories
 
     const validateForm = () => {
 
@@ -689,7 +694,7 @@ const AddRecipe = () => {
                                                         )
                                                         .sort((a, b) => a.tagName.localeCompare(b.tagName))
                                                         .map(({ id, tagName }) => (
-                                                            <option key={id} value={tagName}>
+                                                            <option key={`${tagName}-${id}`} value={tagName}>
                                                                 {tagName}
                                                             </option>
                                                         ))

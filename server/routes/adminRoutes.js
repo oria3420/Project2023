@@ -35,7 +35,6 @@ router.get('/user-recommendations/:userId', async (req, res) => {
     const activeProfile = getActiveTagsAndCategories(userProfile.vector);
 
     const recommendations = await recommendRecipes(userId);
-    console.log("recommendations: ", recommendations)
     // Fetch vectors for the top 3 recommended recipes
     const recipeIds = recommendations.slice(0, 3).map(rec => rec.recipe.RecipeId);
     const recipeVectors = await RecipesVectors.find({ recipeId: { $in: recipeIds } });
